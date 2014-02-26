@@ -340,7 +340,7 @@ failure:
         [cell.contentView addSubview:lab];
 
         UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 14.5, 10, 15)];
-        disclosure.image = [UIImage imageNamed:@"disclosurelight.png"];
+        disclosure.image = [UIImage imageNamed:@"accessory_disclosure"];
         disclosure.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:disclosure];
     } else if (indexPath.section == 2) {
@@ -385,7 +385,7 @@ failure:
         [cell.contentView addSubview:marketLabel];
 
         UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 14.5, 10, 15)];
-        disclosure.image = [UIImage imageNamed:@"disclosurelight.png"];
+        disclosure.image = [UIImage imageNamed:@"accessory_disclosure"];
         disclosure.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:disclosure];
     } else if (indexPath.section == 3) {
@@ -401,7 +401,7 @@ failure:
 
         if ([contestType[SALARYCAP] count] > 1) {
             UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 14.5, 10, 15)];
-            disclosure.image = [UIImage imageNamed:@"disclosurelight.png"];
+            disclosure.image = [UIImage imageNamed:@"accessory_disclosure"];
             disclosure.backgroundColor = [UIColor clearColor];
             [cell.contentView addSubview:disclosure];
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;
@@ -427,7 +427,7 @@ failure:
 
         if ([contestType[ENTRYFEE] count] > 1 || [contestType[ENTRYFEE][_selectedSalaryCap] isEqual:ENTRYFEE_UNDEFINED]) {
             UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 14.5, 10, 15)];
-            disclosure.image = [UIImage imageNamed:@"disclosurelight.png"];
+            disclosure.image = [UIImage imageNamed:@"accessory_disclosure"];
             disclosure.backgroundColor = [UIColor clearColor];
             [cell.contentView addSubview:disclosure];
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;

@@ -20,6 +20,7 @@
 
 @interface FFStyle : NSObject
 
++ (UIColor*)darkBlue;
 + (UIColor*)darkGreen;
 + (UIColor*)white;
 + (UIColor*)brightGreen;

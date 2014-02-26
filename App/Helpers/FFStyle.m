@@ -26,6 +26,14 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 // COLORS --------------------------------------------------------------------------------------------------------------
 
++ (UIColor*)darkBlue
+{
+    return [UIColor colorWithRed:28.f / 255.f
+                           green:27.f / 255.f
+                            blue:163.f / 255.f
+                           alpha:1.f];
+}
+
 + (UIColor*)darkGreen
 {
     return [UIColor colorWithRed:51.0 / 255.0
@@ -376,8 +384,7 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     return [backgroundStates objectForKey:[NSNumber numberWithInt:_state]];
 }
 
-#pragma mark -
-#pragma mark Touches
+#pragma mark - Touches
 
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {

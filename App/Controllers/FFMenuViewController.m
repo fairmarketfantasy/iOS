@@ -8,10 +8,15 @@
 
 #import "FFMenuViewController.h"
 #import "FFSessionViewController.h"
+#import <RATreeView.h>
+#import "FFNodeItem.h"
 
-@interface FFMenuViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate>
 
-@property(nonatomic) UITableView* tableView;
+@property(nonatomic) RATreeView* tableView;
+@property(nonatomic) RATreeView* treeView;
+@property(nonatomic, readonly) NSArray* nodes;
+@property(nonatomic, readonly) NSDictionary* segueByTitle;
 
 @end
 
@@ -25,132 +30,199 @@
         self.view.backgroundColor = [UIColor colorWithWhite:0
                                                       alpha:.9];
 
-        _tableView = [[UITableView alloc] initWithFrame:self.view.frame];
-        _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.dataSource = self;
-        _tableView.delegate = self;
-        [_tableView registerClass:[UITableViewCell class]
-            forCellReuseIdentifier:@"Cell"];
-        [self.view addSubview:_tableView];
+        _nodes = [FFNodeItem nodesFromStrings:
+                                 @[
+                                     @{
+                                         @"Sports" : @[
+                                             @"NFL",
+                                             @"NBA"
+                                         ]
+                                     },
+                                     @{
+                                         @"Fantasy Enternainment" : @[
+                                         ]
+                                     },
+                                     @{
+                                         @"Politics" : @[
+                                         ]
+                                     },
+                                     @"My Games",
+                                     @"Create Game",
+                                     @"Rules",
+                                     @"Legal Stuff",
+                                     @"Support",
+                                     @"Settings"
+                                 ]];
+        _segueByTitle = @{
+            @"My Games" : @"GotoMyGames",
+            @"Create Game" : @"GotoCreateGame",
+            @"Rules" : @"GotoRules",
+            @"Legal Stuff" : @"GotoTerms",
+            @"Support" : @"GotoSupport",
+            @"Settings" : @"GotoAccount"
+        };
+
+        self.treeView = [[RATreeView alloc] initWithFrame:self.view.bounds];
+        self.treeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.treeView.backgroundColor = [UIColor clearColor];
+        self.treeView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.treeView.dataSource = self;
+        self.treeView.delegate = self;
+
+        [self.treeView registerClass:[UITableViewCell class]
+              forCellReuseIdentifier:@"MenuCell"];
+        [self.view addSubview:self.treeView];
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
+#pragma mark - RATreeViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
+- (NSInteger)treeView:(RATreeView*)treeView
+    numberOfChildrenOfItem:(id)item
 {
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 6;
-}
-
-- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
-{
-    return 60;
-}
-
-- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
-{
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"
-                                                            forIndexPath:indexPath];
-    switch (indexPath.row) {
-    case 0:
-        cell.textLabel.text = NSLocalizedString(@"My Games", nil);
-        break;
-    case 1:
-        cell.textLabel.text = NSLocalizedString(@"Create Game", nil);
-        break;
-    //        case 2:
-    //            cell.textLabel.text = NSLocalizedString(@"Join Game", nil);
-    //            break;
-    case 2:
-        cell.textLabel.text = NSLocalizedString(@"Rules", nil);
-        break;
-    case 3:
-        cell.textLabel.text = NSLocalizedString(@"Legal Stuff", nil);
-        break;
-    case 4:
-        cell.textLabel.text = NSLocalizedString(@"Support", nil);
-        break;
-    case 5:
-        cell.textLabel.text = NSLocalizedString(@"Settings", nil);
-        break;
-    default:
-        break;
+    if (!item) {
+        return self.nodes.count;
     }
+    if (![item isKindOfClass:[FFNodeItem class]]) {
+        WTFLog;
+        return 0;
+    }
+    FFNodeItem* nodeItem = (FFNodeItem*)item;
+    return nodeItem.children.count;
+}
+
+- (id)treeView:(RATreeView*)treeView
+         child:(NSInteger)index
+        ofItem:(id)item
+{
+    if (!item) {
+        return self.nodes[index];
+    }
+    if (![item isKindOfClass:[FFNodeItem class]]) {
+        WTFLog;
+        return nil;
+    }
+    FFNodeItem* nodeItem = (FFNodeItem*)item;
+    return nodeItem.children[index];
+}
+
+- (UITableViewCell*)treeView:(RATreeView*)treeView
+                 cellForItem:(id)item
+                treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
+{
+    UITableViewCell* cell = [treeView dequeueReusableCellWithIdentifier:@"MenuCell"];
+    FFNodeItem* nodeItem = [item isKindOfClass:[FFNodeItem class]] ? (FFNodeItem*)item : nil;
+    if (!nodeItem) {
+        WTFLog;
+        NSAssert(FALSE, @"Wrong type of item for cell!");
+    }
+    cell.textLabel.text = NSLocalizedString(nodeItem.title, @"Cell title");
     cell.textLabel.textColor = [FFStyle lightGrey];
-    cell.textLabel.font = [FFStyle regularFont:17];
+
+    cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.bounds];
+    cell.selectedBackgroundView.backgroundColor = [FFStyle darkGreen];
+    CGFloat fontSize = 18.f;
+    cell.textLabel.font = nodeItem.type == FFNodeItemTypeParent ? [FFStyle blockFont:fontSize]
+                                                                : [FFStyle regularFont:fontSize];
 
     // add disclosure indicator
-    UIImageView* disc = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 10, 15)];
-    disc.backgroundColor = [UIColor clearColor];
-    disc.image = [UIImage imageNamed:@"disclosuredark.png"];
-    cell.accessoryView = disc;
+    NSString* accessoryName = @"";
+    if (nodeItem.type == FFNodeItemTypeParent) {
+        accessoryName = treeNodeInfo.expanded ? @"accessory_uncollapse"
+                                              : @"accessory_collapse";
+        if (treeNodeInfo.expanded) {
+            accessoryName = @"accessory_uncollapse";
+        } else {
+            accessoryName = nodeItem.children.count > 0 ? @"accessory_collapse"
+                                                        : @"accessory_uncollapse";
+        }
+    } else {
+        accessoryName = @"accessory_disclosure";
+    }
+
+    [self updateCell:cell
+        withAccessoryName:accessoryName];
 
     // add separator to bottom
-    UIView* sep = [[UIView alloc] initWithFrame:CGRectMake(0, 59, cell.contentView.frame.size.width, 1)];
-    sep.backgroundColor = [UIColor colorWithWhite:1
-                                            alpha:.1];
-    //    sep.translatesAutoresizingMaskIntoConstraints = NO;
-    //    sep.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [cell.contentView addSubview:sep];
-    //    [cell.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[sep]|"
-    //                                                                             options:0 metrics:nil
-    //                                                                               views:NSDictionaryOfVariableBindings(sep)]];
+    UIView* separator = [[UIView alloc] initWithFrame:CGRectMake(0, 59, cell.contentView.frame.size.width, 1)];
+    separator.backgroundColor = [UIColor colorWithWhite:1.f
+                                                  alpha:.1f];
+    [cell.contentView addSubview:separator];
 
-    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = nodeItem.type == FFNodeItemTypeParent ? [FFStyle darkBlue] : [UIColor clearColor];
 
     return cell;
 }
 
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
+#pragma mark - RATreeViewDelegate
+
+- (CGFloat)treeView:(RATreeView*)treeView
+    heightForRowForItem:(id)item
+           treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
 {
-    if (!self.delegate || ![self.delegate respondsToSelector:@selector(performMenuSegue:)]) {
-        NSLog(@"all dressed up with no delegate and no where to go");
-        return;
-    }
-    switch (indexPath.row) {
-    case 0:
-        [self.delegate performMenuSegue:@"GotoMyGames"];
-        break;
-    case 1:
-        [self.delegate performMenuSegue:@"GotoCreateGame"];
-        break;
-    //        case 2:
-    //            break;
-    case 2:
-        [self.delegate performMenuSegue:@"GotoRules"];
-        break;
-    case 3:
-        [self.delegate performMenuSegue:@"GotoTerms"];
-        break;
-    case 4:
-        [self.delegate performMenuSegue:@"GotoSupport"];
-        break;
-    case 5:
-        [self.delegate performMenuSegue:@"GotoAccount"];
-        break;
-    default:
-        break;
-    }
-    [tableView deselectRowAtIndexPath:indexPath
-                             animated:YES];
+    return 44;
 }
 
-- (void)didReceiveMemoryWarning
+- (void)treeView:(RATreeView*)treeView
+    didSelectRowForItem:(id)item
+           treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    if (!self.delegate) {
+        NSLog(@"all dressed up with no delegate and no where to go");
+        WTFLog;
+        return;
+    }
+    FFNodeItem* nodeItem = [item isKindOfClass:[FFNodeItem class]] ? (FFNodeItem*)item : nil;
+    if (!nodeItem) {
+        WTFLog;
+        NSAssert(FALSE, @"Wrong type of item for cell!");
+    }
+    if (nodeItem.type == FFNodeItemTypeLeaf) {
+        NSString* segueTitle = self.segueByTitle[nodeItem.title];
+        if (segueTitle) {
+            [self.delegate performMenuSegue:segueTitle];
+        }
+    }
+    [treeView deselectRowForItem:item
+                        animated:YES];
+}
+
+- (void)treeView:(RATreeView*)treeView
+    willExpandRowForItem:(id)item
+            treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
+{
+    [self updateCell:[treeView cellForItem:item]
+        withAccessoryName:@"accessory_uncollapse"];
+}
+
+- (void)treeView:(RATreeView*)treeView
+    willCollapseRowForItem:(id)item
+              treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
+{
+    FFNodeItem* nodeItem = [item isKindOfClass:[FFNodeItem class]] ? (FFNodeItem*)item : nil;
+    if (!nodeItem) {
+        WTFLog;
+        NSAssert(FALSE, @"Wrong type of item for cell!");
+    }
+    [self updateCell:[treeView cellForItem:item]
+        withAccessoryName:nodeItem.children.count > 0 ? @"accessory_collapse"
+                                                      : @"accessory_uncollapse"];
+}
+
+#pragma mark - private
+
+- (void)updateCell:(UITableViewCell*)cell
+    withAccessoryName:(NSString*)accessoryName
+{
+    UIImage* accessoryImage = [UIImage imageNamed:accessoryName];
+    UIImageView* accessory = [[UIImageView alloc] initWithFrame:
+                                                      CGRectMake(0, 0,
+                                                                 accessoryImage.size.width,
+                                                                 accessoryImage.size.height)];
+    accessory.image = accessoryImage;
+    accessory.backgroundColor = [UIColor clearColor];
+    cell.accessoryView = accessory;
 }
 
 @end

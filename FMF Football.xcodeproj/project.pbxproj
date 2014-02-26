@@ -47,8 +47,6 @@
 		896ACC8118B664F5001E9C64 /* dailyfantasyfootball@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD318B664F5001E9C64 /* dailyfantasyfootball@2x.png */; };
 		896ACC8318B664F5001E9C64 /* darkgreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD418B664F5001E9C64 /* darkgreen.png */; };
 		896ACC8518B664F5001E9C64 /* defaultuser@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD518B664F5001E9C64 /* defaultuser@2x.png */; };
-		896ACC8718B664F5001E9C64 /* disclosuredark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD618B664F5001E9C64 /* disclosuredark@2x.png */; };
-		896ACC8918B664F5001E9C64 /* disclosurelight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD718B664F5001E9C64 /* disclosurelight@2x.png */; };
 		896ACC8B18B664F5001E9C64 /* fmf-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD818B664F5001E9C64 /* fmf-logo@2x.png */; };
 		896ACC8D18B664F5001E9C64 /* fmf-splash-copy@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD918B664F5001E9C64 /* fmf-splash-copy@2x.png */; };
 		896ACC8F18B664F5001E9C64 /* globalmenu-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */; };
@@ -112,6 +110,8 @@
 		896ACD0918B664F5001E9C64 /* FFUserBitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 896ACC4B18B664F5001E9C64 /* FFUserBitView.m */; };
 		896ACD0B18B664F5001E9C64 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 896ACC4D18B664F5001E9C64 /* MainStoryboard_iPad.storyboard */; };
 		896ACD0D18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 896ACC4E18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard */; };
+		89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BABFC518BBB98F001AD755 /* FFNodeItem.m */; };
+		89BABFC818BDFC99001AD755 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89BABFC718BDFC99001AD755 /* Localizable.strings */; };
 		89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBC218B664F5001E9C64 /* FMF-Small-50.png */; };
 		89C3656618B7CBF2003C7A9C /* playerselectmask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE318B664F5001E9C64 /* playerselectmask@2x.png */; };
 		89DFD28E18B37ECC0079F427 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD28D18B37ECC0079F427 /* AdSupport.framework */; };
@@ -120,6 +120,11 @@
 		89DFD29418B37F2B0079F427 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD29318B37F2B0079F427 /* CoreLocation.framework */; };
 		89DFD29618B37F3A0079F427 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD29518B37F3A0079F427 /* AudioToolbox.framework */; };
 		89DFD29818B37F420079F427 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD29718B37F420079F427 /* OpenGLES.framework */; };
+		89F2E70218BE249A00B23A99 /* accessory_check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E6FD18BE249A00B23A99 /* accessory_check@2x.png */; };
+		89F2E70318BE249A00B23A99 /* accessory_collapse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E6FE18BE249A00B23A99 /* accessory_collapse@2x.png */; };
+		89F2E70418BE249A00B23A99 /* accessory_disclosure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E6FF18BE249A00B23A99 /* accessory_disclosure@2x.png */; };
+		89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E70018BE249A00B23A99 /* accessory_uncheck@2x.png */; };
+		89F2E70618BE249A00B23A99 /* accessory_uncollapse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E70118BE249A00B23A99 /* accessory_uncollapse@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -165,8 +170,6 @@
 		896ACBD318B664F5001E9C64 /* dailyfantasyfootball@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dailyfantasyfootball@2x.png"; sourceTree = "<group>"; };
 		896ACBD418B664F5001E9C64 /* darkgreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = darkgreen.png; sourceTree = "<group>"; };
 		896ACBD518B664F5001E9C64 /* defaultuser@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defaultuser@2x.png"; sourceTree = "<group>"; };
-		896ACBD618B664F5001E9C64 /* disclosuredark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosuredark@2x.png"; sourceTree = "<group>"; };
-		896ACBD718B664F5001E9C64 /* disclosurelight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosurelight@2x.png"; sourceTree = "<group>"; };
 		896ACBD818B664F5001E9C64 /* fmf-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fmf-logo@2x.png"; sourceTree = "<group>"; };
 		896ACBD918B664F5001E9C64 /* fmf-splash-copy@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fmf-splash-copy@2x.png"; sourceTree = "<group>"; };
 		896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "globalmenu-highlighted@2x.png"; sourceTree = "<group>"; };
@@ -277,12 +280,20 @@
 		896ACC4B18B664F5001E9C64 /* FFUserBitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFUserBitView.m; sourceTree = "<group>"; };
 		896ACC4D18B664F5001E9C64 /* MainStoryboard_iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		896ACC4E18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		89BABFC418BBB98F001AD755 /* FFNodeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNodeItem.h; sourceTree = "<group>"; };
+		89BABFC518BBB98F001AD755 /* FFNodeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNodeItem.m; sourceTree = "<group>"; };
+		89BABFC718BDFC99001AD755 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		89DFD28D18B37ECC0079F427 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		89DFD28F18B37EE30079F427 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		89DFD29118B37F1B0079F427 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		89DFD29318B37F2B0079F427 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		89DFD29518B37F3A0079F427 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		89DFD29718B37F420079F427 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		89F2E6FD18BE249A00B23A99 /* accessory_check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_check@2x.png"; sourceTree = "<group>"; };
+		89F2E6FE18BE249A00B23A99 /* accessory_collapse@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_collapse@2x.png"; sourceTree = "<group>"; };
+		89F2E6FF18BE249A00B23A99 /* accessory_disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_disclosure@2x.png"; sourceTree = "<group>"; };
+		89F2E70018BE249A00B23A99 /* accessory_uncheck@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_uncheck@2x.png"; sourceTree = "<group>"; };
+		89F2E70118BE249A00B23A99 /* accessory_uncollapse@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_uncollapse@2x.png"; sourceTree = "<group>"; };
 		C7A0D11613844A1D9BF1BC9E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -389,6 +400,7 @@
 				896ACC1318B664F5001E9C64 /* FMF Football-Info.plist */,
 				896ACC1418B664F5001E9C64 /* FMF Football-Prefix.pch */,
 				896ACC2218B664F5001E9C64 /* InfoPlist.strings */,
+				89BABFC718BDFC99001AD755 /* Localizable.strings */,
 				896ACC2318B664F5001E9C64 /* main.m */,
 			);
 			path = App;
@@ -448,6 +460,11 @@
 			children = (
 				896ACBCB18B664F5001E9C64 /* 0-percent.png */,
 				896ACBCC18B664F5001E9C64 /* 40-percent.png */,
+				89F2E6FD18BE249A00B23A99 /* accessory_check@2x.png */,
+				89F2E6FE18BE249A00B23A99 /* accessory_collapse@2x.png */,
+				89F2E6FF18BE249A00B23A99 /* accessory_disclosure@2x.png */,
+				89F2E70018BE249A00B23A99 /* accessory_uncheck@2x.png */,
+				89F2E70118BE249A00B23A99 /* accessory_uncollapse@2x.png */,
 				896ACBCD18B664F5001E9C64 /* avatarmask@2x.png */,
 				896ACBCE18B664F5001E9C64 /* backbtn@2x.png */,
 				896ACBCF18B664F5001E9C64 /* bannerclose@2x.png */,
@@ -457,8 +474,6 @@
 				896ACBD318B664F5001E9C64 /* dailyfantasyfootball@2x.png */,
 				896ACBD418B664F5001E9C64 /* darkgreen.png */,
 				896ACBD518B664F5001E9C64 /* defaultuser@2x.png */,
-				896ACBD618B664F5001E9C64 /* disclosuredark@2x.png */,
-				896ACBD718B664F5001E9C64 /* disclosurelight@2x.png */,
 				896ACBD818B664F5001E9C64 /* fmf-logo@2x.png */,
 				896ACBD918B664F5001E9C64 /* fmf-splash-copy@2x.png */,
 				896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */,
@@ -560,6 +575,8 @@
 				896ACC2E18B664F5001E9C64 /* FFSession.m */,
 				896ACC2F18B664F5001E9C64 /* FFUser.h */,
 				896ACC3018B664F5001E9C64 /* FFUser.m */,
+				89BABFC418BBB98F001AD755 /* FFNodeItem.h */,
+				89BABFC518BBB98F001AD755 /* FFNodeItem.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -676,7 +693,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				896ACD0B18B664F5001E9C64 /* MainStoryboard_iPad.storyboard in Resources */,
+				89F2E70618BE249A00B23A99 /* accessory_uncollapse@2x.png in Resources */,
 				896ACC9718B664F5001E9C64 /* helmet-placeholder.png in Resources */,
+				89BABFC818BDFC99001AD755 /* Localizable.strings in Resources */,
+				89F2E70318BE249A00B23A99 /* accessory_collapse@2x.png in Resources */,
 				896ACC9B18B664F5001E9C64 /* leftshuttle@2x.png in Resources */,
 				896ACCA718B664F5001E9C64 /* rosterslotempty@2x.png in Resources */,
 				896ACC7D18B664F5001E9C64 /* checkmark@2x.png in Resources */,
@@ -690,8 +710,8 @@
 				896ACC5F18B664F5001E9C64 /* FMF-80.png in Resources */,
 				896ACC9918B664F5001E9C64 /* helmet-placeholder@2x.png in Resources */,
 				89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */,
+				89F2E70218BE249A00B23A99 /* accessory_check@2x.png in Resources */,
 				896ACC7918B664F5001E9C64 /* bannerclose@2x.png in Resources */,
-				896ACC8918B664F5001E9C64 /* disclosurelight@2x.png in Resources */,
 				896ACC8118B664F5001E9C64 /* dailyfantasyfootball@2x.png in Resources */,
 				896ACC6B18B664F5001E9C64 /* FMF@2x.png in Resources */,
 				896ACC5918B664F5001E9C64 /* FMF-58.png in Resources */,
@@ -703,9 +723,9 @@
 				896ACC8518B664F5001E9C64 /* defaultuser@2x.png in Resources */,
 				896ACC7B18B664F5001E9C64 /* bluedot@2x.png in Resources */,
 				896ACC6D18B664F5001E9C64 /* iTunesArtwork.png in Resources */,
-				896ACC8718B664F5001E9C64 /* disclosuredark@2x.png in Resources */,
 				896ACC5B18B664F5001E9C64 /* FMF-72.png in Resources */,
 				896ACC8318B664F5001E9C64 /* darkgreen.png in Resources */,
+				89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */,
 				896ACC7118B664F5001E9C64 /* 0-percent.png in Resources */,
 				896ACC9118B664F5001E9C64 /* globalmenu@2x.png in Resources */,
 				896ACC6F18B664F5001E9C64 /* iTunesArtwork@2x.png in Resources */,
@@ -724,6 +744,7 @@
 				896ACC9F18B664F5001E9C64 /* player-cutout@2x.png in Resources */,
 				896ACC6718B664F5001E9C64 /* FMF-Small@2x.png in Resources */,
 				896ACC5718B664F5001E9C64 /* FMF-120.png in Resources */,
+				89F2E70418BE249A00B23A99 /* accessory_disclosure@2x.png in Resources */,
 				896ACC5D18B664F5001E9C64 /* FMF-72@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -801,6 +822,7 @@
 				896ACCC518B664F5001E9C64 /* FFRosterViewController.m in Sources */,
 				896ACCAF18B664F5001E9C64 /* FFContestEntrantsViewController.m in Sources */,
 				896ACCF918B664F5001E9C64 /* FFAlertView.m in Sources */,
+				89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */,
 				896ACCBF18B664F5001E9C64 /* FFMyAccountViewController.m in Sources */,
 				896ACCF718B664F5001E9C64 /* FFRosterSlotCell.m in Sources */,
 				896ACCE918B664F5001E9C64 /* FFGame.m in Sources */,

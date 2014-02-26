@@ -178,7 +178,7 @@
     [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 22.5, 10, 15)];
-    disclosure.image = [UIImage imageNamed:@"disclosurelight.png"];
+    disclosure.image = [UIImage imageNamed:@"accessory_disclosure"];
     disclosure.backgroundColor = [UIColor clearColor];
     [cell.contentView addSubview:disclosure];
 

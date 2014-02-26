@@ -327,8 +327,7 @@
                        forState:UIControlStateNormal];
 }
 
-#pragma mark -
-#pragma mark ffcreategame controller delegate
+#pragma mark - ffcreategame controller delegate
 
 - (void)createGameControllerDidCreateGame:(FFRoster*)roster
 {
@@ -339,8 +338,7 @@
                              context:roster];
 }
 
-#pragma mark -
-#pragma mark ffcontest cell delegate
+#pragma mark - ffcontest cell delegate
 
 - (void)didChooseContest:(FFContestType*)contest
 {
@@ -352,8 +350,7 @@
                                      ]];
 }
 
-#pragma mark -
-#pragma mark gamebuttonview delegate
+#pragma mark - gamebuttonview delegate
 - (void)gameButtonViewCreateGame
 {
     if (self.markets.count > 0) {
@@ -374,8 +371,7 @@
                               sender:self];
 }
 
-#pragma mark -
-#pragma mark ffmarketselector delegate
+#pragma mark - ffmarketselector delegate
 
 - (void)didUpdateToNewMarket:(FFMarket*)market
 {
@@ -405,8 +401,7 @@
     _filteredContests = [_contests allObjects];
 }
 
-#pragma mark -
-#pragma mark uitableview delegate / datasource
+#pragma mark - uitableview delegate / datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {

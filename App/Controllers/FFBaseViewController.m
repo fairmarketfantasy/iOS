@@ -232,7 +232,8 @@
 - (void)maximizeDrawerAnimated:(BOOL)animated
 {
     if (!_minimizedDrawerController) {
-        NSLog(@"tried to maximize drawer but there is no minimized controller... how did we even get here?");
+        NSLog(@"tried to maximize drawer but there is no minimized controller...");
+        WTFLog;
         return;
     }
     if (!_drawerIsMinimized) {
@@ -398,7 +399,7 @@
         NSLog(@"already showing a menu controller");
         return;
     }
-    _menuController = [[FFMenuViewController alloc] init];
+    _menuController = [FFMenuViewController new];
     _menuController.delegate = self;
     _menuController.session = (FFSession*)self.session;
     _menuController.view.frame = CGRectMake(0, CGRectGetMaxY(self.view.frame),
@@ -411,10 +412,12 @@
     if ([self respondsToSelector:@selector(topLayoutGuide)]) {
         topOffset = self.topLayoutGuide.length;
     }
-    [UIView animateWithDuration:.25 animations:^{
+    [UIView animateWithDuration: .25f
+                     animations: ^{
         _menuController.view.alpha = 1;
         _menuController.view.frame = CGRectMake(0, topOffset, self.view.frame.size.width, self.view.frame.size.height);
-    } completion:^(BOOL finished)
+    }
+                     completion: ^(BOOL finished)
     {
         if (finished) {
             [_menuController viewDidAppear:YES];
@@ -444,7 +447,7 @@
 - (void)performMenuSegue:(NSString*)ident
 {
     if (!self.menuController) {
-        NSLog(@"how did we even get here?");
+        WTFLog;
         return;
     }
     [self hideMenuController];
