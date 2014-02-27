@@ -10,15 +10,17 @@
 #import "FFSessionViewController.h"
 #import <RATreeView.h>
 #import "FFNodeItem.h"
+#import "FFMenuCell.h"
 
 @interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate>
 
-@property(nonatomic) RATreeView* tableView;
 @property(nonatomic) RATreeView* treeView;
 @property(nonatomic, readonly) NSArray* nodes;
 @property(nonatomic, readonly) NSDictionary* segueByTitle;
 
 @end
+
+#define MENU_CELL_ID (@"MenuCell")
 
 @implementation FFMenuViewController
 
@@ -27,8 +29,6 @@
     self = [super init];
     if (self) {
         self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 504)];
-        self.view.backgroundColor = [UIColor colorWithWhite:0
-                                                      alpha:.9];
 
         _nodes = [FFNodeItem nodesFromStrings:
                                  @[
@@ -62,18 +62,30 @@
             @"Settings" : @"GotoAccount"
         };
 
-        self.treeView = [[RATreeView alloc] initWithFrame:self.view.bounds];
-        self.treeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        self.treeView.backgroundColor = [UIColor clearColor];
-        self.treeView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        self.treeView.dataSource = self;
-        self.treeView.delegate = self;
-
-        [self.treeView registerClass:[UITableViewCell class]
-              forCellReuseIdentifier:@"MenuCell"];
-        [self.view addSubview:self.treeView];
+        self.treeView = [[RATreeView alloc] initWithFrame:self.view.bounds
+                                                    style:RATreeViewStylePlain];
     }
+
     return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // TODO: make proper MVC in whole project!!!
+    self.view.backgroundColor = [UIColor colorWithWhite:0
+                                                  alpha:.9];
+    self.treeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.treeView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.treeView.separatorColor = [FFStyle lightGrey];
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 7) {
+        self.treeView.separatorInset = UIEdgeInsetsZero;
+    }
+    self.treeView.dataSource = self;
+    self.treeView.delegate = self;
+    [self.treeView registerClass:[FFMenuCell class]
+          forCellReuseIdentifier:MENU_CELL_ID];
+    [self.view addSubview:self.treeView];
 }
 
 #pragma mark - RATreeViewDataSource
@@ -111,21 +123,17 @@
                  cellForItem:(id)item
                 treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
 {
-    UITableViewCell* cell = [treeView dequeueReusableCellWithIdentifier:@"MenuCell"];
+    FFMenuCell* cell = [treeView dequeueReusableCellWithIdentifier:MENU_CELL_ID];
     FFNodeItem* nodeItem = [item isKindOfClass:[FFNodeItem class]] ? (FFNodeItem*)item : nil;
     if (!nodeItem) {
         WTFLog;
         NSAssert(FALSE, @"Wrong type of item for cell!");
     }
     cell.textLabel.text = NSLocalizedString(nodeItem.title, @"Cell title");
-    cell.textLabel.textColor = [FFStyle lightGrey];
-
-    cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.bounds];
-    cell.selectedBackgroundView.backgroundColor = [FFStyle darkGreen];
-    CGFloat fontSize = 18.f;
+    // set font
+    CGFloat fontSize = 17.f;
     cell.textLabel.font = nodeItem.type == FFNodeItemTypeParent ? [FFStyle blockFont:fontSize]
                                                                 : [FFStyle regularFont:fontSize];
-
     // add disclosure indicator
     NSString* accessoryName = @"";
     if (nodeItem.type == FFNodeItemTypeParent) {
@@ -138,20 +146,21 @@
                                                         : @"accessory_uncollapse";
         }
     } else {
-        accessoryName = @"accessory_disclosure";
+        if (treeNodeInfo.treeDepthLevel > 0) {
+            accessoryName = @"accessory_uncheck";
+        } else {
+            accessoryName = @"accessory_disclosure";
+        }
     }
-
-    [self updateCell:cell
-        withAccessoryName:accessoryName];
-
-    // add separator to bottom
-    UIView* separator = [[UIView alloc] initWithFrame:CGRectMake(0, 59, cell.contentView.frame.size.width, 1)];
-    separator.backgroundColor = [UIColor colorWithWhite:1.f
-                                                  alpha:.1f];
-    [cell.contentView addSubview:separator];
-
-    cell.backgroundColor = nodeItem.type == FFNodeItemTypeParent ? [FFStyle darkBlue] : [UIColor clearColor];
-
+    [cell setAccessoryNamed:accessoryName];
+    // set background color
+    if (nodeItem.type == FFNodeItemTypeParent) {
+        cell.backgroundColor = [FFStyle darkBlue];
+    } else if (treeNodeInfo.treeDepthLevel > 0) {
+        cell.backgroundColor = [FFStyle darkerColorForColor:[FFStyle darkBlue]];
+    } else {
+        cell.backgroundColor = [UIColor clearColor];
+    }
     return cell;
 }
 
@@ -161,7 +170,14 @@
     heightForRowForItem:(id)item
            treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
 {
-    return 44;
+    return 44.f;
+}
+
+- (UITableViewCellEditingStyle)treeView:(RATreeView*)treeView
+              editingStyleForRowForItem:(id)item
+                           treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
+{
+    return UITableViewCellEditingStyleNone;
 }
 
 - (void)treeView:(RATreeView*)treeView
@@ -192,8 +208,9 @@
     willExpandRowForItem:(id)item
             treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
 {
-    [self updateCell:[treeView cellForItem:item]
-        withAccessoryName:@"accessory_uncollapse"];
+    FFMenuCell* currentCell = (FFMenuCell*)[treeView cellForItem:item];
+    NSAssert([currentCell isKindOfClass:[FFMenuCell class]], @"wrong cell type, expected FFMenuCell");
+    [currentCell setAccessoryNamed:@"accessory_uncollapse"];
 }
 
 - (void)treeView:(RATreeView*)treeView
@@ -205,24 +222,10 @@
         WTFLog;
         NSAssert(FALSE, @"Wrong type of item for cell!");
     }
-    [self updateCell:[treeView cellForItem:item]
-        withAccessoryName:nodeItem.children.count > 0 ? @"accessory_collapse"
-                                                      : @"accessory_uncollapse"];
-}
-
-#pragma mark - private
-
-- (void)updateCell:(UITableViewCell*)cell
-    withAccessoryName:(NSString*)accessoryName
-{
-    UIImage* accessoryImage = [UIImage imageNamed:accessoryName];
-    UIImageView* accessory = [[UIImageView alloc] initWithFrame:
-                                                      CGRectMake(0, 0,
-                                                                 accessoryImage.size.width,
-                                                                 accessoryImage.size.height)];
-    accessory.image = accessoryImage;
-    accessory.backgroundColor = [UIColor clearColor];
-    cell.accessoryView = accessory;
+    FFMenuCell* currentCell = (FFMenuCell*)[treeView cellForItem:item];
+    NSAssert([currentCell isKindOfClass:[FFMenuCell class]], @"wrong cell type, expected FFMenuCell");
+    [currentCell setAccessoryNamed:nodeItem.children.count > 0 ? @"accessory_collapse"
+                                                               : @"accessory_uncollapse"];
 }
 
 @end

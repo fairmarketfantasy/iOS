@@ -18,6 +18,7 @@
 		15CD295517F7804A0027DFEC /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295317F7804A0027DFEC /* AddressBook.framework */; };
 		15CD295617F7804A0027DFEC /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295417F7804A0027DFEC /* AddressBookUI.framework */; };
 		61A0C8A5904D4788A81F9EA6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A0D11613844A1D9BF1BC9E /* libPods.a */; };
+		89470EC218BF694200E405EF /* FFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89470EC118BF694200E405EF /* FFMenuCell.m */; };
 		896ACA5018B66376001E9C64 /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */; };
 		896ACA5218B66377001E9C64 /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 896ACA4F18B66376001E9C64 /* UbertestersSDKResources.bundle */; };
 		896ACC4F18B664F5001E9C64 /* ProhibitionRound.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBB718B664F5001E9C64 /* ProhibitionRound.ttf */; };
@@ -140,6 +141,8 @@
 		15A2379E17E2865A00225942 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		15CD295317F7804A0027DFEC /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		15CD295417F7804A0027DFEC /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		89470EC018BF694200E405EF /* FFMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMenuCell.h; sourceTree = "<group>"; };
+		89470EC118BF694200E405EF /* FFMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMenuCell.m; sourceTree = "<group>"; };
 		896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
 		896ACA4F18B66376001E9C64 /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
 		896ACBB718B664F5001E9C64 /* ProhibitionRound.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ProhibitionRound.ttf; sourceTree = "<group>"; };
@@ -600,6 +603,8 @@
 				896ACC3618B664F5001E9C64 /* FFPlayerSelectCell.m */,
 				896ACC3718B664F5001E9C64 /* FFRosterSlotCell.h */,
 				896ACC3818B664F5001E9C64 /* FFRosterSlotCell.m */,
+				89470EC018BF694200E405EF /* FFMenuCell.h */,
+				89470EC118BF694200E405EF /* FFMenuCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -796,6 +801,7 @@
 				896ACD0118B664F5001E9C64 /* FFGameButtonView.m in Sources */,
 				896ACD0518B664F5001E9C64 /* FFNavigationBarItemView.m in Sources */,
 				896ACCB118B664F5001E9C64 /* FFContestViewController.m in Sources */,
+				89470EC218BF694200E405EF /* FFMenuCell.m in Sources */,
 				896ACCE718B664F5001E9C64 /* FFContestType.m in Sources */,
 				896ACCBD18B664F5001E9C64 /* FFMenuViewController.m in Sources */,
 				896ACCEF18B664F5001E9C64 /* FFSession.m in Sources */,

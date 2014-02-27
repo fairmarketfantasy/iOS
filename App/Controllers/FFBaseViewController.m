@@ -404,6 +404,7 @@
     _menuController.session = (FFSession*)self.session;
     _menuController.view.frame = CGRectMake(0, CGRectGetMaxY(self.view.frame),
                                             self.view.frame.size.width, self.view.frame.size.height);
+    [_menuController viewDidLoad];
     [_menuController viewWillAppear:YES];
     _menuController.view.alpha = 0;
     [self.view addSubview:_menuController.view];
