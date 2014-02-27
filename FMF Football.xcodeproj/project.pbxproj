@@ -18,6 +18,7 @@
 		15CD295517F7804A0027DFEC /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295317F7804A0027DFEC /* AddressBook.framework */; };
 		15CD295617F7804A0027DFEC /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295417F7804A0027DFEC /* AddressBookUI.framework */; };
 		61A0C8A5904D4788A81F9EA6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A0D11613844A1D9BF1BC9E /* libPods.a */; };
+		89051CB818BFA4E8001E8C78 /* FFDataObjectResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 89051CB718BFA4E8001E8C78 /* FFDataObjectResultSet.m */; };
 		89470EC218BF694200E405EF /* FFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89470EC118BF694200E405EF /* FFMenuCell.m */; };
 		896ACA5018B66376001E9C64 /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */; };
 		896ACA5218B66377001E9C64 /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 896ACA4F18B66376001E9C64 /* UbertestersSDKResources.bundle */; };
@@ -141,6 +142,8 @@
 		15A2379E17E2865A00225942 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		15CD295317F7804A0027DFEC /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		15CD295417F7804A0027DFEC /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		89051CB618BFA4E8001E8C78 /* FFDataObjectResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFDataObjectResultSet.h; sourceTree = "<group>"; };
+		89051CB718BFA4E8001E8C78 /* FFDataObjectResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFDataObjectResultSet.m; sourceTree = "<group>"; };
 		89470EC018BF694200E405EF /* FFMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMenuCell.h; sourceTree = "<group>"; };
 		89470EC118BF694200E405EF /* FFMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMenuCell.m; sourceTree = "<group>"; };
 		896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
@@ -568,6 +571,8 @@
 			children = (
 				896ACC2518B664F5001E9C64 /* FFContestType.h */,
 				896ACC2618B664F5001E9C64 /* FFContestType.m */,
+				89051CB618BFA4E8001E8C78 /* FFDataObjectResultSet.h */,
+				89051CB718BFA4E8001E8C78 /* FFDataObjectResultSet.m */,
 				896ACC2718B664F5001E9C64 /* FFGame.h */,
 				896ACC2818B664F5001E9C64 /* FFGame.m */,
 				896ACC2918B664F5001E9C64 /* FFMarket.h */,
@@ -819,6 +824,7 @@
 				896ACCD318B664F5001E9C64 /* FFWebViewController.m in Sources */,
 				896ACCD118B664F5001E9C64 /* FFValueEntryController.m in Sources */,
 				896ACCCF18B664F5001E9C64 /* FFTokenPurchaseViewController.m in Sources */,
+				89051CB818BFA4E8001E8C78 /* FFDataObjectResultSet.m in Sources */,
 				896ACCDB18B664F5001E9C64 /* FFWeakReference.m in Sources */,
 				896ACCCB18B664F5001E9C64 /* FFTickerMaximizedDrawerViewController.m in Sources */,
 				896ACCEB18B664F5001E9C64 /* FFMarket.m in Sources */,

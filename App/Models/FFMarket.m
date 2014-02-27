@@ -9,6 +9,7 @@
 #import "FFMarket.h"
 #import <SBData/NSDictionary+Convenience.h>
 #import "NSDate+ISO8601.h"
+#import "FFDataObjectResultSet.h"
 
 @implementation FFMarket
 
@@ -23,13 +24,22 @@
 @dynamic state;
 @dynamic totalBets;
 
-+ (NSString *)tableName { return @"ffmarket"; }
++ (NSString*)tableName
+{
+    return @"ffmarket";
+}
 
-+ (void)load { [self registerModel:self]; }
++ (void)load
+{
+    [self registerModel:self];
+}
 
-+ (NSString *)bulkPath { return @"/markets"; }
++ (NSString*)bulkPath
+{
+    return @"/markets";
+}
 
-+ (NSDictionary *)propertyToNetworkKeyMapping
++ (NSDictionary*)propertyToNetworkKeyMapping
 {
     return [[super propertyToNetworkKeyMapping] dictionaryByMergingWithDictionary:@{
                 @"closedAt":        @"closed_at",
@@ -42,26 +52,34 @@
                 @"startedAt":       @"started_at",
                 @"state":           @"state",
                 @"totalBets":       @"total_bets"
-            }];
+            }]; // sport = NBA | NFL
 }
 
-+ (NSArray *)filteredMarkets:(NSArray *)markets
++ (NSArray*)filteredMarkets:(NSArray*)markets
 {
-//    NSMutableArray *ret = [NSMutableArray arrayWithCapacity:2];
-//    for (FFMarket *m in markets) {
-//        if ([m.marketDuration isEqualToString:@"week"]) {
-//            [ret addObject:m];
-//            break;
-//        }
-//    }
-//    for (FFMarket *m in markets) {
-//        if ([m.marketDuration isEqualToString:@"day"]) {
-//            [ret addObject:m];
-//            break;
-//        }
-//    }
-//    return [ret copy];
+    //    NSMutableArray *ret = [NSMutableArray arrayWithCapacity:2];
+    //    for (FFMarket *m in markets) {
+    //        if ([m.marketDuration isEqualToString:@"week"]) {
+    //            [ret addObject:m];
+    //            break;
+    //        }
+    //    }
+    //    for (FFMarket *m in markets) {
+    //        if ([m.marketDuration isEqualToString:@"day"]) {
+    //            [ret addObject:m];
+    //            break;
+    //        }
+    //    }
+    //    return [ret copy];
     return markets;
+}
+
++ (FFDataObjectResultSet*)getBulkWithSession:(SBSession*)session
+                                  authorized:(BOOL)isAuthorizedRequest
+{
+    return [[FFDataObjectResultSet alloc] initWithDataObjectClass:self
+                                                          session:session
+                                                       authorized:isAuthorizedRequest];
 }
 
 @end

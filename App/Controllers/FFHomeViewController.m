@@ -19,14 +19,13 @@
 #import "FFAlertView.h"
 #import "FFWebViewController.h"
 #import "FFNavigationBarItemView.h"
+#import "FFDataObjectResultSet.h"
 
 @interface Fart : UITableViewCell
 
 @end
 
 @implementation Fart
-
-//
 
 @end
 
@@ -35,7 +34,7 @@
      FFMarketSelectorDelegate, FFGameButtonViewDelegate, FFContest2UpTableViewCellDelegate,
      FFCreateGameViewControllerDelegate>
 
-@property(nonatomic) SBDataObjectResultSet* markets;
+@property(nonatomic) FFDataObjectResultSet* markets;
 @property(nonatomic) UITableView* tableView;
 @property(nonatomic) FFMarketSelector* marketSelector;
 @property(nonatomic) FFUserBitView* userBit;
@@ -149,6 +148,9 @@
     }
 }
 
+// uncomment to test the banner
+//#define TEST_BANNER
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -163,20 +165,26 @@
 
     [self.tickerDataSource refresh];
 
-    // uncomment to test the banner
-    //    double delayInSeconds = 2.0;
-    //    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    //    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-    //        [self showBanner:@"Hello there" target:nil selector:NULL animated:YES];
-    //
-    //    });
+#ifdef TEST_BANNER
+
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+            [self showBanner:@"Hello there" target:nil selector:NULL animated:YES];
+    });
+
+#endif
 
     _markets = [FFMarket getBulkWithSession:self.session
                                  authorized:YES];
     _markets.clearsCollectionBeforeSaving = YES;
     _markets.delegate = self;
 
-    [_markets refresh];
+    NSDictionary* params = @{
+        @"sport" : @"NBA",
+        @"type" : @"regular_season"
+    };
+    [_markets refreshWithParameters:params];
 
     _marketSelector.markets = [FFMarket filteredMarkets:[_markets allObjects]];
 
@@ -352,7 +360,8 @@
                                      ]];
 }
 
-#pragma mark - gamebuttonview delegate
+#pragma mark - GameButtonViewDelegate
+
 - (void)gameButtonViewCreateGame
 {
     if (self.markets.count > 0) {
@@ -373,7 +382,7 @@
                               sender:self];
 }
 
-#pragma mark - ffmarketselector delegate
+#pragma mark - FFMarketSelectorDelegate
 
 - (void)didUpdateToNewMarket:(FFMarket*)market
 {

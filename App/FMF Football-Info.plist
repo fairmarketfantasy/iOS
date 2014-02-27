@@ -57,7 +57,7 @@
 	<key>SBAPIAllowInvalidSSLCertificate</key>
 	<true/>
 	<key>SBAPIBaseURLSpec</key>
-	<string>https://fairmarketfantasy.com</string>
+	<string>https://staging.fairmarketfantasy.com</string>
 	<key>SBAPIVersion</key>
 	<string></string>
 	<key>SBApiClientId</key>

@@ -9,19 +9,23 @@
 #import "SBDataObject.h"
 #import <SBData/SBTypes.h>
 
+@class FFDataObjectResultSet;
+
 @interface FFMarket : SBDataObject
 
-@property (nonatomic) SBDate    *closedAt;
-@property (nonatomic) NSString  *marketDuration;
-@property (nonatomic) NSString  *name;
-@property (nonatomic) SBDate    *openedAt;
-@property (nonatomic) SBFloat   *shadowBetRate;
-@property (nonatomic) SBFloat   *shadowBets;
-@property (nonatomic) SBInteger *sportId;
-@property (nonatomic) SBDate    *startedAt;
-@property (nonatomic) NSString  *state;
-@property (nonatomic) SBFloat   *totalBets;
+@property(nonatomic) SBDate* closedAt;
+@property(nonatomic) NSString* marketDuration;
+@property(nonatomic) NSString* name;
+@property(nonatomic) SBDate* openedAt;
+@property(nonatomic) SBFloat* shadowBetRate;
+@property(nonatomic) SBFloat* shadowBets;
+@property(nonatomic) SBInteger* sportId;
+@property(nonatomic) SBDate* startedAt;
+@property(nonatomic) NSString* state;
+@property(nonatomic) SBFloat* totalBets;
 
-+ (NSArray *)filteredMarkets:(NSArray *)markets;
++ (NSArray*)filteredMarkets:(NSArray*)markets;
++ (FFDataObjectResultSet*)getBulkWithSession:(SBSession*)session
+                                  authorized:(BOOL)isAuthorizedRequest;
 
 @end
