@@ -155,11 +155,11 @@
     [cell setAccessoryNamed:accessoryName];
     // set background color
     if (nodeItem.type == FFNodeItemTypeParent) {
-        cell.backgroundColor = [FFStyle darkBlue];
+        cell.backgroundView.backgroundColor = [FFStyle darkBlue];
     } else if (treeNodeInfo.treeDepthLevel > 0) {
-        cell.backgroundColor = [FFStyle darkerColorForColor:[FFStyle darkBlue]];
+        cell.backgroundView.backgroundColor = [FFStyle darkerColorForColor:[FFStyle darkBlue]];
     } else {
-        cell.backgroundColor = [UIColor clearColor];
+        cell.backgroundView.backgroundColor = [UIColor clearColor];
     }
     return cell;
 }

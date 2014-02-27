@@ -18,7 +18,9 @@
     self = [super initWithStyle:style
                 reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.backgroundColor = [UIColor clearColor];
         self.textLabel.textColor = [FFStyle lightGrey];
+        self.backgroundView = [[UIView alloc] initWithFrame:self.bounds];
         // add custom separator
         self.separator = [self newSeparator];
         [self addSubview:self.separator];
@@ -71,6 +73,7 @@
     if (enable) {
         [self addSubview:self.selectedBackgroundView];
         [self sendSubviewToBack:self.selectedBackgroundView];
+        [self sendSubviewToBack:self.backgroundView];
         self.selectedBackgroundView.alpha = 1.f;
     } else {
         [UIView animateWithDuration:MENU_CELL_ANIMATION_DURATION
