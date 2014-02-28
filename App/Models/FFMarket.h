@@ -9,7 +9,7 @@
 #import "SBDataObject.h"
 #import <SBData/SBTypes.h>
 
-@class FFDataObjectResultSet;
+@class FFMarketSet;
 
 @interface FFMarket : SBDataObject
 
@@ -25,7 +25,7 @@
 @property(nonatomic) SBFloat* totalBets;
 
 + (NSArray*)filteredMarkets:(NSArray*)markets;
-+ (FFDataObjectResultSet*)getBulkWithSession:(SBSession*)session
-                                  authorized:(BOOL)isAuthorizedRequest;
++ (FFMarketSet*)getBulkWithSession:(SBSession*)session
+                        authorized:(BOOL)isAuthorizedRequest;
 
 @end

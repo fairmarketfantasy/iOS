@@ -115,8 +115,11 @@
         WTFLog;
         return nil;
     }
+    NSParameterAssert([item isKindOfClass:[FFNodeItem class]]);
     FFNodeItem* nodeItem = (FFNodeItem*)item;
-    return nodeItem.children[index];
+    FFNodeItem* child = nodeItem.children[index];
+    [self declareOnTouchCellActionsForItem:child];
+    return child;
 }
 
 - (UITableViewCell*)treeView:(RATreeView*)treeView
@@ -147,7 +150,14 @@
         }
     } else {
         if (treeNodeInfo.treeDepthLevel > 0) {
-            accessoryName = @"accessory_uncheck";
+            if ([self.delegate respondsToSelector:@selector(currentMarketSport)]
+                    &&
+                [[FFMarketSet stringFromSport:[self.delegate currentMarketSport]]
+                    isEqualToString:nodeItem.title]) {
+                accessoryName = @"accessory_check";
+            } else {
+                accessoryName = @"accessory_uncheck";
+            }
         } else {
             accessoryName = @"accessory_disclosure";
         }
@@ -194,11 +204,8 @@
         WTFLog;
         NSAssert(FALSE, @"Wrong type of item for cell!");
     }
-    if (nodeItem.type == FFNodeItemTypeLeaf) {
-        NSString* segueTitle = self.segueByTitle[nodeItem.title];
-        if (segueTitle) {
-            [self.delegate performMenuSegue:segueTitle];
-        }
+    if (nodeItem.action) {
+        nodeItem.action();
     }
     [treeView deselectRowForItem:item
                         animated:YES];
@@ -226,6 +233,37 @@
     NSAssert([currentCell isKindOfClass:[FFMenuCell class]], @"wrong cell type, expected FFMenuCell");
     [currentCell setAccessoryNamed:nodeItem.children.count > 0 ? @"accessory_collapse"
                                                                : @"accessory_uncollapse"];
+}
+
+#pragma mark - private
+
+- (void)declareOnTouchCellActionsForItem:(FFNodeItem*)item
+{
+    NSParameterAssert([item isKindOfClass:[FFNodeItem class]]);
+    if (item.type != FFNodeItemTypeLeaf || item.action) {
+        return;
+    }
+    __block FFMenuViewController* blockSelf = self;
+    if ([item.title isEqualToString:@"NBA"]) {
+        item.action = ^{
+            if ([blockSelf.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
+                [blockSelf.delegate didUpdateToNewSport:FFMarketSportNBA];
+            }
+        };
+    } else if ([item.title isEqualToString:@"NFL"]) {
+        item.action = ^{
+            if ([blockSelf.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
+                [blockSelf.delegate didUpdateToNewSport:FFMarketSportNFL];
+            }
+        };
+    } else {
+        __block FFNodeItem* blockItem = item;
+        item.action = ^{
+            if (blockSelf.delegate) {
+                [blockSelf.delegate performMenuSegue:blockSelf.segueByTitle[blockItem.title]];
+            }
+        };
+    }
 }
 
 @end

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_OPTIONS(NSInteger, FFNodeItemType) {
+typedef NS_ENUM(NSInteger, FFNodeItemType) {
     FFNodeItemTypeLeaf,
     FFNodeItemTypeParent
 };
@@ -18,7 +18,9 @@ typedef NS_OPTIONS(NSInteger, FFNodeItemType) {
 @property(nonatomic, assign) FFNodeItemType type;
 @property(nonatomic, copy) NSString* title;
 @property(nonatomic) NSArray* children;
-+ (FFNodeItem*)nodeWithTitle:(NSString*)title children:(NSArray*)children;
+@property(nonatomic, copy) void (^action)();
++ (FFNodeItem*)nodeWithTitle:(NSString*)title
+                    children:(NSArray*)children;
 + (FFNodeItem*)nodeWithTitle:(NSString*)title;
 + (NSArray*)nodesFromStrings:(NSArray*)strings;
 

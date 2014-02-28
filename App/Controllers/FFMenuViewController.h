@@ -6,12 +6,15 @@
 //  Copyright (c) 2013 FairMarketFantasy. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "FFSession.h"
+#import "FFMarketSet.h"
 
 @protocol FFMenuViewControllerDelegate <NSObject>
 
 - (void)performMenuSegue:(NSString*)ident;
+@optional
+- (void)didUpdateToNewSport:(FFMarketSport)sport;
+- (FFMarketSport)currentMarketSport;
 
 @end
 

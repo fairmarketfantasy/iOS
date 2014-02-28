@@ -19,22 +19,14 @@
 #import "FFAlertView.h"
 #import "FFWebViewController.h"
 #import "FFNavigationBarItemView.h"
-#import "FFDataObjectResultSet.h"
-
-@interface Fart : UITableViewCell
-
-@end
-
-@implementation Fart
-
-@end
+#import "FFMarketSet.h"
 
 @interface FFHomeViewController ()
     <SBDataObjectResultSetDelegate, UITableViewDataSource, UITableViewDelegate,
      FFMarketSelectorDelegate, FFGameButtonViewDelegate, FFContest2UpTableViewCellDelegate,
      FFCreateGameViewControllerDelegate>
 
-@property(nonatomic) FFDataObjectResultSet* markets;
+@property(nonatomic) FFMarketSet* markets;
 @property(nonatomic) UITableView* tableView;
 @property(nonatomic) FFMarketSelector* marketSelector;
 @property(nonatomic) FFUserBitView* userBit;
@@ -46,16 +38,6 @@
 @end
 
 @implementation FFHomeViewController
-
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil
-                           bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -116,7 +98,7 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_tableView registerClass:[UITableViewCell class]
         forCellReuseIdentifier:@"MarketSelectorCell"];
-    [_tableView registerClass:[Fart class]
+    [_tableView registerClass:[UITableViewCell class]
         forCellReuseIdentifier:@"UserBitCell"];
     [_tableView registerClass:[FFContest2UpTabelViewCell class]
         forCellReuseIdentifier:@"ContestCell"];
@@ -155,8 +137,6 @@
 {
     [super viewDidAppear:animated];
 
-    UIViewController* cont2 = [[UIViewController alloc] init];
-    cont2.view.backgroundColor = [UIColor redColor];
     [self showControllerInDrawer:self.maximizedTicker
          minimizedViewController:self.minimizedTicker
                           inView:self.view
@@ -177,18 +157,9 @@
 
     _markets = [FFMarket getBulkWithSession:self.session
                                  authorized:YES];
-    _markets.clearsCollectionBeforeSaving = YES;
     _markets.delegate = self;
 
-    NSDictionary* params = @{
-        @"sport" : @"NBA",
-        @"type" : @"regular_season"
-    };
-    [_markets refreshWithParameters:params];
-
-    _marketSelector.markets = [FFMarket filteredMarkets:[_markets allObjects]];
-
-    [_tableView reloadData];
+    [self updateMarkets];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didUpdateUser:)
@@ -203,9 +174,14 @@
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)updateMarkets
 {
-    [super viewDidDisappear:animated];
+    _markets.clearsCollectionBeforeSaving = YES;
+    [_markets fetchType:FFMarketTypeRegularSeason];
+    _markets.clearsCollectionBeforeSaving = NO;
+    [_markets fetchType:FFMarketTypeSingleElimination];
+    _marketSelector.markets = [FFMarket filteredMarkets:[_markets allObjects]];
+    [_tableView reloadData];
 }
 
 - (void)didUpdateUser:(NSNotification*)note
@@ -412,14 +388,51 @@
     _filteredContests = [_contests allObjects];
 }
 
-#pragma mark - uitableview delegate / datasource
+#pragma mark - SBDataobjectResultSetDelegate
+
+- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
+{
+    if (resultSet == _markets) {
+        _marketSelector.markets = [FFMarket filteredMarkets:[resultSet allObjects]];
+    } else if (resultSet == _contests) {
+        // the server does not filter, and the result set by defaults shows what the server shows, hence we must
+        // do our own pass of filtering to show only takesTokens==True contest types
+        NSMutableArray* filtered = [NSMutableArray array];
+        for (FFContestType* contest in [_contests allObjects]) {
+            if ([contest.takesTokens integerValue]) {
+                [filtered addObject:contest];
+            }
+        }
+        _filteredContests = filtered;
+
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
+#pragma mark - FFMenuViewControllerDelegate
+
+- (void)didUpdateToNewSport:(FFMarketSport)sport
+{
+    [self hideMenuController];
+    _markets.sport = sport;
+    [self updateMarkets];
+}
+
+- (FFMarketSport)currentMarketSport
+{
+    return _markets.sport;
+}
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
     return 2;
 }
 
-- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView*)tableView
+    numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
         return 3;
@@ -430,24 +443,8 @@
     return 0;
 }
 
-- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
-{
-    if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
-            FFUser* user = (FFUser*)self.session.user;
-            if (user.inProgressRoster != nil) {
-                return 162;
-            }
-            return 122;
-        } else if (indexPath.row == 2) {
-            return 58;
-        }
-        return 60;
-    }
-    return 145;
-}
-
-- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
+- (UITableViewCell*)tableView:(UITableView*)tableView
+        cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     UITableViewCell* cell;
     if (indexPath.section == 0) {
@@ -497,37 +494,33 @@
     return cell;
 }
 
-- (BOOL)tableView:(UITableView*)tableView shouldHighlightRowAtIndexPath:(NSIndexPath*)indexPath
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView*)tableView
+    heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if (indexPath.row < 3) {
-        return NO;
+    if (indexPath.section != 0) {
+        return 145;
     }
-    return YES;
+    switch (indexPath.row) {
+    case 0: {
+        FFUser* user = (FFUser*)self.session.user;
+        if (user.inProgressRoster != nil) {
+            return 162;
+        }
+        return 122;
+    } break;
+    case 2:
+        return 58.f;
+    default:
+        return 60.f;
+    }
 }
 
-#pragma mark -
-#pragma mark sbdataobjectresultset delegate
-
-// REFRESH
-
-- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
+- (BOOL)tableView:(UITableView*)tableView
+    shouldHighlightRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if (resultSet == _markets) {
-        _marketSelector.markets = [FFMarket filteredMarkets:[resultSet allObjects]];
-    } else if (resultSet == _contests) {
-        // the server does not filter, and the result set by defaults shows what the server shows, hence we must
-        // do our own pass of filtering to show only takesTokens==True contest types
-        NSMutableArray* filtered = [NSMutableArray array];
-        for (FFContestType* ct in [_contests allObjects]) {
-            if ([ct.takesTokens integerValue]) {
-                [filtered addObject:ct];
-            }
-        }
-        _filteredContests = filtered;
-
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
+    return indexPath.row >= 3;
 }
 
 @end

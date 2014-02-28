@@ -19,6 +19,7 @@
 		15CD295617F7804A0027DFEC /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295417F7804A0027DFEC /* AddressBookUI.framework */; };
 		61A0C8A5904D4788A81F9EA6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A0D11613844A1D9BF1BC9E /* libPods.a */; };
 		89051CB818BFA4E8001E8C78 /* FFDataObjectResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 89051CB718BFA4E8001E8C78 /* FFDataObjectResultSet.m */; };
+		89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 89051CBA18BFC253001E8C78 /* FFMarketSet.m */; };
 		89470EC218BF694200E405EF /* FFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89470EC118BF694200E405EF /* FFMenuCell.m */; };
 		896ACA5018B66376001E9C64 /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */; };
 		896ACA5218B66377001E9C64 /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 896ACA4F18B66376001E9C64 /* UbertestersSDKResources.bundle */; };
@@ -144,6 +145,8 @@
 		15CD295417F7804A0027DFEC /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		89051CB618BFA4E8001E8C78 /* FFDataObjectResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFDataObjectResultSet.h; sourceTree = "<group>"; };
 		89051CB718BFA4E8001E8C78 /* FFDataObjectResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFDataObjectResultSet.m; sourceTree = "<group>"; };
+		89051CB918BFC253001E8C78 /* FFMarketSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMarketSet.h; sourceTree = "<group>"; };
+		89051CBA18BFC253001E8C78 /* FFMarketSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMarketSet.m; sourceTree = "<group>"; };
 		89470EC018BF694200E405EF /* FFMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMenuCell.h; sourceTree = "<group>"; };
 		89470EC118BF694200E405EF /* FFMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMenuCell.m; sourceTree = "<group>"; };
 		896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
@@ -577,6 +580,8 @@
 				896ACC2818B664F5001E9C64 /* FFGame.m */,
 				896ACC2918B664F5001E9C64 /* FFMarket.h */,
 				896ACC2A18B664F5001E9C64 /* FFMarket.m */,
+				89051CB918BFC253001E8C78 /* FFMarketSet.h */,
+				89051CBA18BFC253001E8C78 /* FFMarketSet.m */,
 				896ACC2B18B664F5001E9C64 /* FFRoster.h */,
 				896ACC2C18B664F5001E9C64 /* FFRoster.m */,
 				896ACC2D18B664F5001E9C64 /* FFSession.h */,
@@ -819,6 +824,7 @@
 				896ACCB718B664F5001E9C64 /* FFFindGameViewController.m in Sources */,
 				896ACCCD18B664F5001E9C64 /* FFTickerMinimizedDrawerViewController.m in Sources */,
 				896ACCB918B664F5001E9C64 /* FFHomeViewController.m in Sources */,
+				89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */,
 				896ACCC118B664F5001E9C64 /* FFNavigationController.m in Sources */,
 				896ACCF318B664F5001E9C64 /* FFContest2UpTabelViewCell.m in Sources */,
 				896ACCD318B664F5001E9C64 /* FFWebViewController.m in Sources */,

@@ -445,6 +445,8 @@
     }];
 }
 
+#pragma mark - FFMenuViewControllerDelegate
+
 - (void)performMenuSegue:(NSString*)ident
 {
     if (!self.menuController) {
@@ -455,6 +457,8 @@
     [self performSegueWithIdentifier:ident
                               sender:self.menuController];
 }
+
+#pragma mark -
 
 - (FFTickerDataSource*)tickerDataSource
 {

@@ -9,7 +9,7 @@
 #import "FFMarket.h"
 #import <SBData/NSDictionary+Convenience.h>
 #import "NSDate+ISO8601.h"
-#import "FFDataObjectResultSet.h"
+#import "FFMarketSet.h"
 
 @implementation FFMarket
 
@@ -52,7 +52,7 @@
                 @"startedAt":       @"started_at",
                 @"state":           @"state",
                 @"totalBets":       @"total_bets"
-            }]; // sport = NBA | NFL
+            }];
 }
 
 + (NSArray*)filteredMarkets:(NSArray*)markets
@@ -74,12 +74,12 @@
     return markets;
 }
 
-+ (FFDataObjectResultSet*)getBulkWithSession:(SBSession*)session
-                                  authorized:(BOOL)isAuthorizedRequest
++ (FFMarketSet*)getBulkWithSession:(SBSession*)session
+                        authorized:(BOOL)isAuthorizedRequest
 {
-    return [[FFDataObjectResultSet alloc] initWithDataObjectClass:self
-                                                          session:session
-                                                       authorized:isAuthorizedRequest];
+    return [[FFMarketSet alloc] initWithDataObjectClass:self
+                                                session:session
+                                             authorized:isAuthorizedRequest];
 }
 
 @end
