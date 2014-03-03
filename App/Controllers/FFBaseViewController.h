@@ -26,28 +26,21 @@
 @property(nonatomic, readonly) BOOL drawerIsMinimized;
 @property(nonatomic, readonly) FFMenuViewController* menuController;
 
-- (void)showBanner:(NSString*)text target:(id)target selector:(SEL)sel animated:(BOOL)animated;
+- (void)showBanner:(NSString*)text
+            target:(id)target
+          selector:(SEL)selector
+          animated:(BOOL)animated;
 - (void)closeBannerAnimated:(BOOL)animated;
-
-- (void)showControllerInDrawer:(FFDrawerViewController*)view
-       minimizedViewController:(FFDrawerViewController*)view
-                      animated:(BOOL)animated;
-
-- (void)showControllerInDrawer:(FFDrawerViewController*)vc
-       minimizedViewController:(FFDrawerViewController*)mvc
-                        inView:(UIView*)view
-                      animated:(BOOL)animated;
-
-- (void)showControllerInDrawer:(FFDrawerViewController*)vc
-       minimizedViewController:(FFDrawerViewController*)mvc
-                        inView:(UIView*)view
-               resizeTableView:(UITableView*)tableView
-                      animated:(BOOL)animated;
-
+- (void)showInDrawerMaximizedController:(FFDrawerViewController*)maximizedController
+            withMinimizedViewController:(FFDrawerViewController*)minimizedController
+                        resizeTableView:(UITableView*)tableView
+                               animated:(BOOL)animated;
+- (void)showInDrawerMaximizedController:(FFDrawerViewController*)maximizedController
+            withMinimizedViewController:(FFDrawerViewController*)minimizedController
+                               animated:(BOOL)animated;
 - (void)maximizeDrawerAnimated:(BOOL)animated;
 - (void)minimizeDrawerAnimated:(BOOL)animated;
 - (void)closeDrawerAnimated:(BOOL)animated;
-
 - (void)showMenuController;
 - (void)hideMenuController;
 
