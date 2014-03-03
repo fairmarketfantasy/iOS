@@ -12,11 +12,14 @@
 @interface FFTickerDrawerViewController ()
 
 @property(nonatomic) UICollectionViewFlowLayout* flowLayout;
-@property(nonatomic) NSDate* dontTickUntil; // you can block the ticker for a period of time
+/** block the ticker for a period of time */
+@property(nonatomic) NSDate* dontTickUntil;
 @property(nonatomic) BOOL doTick;
 @property(nonatomic) NSUInteger currentTickItem;
 
 @end
+
+#define TICK_INTERVAL ((NSTimeInterval)2.5f)
 
 @implementation FFTickerDrawerViewController
 
@@ -24,7 +27,9 @@
 {
     self = [super init];
     if (self) {
-        _flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        self.tickerData = @[
+        ];
+        _flowLayout = [UICollectionViewFlowLayout new];
         _flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 
         self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 48)];
@@ -55,7 +60,8 @@
         [self.view insertSubview:_loadingLabel
                     belowSubview:_collectionView];
 
-        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+                                                                  UIActivityIndicatorViewStyleWhite];
         _activityIndicator.frame = CGRectMake(10, 10, 10, 10);
         _activityIndicator.hidesWhenStopped = YES;
         _activityIndicator.userInteractionEnabled = NO;
@@ -74,19 +80,14 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.tickerData) {
-        [self.collectionView reloadData];
-    } else {
+    if (self.tickerData.count == 0) {
         [self tickerShowLoading:nil];
+        return;
     }
+    [self.collectionView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -101,8 +102,6 @@
     [super viewDidDisappear:animated];
     _doTick = NO;
 }
-
-#define TICK_INTERVAL 2.5
 
 - (void)tick
 {
@@ -123,7 +122,9 @@
         } else {
             self.dontTickUntil = nil;
             // we just scrolled, so set tickernext to the first visible cell
-            _currentTickItem = [(NSIndexPath*)[self.collectionView indexPathsForVisibleItems][0] item];
+            if (self.collectionView.indexPathsForVisibleItems.count > 0) {
+                _currentTickItem = [(NSIndexPath*)[self.collectionView indexPathsForVisibleItems][0] item];
+            }
         }
     }
     // scroll to the next one if available
@@ -144,23 +145,22 @@
                afterDelay:TICK_INTERVAL];
 }
 
-// ticker data source delegate -----------------------------------------------------------------------------------------
+#pragma mark - TickerDataSourceDelegate
 
 - (void)tickerShowLoading:(FFTickerDataSource*)source
 {
     self.errorLabel.hidden = YES;
     self.collectionView.hidden = YES;
-
     self.loadingLabel.hidden = NO;
     [self.activityIndicator startAnimating];
 }
 
-- (void)ticker:(FFTickerDataSource*)ticker showError:(NSString*)errStr
+- (void)ticker:(FFTickerDataSource*)ticker
+     showError:(NSString*)errStr
 {
     self.loadingLabel.hidden = YES;
     [self.activityIndicator stopAnimating];
     self.collectionView.hidden = YES;
-
     self.errorLabel.hidden = NO;
     if (!errStr) {
         errStr = NSLocalizedString(@"Error retrieving live stream", nil);
@@ -173,20 +173,20 @@
     self.loadingLabel.hidden = YES;
     [self.activityIndicator stopAnimating];
     self.errorLabel.hidden = YES;
-
     self.collectionView.hidden = NO;
     [self.collectionView reloadData];
     self.tickerData = [ticker.tickerData copy];
 }
 
-// collection view data source -----------------------------------------------------------------------------------------
+#pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView*)collectionView
 {
     return 1;
 }
 
-- (NSInteger)collectionView:(UICollectionView*)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)collectionView:(UICollectionView*)collectionView
+     numberOfItemsInSection:(NSInteger)section
 {
     return self.tickerData.count;
 }
@@ -200,14 +200,16 @@
                                  userInfo:nil];
 }
 
-- (UICollectionViewCell*)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath*)indexPath
+- (UICollectionViewCell*)collectionView:(UICollectionView*)collectionView
+                 cellForItemAtIndexPath:(NSIndexPath*)indexPath
 {
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                    reason:@"this method must be implemented in a subclass"
                                  userInfo:nil];
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView*)scrollView willDecelerate:(BOOL)decelerate
+- (void)scrollViewDidEndDragging:(UIScrollView*)scrollView
+                  willDecelerate:(BOOL)decelerate
 {
     self.dontTickUntil = [NSDate dateWithTimeIntervalSinceNow:5];
 }

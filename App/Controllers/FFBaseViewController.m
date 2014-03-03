@@ -458,7 +458,7 @@
                               sender:self.menuController];
 }
 
-#pragma mark -
+#pragma mark - Ticker
 
 - (FFTickerDataSource*)tickerDataSource
 {

@@ -18,8 +18,7 @@
 #import "FFNavigationBarItemView.h"
 #import <FacebookSDK/FacebookSDK.h>
 
-@interface FFSessionViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate, FFBalanceViewDataSource> {
-}
+@interface FFSessionViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate, FFBalanceViewDataSource>
 
 @property(nonatomic) UIView* signInView;
 @property(nonatomic) UIView* signUpView;
@@ -36,8 +35,8 @@
 @property(nonatomic) UIGestureRecognizer* dismissKeyboardRecognizer;
 @property(nonatomic) CGFloat keyboardHeight;
 @property(nonatomic) BOOL keyboardIsShowing;
-//@property (nonatomic) UIButton              *_balanceView;
-@property(nonatomic) FFTickerMaximizedDrawerViewController* signInTicker, *signUpTicker;
+@property(nonatomic) FFTickerMaximizedDrawerViewController* signInTicker;
+@property(nonatomic) FFTickerMaximizedDrawerViewController* signUpTicker;
 @property(nonatomic) BOOL onSignUpView;
 
 - (void)setupSignInView;
@@ -77,7 +76,6 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
-    //    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
 }
 
 - (id)ticker
@@ -108,7 +106,6 @@
                                                  name:SBLoginDidBecomeInvalidNotification
                                                object:nil];
     if (self.session != nil) {
-        //        [self.session syncUser];
         [self pollUser];
         [self.session syncPushToken];
         [self performSegueWithIdentifier:@"GoImmediatelyToHome"
@@ -116,24 +113,13 @@
         [self setNeedsStatusBarAppearanceUpdate];
     } else {
         [self.tickerDataSource refresh];
-        //        [self showControllerInDrawer:self.maximizedTicker
-        //             minimizedViewController:nil
-        //                              inView:self.signUpView
-        //                            animated:YES];
     }
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    //    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)gotLogout:(NSNotification*)note
 {
     NSLog(@"Got login/logout notification: %@", note);
     self.session = nil;
-    //    [self.navigationController popToRootViewControllerAnimated:YES];
 
     [self dismissViewControllerAnimated:YES
                              completion:^{
@@ -195,11 +181,6 @@
         logo.frame = CGRectOffset(logo.frame, 0, 17);
         signIn.frame = CGRectOffset(signIn.frame, 0, 20);
     }
-    //
-    //    UIImageView *marketingCopy = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dailyfantasyfootball.png"]];
-    //    marketingCopy.frame = CGRectMake(0, 44, 320, 60);
-    //    marketingCopy.contentMode = UIViewContentModeTop;
-    //    [self.signUpView addSubview:marketingCopy];
 
     UIView* container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
     container.backgroundColor = [UIColor clearColor];
@@ -225,7 +206,6 @@
     nam.autocapitalizationType = UITextAutocapitalizationTypeNone;
     nam.autocorrectionType = UITextAutocorrectionTypeNo;
     nam.keyboardType = UIKeyboardTypeEmailAddress;
-    //    un.text = //@"sam@mustw.in"; // TOOD: remove
     [container addSubview:nam];
     self.nameSignupField = nam;
 
@@ -933,9 +913,6 @@ validate_error:
     [self.session syncUserSuccess:^(id successObj)
     {
         FFUser* user = successObj;
-
-        //        UILabel *lab = (UILabel *)[self.balanceView viewWithTag:1337];
-        //        lab.text = [NSString stringWithFormat:@"%d", [user.tokenBalance integerValue]];
 
         [[NSNotificationCenter defaultCenter] postNotificationName:FFSessionDidUpdateUserNotification
                                                             object:nil
