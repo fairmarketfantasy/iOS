@@ -21,7 +21,7 @@
 @property(nonatomic) FFTickerDataSource* tickerDataSource;
 
 @property(nonatomic, readonly) UIView* banner;
-@property(nonatomic, readonly) FFDrawerViewController* drawerController;
+@property(nonatomic, readonly) FFDrawerViewController* maximizedDrawerController;
 @property(nonatomic, readonly) FFDrawerViewController* minimizedDrawerController;
 @property(nonatomic, readonly) BOOL drawerIsMinimized;
 @property(nonatomic, readonly) FFMenuViewController* menuController;

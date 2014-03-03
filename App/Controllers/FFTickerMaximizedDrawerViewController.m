@@ -10,10 +10,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <AFNetworking/UIImageView+AFNetworking.h>
 
-@interface FFTickerMaximizedDrawerViewController ()
-
-@end
-
 @implementation FFTickerMaximizedDrawerViewController
 
 - (id)init
@@ -35,71 +31,16 @@
         [self.view addSubview:lab];
 
         self.collectionView.frame = CGRectMake(0, 30, 320, 65);
-        [self.collectionView registerClass:[UICollectionViewCell class]
-                forCellWithReuseIdentifier:@"MaxCell"];
     }
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (CGSize)collectionView:(UICollectionView*)collectionView
-                    layout:(UICollectionViewLayout*)collectionViewLayout
-    sizeForItemAtIndexPath:(NSIndexPath*)indexPath
-{
-    NSDictionary* player = [self.tickerData objectAtIndex:indexPath.row];
-
-    NSString* nameValue = [NSString stringWithFormat:@"%@ (%@)", player[@"name"], player[@"position"]];
-    CGFloat namw = [nameValue sizeWithFont:[FFStyle regularFont:15]
-                         constrainedToSize:CGSizeMake(150, 100)].width;
-    return CGSizeMake(56 + namw, 65);
-}
-
 - (UICollectionViewCell*)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath*)indexPath
 {
-    UICollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MaxCell"
-                                                                           forIndexPath:indexPath];
-
-    [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    UICollectionViewCell* cell = [super collectionView:collectionView
+                                cellForItemAtIndexPath:indexPath];
 
     NSDictionary* player = [self.tickerData objectAtIndex:indexPath.row];
-
-    UIImageView* img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 56, 56)];
-    img.contentMode = UIViewContentModeScaleAspectFit;
-    [cell.contentView addSubview:img];
-    [img setImageWithURL:[NSURL URLWithString:player[@"headshot_url"]]
-        placeholderImage:[UIImage imageNamed:@"helmet-placeholder.png"]];
-
-    UIImageView* overlay = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 56, 56)];
-    overlay.contentMode = UIViewContentModeScaleAspectFit;
-    overlay.image = [UIImage imageNamed:@"player-cutout.png"];
-    overlay.backgroundColor = [UIColor clearColor];
-    [cell.contentView addSubview:overlay];
-
-    NSString* nameValue = [NSString stringWithFormat:@"%@ (%@)", player[@"name"], player[@"position"]];
-    CGFloat namw = [nameValue sizeWithFont:[FFStyle regularFont:15]
-                         constrainedToSize:CGSizeMake(150, 100)].width;
-    UILabel* nam = [[UILabel alloc] initWithFrame:CGRectMake(56, 5, namw, 15)];
-    nam.font = [FFStyle regularFont:15];
-    nam.textColor = [FFStyle white];
-    nam.backgroundColor = [FFStyle darkGreen];
-    nam.text = nameValue;
-    [cell.contentView addSubview:nam];
 
     NSString* ppgValue = [NSString stringWithFormat:@"%@ PPG", (![player[@"ppg"] isEqual:[NSNull null]]
                                                                         ? [NSString stringWithFormat:@"%.2f", [player[@"ppg"] floatValue]]
@@ -126,6 +67,18 @@
     [cell.contentView addSubview:cost];
 
     return cell;
+}
+
+#pragma mark - private
+
+- (NSString*)cellReuseIdentifier
+{
+    return @"MaxCell";
+}
+
+- (CGFloat)itemHeight
+{
+    return 65.f;
 }
 
 @end

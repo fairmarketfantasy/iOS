@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 FairMarketFantasy. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "FFTickerDrawerViewController.h"
 
 @interface FFTickerMinimizedDrawerViewController : FFTickerDrawerViewController

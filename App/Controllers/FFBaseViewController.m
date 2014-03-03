@@ -22,17 +22,10 @@
 
 @end
 
-@implementation FFBaseViewController
+#define DRAWER_HEIGHT (95.f)
+#define DRAWER_MINIMIZED_HEIGHT (48.f)
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil
-                           bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@implementation FFBaseViewController
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
@@ -42,7 +35,9 @@
 - (void)showBanner:(NSString*)text target:(id)target selector:(SEL)sel animated:(BOOL)animated
 {
     if (_banner) {
-        NSLog(@"trying to show a banner when there already is one %@ %@ -> %@", text, target, NSStringFromSelector(sel));
+        WTFLog;
+        NSLog(@"trying to show a banner when there already is one %@ %@ -> %@",
+              text, target, NSStringFromSelector(sel));
         return;
     }
     FFCustomButton* v = [FFCustomButton buttonWithType:UIButtonTypeCustom];
@@ -78,48 +73,43 @@
     close.contentMode = UIViewContentModeCenter;
     [v addSubview:close];
 
-    //CGRect viewFrame = CGRectMake(0, self.view.frame.origin.y+44, self.view.frame.size.width, self.view.frame.size.height-44);
-
-    void (^ani)(void) = ^{
-        //self.view.frame = viewFrame;
-        v.alpha = 1;
-        v.frame = CGRectOffset(v.frame, 0, 44);
-    };
-
-    if (animated) {
-        [UIView animateWithDuration:.25
-                         animations:ani];
-    } else {
-        ani();
-    }
+    [UIView animateWithDuration:animated ? .25f : 0.f
+                     animations:^{
+                         v.alpha = 1;
+                         v.frame = CGRectOffset(v.frame, 0, 44);
+                     }];
 }
 
 - (void)closeBannerAnimated:(BOOL)animated
 {
-    // TODO: respect animated
     if (self.banner) {
-        [self closeBanner:self.banner];
+        [self closeBanner:self.banner
+                 animated:animated];
     }
 }
 
 - (void)closeBanner:(UIView*)banner
 {
-    //CGRect viewFrame = CGRectMake(0, self.view.frame.origin.y-44, self.view.frame.size.width, self.view.frame.size.height+44);
-    [UIView animateWithDuration:.25 animations:^{
-        //self.view.frame = viewFrame;
+    [self closeBanner:banner
+             animated:YES];
+}
+
+- (void)closeBanner:(UIView*)banner
+           animated:(BOOL)animated
+{
+    [UIView animateWithDuration: animated ? .25f : 0.f
+                     animations:^{
         banner.alpha = 0;
         banner.frame = CGRectOffset(banner.frame, 0, -44);
     } completion:^(BOOL finished)
     {
-        if (finished) {
-            [banner removeFromSuperview];
-            _banner = nil;
+        if (!finished) {
+            return;
         }
+        [banner removeFromSuperview];
+        _banner = nil;
     }];
 }
-
-#define DRAWER_HEIGHT 95
-#define DRAWER_MINIMIZED_HEIGHT 48
 
 - (void)showControllerInDrawer:(FFDrawerViewController*)vc minimizedViewController:(FFDrawerViewController*)mvc animated:(BOOL)animated
 {
@@ -146,7 +136,7 @@
                         inView:(UIView*)view
                       animated:(BOOL)animated
 {
-    if (_minimizedDrawerController || _drawerController) {
+    if (_minimizedDrawerController || _maximizedDrawerController) {
         NSLog(@"trying to show a drawer when there already is one %@ %@", vc, mvc);
         return;
     }
@@ -154,7 +144,7 @@
 
     _drawerIsMinimized = NO;
 
-    _drawerController = vc;
+    _maximizedDrawerController = vc;
     vc.view.frame = CGRectMake(0, 0, view.frame.size.width, DRAWER_HEIGHT);
 
     CGRect viewFrame = view.frame;
@@ -188,35 +178,27 @@
     [vc viewWillAppear:YES];
 
     FFDrawerBackingView* mview = [[FFDrawerBackingView alloc] initWithFrame:
-                                                                  CGRectMake(0, viewFrame.size.height + DRAWER_HEIGHT, viewFrame.size.width,
+                                                                  CGRectMake(0,
+                                                                             viewFrame.size.height + DRAWER_HEIGHT,
+                                                                             viewFrame.size.width,
                                                                              DRAWER_HEIGHT)];
     [mview addSubview:vc.view];
     [view addSubview:mview];
 
-    void (^ani)(void) = ^{
-        mview.frame = CGRectMake(0, viewFrame.size.height, viewFrame.size.width, DRAWER_HEIGHT);
-        mview.frameLocked = YES; // ss: hackity hack
-//        view.frame = viewFrame;
-        if (__resizingTableView) {
-            __resizingTableView.contentInset = UIEdgeInsetsMake(0, 0, DRAWER_HEIGHT, 0);
-        }
-    };
-
-    void (^finish)(BOOL) = ^(BOOL finished)
-    {
-        if (finished) {
-            [vc viewDidAppear:YES];
-        }
-    };
-
-    if (animated) {
         [UIView animateWithDuration:.25
-                         animations:ani
-                         completion:finish];
-    } else {
-        ani();
-        finish(YES);
-    }
+                         animations:^{
+                             mview.frame = CGRectMake(0, viewFrame.size.height, viewFrame.size.width, DRAWER_HEIGHT);
+                             mview.frameLocked = YES; // TODO: remove it hackity hack
+                             if (__resizingTableView) {
+                                 __resizingTableView.contentInset = UIEdgeInsetsMake(0, 0, DRAWER_HEIGHT, 0);
+                             }
+                         }
+                         completion:^(BOOL finished)
+        {
+            if (finished) {
+                [vc viewDidAppear:YES];
+            }
+        }];
 }
 
 - (void)swipeDrawer:(UISwipeGestureRecognizer*)recognizer
@@ -245,43 +227,36 @@
 
     CGFloat diff = DRAWER_MINIMIZED_HEIGHT - DRAWER_HEIGHT;
 
-    CGRect viewFrame = _drawerController.view.superview.superview.frame;
+    CGRect viewFrame = _maximizedDrawerController.view.superview.superview.frame;
     viewFrame.size.height = viewFrame.size.height + diff;
 
     [_minimizedDrawerController viewWillDisappear:animated];
-    [_drawerController viewWillAppear:animated];
+    [_maximizedDrawerController viewWillAppear:animated];
 
-    [(FFDrawerBackingView*)_drawerController.view.superview setFrameLocked:NO];
+    [(FFDrawerBackingView*)_maximizedDrawerController.view.superview setFrameLocked:NO];
     [(FFDrawerBackingView*)_minimizedDrawerController.view.superview setFrameLocked:NO];
 
-    void (^ani)(void) = ^{
-//        _drawerController.view.superview.superview.frame = viewFrame;
-        _drawerController.view.superview.frame = CGRectOffset(_drawerController.view.superview.frame, 0, diff);
-        _drawerController.view.superview.alpha = 1;
-        _minimizedDrawerController.view.superview.frame = CGRectOffset(_minimizedDrawerController.view.superview.frame, 0, diff);
-        _minimizedDrawerController.view.superview.alpha = 0;
-        if (__resizingTableView) {
-            __resizingTableView.contentInset = UIEdgeInsetsMake(0, 0, DRAWER_HEIGHT, 0);
-        }
-    };
-    void (^finish)(BOOL) = ^(BOOL finished)
-    {
-        if (finished) {
-            [_minimizedDrawerController viewDidDisappear:animated];
-            [_drawerController viewDidAppear:animated];
-            [(FFDrawerBackingView*)_drawerController.view.superview setFrameLocked:YES];
-            [(FFDrawerBackingView*)_minimizedDrawerController.view.superview setFrameLocked:YES];
-        }
-    };
-
-    if (animated) {
-        [UIView animateWithDuration:.25
-                         animations:ani
-                         completion:finish];
-    } else {
-        ani();
-        finish(YES);
-    }
+        [UIView animateWithDuration: animated ? .25f : 0.f
+                         animations:^{
+                             _maximizedDrawerController.view.superview.frame = CGRectOffset(_maximizedDrawerController.view.superview.frame,
+                                                                                   0, diff);
+                             _maximizedDrawerController.view.superview.alpha = 1;
+                             _minimizedDrawerController.view.superview.frame = CGRectOffset(_minimizedDrawerController.view.superview.frame,
+                                                                                            0, diff);
+                             _minimizedDrawerController.view.superview.alpha = 0;
+                             if (__resizingTableView) {
+                                 __resizingTableView.contentInset = UIEdgeInsetsMake(0, 0, DRAWER_HEIGHT, 0);
+                             }
+                         }
+                         completion:^(BOOL finished)
+        {
+            if (finished) {
+                [_minimizedDrawerController viewDidDisappear:animated];
+                [_maximizedDrawerController viewDidAppear:animated];
+                [(FFDrawerBackingView*)_maximizedDrawerController.view.superview setFrameLocked:YES];
+                [(FFDrawerBackingView*)_minimizedDrawerController.view.superview setFrameLocked:YES];
+            }
+        }];
 }
 
 - (void)minimizeDrawerAnimated:(BOOL)animated
@@ -299,59 +274,50 @@
 
     CGFloat diff = DRAWER_HEIGHT - DRAWER_MINIMIZED_HEIGHT;
 
-    CGRect viewFrame = _drawerController.view.superview.superview.frame;
+    CGRect viewFrame = _maximizedDrawerController.view.superview.superview.frame;
     viewFrame.size.height = viewFrame.size.height + diff;
 
-    [_drawerController viewWillDisappear:animated];
+    [_maximizedDrawerController viewWillDisappear:animated];
     [_minimizedDrawerController viewWillAppear:animated];
 
-    [(FFDrawerBackingView*)_drawerController.view.superview setFrameLocked:NO];
+    [(FFDrawerBackingView*)_maximizedDrawerController.view.superview setFrameLocked:NO];
     [(FFDrawerBackingView*)_minimizedDrawerController.view.superview setFrameLocked:NO];
-
-    void (^ani)(void) = ^{
-//        _drawerController.view.superview.superview.frame = viewFrame;
-        _drawerController.view.superview.frame = CGRectOffset(_drawerController.view.superview.frame, 0, diff);
-        _drawerController.view.superview.alpha = 0;
-        _minimizedDrawerController.view.superview.frame = CGRectOffset(_minimizedDrawerController.view.superview.frame, 0, diff);
-        _minimizedDrawerController.view.superview.alpha = 1;
-        if (__resizingTableView) {
-            __resizingTableView.contentInset = UIEdgeInsetsMake(0, 0, DRAWER_MINIMIZED_HEIGHT, 0);
-        }
-    };
-
-    void (^finish)(BOOL) = ^(BOOL finished)
+    [UIView animateWithDuration: animated ? .25f : 0.f
+                     animations:^{
+                         _maximizedDrawerController.view.superview.frame = CGRectOffset(_maximizedDrawerController.view.superview.frame,
+                                                                               0, diff);
+                         _maximizedDrawerController.view.superview.alpha = 0;
+                         _minimizedDrawerController.view.superview.frame = CGRectOffset(_minimizedDrawerController.view.superview.frame,
+                                                                                        0, diff);
+                         _minimizedDrawerController.view.superview.alpha = 1;
+                         if (__resizingTableView) {
+                             __resizingTableView.contentInset = UIEdgeInsetsMake(0, 0, DRAWER_MINIMIZED_HEIGHT, 0);
+                         }
+                     }
+                     completion:^(BOOL finished)
     {
         if (finished) {
-            [_drawerController viewDidDisappear:animated];
+            [_maximizedDrawerController viewDidDisappear:animated];
             [_minimizedDrawerController viewDidAppear:animated];
-            [(FFDrawerBackingView*)_drawerController.view.superview setFrameLocked:YES];
+            [(FFDrawerBackingView*)_maximizedDrawerController.view.superview setFrameLocked:YES];
             [(FFDrawerBackingView*)_minimizedDrawerController.view.superview setFrameLocked:YES];
         }
-    };
-
-    if (animated) {
-        [UIView animateWithDuration:.25
-                         animations:ani
-                         completion:finish];
-    } else {
-        ani();
-        finish(YES);
-    }
+    }];
 }
 
 - (void)closeDrawerAnimated:(BOOL)animated
 {
-    if (!_drawerController) {
+    if (!_maximizedDrawerController) {
         NSLog(@"cant close a drawer that isn't showing...");
         return;
     }
 
-    [(FFDrawerBackingView*)_drawerController.view.superview setFrameLocked:NO];
+    [(FFDrawerBackingView*)_maximizedDrawerController.view.superview setFrameLocked:NO];
     if (self.minimizedDrawerController) {
         [(FFDrawerBackingView*)_minimizedDrawerController.view.superview setFrameLocked:NO];
     }
 
-    FFDrawerViewController* drawer = (_drawerIsMinimized ? self.minimizedDrawerController : self.drawerController);
+    FFDrawerViewController* drawer = (_drawerIsMinimized ? self.minimizedDrawerController : self.maximizedDrawerController);
     [drawer viewWillDisappear:animated];
 
     CGFloat diff = (_drawerIsMinimized ? DRAWER_MINIMIZED_HEIGHT : DRAWER_HEIGHT);
@@ -359,38 +325,30 @@
     CGRect viewRect = drawer.view.superview.superview.frame;
     viewRect.size.height += diff;
 
-    void (^ani)(void) = ^{
-        drawer.view.superview.superview.frame = viewRect;
-        drawer.view.superview.frame = CGRectOffset(drawer.view.superview.frame, 0, diff);
-        drawer.view.superview.alpha = 0;
-        if (__resizingTableView) {
-            __resizingTableView.contentInset = UIEdgeInsetsZero;
-        }
-    };
-    void (^finish)(BOOL) = ^(BOOL finished)
-    {
-        if (finished) {
-            [drawer viewDidDisappear:animated];
-            [(FFDrawerBackingView*)_drawerController.view.superview setFrameLocked:YES];
-            [_drawerController.view.superview removeFromSuperview];
-            if (self.minimizedDrawerController) {
-                [(FFDrawerBackingView*)_minimizedDrawerController.view.superview setFrameLocked:YES];
-                [_minimizedDrawerController.view.superview removeFromSuperview];
+        [UIView animateWithDuration: animated ? .25f : 0.f
+                         animations:^{
+                             drawer.view.superview.superview.frame = viewRect;
+                             drawer.view.superview.frame = CGRectOffset(drawer.view.superview.frame, 0, diff);
+                             drawer.view.superview.alpha = 0;
+                             if (__resizingTableView) {
+                                 __resizingTableView.contentInset = UIEdgeInsetsZero;
+                             }
+                         }
+                         completion:^(BOOL finished)
+        {
+            if (finished) {
+                [drawer viewDidDisappear:animated];
+                [(FFDrawerBackingView*)_maximizedDrawerController.view.superview setFrameLocked:YES];
+                [_maximizedDrawerController.view.superview removeFromSuperview];
+                if (self.minimizedDrawerController) {
+                    [(FFDrawerBackingView*)_minimizedDrawerController.view.superview setFrameLocked:YES];
+                    [_minimizedDrawerController.view.superview removeFromSuperview];
+                }
+                _maximizedDrawerController = nil;
+                _minimizedDrawerController = nil;
+                _drawerIsMinimized = NO;
             }
-            _drawerController = nil;
-            _minimizedDrawerController = nil;
-            _drawerIsMinimized = NO;
-        }
-    };
-
-    if (animated) {
-        [UIView animateWithDuration:.25
-                         animations:ani
-                         completion:finish];
-    } else {
-        ani();
-        finish(YES);
-    }
+        }];
 }
 
 - (void)showMenuController
@@ -463,7 +421,7 @@
 - (FFTickerDataSource*)tickerDataSource
 {
     if (!_tickerDataSource) {
-        _tickerDataSource = [[FFTickerDataSource alloc] init];
+        _tickerDataSource = [FFTickerDataSource new];
     }
     return _tickerDataSource;
 }
@@ -471,7 +429,7 @@
 - (FFTickerMaximizedDrawerViewController*)maximizedTicker
 {
     if (!_maximizedTicker) {
-        _maximizedTicker = [[FFTickerMaximizedDrawerViewController alloc] init];
+        _maximizedTicker = [FFTickerMaximizedDrawerViewController new];
         _maximizedTicker.view.backgroundColor = [FFStyle darkGreen];
         _maximizedTicker.session = self.session;
         [self.tickerDataSource addDelegate:_maximizedTicker];
@@ -482,7 +440,7 @@
 - (FFTickerMinimizedDrawerViewController*)minimizedTicker
 {
     if (!_minimizedTicker) {
-        _minimizedTicker = [[FFTickerMinimizedDrawerViewController alloc] init];
+        _minimizedTicker = [FFTickerMinimizedDrawerViewController new];
         _minimizedTicker.view.backgroundColor = [FFStyle darkGreen];
         _minimizedTicker.session = self.session;
         [self.tickerDataSource addDelegate:_minimizedTicker];
@@ -512,12 +470,5 @@
 @end
 
 @implementation FFDrawerBackingView
-
-//- (void)setFrame:(CGRect)frame
-//{
-//    if (!_frameLocked) {
-//        [super setFrame:frame];
-//    }
-//}
 
 @end

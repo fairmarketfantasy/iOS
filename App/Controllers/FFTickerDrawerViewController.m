@@ -50,7 +50,7 @@
         [self.view insertSubview:_errorLabel
                     belowSubview:_collectionView];
 
-        _loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, 0, 300, 48)];
+        _loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(42, 0, 300, 48)];
         _loadingLabel.textColor = [FFStyle white];
         _loadingLabel.font = [FFStyle regularFont:16];
         _loadingLabel.text = NSLocalizedString(@"Loading...", nil);
@@ -62,7 +62,7 @@
 
         _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
                                                                   UIActivityIndicatorViewStyleWhite];
-        _activityIndicator.frame = CGRectMake(10, 10, 10, 10);
+        _activityIndicator.frame = CGRectMake(18, 19, 10, 10);
         _activityIndicator.hidesWhenStopped = YES;
         _activityIndicator.userInteractionEnabled = NO;
         [self.view insertSubview:_activityIndicator
@@ -76,6 +76,9 @@
         _collectionView.showsHorizontalScrollIndicator = NO;
 
         _currentTickItem = 0;
+
+        [self.collectionView registerClass:[UICollectionViewCell class]
+                forCellWithReuseIdentifier:[self cellReuseIdentifier]];
     }
     return self;
 }
@@ -195,23 +198,71 @@
                     layout:(UICollectionViewLayout*)collectionViewLayout
     sizeForItemAtIndexPath:(NSIndexPath*)indexPath
 {
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                   reason:@"thism ethod must be implemented in a subclass"
-                                 userInfo:nil];
+    NSDictionary* player = [self.tickerData objectAtIndex:indexPath.row];
+
+    NSString* nameValue = [NSString stringWithFormat:@"%@ (%@)", player[@"name"], player[@"position"]];
+    CGFloat namw = [nameValue sizeWithFont:[FFStyle regularFont:14.f]
+                         constrainedToSize:CGSizeMake(150, 100)].width;
+    return CGSizeMake(56 + namw, [self itemHeight]);
 }
 
 - (UICollectionViewCell*)collectionView:(UICollectionView*)collectionView
                  cellForItemAtIndexPath:(NSIndexPath*)indexPath
 {
-    @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                   reason:@"this method must be implemented in a subclass"
-                                 userInfo:nil];
+    UICollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:[self cellReuseIdentifier]
+                                                                           forIndexPath:indexPath];
+
+    [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+
+    NSDictionary* player = [self.tickerData objectAtIndex:indexPath.row];
+
+    CGFloat itemHeight = [self itemHeight];
+
+    UIImageView* img = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, itemHeight, itemHeight)];
+    img.contentMode = UIViewContentModeScaleAspectFit;
+    [cell.contentView addSubview:img];
+    [img setImageWithURL:[NSURL URLWithString:player[@"headshot_url"]]
+        placeholderImage:[UIImage imageNamed:@"helmet-placeholder.png"]];
+
+    UIImageView* overlay = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, itemHeight, itemHeight)];
+    overlay.contentMode = UIViewContentModeScaleAspectFit;
+    overlay.image = [UIImage imageNamed:@"player-cutout.png"];
+    overlay.backgroundColor = [UIColor clearColor];
+    [cell.contentView addSubview:overlay];
+
+    NSString* nameValue = [NSString stringWithFormat:@"%@ (%@)", player[@"name"], player[@"position"]];
+    CGFloat namw = [nameValue sizeWithFont:[FFStyle regularFont:14.f]
+                         constrainedToSize:CGSizeMake(150, 100)].width;
+    UILabel* nam = [[UILabel alloc] initWithFrame:CGRectMake(itemHeight, 15, namw, 15)];
+    nam.font = [FFStyle regularFont:14.f];
+    nam.textColor = [FFStyle white];
+    nam.backgroundColor = [FFStyle darkGreen];
+    nam.text = nameValue;
+    [cell.contentView addSubview:nam];
+
+    return cell;
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView*)scrollView
                   willDecelerate:(BOOL)decelerate
 {
-    self.dontTickUntil = [NSDate dateWithTimeIntervalSinceNow:5];
+    self.dontTickUntil = [NSDate dateWithTimeIntervalSinceNow:(NSTimeInterval)5.f];
+}
+
+#pragma mark - private
+
+- (NSString*)cellReuseIdentifier
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:@"This method must be implemented in a subclass."
+                                 userInfo:nil];
+}
+
+- (CGFloat)itemHeight
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:@"This method must be implemented in a subclass."
+                                 userInfo:nil];
 }
 
 @end

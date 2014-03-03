@@ -136,7 +136,6 @@
     self.signUpView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, self.view.frame.size.height)];
     [self setupSignUpView];
 
-    [self.view addSubview:self.signUpView];
     [self.view addSubview:self.signInView];
     [_signInTicker viewDidAppear:NO];
 
