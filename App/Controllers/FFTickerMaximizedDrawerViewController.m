@@ -18,17 +18,23 @@
     if (self) {
         self.view.frame = CGRectMake(0, 0, 320, 95);
 
-        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 320, 15)];
-        lab.text = NSLocalizedString(@"Real-Time Market Rates", nil);
-        lab.font = [FFStyle lightFont:17];
-        lab.textColor = [FFStyle white];
-        lab.backgroundColor = [UIColor clearColor];
+        CGFloat offset = 10.f;
+        UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(2 * offset,
+                                                                        offset,
+                                                                        self.view.frame.size.width - 4 * offset,
+                                                                        15.f)];
+        titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        titleLabel.textAlignment = NSTextAlignmentLeft;
+        titleLabel.text = NSLocalizedString(@"Real-Time Market Rates", nil);
+        titleLabel.font = [FFStyle lightFont:17.f];
+        titleLabel.textColor = [FFStyle white];
+        titleLabel.backgroundColor = [UIColor clearColor];
 
         self.errorLabel.frame = CGRectMake(10, 0, 300, 95);
         self.loadingLabel.frame = CGRectMake(42, 0, 300, 95);
         self.activityIndicator.frame = CGRectMake(18, 43, 10, 10);
 
-        [self.view addSubview:lab];
+        [self.view addSubview:titleLabel];
 
         self.collectionView.frame = CGRectMake(0, 30, 320, 65);
     }

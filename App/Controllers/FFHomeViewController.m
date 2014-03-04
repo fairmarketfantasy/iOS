@@ -44,15 +44,15 @@
     [super viewDidLoad];
 
     UIView* leftView = [[FFNavigationBarItemView alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    UIButton* gmenu = [UIButton buttonWithType:UIButtonTypeCustom];
-    [gmenu setImage:[UIImage imageNamed:@"globalmenu.png"]
-           forState:UIControlStateNormal];
-    [gmenu addTarget:self
-                  action:@selector(globalMenuButton:)
-        forControlEvents:UIControlEventTouchUpInside];
-    gmenu.frame = CGRectMake(-2, -2, 35, 44);
-    _globalMenuButton = gmenu;
-    [leftView addSubview:gmenu];
+    UIButton* menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [menuButton setImage:[UIImage imageNamed:@"globalmenu.png"]
+                forState:UIControlStateNormal];
+    [menuButton addTarget:self
+                   action:@selector(globalMenuButton:)
+         forControlEvents:UIControlEventTouchUpInside];
+    menuButton.frame = CGRectMake(-2, -2, 35, 44);
+    _globalMenuButton = menuButton;
+    [leftView addSubview:menuButton];
     UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fmf-logo.png"]];
     logo.frame = CGRectMake(32, 13, 150, 19);
     [leftView addSubview:logo];
@@ -111,23 +111,10 @@
     _gameButtonView.delegate = self;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
-
 - (void)showBalance:(UIButton*)seder
 {
     [self performSegueWithIdentifier:@"GotoTokenPurchase"
                               sender:nil];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
-        [self setNeedsStatusBarAppearanceUpdate];
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated

@@ -38,6 +38,7 @@
 @property(nonatomic) FFTickerMaximizedDrawerViewController* signInTicker;
 //@property(nonatomic) FFTickerMaximizedDrawerViewController* signUpTicker;
 //@property(nonatomic) BOOL onSignUpView;
+@property(nonatomic) UIView* container;
 
 - (void)setupSignInView;
 //- (void)setupSignUpView;
@@ -72,11 +73,11 @@
     return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    self.navigationController.navigationBarHidden = YES;
-}
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//    self.navigationController.navigationBarHidden = YES;
+//}
 
 - (id)ticker
 {
@@ -110,7 +111,7 @@
         [self.session syncPushToken];
         [self performSegueWithIdentifier:@"GoImmediatelyToHome"
                                   sender:nil];
-        [self setNeedsStatusBarAppearanceUpdate];
+        //        [self setNeedsStatusBarAppearanceUpdate];
     } else {
         [self.tickerDataSource refresh];
     }
@@ -270,20 +271,22 @@
 - (void)setupSignInView
 {
     // background
-    UIImageView* backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loginbg.png"]];
-    backgroundImage.contentMode = UIViewContentModeTop;
-    backgroundImage.frame = self.signInView.frame;
-    [self.signInView addSubview:backgroundImage];
+    UIImageView* backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loginbg.png"]];
+    backgroundView.contentMode = UIViewContentModeTop;
+    backgroundView.frame = self.signInView.bounds;
+    [self.signInView addSubview:backgroundView];
 
     // header
-    UIView* backgroundView = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 45.f)];
-    backgroundView.backgroundColor = [FFStyle darkGreen];
-    [self.signInView addSubview:backgroundView];
+    //    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 45.f)];
+    //    headerView.backgroundColor = [FFStyle darkGreen];
+    //    [self.signInView addSubview:headerView];
 
     UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fmf-logo.png"]];
     [logo sizeToFit];
     logo.frame = CGRectCopyWithOrigin(logo.frame, CGPointMake(10.f, 15.f));
-    [backgroundView addSubview:logo];
+    //        [headerView addSubview:logo];
+
+    self.navigationItem.titleView = logo;
 
     //    UIButton* signup = [FFStyle clearButtonWithText:NSLocalizedString(@"Sign Up", nil)
     //                                        borderColor:[FFStyle white]];
@@ -300,19 +303,21 @@
     //        signup.frame = CGRectOffset(signup.frame, 0, 20);
     //    }
 
-    UIView* container = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, self.view.frame.size.height)];
-    container.backgroundColor = [UIColor clearColor];
-    [self.signInView insertSubview:container
-                      belowSubview:backgroundView];
+    self.container = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, self.view.frame.size.height)];
+    self.container.backgroundColor = [UIColor clearColor];
+    //    [self.signInView insertSubview:container
+    //                      belowSubview:headerView];
+
+    [self.signInView addSubview:self.container];
 
     UILabel* signInLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.f, 90.f, 290.f, 60.f)];
     signInLabel.font = [FFStyle lightFont:30.f];
     signInLabel.text = NSLocalizedString(@"Sign In", nil);
     signInLabel.backgroundColor = [UIColor clearColor];
     signInLabel.textColor = [FFStyle white];
-    [container addSubview:signInLabel];
+    [self.container addSubview:signInLabel];
 
-    // text inputs
+    // mail text field
     UITextField* mailField = [FFTextField new];
     mailField.layer.borderWidth = 1.f;
     mailField.frame = CGRectMake(15.f, 155.f, 290.f, 44.f);
@@ -324,9 +329,10 @@
     mailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     mailField.autocorrectionType = UITextAutocorrectionTypeNo;
     mailField.keyboardType = UIKeyboardTypeEmailAddress;
-    [container addSubview:mailField];
+    [self.container addSubview:mailField];
     self.usernameSigninField = mailField;
 
+    // password text field
     UITextField* passwordField = [FFTextField new];
     passwordField.layer.borderWidth = 1.f;
     passwordField.layer.borderColor = [FFStyle greyBorder].CGColor;
@@ -336,7 +342,7 @@
     passwordField.secureTextEntry = YES;
     passwordField.placeholder = NSLocalizedString(@"password", nil);
     passwordField.returnKeyType = UIReturnKeyGo;
-    [container addSubview:passwordField];
+    [self.container addSubview:passwordField];
     self.passwordSigninField = passwordField;
 
     // sign in buttons
@@ -347,7 +353,7 @@
     [signInButton addTarget:self
                      action:@selector(signIn:)
            forControlEvents:UIControlEventTouchUpInside];
-    [container addSubview:signInButton];
+    [self.container addSubview:signInButton];
     self.signInButton = signInButton;
 
     //    UIButton* fbSignUp = [FFStyle coloredButtonWithText:NSLocalizedString(@"Sign In With Facebook", nil)
@@ -372,7 +378,7 @@
     [forgotButton addTarget:self
                      action:@selector(forgotPassword:)
            forControlEvents:UIControlEventTouchUpInside];
-    [container addSubview:forgotButton];
+    [self.container addSubview:forgotButton];
 
     //    UIButton* needAccountButton = [UIButton buttonWithType:UIButtonTypeCustom];
     //    [needAccountButton setTitle:NSLocalizedString(@"Need an Account?", nil)
@@ -390,7 +396,7 @@
     //    [container addSubview:needAccountButton];
 
     if (IS_SMALL_DEVICE) {
-        container.frame = CGRectOffset(container.frame, 0.f, -40.f);
+        self.container.frame = CGRectOffset(self.container.frame, 0.f, -40.f);
         signInLabel.font = [FFStyle lightFont:24];
         signInLabel.frame = CGRectOffset(signInLabel.frame, 0.f, 8.f);
     }
@@ -796,28 +802,22 @@ failure:
 {
     CGRect keyboardBounds;
     NSValue* aValue = [note.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey];
-
     [aValue getValue:&keyboardBounds];
-    _keyboardHeight = keyboardBounds.size.height;
-    if (!_keyboardIsShowing) {
-        _keyboardIsShowing = YES;
-        CGFloat offset = -100;
-        if (IS_SMALL_DEVICE) {
-            //            if (_onSignUpView) {
-            //                offset = -65;
-            //            } else {
-            offset = -70;
-            //            }
-        }
-        CGRect frame = CGRectOffset(self.view.frame, 0, offset);
 
-        [UIView beginAnimations:nil
-                        context:NULL];
-        [UIView setAnimationBeginsFromCurrentState:YES];
-        [UIView setAnimationDuration:0.3f];
-        self.view.frame = frame;
-        [UIView commitAnimations];
+    _keyboardHeight = keyboardBounds.size.height;
+
+    if (_keyboardIsShowing) {
+        return;
     }
+    _keyboardIsShowing = YES;
+
+    CGRect viewFrame = CGRectOffset(self.container.frame, 0.f, IS_SMALL_DEVICE ? -50.f : -80.f);
+
+    [UIView animateWithDuration:(NSTimeInterval).3f
+                     animations:^{
+                         self.container.frame = viewFrame;
+                         self.navigationController.navigationBarHidden = YES;
+                     }];
 }
 
 - (void)keyboardWillHide:(NSNotification*)note
@@ -827,25 +827,19 @@ failure:
     [aValue getValue:&keyboardBounds];
 
     _keyboardHeight = keyboardBounds.size.height;
-    if (_keyboardIsShowing) {
-        _keyboardIsShowing = NO;
-        CGFloat offset = 100;
-        if (IS_SMALL_DEVICE) {
-            //            if (_onSignUpView) {
-            //                offset = 65;
-            //            } else {
-            offset = 70;
-            //            }
-        }
-        CGRect frame = CGRectOffset(self.view.frame, 0, offset);
 
-        [UIView beginAnimations:nil
-                        context:NULL];
-        [UIView setAnimationBeginsFromCurrentState:YES];
-        [UIView setAnimationDuration:0.3f];
-        self.view.frame = frame;
-        [UIView commitAnimations];
+    if (!_keyboardIsShowing) {
+        return;
     }
+    _keyboardIsShowing = NO;
+
+    CGRect viewFrame = CGRectOffset(self.container.frame, 0.f, IS_SMALL_DEVICE ? 50.f : 80.f);
+
+    [UIView animateWithDuration:(NSTimeInterval).3f
+                     animations:^{
+                         self.navigationController.navigationBarHidden = NO;
+                         self.container.frame = viewFrame;
+                     }];
 }
 
 // session controller stuff --------------------------------------------------------------------------------------------
