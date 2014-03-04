@@ -40,7 +40,7 @@
     if (!self.session) {
         FFSession* tempSession = [FFSession anonymousSession];
         [tempSession anonymousJSONRequestWithMethod: @"GET"
-                                               path: @"/players/public"
+                                               path: @"/players/public" // currently available for NFL only
                                          parameters: @{}
                                             success: ^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON)
         {
@@ -60,39 +60,42 @@
         }];
         return;
     }
-    // mine
+    // try to get mine
     [self.session authorizedJSONRequestWithMethod:@"GET" path:@"/players/mine" paramters:@{} success:
      ^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON)
     {
-        if (![JSON isKindOfClass:[NSArray class]] || ![JSON count]) {
-            // there were no results from mine, so get the public one
-             [self.session authorizedJSONRequestWithMethod:@"GET" path:@"/players/public" paramters:@{} success:
-              ^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON)
-             {
-                 if (![JSON isKindOfClass:[NSArray class]]) {
-                     [self notifyDelegatesError:NSLocalizedString(@"Error loading ticker data", nil)];
-                     return;
-                 }
-                 self.tickerData = JSON;
-                 self.lastFetch = [NSDate date];
-                 [self notifyDelegatesGotData];
-             }
-        failure:
-            ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
-            {
-                NSLog(@"failed to get ticker 2: %@ %@", error, JSON);
-                [self notifyDelegatesError:error.userInfo[NSLocalizedDescriptionKey]];
-            }];
-        } else {
+        BOOL isThereAnyRelultsFromMine = [JSON isKindOfClass:[NSArray class]] && [JSON count];
+        if (isThereAnyRelultsFromMine) {
+            self.tickerData = JSON;
+            self.lastFetch = [NSDate date];
+            [self notifyDelegatesGotData];
+            return;
+        }
+        // so get the public one
+        [self.session authorizedJSONRequestWithMethod:@"GET" path:@"/players/public" // currently available for NFL only
+                                            paramters:@{}
+                                              success:
+         ^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
+        {
+            if (![JSON isKindOfClass:[NSArray class]]) {
+                [self notifyDelegatesError:NSLocalizedString(@"Error loading ticker data", nil)];
+                return;
+            }
             self.tickerData = JSON;
             self.lastFetch = [NSDate date];
             [self notifyDelegatesGotData];
         }
+    failure:
+        ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
+        {
+            NSLog(@"Failed to get ticker (public): %@ %@", error, JSON);
+            [self notifyDelegatesError:error.userInfo[NSLocalizedDescriptionKey]];
+        }];
     }
 failure:
     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
     {
-        NSLog(@"failed to get ticker: %@ %@", error, JSON);
+        NSLog(@"Failed to get ticker (mine): %@ %@", error, JSON);
         [self notifyDelegatesError:error.userInfo[NSLocalizedDescriptionKey]];
     }];
 }

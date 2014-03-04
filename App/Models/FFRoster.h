@@ -13,47 +13,52 @@
 
 @interface FFRoster : SBDataObject
 
-@property (nonatomic) SBInteger     *amountPaid;
-@property (nonatomic) SBInteger     *buyIn;
-@property (nonatomic) SBDate        *canceledAt;
-@property (nonatomic) NSString      *canceledCause;
-@property (nonatomic) NSDictionary  *contest;
-@property (nonatomic) SBInteger     *contestId;
-@property (nonatomic) SBInteger     *contestRank;
-@property (nonatomic) SBInteger     *contestRankPayout;
-//@property (nonatomic) FFContestType *contestType;
-@property (nonatomic) SBInteger     *live;
-@property (nonatomic) SBDate        *nextGameTime;
-@property (nonatomic) NSString      *ownerId;
-@property (nonatomic) NSString      *ownerName;
-@property (nonatomic) SBDate        *paidAt;
-@property (nonatomic) NSArray       *players;
-@property (nonatomic) NSString      *positions;
-@property (nonatomic) SBFloat       *remainingSalary;
-@property (nonatomic) SBInteger     *score;
-@property (nonatomic) NSString      *state;
-
-@property (nonatomic) FFContestType *contestType;
-@property (nonatomic) NSString      *contestTypeId;
-
-@property (nonatomic) FFMarket      *market;
-@property (nonatomic) NSString      *marketId;
-
-// rosters dont have a contest_type_id, so we have to post that separately to /rosters which then returns a roster
+@property(nonatomic) SBInteger* amountPaid;
+@property(nonatomic) SBInteger* buyIn;
+@property(nonatomic) SBDate* canceledAt;
+@property(nonatomic) NSString* canceledCause;
+@property(nonatomic) NSDictionary* contest;
+@property(nonatomic) SBInteger* contestId;
+@property(nonatomic) SBInteger* contestRank;
+@property(nonatomic) SBInteger* contestRankPayout;
+@property(nonatomic) SBInteger* live;
+@property(nonatomic) SBDate* nextGameTime;
+@property(nonatomic) NSString* ownerId;
+@property(nonatomic) NSString* ownerName;
+@property(nonatomic) SBDate* paidAt;
+@property(nonatomic) NSArray* players;
+@property(nonatomic) NSString* positions;
+@property(nonatomic) SBFloat* remainingSalary;
+@property(nonatomic) SBInteger* score;
+@property(nonatomic) NSString* state;
+#pragma mark - Contest
+@property(nonatomic) FFContestType* contestType;
+@property(nonatomic) NSString* contestTypeId;
+#pragma mark - Market
+@property(nonatomic) FFMarket* market;
+@property(nonatomic) NSString* marketId;
+#pragma mark -
+/**
+ *  Rosters don't have a contest_type_id,
+ *  so we have to post that separately
+ *  to /rosters which then returns a roster
+ */
 + (void)createRosterWithContestTypeId:(NSInteger)cTyp
-                              session:(SBSession *)sesh
+                              session:(SBSession*)sesh
                               success:(SBSuccessBlock)success
                               failure:(SBErrorBlock)failure;
-
-+ (void)createWithContestDef:(NSDictionary *)dict
-                     session:(SBSession *)sesh
++ (void)createWithContestDef:(NSDictionary*)dict
+                     session:(SBSession*)sesh
                      success:(SBSuccessBlock)success
                      failure:(SBErrorBlock)failure;
-
-- (void)addPlayer:(NSDictionary *)player success:(SBSuccessBlock)success failure:(SBErrorBlock)failure;
-
-- (void)removePlayer:(NSDictionary *)player success:(SBSuccessBlock)success failure:(SBErrorBlock)failure;
-
-- (void)submitSuccess:(SBSuccessBlock)success failure:(SBErrorBlock)failure;
+- (void)addPlayer:(NSDictionary*)player
+       toPosition:(NSString*)position
+          success:(SBSuccessBlock)success
+          failure:(SBErrorBlock)failure;
+- (void)removePlayer:(NSDictionary*)player
+             success:(SBSuccessBlock)success
+             failure:(SBErrorBlock)failure;
+- (void)submitSuccess:(SBSuccessBlock)success
+              failure:(SBErrorBlock)failure;
 
 @end

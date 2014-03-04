@@ -166,15 +166,15 @@
     [_markets fetchType:FFMarketTypeRegularSeason];
     _markets.clearsCollectionBeforeSaving = NO;
     [_markets fetchType:FFMarketTypeSingleElimination];
-    _marketSelector.markets = [FFMarket filteredMarkets:[_markets allObjects]];
+    _marketSelector.markets = [FFMarket filteredMarkets:_markets.allObjects];
     [_tableView reloadData];
 }
 
 - (void)didUpdateUser:(NSNotification*)note
 {
-    [self performSelector:@selector(updateUserCell)
-               withObject:nil
-               afterDelay:0.001];
+    [self performSelectorOnMainThread:@selector(updateUserCell)
+                           withObject:nil
+                        waitUntilDone:NO];
 }
 
 - (void)updateUserCell

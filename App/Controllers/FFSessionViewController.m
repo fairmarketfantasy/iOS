@@ -452,35 +452,28 @@
         }
     }
 
-    NSString* error = nil;
+    NSString* errorTitle = nil;
 
     if (!self.usernameSigninField.text.length) {
-        error = NSLocalizedString(@"Please provide your email address", nil);
-        goto validate_error;
-    }
-    {
+        errorTitle = NSLocalizedString(@"Please provide your email address", nil);
+    } else {
         NSString* email = self.usernameSigninField.text;
         NSTextCheckingResult* result = [regex firstMatchInString:email
                                                          options:0
                                                            range:NSMakeRange(0, email.length)];
         if (!result.range.length) {
-            error = NSLocalizedString(@"Please provide a valid email address", nil);
-            goto validate_error;
+            errorTitle = NSLocalizedString(@"Please provide a valid email address", nil);
+        } else if (self.passwordSigninField.text.length <= 6) {
+            errorTitle = NSLocalizedString(@"Please provide a password at least 6 characters long", nil);
         }
     }
-    if (!(self.passwordSigninField.text.length > 6)) {
-        error = NSLocalizedString(@"Please provide a password at least 6 characters long", nil);
-        goto validate_error;
-    }
 
-validate_error:
-    if (error != nil) {
-        FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
-                                                        message:error
-                                              cancelButtonTitle:nil
-                                                okayButtonTitle:NSLocalizedString(@"Okay", nil)
-                                                       autoHide:YES];
-        [alert showInView:self.view];
+    if (errorTitle) {
+        [[[FFAlertView alloc] initWithTitle:nil
+                                    message:errorTitle
+                          cancelButtonTitle:nil
+                            okayButtonTitle:NSLocalizedString(@"Okay", nil)
+                                   autoHide:YES] showInView:self.view];
         return;
     }
 

@@ -105,7 +105,7 @@
             bodyLabel.translatesAutoresizingMaskIntoConstraints = NO;
             bodyLabel.textAlignment = NSTextAlignmentCenter;
             bodyLabel.backgroundColor = [UIColor clearColor];
-            bodyLabel.font = [FFStyle regularFont:18];
+            bodyLabel.font = [FFStyle regularFont:17.f];
             bodyLabel.textColor = [FFStyle black];
             bodyLabel.numberOfLines = 8;
             bodyLabel.preferredMaxLayoutWidth = 240;
@@ -178,37 +178,36 @@
       okayButtonTitle:(NSString*)okayTitle
              autoHide:(BOOL)shouldAutohide
 {
-    NSString* tit = nil;
-    NSString* msg = nil;
+    NSString* caption = @"";
+    NSString* message = nil;
 
-    // try to stringify the error somehow
     NSDictionary* data = [error userInfo];
-    if (data != nil) {
-        NSString* locDesc = [data objectForKey:NSLocalizedDescriptionKey];
-        if (locDesc != nil) {
-            msg = locDesc;
-            goto got_msg;
+    if ([data isKindOfClass:[NSDictionary class]]) {
+
+        NSString* description = [data objectForKey:NSLocalizedDescriptionKey];
+        if (description) {
+            message = description;
+        } else {
+            NSString* errorString = [data objectForKey:@"error"];
+            if (errorString) {
+                message = errorString;
+            }
         }
-        NSString* errorKey = [data objectForKey:@"error"];
-        if (errorKey != nil) {
-            msg = errorKey;
-            goto got_msg;
-        }
+
+    } else {
+
+        message = NSLocalizedString(@"An uknown error occurred.", @"unknown error message");
     }
-
-    msg = NSLocalizedString(@"An uknown error occurred.", @"unknown error msg");
-
-got_msg:
 
     if (title) {
-        tit = title;
+        caption = title;
     } else {
-        tit = msg;
-        msg = nil;
+        caption = message;
+        message = nil;
     }
 
-    return [self initWithTitle:tit
-                       message:msg
+    return [self initWithTitle:caption
+                       message:message
              cancelButtonTitle:cancelTitle
                okayButtonTitle:okayTitle
                       autoHide:shouldAutohide];

@@ -459,7 +459,7 @@ failure:
         NSDictionary* contestType = _contestTypeDesc[_selectedContestType];
 
         if ([contestType[SALARYCAP] count] > 1) {
-            // goto salary cap
+            // go to salary cap
             [self performSegueWithIdentifier:@"GotoSalaryCapSelect"
                                       sender:self];
         }
@@ -468,7 +468,7 @@ failure:
         NSDictionary* contestType = _contestTypeDesc[_selectedContestType];
 
         if ([contestType[ENTRYFEE][_selectedSalaryCap] isEqual:ENTRYFEE_UNDEFINED]) {
-            // goto value entry
+            // go to value entry
             [self performSegueWithIdentifier:@"GotoEntryFeeEntry"
                                       sender:self];
         } else {

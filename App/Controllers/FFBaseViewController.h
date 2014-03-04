@@ -31,10 +31,25 @@
           selector:(SEL)selector
           animated:(BOOL)animated;
 - (void)closeBannerAnimated:(BOOL)animated;
+/**
+ *  show controller in bottom popup
+ *
+ *  @param maximizedController required
+ *  @param minimizedController may be nil
+ *  @param tableView           table to resize
+ *  @param animated
+ */
 - (void)showInDrawerMaximizedController:(FFDrawerViewController*)maximizedController
             withMinimizedViewController:(FFDrawerViewController*)minimizedController
                         resizeTableView:(UITableView*)tableView
                                animated:(BOOL)animated;
+/**
+ *  show controller in bottom popup
+ *
+ *  @param maximizedController required
+ *  @param minimizedController may be nil
+ *  @param animated
+ */
 - (void)showInDrawerMaximizedController:(FFDrawerViewController*)maximizedController
             withMinimizedViewController:(FFDrawerViewController*)minimizedController
                                animated:(BOOL)animated;

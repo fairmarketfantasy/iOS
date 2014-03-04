@@ -29,7 +29,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        //        self.backgroundColor = [UIColor colorWithWhite:.8 alpha:1];
         _title = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 320, 25)];
         _title.backgroundColor = [UIColor clearColor];
         _title.textColor = [FFStyle darkGreyTextColor];
