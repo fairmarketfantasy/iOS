@@ -18,21 +18,11 @@
 @property(nonatomic) UITableView* tableView;
 @property(nonatomic) SBDataObjectResultSet* rosters;
 @property(nonatomic) SBDataObjectResultSet* historicalRosters;
-@property(nonatomic) BOOL disappeared;
+@property(nonatomic) NSTimer* refreshTimer;
 
 @end
 
 @implementation FFRosterViewController
-
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil
-                           bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -104,29 +94,19 @@
                                    withSession:self.session
                                     authorized:YES];
     _historicalRosters.delegate = self;
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-
-    self.disappeared = NO;
-
-    [self refreshLiveData];
-    [_historicalRosters refresh];
-
+    self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval)2.f
+                                                         target:self
+                                                       selector:@selector(refreshLiveData)
+                                                       userInfo:nil
+                                                        repeats:YES];
     [self.tableView reloadData];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    self.disappeared = YES;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    [self.refreshTimer invalidate];
+    self.refreshTimer = nil;
 }
 
 - (void)showBalance:(UIButton*)seder
@@ -137,14 +117,9 @@
 
 - (void)refreshLiveData
 {
-    [_rosters refresh];
-    double delayInSeconds = 2.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-        if (!self.disappeared) {
-            [self refreshLiveData];
-        }
-    });
+    [self.rosters performSelectorOnMainThread:@selector(refresh)
+                                   withObject:nil
+                                waitUntilDone:NO];
 }
 
 - (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
