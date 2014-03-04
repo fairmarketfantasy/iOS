@@ -33,7 +33,7 @@
         [bg addSubview:separator];
 
         _create = [UIButton buttonWithType:UIButtonTypeCustom];
-        _create.titleLabel.font = [FFStyle blockFont:18];
+        _create.titleLabel.font = [FFStyle blockFont:19.f];
         [_create setTitle:NSLocalizedString(@"Create Game", nil)
                  forState:UIControlStateNormal];
         _create.frame = CGRectMake(12, 0, frame.size.width / 2 - 12, frame.size.height - 5);
@@ -47,7 +47,7 @@
         [self addSubview:_create];
 
         _enter = [UIButton buttonWithType:UIButtonTypeCustom];
-        _enter.titleLabel.font = [FFStyle blockFont:18];
+        _enter.titleLabel.font = [FFStyle blockFont:19.f];
         [_enter setTitle:NSLocalizedString(@"My Games", nil)
                 forState:UIControlStateNormal];
         _enter.frame = CGRectMake(frame.size.width / 2, 0, frame.size.width / 2 - 12, frame.size.height - 5);

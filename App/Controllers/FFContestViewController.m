@@ -309,7 +309,7 @@
                               action:@selector(inviteToGame:)
                     forControlEvents:UIControlEventTouchUpInside];
             }
-            butt.titleLabel.font = [FFStyle blockFont:18];
+            butt.titleLabel.font = [FFStyle blockFont:19.f];
             butt.frame = CGRectMake(15, 3, 290, 38);
             [cell.contentView addSubview:butt];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -1026,7 +1026,7 @@ failure:
                                                   color:[FFStyle brightOrange]
                                             borderColor:[FFStyle brightOrange]];
         butt.frame = CGRectMake(15, 30, 290, 38);
-        butt.titleLabel.font = [FFStyle blockFont:18];
+        butt.titleLabel.font = [FFStyle blockFont:19.f];
         [butt addTarget:self
                       action:@selector(submitRoster:)
             forControlEvents:UIControlEventTouchUpInside];
