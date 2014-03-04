@@ -12,8 +12,6 @@
 	<dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
-			<key>UIPrerenderedIcon</key>
-			<true/>
 			<key>CFBundleIconFiles</key>
 			<array>
 				<string>FMF-80</string>
@@ -22,6 +20,8 @@
 				<string>FMF.png</string>
 				<string>FMF@2x.png</string>
 			</array>
+			<key>UIPrerenderedIcon</key>
+			<true/>
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
@@ -33,7 +33,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1</string>
+	<string>1.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -49,7 +49,7 @@
 	<key>CFBundleVersion</key>
 	<string>202</string>
 	<key>FFEmailRegex</key>
-	<string>(^[-!#$%&amp;&apos;*+/=?^_`{}|~0-9A-Z]+(\\.[-!#$%&amp;&apos;*+/=?^_`{}|~0-9A-Z]+)*|^\&quot;([\001-\010\013\014\016-\037!#-\\[\\]-\177]|\\[\001-011\013\014\016-\177])*\&quot;)@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\\.)+[A-Z]{2,6}\\.?$</string>
+	<string>(^[-!#$%&amp;'*+/=?^_`{}|~0-9A-Z]+(\\.[-!#$%&amp;'*+/=?^_`{}|~0-9A-Z]+)*|^\"([\001-\010\013\014\016-\037!#-\\[\\]-\177]|\\[\001-011\013\014\016-\177])*\")@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\\.)+[A-Z]{2,6}\\.?$</string>
 	<key>FacebookAppID</key>
 	<string>517379538328159</string>
 	<key>FacebookDisplayName</key>
@@ -78,6 +78,8 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -86,11 +88,9 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>ubertesters_project_id</key>
-	<string>1e5725cc-9820-11e3-b7eb-123141017889</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
+	<key>ubertesters_project_id</key>
+	<string>1e5725cc-9820-11e3-b7eb-123141017889</string>
 </dict>
 </plist>

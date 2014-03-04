@@ -928,6 +928,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yuriy Pitomets (47VZ8BF4S2)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/UbertestersSDK",
@@ -936,6 +937,7 @@
 				GCC_PREFIX_HEADER = "App/FMF Football-Prefix.pch";
 				INFOPLIST_FILE = "App/FMF Football-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "2D04CEE7-2DAB-420A-B962-730CA2E4F18C";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -945,8 +947,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yuriy Pitomets (47VZ8BF4S2)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yuriy Pitomets (47VZ8BF4S2)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/Vendor/UbertestersSDK",
@@ -955,8 +957,8 @@
 				GCC_PREFIX_HEADER = "App/FMF Football-Prefix.pch";
 				INFOPLIST_FILE = "App/FMF Football-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "2D04CEE7-2DAB-420A-B962-730CA2E4F18C";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2D04CEE7-2DAB-420A-B962-730CA2E4F18C";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
