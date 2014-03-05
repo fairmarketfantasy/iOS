@@ -14,6 +14,20 @@
     BOOL shouldPoll;
 }
 
++ (FFBalanceButton*)buttonWithDataSource:(id<FFBalanceViewDataSource>)dataSource
+{
+    return [[FFBalanceButton alloc] initWithDataSource:dataSource];
+}
+
+- (id)initWithDataSource:(id<FFBalanceViewDataSource>)dataSource
+{
+    self = [self initWithFrame:CGRectZero];
+    if (self) {
+        self.dataSource = dataSource;
+    }
+    return self;
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -24,7 +38,7 @@
 
         UILabel* balance = [[UILabel alloc] initWithFrame:CGRectMake(20, 0, 100, 44)];
         balance.backgroundColor = [UIColor clearColor];
-        balance.font = [FFStyle regularFont:12];
+        balance.font = [FFStyle regularFont:14];
         balance.textColor = [UIColor whiteColor];
         balance.text = NSLocalizedString(@"Balance", nil);
         balance.userInteractionEnabled = NO;

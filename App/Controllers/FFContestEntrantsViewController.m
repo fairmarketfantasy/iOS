@@ -62,7 +62,7 @@
     [_tableView registerClass:[UITableViewCell class]
         forCellReuseIdentifier:@"Cell"];
 
-    UIButton* balanceView = [self.sessionController balanceView];
+    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
     [balanceView addTarget:self
                     action:@selector(showBalance:)
           forControlEvents:UIControlEventTouchUpInside];
@@ -185,7 +185,7 @@
 
     //    UILabel *entry = [[UILabel alloc] initWithFrame:CGRectMake(15, 32, 170, 20)];
     //    entry.backgroundColor = [UIColor clearColor];
-    //    entry.font = [FFStyle regularFont:13];
+    //    entry.font = [FFStyle regularFont:14];
     //    entry.textColor = [FFStyle greyTextColor];
     //    entry.text = [NSString stringWithFormat:@"%@ %@",
     //                  NSLocalizedString(@"Entrant:", 0), roster.ownerName];

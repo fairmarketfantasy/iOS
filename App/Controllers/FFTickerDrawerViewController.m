@@ -42,7 +42,7 @@
 
         _errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 300, 48)];
         _errorLabel.textColor = [FFStyle yellowErrorColor];
-        _errorLabel.font = [FFStyle boldFont:16];
+        _errorLabel.font = [FFStyle boldFont:17.f];
         _errorLabel.text = NSLocalizedString(@"Error", nil);
         _errorLabel.backgroundColor = [UIColor clearColor];
         _errorLabel.hidden = YES;
@@ -52,7 +52,7 @@
 
         _loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(42, 0, 300, 48)];
         _loadingLabel.textColor = [FFStyle white];
-        _loadingLabel.font = [FFStyle regularFont:16];
+        _loadingLabel.font = [FFStyle regularFont:17.f];
         _loadingLabel.text = NSLocalizedString(@"Loading...", nil);
         _loadingLabel.backgroundColor = [UIColor clearColor];
         _loadingLabel.hidden = YES;
@@ -131,7 +131,6 @@
         }
     }
     // scroll to the next one if available
-    NSLog(@"ticker ticking");
     NSArray* visible = [self.collectionView indexPathsForVisibleItems];
     if (visible.count > 1) {
         NSIndexPath* next = [NSIndexPath indexPathForItem:_currentTickItem

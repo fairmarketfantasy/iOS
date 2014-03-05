@@ -20,5 +20,7 @@
 @interface FFBalanceButton : FFNavigationBarItemButton
 
 @property(nonatomic, weak) id<FFBalanceViewDataSource> dataSource;
++ (FFBalanceButton*)buttonWithDataSource:(id<FFBalanceViewDataSource>)dataSource;
+- (id)initWithDataSource:(id<FFBalanceViewDataSource>)dataSource;
 
 @end

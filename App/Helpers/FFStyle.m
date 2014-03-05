@@ -9,6 +9,7 @@
 #import "FFStyle.h"
 #import <QuartzCore/QuartzCore.h>
 #import "FFNavigationBarItemView.h"
+#import "FFLogo.h"
 
 // HELPER FUNCTIONS ----------------------------------------------------------------------------------------------------
 
@@ -190,8 +191,6 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     return b;
 }
 
-//+ (UIButton *)clearNavigationBarButtonWithText:(NSString *)text borderColor:(UIColor *)color
-//+ (NSArray *)clearNavigationBarButtonWithText:(NSString *)text borderColor:(UIColor *)color leftElseRight:(BOOL)left
 + (NSArray*)clearNavigationBarButtonWithText:(NSString*)text
                                  borderColor:(UIColor*)color
                                       target:(id)target
@@ -235,7 +234,6 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
             return @[
                 [[UIBarButtonItem alloc] initWithCustomView:cont]
             ];
-            //            return @[item, spacer];
         }
     } else {
         return @[
@@ -244,25 +242,35 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     }
 }
 
-+ (UIButton*)coloredButtonWithText:(NSString*)text color:(UIColor*)color borderColor:(UIColor*)borderColor
++ (UIButton*)coloredButtonWithText:(NSString*)text
+                             color:(UIColor*)color
+                       borderColor:(UIColor*)borderColor
 {
-    FFCustomButton* b = [[FFCustomButton alloc] init];
-    b.layer.borderColor = borderColor.CGColor;
-    b.layer.borderWidth = 1;
-    b.layer.cornerRadius = 3;
-    [b setBackgroundColor:color
-                  forState:UIControlStateNormal];
-    [b setBackgroundColor:[self darkerColorForColor:color]
-                  forState:UIControlStateHighlighted];
-    b.titleLabel.font = [FFStyle blockFont:14];
-    [b setTitle:text
-        forState:UIControlStateNormal];
-    return b;
+    FFCustomButton* button = [FFCustomButton new];
+    button.autoresizesSubviews = YES;
+    button.contentMode = UIViewContentModeScaleAspectFit;
+    button.layer.borderColor = borderColor.CGColor;
+    button.layer.borderWidth = 1.f;
+    button.layer.cornerRadius = 3.f;
+    [button setBackgroundColor:color
+                      forState:UIControlStateNormal];
+    [button setBackgroundColor:[self darkerColorForColor:color]
+                      forState:UIControlStateHighlighted];
+    button.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    button.titleLabel.font = [FFStyle blockFont:17.f];
+    [button setTitle:text
+            forState:UIControlStateNormal];
+    return button;
+}
+
++ (CGRect)leftItemRect
+{
+    return CGRectMake(0.f, 0.f, 44.f, 44.f);
 }
 
 + (NSArray*)backBarItemsForController:(UIViewController*)controller
 {
-    UIView* leftView = [[FFNavigationBarItemButton alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
+    UIView* leftView = [[FFNavigationBarItemButton alloc] initWithFrame:[self leftItemRect]];
     UIButton* gmenu = [UIButton buttonWithType:UIButtonTypeCustom];
     [gmenu setImage:[UIImage imageNamed:@"backbtn.png"]
            forState:UIControlStateNormal];
@@ -271,9 +279,6 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
         forControlEvents:UIControlEventTouchUpInside];
     gmenu.frame = CGRectMake(-2, 0, 35, 44);
     [leftView addSubview:gmenu];
-    UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fmf-logo.png"]];
-    logo.frame = CGRectMake(32, 13, 150, 19);
-    [leftView addSubview:logo];
 
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace

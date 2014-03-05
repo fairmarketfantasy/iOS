@@ -65,12 +65,10 @@
                                                                               selector:@selector(close:)
                                                                          leftElseRight:YES];
 
-    UIButton* balanceView = [self.sessionController balanceView];
+    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
 
-    UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fmf-logo.png"]];
-    [logo sizeToFit];
-    self.navigationItem.titleView = logo;
+    //    self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 45.f)];
 }
 
 - (void)close:(UIButton*)sender

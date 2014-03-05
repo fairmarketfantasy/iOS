@@ -18,11 +18,10 @@
 #define FFSessionDidUpdateUserNotification @"didupdateuser"
 #define FFUserKey @"user"
 
-@interface FFSessionViewController : FFBaseViewController
+@interface FFSessionViewController : FFBaseViewController <FFBalanceViewDataSource>
 
 @property(nonatomic) SBSession* session;
 
-- (FFBalanceButton*)balanceView;
 /**
  * updates a user immediately
  * eg the user just bought some tokens,

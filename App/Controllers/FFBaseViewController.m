@@ -9,6 +9,7 @@
 #import "FFBaseViewController.h"
 #import "FFStyle.h"
 #import "FFSessionViewController.h"
+#import "FFLogo.h"
 
 @interface FFDrawerBackingView : UIView
 
@@ -32,20 +33,6 @@
 #define DRAWER_MINIMIZED_HEIGHT (48.f)
 
 @implementation FFBaseViewController
-
-
-//- (void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
-//        [self setNeedsStatusBarAppearanceUpdate];
-//    }
-//}
-
-//- (UIStatusBarStyle)preferredStatusBarStyle
-//{
-//    return UIStatusBarStyleLightContent;
-//}
 
 - (void)showBanner:(NSString*)text
             target:(id)target
@@ -202,7 +189,7 @@
     [self.maxBackingView addSubview:maximizedController.view];
     [self.view addSubview:self.maxBackingView];
 
-    [UIView animateWithDuration:.25
+    [UIView animateWithDuration:.25f
                      animations:^{
                          self.maxBackingView.frame = CGRectMake(0,
                                                                 viewFrame.size.height,
@@ -431,11 +418,13 @@
         return;
     }
     [_menuController viewWillDisappear:YES];
-    [UIView animateWithDuration:.25 animations:^{
+    [UIView animateWithDuration:.25f
+                     animations:^{
         _menuController.view.alpha = 0.f;
         _menuController.view.frame = CGRectMake(0.f, CGRectGetMaxY(self.view.frame),
                                                 self.view.frame.size.width, self.view.frame.size.height);
-    } completion:^(BOOL finished)
+    }
+                     completion:^(BOOL finished)
     {
         [_menuController viewDidDisappear:YES];
         [_menuController.view removeFromSuperview];
@@ -491,6 +480,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
     if (self.navigationController && self.navigationController.viewControllers.count
         && self.navigationController.viewControllers[0] != self) {
         self.navigationItem.leftBarButtonItems = [FFStyle backBarItemsForController:self];

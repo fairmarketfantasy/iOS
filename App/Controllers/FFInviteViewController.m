@@ -12,8 +12,10 @@
 #import "FFAlertView.h"
 #import "FFSessionViewController.h"
 
-@interface FFInviteViewController ()
-    <FFBubblePickerDelegate, UITextViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface FFInviteViewController () <FFBubblePickerDelegate,
+                                      UITextViewDelegate,
+                                      UITableViewDataSource,
+                                      UITableViewDelegate>
 
 @property(nonatomic) FFBubblePicker* bubblePicker;
 @property(nonatomic) UITextView* message;
@@ -109,7 +111,7 @@
     //    _message.backgroundColor = [UIColor yellowColor];
     _message.editable = YES;
     _message.delegate = self;
-    _message.font = [FFStyle regularFont:16];
+    _message.font = [FFStyle regularFont:17.f];
     _message.text = NSLocalizedString(@"You can customize the message to your friends here.", nil);
     [_lowerHalf addSubview:_message];
 
@@ -160,10 +162,6 @@
     //    create.frame = CGRectMake(0, 0, 70, 30);
     //    [create addTarget:self action:@selector(send:) forControlEvents:UIControlEventTouchUpInside];
 
-    UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fmf-logo.png"]];
-    [logo sizeToFit];
-
-    self.navigationItem.titleView = logo;
     self.navigationItem.leftBarButtonItems = [FFStyle clearNavigationBarButtonWithText:NSLocalizedString(@"Close", nil)
                                                                            borderColor:[FFStyle white]
                                                                                 target:self
@@ -484,7 +482,7 @@ failure:
 
     UILabel* elab = [[UILabel alloc] initWithFrame:CGRectMake(15, 28, 290, 20)];
     elab.backgroundColor = [UIColor clearColor];
-    elab.font = [FFStyle regularFont:13];
+    elab.font = [FFStyle regularFont:14];
     elab.textColor = [FFStyle greyTextColor];
     if (indexPath.row < _contacts.count) {
         elab.text = _contacts[indexPath.row][1];

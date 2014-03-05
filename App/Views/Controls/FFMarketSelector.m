@@ -197,7 +197,7 @@
 
     UILabel* timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 30, cell.contentView.frame.size.width, 25)];
     timeLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleHeight;
-    timeLabel.font = [FFStyle regularFont:16];
+    timeLabel.font = [FFStyle regularFont:17.f];
     timeLabel.textColor = [FFStyle black];
     timeLabel.textAlignment = NSTextAlignmentCenter;
     timeLabel.backgroundColor = [UIColor clearColor];

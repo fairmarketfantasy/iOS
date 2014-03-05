@@ -62,7 +62,7 @@
     [_tableView registerClass:[UITableViewCell class]
         forCellReuseIdentifier:@"Cell"];
 
-    UIButton* balanceView = [self.sessionController balanceView];
+    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
     [balanceView addTarget:self
                     action:@selector(showBalance:)
           forControlEvents:UIControlEventTouchUpInside];

@@ -54,6 +54,7 @@
                                     selector:(SEL)selector
                                leftElseRight:(BOOL)left;
 + (FFCustomButton*)coloredButtonWithText:(NSString*)text color:(UIColor*)color borderColor:(UIColor*)color;
++ (CGRect)leftItemRect;
 + (NSArray*)backBarItemsForController:(UIViewController*)controller;
 
 + (void)customizeAppearance;

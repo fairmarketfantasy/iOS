@@ -50,7 +50,7 @@
 
         _team = [[UILabel alloc] initWithFrame:CGRectMake(82, 32, 140, 16)];
         _team.backgroundColor = [UIColor clearColor];
-        _team.font = [FFStyle regularFont:13];
+        _team.font = [FFStyle regularFont:14];
         _team.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:_team];
 
@@ -101,7 +101,7 @@
         _points = [[UILabel alloc] initWithFrame:CGRectMake(200, 0, 20, self.contentView.frame.size.height)];
         _points.backgroundColor = [UIColor clearColor];
         _points.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        _points.font = [FFStyle regularFont:16];
+        _points.font = [FFStyle regularFont:17.f];
         _points.hidden = YES;
         [self.contentView addSubview:_points];
 

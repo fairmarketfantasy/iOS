@@ -48,21 +48,21 @@
 
         _memberSince = [[UILabel alloc] initWithFrame:CGRectMake(15, 35, 205, 30)];
         _memberSince.backgroundColor = [UIColor clearColor];
-        _memberSince.font = [FFStyle regularFont:13];
+        _memberSince.font = [FFStyle regularFont:14];
         _memberSince.textColor = [FFStyle greyTextColor];
         _memberSince.text = @"Member Since 9/10/2013";
         [self addSubview:_memberSince];
 
         _points = [[UILabel alloc] initWithFrame:CGRectMake(15, 54, 205, 30)];
         _points.backgroundColor = [UIColor clearColor];
-        _points.font = [FFStyle regularFont:13];
+        _points.font = [FFStyle regularFont:14];
         _points.textColor = [FFStyle greyTextColor];
         _points.text = @"234,503 points";
         [self addSubview:_points];
 
         _wins = [[UILabel alloc] initWithFrame:CGRectMake(15, 70, 205, 35)];
         _wins.backgroundColor = [UIColor clearColor];
-        _wins.font = [FFStyle regularFont:13];
+        _wins.font = [FFStyle regularFont:14];
         _wins.textColor = [FFStyle greyTextColor];
         _wins.text = @"23 wins (0.492 win %)";
         [self addSubview:_wins];

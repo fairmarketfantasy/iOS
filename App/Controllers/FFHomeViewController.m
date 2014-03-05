@@ -43,34 +43,33 @@
 {
     [super viewDidLoad];
 
-    UIView* leftView = [[FFNavigationBarItemView alloc] initWithFrame:CGRectMake(0, 0, 200, 44)];
-    UIButton* menuButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [menuButton setImage:[UIImage imageNamed:@"globalmenu.png"]
+    FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle leftItemRect]];
+    self.globalMenuButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.globalMenuButton setImage:[UIImage imageNamed:@"globalmenu.png"]
                 forState:UIControlStateNormal];
-    [menuButton addTarget:self
+    [self.globalMenuButton addTarget:self
                    action:@selector(globalMenuButton:)
          forControlEvents:UIControlEventTouchUpInside];
-    menuButton.frame = CGRectMake(-2, -2, 35, 44);
-    _globalMenuButton = menuButton;
-    [leftView addSubview:menuButton];
-    UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fmf-logo.png"]];
-    logo.frame = CGRectMake(32, 13, 150, 19);
-    [leftView addSubview:logo];
+    
+    self.globalMenuButton.contentMode = UIViewContentModeScaleAspectFit;
+
+    self.globalMenuButton.frame = [FFStyle leftItemRect];
+    [leftItem addSubview:self.globalMenuButton];
 
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-        UIBarButtonItem* negspace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                  target:nil
-                                                                                  action:NULL];
-        negspace.width = -16;
+        UIBarButtonItem* spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                   target:nil
+                                                                                   action:NULL];
+        spaceItem.width = -16.f;
         self.navigationItem.leftBarButtonItems = @[
-            negspace,
-            [[UIBarButtonItem alloc] initWithCustomView:leftView]
+            spaceItem,
+            [[UIBarButtonItem alloc] initWithCustomView:leftItem]
         ];
     } else {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftView];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftItem];
     }
 
-    UIButton* balanceView = [self.sessionController balanceView];
+    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
     [balanceView addTarget:self
                     action:@selector(showBalance:)
           forControlEvents:UIControlEventTouchUpInside];
@@ -111,15 +110,9 @@
     _gameButtonView.delegate = self;
 }
 
-- (void)showBalance:(UIButton*)seder
+- (void)viewWillAppear:(BOOL)animated
 {
-    [self performSegueWithIdentifier:@"GotoTokenPurchase"
-                              sender:nil];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
 
     [self showInDrawerMaximizedController:self.maximizedTicker
               withMinimizedViewController:self.minimizedTicker
@@ -138,13 +131,22 @@
                                              selector:@selector(didUpdateUser:)
                                                  name:FFSessionDidUpdateUserNotification
                                                object:nil];
-    if (IS_SMALL_DEVICE) {
-        double delayInSeconds = 1.5;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-            [self minimizeDrawerAnimated:YES];
-        });
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (IS_SMALL_DEVICE && !self.drawerIsMinimized) {
+        [self minimizeDrawerAnimated:YES];
     }
+}
+
+#pragma mark -
+
+- (void)showBalance:(UIButton*)seder
+{
+    [self performSegueWithIdentifier:@"GotoTokenPurchase"
+                              sender:nil];
 }
 
 - (void)updateMarkets

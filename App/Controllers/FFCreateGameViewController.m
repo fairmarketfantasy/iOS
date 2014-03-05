@@ -58,8 +58,8 @@
     //    create.frame = CGRectMake(0, 0, 70, 30);
     //    [create addTarget:self action:@selector(create:) forControlEvents:UIControlEventTouchUpInside];
 
-    UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fmf-logo.png"]];
-    logo.contentMode = UIViewContentModeCenter;
+    //    self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 45.f)];
+
     //    logo.frame = CGRectMake(0, 0, 320, 44);
 
     //    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:cancel];
@@ -74,7 +74,7 @@
                                                                                  target:self
                                                                                selector:@selector(create:)
                                                                           leftElseRight:NO];
-    self.navigationItem.titleView = logo;
+    //    self.navigationItem.titleView = logo;
 
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:_tableView];
@@ -351,7 +351,7 @@ failure:
         UILabel* marketLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 50,
                                                                          cell.contentView.frame.size.height)];
         marketLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        marketLabel.font = [FFStyle regularFont:16];
+        marketLabel.font = [FFStyle regularFont:17.f];
         marketLabel.textColor = [FFStyle darkGreyTextColor];
         marketLabel.backgroundColor = [UIColor clearColor];
         marketLabel.textAlignment = NSTextAlignmentCenter;
@@ -371,7 +371,7 @@ failure:
         UILabel* timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(mlr) + 6, 0, 250,
                                                                        cell.contentView.frame.size.height)];
         timeLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        timeLabel.font = [FFStyle mediumFont:16];
+        timeLabel.font = [FFStyle mediumFont:17.f];
         timeLabel.textColor = [FFStyle black];
         timeLabel.textAlignment = NSTextAlignmentCenter;
         timeLabel.backgroundColor = [UIColor clearColor];

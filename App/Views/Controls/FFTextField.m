@@ -112,7 +112,7 @@
 {
     [self.placeholderColor setFill];
     [self.placeholder drawInRect:rect
-                        withFont:[FFStyle italicFont:16]];
+                        withFont:[FFStyle italicFont:17.f]];
 }
 
 @end

@@ -43,7 +43,7 @@
 
         _team = [[UILabel alloc] initWithFrame:CGRectMake(82, 32, 140, 16)];
         _team.backgroundColor = [UIColor clearColor];
-        _team.font = [FFStyle regularFont:13];
+        _team.font = [FFStyle regularFont:14];
         _team.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:_team];
 
@@ -72,7 +72,7 @@
         _inactive.backgroundColor = [UIColor clearColor];
         _inactive.textColor = [FFStyle brightRed];
         _inactive.text = NSLocalizedString(@"INACTIVE", nil);
-        _inactive.font = [FFStyle regularFont:12];
+        _inactive.font = [FFStyle regularFont:14];
         [self.contentView addSubview:_inactive];
 
         UIView* sep = [[UIView alloc] initWithFrame:CGRectMake(7, 78, 306, 1)];

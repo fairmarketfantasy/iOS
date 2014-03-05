@@ -54,7 +54,7 @@
     UILabel* ppg = [[UILabel alloc] initWithFrame:CGRectMake(56, 23, 60, 15)];
     ppg.textColor = [FFStyle white];
     ppg.backgroundColor = [FFStyle darkGreen];
-    ppg.font = [FFStyle regularFont:12];
+    ppg.font = [FFStyle regularFont:14];
     ppg.text = ppgValue;
     [cell.contentView addSubview:ppg];
 
@@ -68,7 +68,7 @@
     UILabel* cost = [[UILabel alloc] initWithFrame:CGRectMake(56, 38, 100, 15)];
     cost.textColor = [FFStyle white];
     cost.backgroundColor = [FFStyle darkGreen];
-    cost.font = [FFStyle regularFont:12];
+    cost.font = [FFStyle regularFont:14];
     cost.text = costValue;
     [cell.contentView addSubview:cost];
 

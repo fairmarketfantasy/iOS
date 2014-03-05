@@ -22,7 +22,7 @@
 
 @end
 
-#define BUTTON_FONT [FFStyle regularFont:16]
+#define BUTTON_FONT [FFStyle regularFont:17.f]
 #define kButtonLeftPadding 5.0f
 #define kButtonRightPadding 5.0f
 #define kButtonTopPadding 5.0f

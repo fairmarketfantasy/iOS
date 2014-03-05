@@ -8,6 +8,7 @@
 
 #import "FFRosterViewController.h"
 #import "FFRoster.h"
+#import "FFRosterTable.h"
 #import "FFSessionViewController.h"
 #import "FFContestViewController.h"
 #import <A2StoryboardSegueContext/A2StoryboardSegueContext.h>
@@ -15,7 +16,7 @@
 
 @interface FFRosterViewController () <UITableViewDataSource, UITableViewDelegate, SBDataObjectResultSetDelegate>
 
-@property(nonatomic) UITableView* tableView;
+@property(nonatomic) FFRosterTable* tableView;
 @property(nonatomic) SBDataObjectResultSet* rosters;
 @property(nonatomic) SBDataObjectResultSet* historicalRosters;
 @property(nonatomic) NSTimer* refreshTimer;
@@ -27,11 +28,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // TODO: move to separate VIEW
-    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
+    _tableView = [[FFRosterTable alloc] initWithFrame:self.view.bounds];
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
     [self.view addSubview:_tableView];
     if ([self respondsToSelector:@selector(topLayoutGuide)]) {
-        [_tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
         id topGuide = self.topLayoutGuide;
         NSDictionary* viewsDictionary = NSDictionaryOfVariableBindings(_tableView, topGuide);
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topGuide][_tableView]|"
@@ -42,17 +43,8 @@
                                                                           options:0
                                                                           metrics:nil
                                                                             views:viewsDictionary]];
-    } else {
-        _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     }
-    _tableView.backgroundColor = [UIColor clearColor];
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    [_tableView registerClass:[UITableViewCell class]
-        forCellReuseIdentifier:@"Cell"];
-
-    UIButton* balanceView = [self.sessionController balanceView];
+    FFBalanceButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
     [balanceView addTarget:self
                     action:@selector(showBalance:)
           forControlEvents:UIControlEventTouchUpInside];
@@ -99,7 +91,12 @@
                                                        selector:@selector(refreshLiveData)
                                                        userInfo:nil
                                                         repeats:YES];
-    [self.tableView reloadData];
+    //    [self.tableView reloadData];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -193,7 +190,7 @@
 - (UITableViewCell*)tableView:(UITableView*)tableView
         cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"RosterCell"
                                                             forIndexPath:indexPath];
     // TODO: move to separate CELL VIEW
     [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -239,7 +236,7 @@
 
     UILabel* entry = [[UILabel alloc] initWithFrame:CGRectMake(15, 32, 170, 20)];
     entry.backgroundColor = [UIColor clearColor];
-    entry.font = [FFStyle regularFont:13];
+    entry.font = [FFStyle regularFont:14];
     entry.textColor = [FFStyle greyTextColor];
     entry.text = [NSString stringWithFormat:@"%@ %@  %@ %@",
                                             NSLocalizedString(@"Entry:", 0), cType.buyIn,

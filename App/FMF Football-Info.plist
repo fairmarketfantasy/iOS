@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Fair Market Fantasy</string>
+	<string>Predict That</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIcons</key>
@@ -25,7 +25,7 @@
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.fairmarketfantasy.fmf-football</string>
+	<string>com.fairmarketfantasy.predictthat</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -49,11 +49,11 @@
 	<key>CFBundleVersion</key>
 	<string>202</string>
 	<key>FFEmailRegex</key>
-	<string>(^[-!#$%&amp;&apos;*+/=?^_`{}|~0-9A-Z]+(\\.[-!#$%&amp;&apos;*+/=?^_`{}|~0-9A-Z]+)*|^\&quot;([\001-\010\013\014\016-\037!#-\\[\\]-\177]|\\[\001-011\013\014\016-\177])*\&quot;)@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\\.)+[A-Z]{2,6}\\.?$</string>
+	<string>(^[-!#$%&amp;'*+/=?^_`{}|~0-9A-Z]+(\\.[-!#$%&amp;'*+/=?^_`{}|~0-9A-Z]+)*|^\"([\001-\010\013\014\016-\037!#-\\[\\]-\177]|\\[\001-011\013\014\016-\177])*\")@(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\\.)+[A-Z]{2,6}\\.?$</string>
 	<key>FacebookAppID</key>
 	<string>517379538328159</string>
 	<key>FacebookDisplayName</key>
-	<string>Fair Market Fantasy</string>
+	<string>Predict That</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>SBAPIAllowInvalidSSLCertificate</key>

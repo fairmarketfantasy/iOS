@@ -40,7 +40,7 @@
         _subtitle.numberOfLines = 2;
         _subtitle.lineBreakMode = NSLineBreakByWordWrapping;
         _subtitle.textColor = [FFStyle greyTextColor];
-        _subtitle.font = [FFStyle regularFont:13];
+        _subtitle.font = [FFStyle regularFont:14];
         [self addSubview:_subtitle];
 
         UILabel* ent = [[UILabel alloc] initWithFrame:CGRectMake(15, 81, 220, 18)];
