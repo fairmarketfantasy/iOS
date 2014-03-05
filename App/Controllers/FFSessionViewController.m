@@ -281,12 +281,37 @@
     //    headerView.backgroundColor = [FFStyle darkGreen];
     //    [self.signInView addSubview:headerView];
 
-    UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fmf-logo.png"]];
-    [logo sizeToFit];
-    logo.frame = CGRectCopyWithOrigin(logo.frame, CGPointMake(10.f, 15.f));
-    //        [headerView addSubview:logo];
+    //    UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fmf-logo.png"]];
+    //    [logo sizeToFit];
+    //    logo.frame = CGRectCopyWithOrigin(logo.frame, CGPointMake(10.f, 15.f));
+    //    //        [headerView addSubview:logo];
+    //
+    //    self.navigationItem.titleView = logo;
+    UILabel* logo = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 45.f)];
+    logo.textAlignment = NSTextAlignmentCenter;
 
+    NSMutableAttributedString* attributedTitle = [[NSMutableAttributedString alloc]
+        initWithString:
+            NSLocalizedString(@"Fair Market Fantasy", @"Session controller title")
+            attributes:@{
+                           NSFontAttributeName : [FFStyle blockFont:19.f],
+                           NSForegroundColorAttributeName : [FFStyle white]
+                       }];
+    NSRange lastWord = [attributedTitle.string rangeOfString:@" "
+                                                     options:NSBackwardsSearch];
+    lastWord.location++;
+    lastWord.length = attributedTitle.length - lastWord.location;
+
+    [attributedTitle beginEditing];
+    [attributedTitle addAttribute:NSFontAttributeName
+                            value:[FFStyle italicBlockFont:19.f]
+                            range:lastWord];
+    [attributedTitle endEditing];
+
+    [logo setAttributedText:attributedTitle];
     self.navigationItem.titleView = logo;
+
+    //    self.navigationController.navigationBar.titleTextAttributes = attributedTitle
 
     //    UIButton* signup = [FFStyle clearButtonWithText:NSLocalizedString(@"Sign Up", nil)
     //                                        borderColor:[FFStyle white]];

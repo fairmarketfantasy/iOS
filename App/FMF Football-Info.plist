@@ -59,7 +59,7 @@
 	<key>SBAPIAllowInvalidSSLCertificate</key>
 	<true/>
 	<key>SBAPIBaseURLSpec</key>
-	<string>https://staging.fairmarketfantasy.com</string>
+	<string>https://staging.predictthat.com</string>
 	<key>SBAPIVersion</key>
 	<string></string>
 	<key>SBApiClientId</key>
@@ -68,7 +68,8 @@
 	<string>f4n7Astic</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>ProhibitionRound.ttf</string>
+		<string>Prohibition-Bold.ttf</string>
+		<string>Prohibition-BoldItalic.ttf</string>
 	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard_iPhone</string>

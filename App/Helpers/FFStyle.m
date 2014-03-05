@@ -131,7 +131,13 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 + (UIFont*)blockFont:(int)size
 {
-    return [UIFont fontWithName:@"Prohibition-Round"
+    return [UIFont fontWithName:@"Prohibition-Bold"
+                           size:size];
+}
+
++ (UIFont*)italicBlockFont:(int)size
+{
+    return [UIFont fontWithName:@"Prohibition-BoldItalic"
                            size:size];
 }
 

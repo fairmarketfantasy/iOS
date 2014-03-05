@@ -27,7 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    // TODO: move to separate VIEW
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:_tableView];
     if ([self respondsToSelector:@selector(topLayoutGuide)]) {
@@ -62,7 +62,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
     SBModelQuery* query = [[[[[[self.session queryBuilderForClass:[FFRoster class]]
                                    property:@"ownerId"
                                   isEqualTo:self.session.user.objId]
@@ -94,6 +93,7 @@
                                    withSession:self.session
                                     authorized:YES];
     _historicalRosters.delegate = self;
+
     self.refreshTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval)2.f
                                                          target:self
                                                        selector:@selector(refreshLiveData)
@@ -108,6 +108,17 @@
     [self.refreshTimer invalidate];
     self.refreshTimer = nil;
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue
+                 sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"GotoContest"]) {
+        FFRoster* roster = segue.context;
+        ((FFContestViewController*)segue.destinationViewController).roster = roster;
+    }
+}
+
+#pragma mark -
 
 - (void)showBalance:(UIButton*)seder
 {
@@ -132,6 +143,8 @@
                       withRowAnimation:UITableViewRowAnimationNone];
     }
 }
+
+#pragma mark - UITableViewDataSource UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
@@ -158,8 +171,10 @@
     return 50;
 }
 
-- (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
+- (UIView*)tableView:(UITableView*)tableView
+    viewForHeaderInSection:(NSInteger)section
 {
+    // TODO: move to separate HEADER VIEW
     UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
     header.backgroundColor = [FFStyle white];
     UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 290, 50)];
@@ -175,10 +190,12 @@
     return header;
 }
 
-- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
+- (UITableViewCell*)tableView:(UITableView*)tableView
+        cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"
                                                             forIndexPath:indexPath];
+    // TODO: move to separate CELL VIEW
     [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 22.5, 10, 15)];
@@ -263,7 +280,8 @@
     return cell;
 }
 
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
+- (void)tableView:(UITableView*)tableView
+    didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     FFRoster* roster;
     if (indexPath.section == 0) {
@@ -304,14 +322,6 @@
     }
     [tableView deselectRowAtIndexPath:indexPath
                              animated:YES];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"GotoContest"]) {
-        FFRoster* roster = segue.context;
-        ((FFContestViewController*)segue.destinationViewController).roster = roster;
-    }
 }
 
 @end

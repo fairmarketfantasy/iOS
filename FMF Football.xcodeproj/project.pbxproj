@@ -23,7 +23,6 @@
 		89470EC218BF694200E405EF /* FFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89470EC118BF694200E405EF /* FFMenuCell.m */; };
 		896ACA5018B66376001E9C64 /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */; };
 		896ACA5218B66377001E9C64 /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 896ACA4F18B66376001E9C64 /* UbertestersSDKResources.bundle */; };
-		896ACC4F18B664F5001E9C64 /* ProhibitionRound.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBB718B664F5001E9C64 /* ProhibitionRound.ttf */; };
 		896ACC5118B664F5001E9C64 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBB918B664F5001E9C64 /* Default-568h@2x.png */; };
 		896ACC5318B664F5001E9C64 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBBA18B664F5001E9C64 /* Default.png */; };
 		896ACC5518B664F5001E9C64 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBBB18B664F5001E9C64 /* Default@2x.png */; };
@@ -50,7 +49,6 @@
 		896ACC8118B664F5001E9C64 /* dailyfantasyfootball@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD318B664F5001E9C64 /* dailyfantasyfootball@2x.png */; };
 		896ACC8318B664F5001E9C64 /* darkgreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD418B664F5001E9C64 /* darkgreen.png */; };
 		896ACC8518B664F5001E9C64 /* defaultuser@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD518B664F5001E9C64 /* defaultuser@2x.png */; };
-		896ACC8B18B664F5001E9C64 /* fmf-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD818B664F5001E9C64 /* fmf-logo@2x.png */; };
 		896ACC8F18B664F5001E9C64 /* globalmenu-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */; };
 		896ACC9118B664F5001E9C64 /* globalmenu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDB18B664F5001E9C64 /* globalmenu@2x.png */; };
 		896ACC9318B664F5001E9C64 /* greendot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDC18B664F5001E9C64 /* greendot@2x.png */; };
@@ -116,6 +114,8 @@
 		89BABFC818BDFC99001AD755 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89BABFC718BDFC99001AD755 /* Localizable.strings */; };
 		89BED92618C4B67B003E9E68 /* tshirt-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92418C4B67B003E9E68 /* tshirt-placeholder.png */; };
 		89BED92718C4B67B003E9E68 /* tshirt-placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92518C4B67B003E9E68 /* tshirt-placeholder@2x.png */; };
+		89BED92D18C77348003E9E68 /* Prohibition-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92B18C77348003E9E68 /* Prohibition-Bold.ttf */; };
+		89BED92E18C77348003E9E68 /* Prohibition-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92C18C77348003E9E68 /* Prohibition-BoldItalic.ttf */; };
 		89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBC218B664F5001E9C64 /* FMF-Small-50.png */; };
 		89C3656618B7CBF2003C7A9C /* playerselectmask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE318B664F5001E9C64 /* playerselectmask@2x.png */; };
 		89DFD28E18B37ECC0079F427 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD28D18B37ECC0079F427 /* AdSupport.framework */; };
@@ -152,7 +152,6 @@
 		89470EC118BF694200E405EF /* FFMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMenuCell.m; sourceTree = "<group>"; };
 		896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
 		896ACA4F18B66376001E9C64 /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
-		896ACBB718B664F5001E9C64 /* ProhibitionRound.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ProhibitionRound.ttf; sourceTree = "<group>"; };
 		896ACBB918B664F5001E9C64 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		896ACBBA18B664F5001E9C64 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		896ACBBB18B664F5001E9C64 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -180,7 +179,6 @@
 		896ACBD318B664F5001E9C64 /* dailyfantasyfootball@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dailyfantasyfootball@2x.png"; sourceTree = "<group>"; };
 		896ACBD418B664F5001E9C64 /* darkgreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = darkgreen.png; sourceTree = "<group>"; };
 		896ACBD518B664F5001E9C64 /* defaultuser@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defaultuser@2x.png"; sourceTree = "<group>"; };
-		896ACBD818B664F5001E9C64 /* fmf-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fmf-logo@2x.png"; sourceTree = "<group>"; };
 		896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "globalmenu-highlighted@2x.png"; sourceTree = "<group>"; };
 		896ACBDB18B664F5001E9C64 /* globalmenu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "globalmenu@2x.png"; sourceTree = "<group>"; };
 		896ACBDC18B664F5001E9C64 /* greendot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greendot@2x.png"; sourceTree = "<group>"; };
@@ -294,6 +292,8 @@
 		89BABFC718BDFC99001AD755 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		89BED92418C4B67B003E9E68 /* tshirt-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tshirt-placeholder.png"; sourceTree = "<group>"; };
 		89BED92518C4B67B003E9E68 /* tshirt-placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tshirt-placeholder@2x.png"; sourceTree = "<group>"; };
+		89BED92B18C77348003E9E68 /* Prohibition-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Prohibition-Bold.ttf"; sourceTree = "<group>"; };
+		89BED92C18C77348003E9E68 /* Prohibition-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Prohibition-BoldItalic.ttf"; sourceTree = "<group>"; };
 		89DFD28D18B37ECC0079F427 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		89DFD28F18B37EE30079F427 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		89DFD29118B37F1B0079F427 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -429,7 +429,8 @@
 		896ACBB618B664F5001E9C64 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				896ACBB718B664F5001E9C64 /* ProhibitionRound.ttf */,
+				89BED92B18C77348003E9E68 /* Prohibition-Bold.ttf */,
+				89BED92C18C77348003E9E68 /* Prohibition-BoldItalic.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -485,7 +486,6 @@
 				896ACBD318B664F5001E9C64 /* dailyfantasyfootball@2x.png */,
 				896ACBD418B664F5001E9C64 /* darkgreen.png */,
 				896ACBD518B664F5001E9C64 /* defaultuser@2x.png */,
-				896ACBD818B664F5001E9C64 /* fmf-logo@2x.png */,
 				896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */,
 				896ACBDB18B664F5001E9C64 /* globalmenu@2x.png */,
 				896ACBDC18B664F5001E9C64 /* greendot@2x.png */,
@@ -603,6 +603,7 @@
 				896ACC3218B664F5001E9C64 /* Cells */,
 				896ACC3918B664F5001E9C64 /* Controls */,
 				896ACC4C18B664F5001E9C64 /* Storyboards */,
+				89BED92818C75683003E9E68 /* Partials */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -654,6 +655,13 @@
 				896ACC4E18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard */,
 			);
 			path = Storyboards;
+			sourceTree = "<group>";
+		};
+		89BED92818C75683003E9E68 /* Partials */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Partials;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -722,6 +730,7 @@
 				896ACC5318B664F5001E9C64 /* Default.png in Resources */,
 				896ACCA918B664F5001E9C64 /* sectionback@2x.png in Resources */,
 				896ACC9518B664F5001E9C64 /* greydot@2x.png in Resources */,
+				89BED92D18C77348003E9E68 /* Prohibition-Bold.ttf in Resources */,
 				896ACA5218B66377001E9C64 /* UbertestersSDKResources.bundle in Resources */,
 				896ACD0D18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard in Resources */,
 				896ACC6318B664F5001E9C64 /* FMF-Small-50@2x.png in Resources */,
@@ -742,6 +751,7 @@
 				896ACC8518B664F5001E9C64 /* defaultuser@2x.png in Resources */,
 				896ACC7B18B664F5001E9C64 /* bluedot@2x.png in Resources */,
 				896ACC6D18B664F5001E9C64 /* iTunesArtwork.png in Resources */,
+				89BED92E18C77348003E9E68 /* Prohibition-BoldItalic.ttf in Resources */,
 				896ACC5B18B664F5001E9C64 /* FMF-72.png in Resources */,
 				896ACC8318B664F5001E9C64 /* darkgreen.png in Resources */,
 				89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */,
@@ -757,8 +767,6 @@
 				89BED92618C4B67B003E9E68 /* tshirt-placeholder.png in Resources */,
 				896ACC9D18B664F5001E9C64 /* loginbg@2x.png in Resources */,
 				896ACC6918B664F5001E9C64 /* FMF.png in Resources */,
-				896ACC4F18B664F5001E9C64 /* ProhibitionRound.ttf in Resources */,
-				896ACC8B18B664F5001E9C64 /* fmf-logo@2x.png in Resources */,
 				896ACCA318B664F5001E9C64 /* reddot@2x.png in Resources */,
 				896ACC9F18B664F5001E9C64 /* player-cutout@2x.png in Resources */,
 				896ACC6718B664F5001E9C64 /* FMF-Small@2x.png in Resources */,
