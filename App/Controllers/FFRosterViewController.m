@@ -13,6 +13,8 @@
 #import "FFContestViewController.h"
 #import <A2StoryboardSegueContext/A2StoryboardSegueContext.h>
 #import "FFAlertView.h"
+#import "FFRosterCell.h"
+#import "FFRosterTableHeader.h"
 
 @interface FFRosterViewController () <UITableViewDataSource, UITableViewDelegate, SBDataObjectResultSetDelegate>
 
@@ -91,12 +93,7 @@
                                                        selector:@selector(refreshLiveData)
                                                        userInfo:nil
                                                         repeats:YES];
-    //    [self.tableView reloadData];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -115,7 +112,7 @@
     }
 }
 
-#pragma mark -
+#pragma mark - private
 
 - (void)showBalance:(UIButton*)seder
 {
@@ -141,14 +138,15 @@
     }
 }
 
-#pragma mark - UITableViewDataSource UITableViewDelegate
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
     return 2;
 }
 
-- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView*)tableView
+    numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
         return [_rosters count];
@@ -158,123 +156,50 @@
     return 0;
 }
 
-- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
+- (UITableViewCell*)tableView:(UITableView*)tableView
+        cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    return 60;
+    FFRosterCell* cell = [tableView dequeueReusableCellWithIdentifier:@"RosterCell"
+                                                         forIndexPath:indexPath];
+
+    FFRoster* roster = nil;
+    if (indexPath.section == 0) {
+        roster = [self.rosters objectAtIndex:indexPath.row];
+    } else if (indexPath.section == 1) {
+        roster = [self.historicalRosters objectAtIndex:indexPath.row];
+    }
+
+    cell.roster = roster;
+
+    return cell;
 }
 
-- (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView*)tableView
+    heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    return 50;
+    return 60.f;
+}
+
+- (CGFloat)tableView:(UITableView*)tableView
+    heightForHeaderInSection:(NSInteger)section
+{
+    return 50.f;
 }
 
 - (UIView*)tableView:(UITableView*)tableView
     viewForHeaderInSection:(NSInteger)section
 {
-    // TODO: move to separate HEADER VIEW
-    UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-    header.backgroundColor = [FFStyle white];
-    UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 290, 50)];
-    lab.backgroundColor = [UIColor clearColor];
-    lab.font = [FFStyle lightFont:26];
-    lab.textColor = [FFStyle tableViewSectionHeaderColor];
+    FFRosterTableHeader* header = [[FFRosterTableHeader alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 50.f)];
+    NSString* headerTitle = @"";
     if (section == 0) {
-        lab.text = NSLocalizedString(@"Live Contest Entries", nil);
-    } else if (section == 1 && _historicalRosters.count) {
-        lab.text = NSLocalizedString(@"Past Entries", nil);
+        headerTitle = NSLocalizedString(@"Live Contest Entries", nil);
+    } else if (section == 1 && self.historicalRosters.count > 0) {
+        headerTitle = NSLocalizedString(@"Past Entries", nil);
     }
-    [header addSubview:lab];
+    header.titleLabel.text = headerTitle;
     return header;
-}
-
-- (UITableViewCell*)tableView:(UITableView*)tableView
-        cellForRowAtIndexPath:(NSIndexPath*)indexPath
-{
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"RosterCell"
-                                                            forIndexPath:indexPath];
-    // TODO: move to separate CELL VIEW
-    [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-
-    UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 22.5, 10, 15)];
-    disclosure.image = [UIImage imageNamed:@"accessory_disclosure"];
-    disclosure.backgroundColor = [UIColor clearColor];
-    [cell.contentView addSubview:disclosure];
-
-    UIView* sep = [[UIView alloc] initWithFrame:CGRectMake(15, CGRectGetMaxY(cell.contentView.frame), 290, 1)];
-    sep.backgroundColor = [FFStyle tableViewSeparatorColor];
-    sep.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [cell.contentView addSubview:sep];
-
-    FFRoster* roster;
-    if (indexPath.section == 0) {
-        roster = [_rosters objectAtIndex:indexPath.row];
-    } else if (indexPath.section == 1) {
-        roster = [_historicalRosters objectAtIndex:indexPath.row];
-    }
-    FFContestType* cType = roster.contestType;
-
-    CGFloat labw = [cType.name sizeWithFont:[FFStyle mediumFont:19]].width;
-
-    UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, labw, 36)];
-    lab.backgroundColor = [UIColor clearColor];
-    lab.font = [FFStyle mediumFont:19];
-    lab.text = cType.name;
-    [cell.contentView addSubview:lab];
-
-    UIImageView* status = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
-    status.center = CGPointMake(CGRectGetMaxX(lab.frame) + 10, CGRectGetMidY(lab.frame));
-    status.backgroundColor = [UIColor clearColor];
-    NSDictionary* states = @{
-        @"in_progress" : @"greydot.png",
-        @"submitted" : @"greendot.png",
-        @"finished" : @"bluedot.png"
-    };
-    if (states[roster.state]) {
-        status.image = [UIImage imageNamed:states[roster.state]];
-        [cell.contentView addSubview:status];
-    }
-
-    UILabel* entry = [[UILabel alloc] initWithFrame:CGRectMake(15, 32, 170, 20)];
-    entry.backgroundColor = [UIColor clearColor];
-    entry.font = [FFStyle regularFont:14];
-    entry.textColor = [FFStyle greyTextColor];
-    entry.text = [NSString stringWithFormat:@"%@ %@  %@ %@",
-                                            NSLocalizedString(@"Entry:", 0), cType.buyIn,
-                                            NSLocalizedString(@"Payout:", nil), (roster.amountPaid != nil ? roster.amountPaid : @"0")];
-    [cell.contentView addSubview:entry];
-
-    UILabel* rankLab = [[UILabel alloc] initWithFrame:CGRectMake(165, 5, 50, 30)];
-    rankLab.backgroundColor = [UIColor clearColor];
-    rankLab.font = [FFStyle regularFont:15];
-    rankLab.textColor = [FFStyle darkerColorForColor:[FFStyle lightGrey]];
-    rankLab.text = NSLocalizedString(@"Rank:", nil);
-    [cell.contentView addSubview:rankLab];
-
-    UILabel* scoreLab = [[UILabel alloc] initWithFrame:CGRectMake(165, 32, 50, 20)];
-    scoreLab.backgroundColor = [UIColor clearColor];
-    scoreLab.font = [FFStyle regularFont:14];
-    scoreLab.text = NSLocalizedString(@"Score:", nil);
-    scoreLab.textColor = [FFStyle darkerColorForColor:[FFStyle lightGrey]];
-    [cell.contentView addSubview:scoreLab];
-
-    UILabel* rank = [[UILabel alloc] initWithFrame:CGRectMake(210, 5, 65, 30)];
-    rank.backgroundColor = [UIColor clearColor];
-    rank.font = [FFStyle mediumFont:15];
-    rank.textColor = [FFStyle darkGreyTextColor];
-    rank.text = [NSString stringWithFormat:@"%@ %@ %@",
-                                           (roster.contestRank == nil ? @"0" : roster.contestRank),
-                                           NSLocalizedString(@"of", nil),
-                                           (cType.maxEntries == nil ? @"0" : cType.maxEntries)];
-    [cell.contentView addSubview:rank];
-
-    UILabel* score = [[UILabel alloc] initWithFrame:CGRectMake(210, 32, 65, 20)];
-    score.backgroundColor = [UIColor clearColor];
-    score.font = [FFStyle mediumFont:14];
-    score.textColor = [FFStyle darkGreyTextColor];
-    score.text = [NSString stringWithFormat:@"%@", (roster.score == nil ? @"0" : roster.score)];
-    [cell.contentView addSubview:score];
-
-    return cell;
 }
 
 - (void)tableView:(UITableView*)tableView

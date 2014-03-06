@@ -193,7 +193,7 @@
 
     UILabel* rankLab = [[UILabel alloc] initWithFrame:CGRectMake(160, 5, 50, 30)];
     rankLab.backgroundColor = [UIColor clearColor];
-    rankLab.font = [FFStyle regularFont:15];
+    rankLab.font = [FFStyle regularFont:14];
     rankLab.textColor = [FFStyle darkerColorForColor:[FFStyle lightGrey]];
     rankLab.text = NSLocalizedString(@"Score:", 0);
     [cell.contentView addSubview:rankLab];
@@ -207,7 +207,7 @@
 
     UILabel* rank = [[UILabel alloc] initWithFrame:CGRectMake(210, 5, 65, 30)];
     rank.backgroundColor = [UIColor clearColor];
-    rank.font = [FFStyle mediumFont:15];
+    rank.font = [FFStyle mediumFont:14];
     rank.textColor = [FFStyle darkGreyTextColor];
     rank.text = [NSString stringWithFormat:@"%@ %@", roster.score, NSLocalizedString(@"points", nil)];
     [cell.contentView addSubview:rank];

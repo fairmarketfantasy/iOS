@@ -20,6 +20,8 @@
 		61A0C8A5904D4788A81F9EA6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A0D11613844A1D9BF1BC9E /* libPods.a */; };
 		89051CB818BFA4E8001E8C78 /* FFDataObjectResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 89051CB718BFA4E8001E8C78 /* FFDataObjectResultSet.m */; };
 		89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 89051CBA18BFC253001E8C78 /* FFMarketSet.m */; };
+		89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89314A7618C8C2B80048E00F /* FFRosterCell.m */; };
+		89314A7A18C8DCF50048E00F /* FFRosterTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 89314A7918C8DCF50048E00F /* FFRosterTableHeader.m */; };
 		89470EC218BF694200E405EF /* FFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89470EC118BF694200E405EF /* FFMenuCell.m */; };
 		896ACA5018B66376001E9C64 /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */; };
 		896ACA5218B66377001E9C64 /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 896ACA4F18B66376001E9C64 /* UbertestersSDKResources.bundle */; };
@@ -150,6 +152,10 @@
 		89051CB718BFA4E8001E8C78 /* FFDataObjectResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFDataObjectResultSet.m; sourceTree = "<group>"; };
 		89051CB918BFC253001E8C78 /* FFMarketSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMarketSet.h; sourceTree = "<group>"; };
 		89051CBA18BFC253001E8C78 /* FFMarketSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMarketSet.m; sourceTree = "<group>"; };
+		89314A7518C8C2B80048E00F /* FFRosterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterCell.h; sourceTree = "<group>"; };
+		89314A7618C8C2B80048E00F /* FFRosterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterCell.m; sourceTree = "<group>"; };
+		89314A7818C8DCF50048E00F /* FFRosterTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterTableHeader.h; sourceTree = "<group>"; };
+		89314A7918C8DCF50048E00F /* FFRosterTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterTableHeader.m; sourceTree = "<group>"; };
 		89470EC018BF694200E405EF /* FFMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMenuCell.h; sourceTree = "<group>"; };
 		89470EC118BF694200E405EF /* FFMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMenuCell.m; sourceTree = "<group>"; };
 		896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
@@ -625,6 +631,8 @@
 				896ACC3818B664F5001E9C64 /* FFRosterSlotCell.m */,
 				89470EC018BF694200E405EF /* FFMenuCell.h */,
 				89470EC118BF694200E405EF /* FFMenuCell.m */,
+				89314A7518C8C2B80048E00F /* FFRosterCell.h */,
+				89314A7618C8C2B80048E00F /* FFRosterCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -670,6 +678,8 @@
 				89BED93018C77D19003E9E68 /* FFRosterTable.m */,
 				89BED93218C7855C003E9E68 /* FFLogo.h */,
 				89BED93318C7855C003E9E68 /* FFLogo.m */,
+				89314A7818C8DCF50048E00F /* FFRosterTableHeader.h */,
+				89314A7918C8DCF50048E00F /* FFRosterTableHeader.m */,
 			);
 			path = Partials;
 			sourceTree = "<group>";
@@ -825,6 +835,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89314A7A18C8DCF50048E00F /* FFRosterTableHeader.m in Sources */,
 				89BED93418C7855C003E9E68 /* FFLogo.m in Sources */,
 				896ACCD918B664F5001E9C64 /* FFTickerDataSource.m in Sources */,
 				896ACCE118B664F5001E9C64 /* UIView+FindFirstResponder.m in Sources */,
@@ -873,6 +884,7 @@
 				896ACCFB18B664F5001E9C64 /* FFBalanceButton.m in Sources */,
 				896ACCB318B664F5001E9C64 /* FFCreateGameViewController.m in Sources */,
 				896ACCAD18B664F5001E9C64 /* FFBaseViewController.m in Sources */,
+				89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */,
 				896ACCC918B664F5001E9C64 /* FFTickerDrawerViewController.m in Sources */,
 				896ACCBB18B664F5001E9C64 /* FFInviteViewController.m in Sources */,
 				896ACCF118B664F5001E9C64 /* FFUser.m in Sources */,

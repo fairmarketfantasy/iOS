@@ -7,6 +7,7 @@
 //
 
 #import "FFRosterTable.h"
+#import "FFRosterCell.h"
 
 @implementation FFRosterTable
 
@@ -19,7 +20,7 @@
         self.backgroundColor = [UIColor clearColor];
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-        [self registerClass:[UITableViewCell class]
+        [self registerClass:[FFRosterCell class]
             forCellReuseIdentifier:@"RosterCell"];
     }
     return self;

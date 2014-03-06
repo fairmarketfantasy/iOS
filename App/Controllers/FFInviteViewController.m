@@ -134,14 +134,14 @@
     //    [self.view addSubview:navBar];
 
     //    UIButton *closeButt = [UIButton buttonWithType:UIButtonTypeCustom];
-    //    closeButt.titleLabel.font = [FFStyle regularFont:15];
+    //    closeButt.titleLabel.font = [FFStyle regularFont:14];
     //    closeButt.titleLabel.textColor = [FFStyle white];
     //    closeButt.frame = CGRectMake(0, 0, 56, 44);
     //    [closeButt setTitle:NSLocalizedString(@"Close", nil) forState:UIControlStateNormal];
     //    [closeButt addTarget:self action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
     //
     //    UIButton *sendButt = [UIButton buttonWithType:UIButtonTypeCustom];
-    //    sendButt.titleLabel.font = [FFStyle regularFont:15];
+    //    sendButt.titleLabel.font = [FFStyle regularFont:14];
     //    sendButt.titleLabel.textColor = [FFStyle white];
     //    sendButt.frame = CGRectMake(0, 0, 56, 44);
     //    [sendButt setTitle:NSLocalizedString(@"Send", nil) forState:UIControlStateNormal];
