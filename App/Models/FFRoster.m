@@ -212,16 +212,22 @@ failure:
 
 - (void)setValuesForKeysWithNetworkDictionary:(NSDictionary*)keyedValues
 {
+    if (![keyedValues isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
     [super setValuesForKeysWithNetworkDictionary:keyedValues];
-    self.contestTypeId = keyedValues[@"contest_type"][@"id"];
-    // save the connected contest type
-    self.contestType = [FFContestType fromNetworkRepresentation:keyedValues[@"contest_type"]
-                                                        session:self.session
-                                                           save:YES];
-    self.marketId = keyedValues[@"market"][@"id"];
-    self.market = [FFMarket fromNetworkRepresentation:keyedValues[@"market"]
-                                              session:self.session
-                                                 save:YES];
+    self.contestTypeId = [keyedValues valueForKeyPath:@"contest_type.id"];
+    if ([self.contestTypeId isKindOfClass:[NSString class]]) {
+        self.contestType = [FFContestType fromNetworkRepresentation:keyedValues[@"contest_type"]
+                                                            session:self.session
+                                                               save:YES];
+    }
+    self.marketId = [keyedValues valueForKeyPath:@"market.id"];
+    if ([self.marketId isKindOfClass:[NSString class]]) {
+        self.market = [FFMarket fromNetworkRepresentation:keyedValues[@"market"]
+                                                  session:self.session
+                                                     save:YES];
+    }
 }
 
 - (FFContestType*)contestType

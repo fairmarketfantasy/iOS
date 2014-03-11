@@ -465,11 +465,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="TY5-BO-lyU"/>
-        <segue reference="Zjb-xv-NwD"/>
         <segue reference="N1l-vH-mFu"/>
-        <segue reference="8Up-JT-o81"/>
+        <segue reference="Zjb-xv-NwD"/>
+        <segue reference="TY5-BO-lyU"/>
         <segue reference="3y5-bZ-Hxu"/>
+        <segue reference="Vgf-W4-inr"/>
         <segue reference="u0q-yD-ZaH"/>
     </inferredMetricsTieBreakers>
 </document>

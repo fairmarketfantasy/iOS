@@ -138,6 +138,37 @@
     }
 }
 
+- (void)fetchRoster:(FFRoster*)roster
+{
+    FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading...", nil)
+                                                   messsage:nil
+                                               loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+
+    [FFMarket get:roster.marketId
+          session:self.session
+          success:^(id successObj)
+    {
+        roster.market = successObj;
+        [roster save];
+        [alert hide];
+        [self performSegueWithIdentifier:@"GotoContest"
+                                  sender:nil
+                                 context:roster];
+    }
+failure:
+    ^(NSError * error)
+    {
+        [alert hide];
+        [[[FFAlertView alloc] initWithError:error
+                                      title:nil
+                          cancelButtonTitle:nil
+                            okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                   autoHide:YES]
+            showInView:self.navigationController.view];
+    }];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -149,9 +180,9 @@
     numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return [_rosters count];
+        return [self.rosters count];
     } else if (section == 1) {
-        return [_historicalRosters count];
+        return [self.historicalRosters count];
     }
     return 0;
 }
@@ -205,38 +236,15 @@
 - (void)tableView:(UITableView*)tableView
     didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    FFRoster* roster;
+    FFRoster* roster = nil;
     if (indexPath.section == 0) {
-        roster = [_rosters objectAtIndex:indexPath.row];
+        roster = [self.rosters objectAtIndex:indexPath.row];
     } else if (indexPath.section == 1) {
-        roster = [_historicalRosters objectAtIndex:indexPath.row];
+        roster = [self.historicalRosters objectAtIndex:indexPath.row];
     }
 
     if (!roster.market) {
-        FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading...", nil)
-                                                       messsage:nil
-                                                   loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
-        [FFMarket get:roster.marketId session:self.session success:^(id successObj)
-        {
-            roster.market = successObj;
-            [roster save];
-            [alert hide];
-            [self performSegueWithIdentifier:@"GotoContest"
-                                      sender:nil
-                                     context:roster];
-        }
-    failure:
-        ^(NSError * error)
-        {
-            [alert hide];
-            FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
-                                                               title:nil
-                                                   cancelButtonTitle:nil
-                                                     okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                                            autoHide:YES];
-            [ealert showInView:self.navigationController.view];
-        }];
+        [self fetchRoster:roster];
     } else {
         [self performSegueWithIdentifier:@"GotoContest"
                                   sender:self

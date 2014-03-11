@@ -354,7 +354,8 @@
                         andRoster:_roster
                         andMarket:_market];
             rosterCell.delegate = self;
-            if (_state == FFContestViewControllerStateShowFriendRoster || _state == FFContestViewControllerStateContestCompleted) {
+            if (_state == FFContestViewControllerStateShowFriendRoster
+                || _state == FFContestViewControllerStateContestCompleted) {
                 rosterCell.showButtons = NO;
             } else {
                 rosterCell.showButtons = YES;
