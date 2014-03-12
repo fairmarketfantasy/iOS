@@ -256,7 +256,7 @@
                                                            range:NSMakeRange(0, email.length)];
         if (!result.range.length) {
             errorTitle = NSLocalizedString(@"Please provide a valid email address", nil);
-        } else if (self.passwordSigninField.text.length <= 6) {
+        } else if (self.passwordSigninField.text.length < 6) {
             errorTitle = NSLocalizedString(@"Please provide a password at least 6 characters long", nil);
         }
     }
