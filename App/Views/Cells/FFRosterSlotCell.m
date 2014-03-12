@@ -29,7 +29,8 @@
 
 @implementation FFRosterSlotCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)reuseIdentifier
+- (id)initWithStyle:(UITableViewCellStyle)style
+    reuseIdentifier:(NSString*)reuseIdentifier
 {
     self = [super initWithStyle:style
                 reuseIdentifier:reuseIdentifier];
@@ -114,6 +115,7 @@
         sep.backgroundColor = [UIColor colorWithWhite:1
                                                 alpha:.5];
         [self.contentView addSubview:sep];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }

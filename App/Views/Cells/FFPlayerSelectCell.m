@@ -84,6 +84,7 @@
         sep.backgroundColor = [UIColor colorWithWhite:1
                                                 alpha:.5];
         [self.contentView addSubview:sep];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }

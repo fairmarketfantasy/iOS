@@ -13,10 +13,15 @@
 #import "FFRoster.h"
 #import "FFSessionViewController.h"
 #import "FFAlertView.h"
-#import "FFRosterSlotCell.h"
-#import "FFPlayerSelectCell.h"
 #import "FFContestEntrantsViewController.h"
 #import "FFInviteViewController.h"
+#import "FFContestTable.h"
+#import "FFRosterSlotCell.h"
+#import "FFPlayerSelectCell.h"
+#import "FFBannerCell.h"
+#import "FFContestCell.h"
+#import "FFEnterCell.h"
+#import "FFEntrantsCell.h"
 
 @interface FFContestViewController () <UITableViewDataSource,
                                        UITableViewDelegate,
@@ -25,13 +30,13 @@
     BOOL _filterBenchPlayers;
 }
 
-@property(nonatomic) UITableView* tableView;
+@property(nonatomic) FFContestTable* tableView;
 @property(nonatomic) FFContestViewControllerState state; /** current state of the FSM */
 @property(nonatomic) NSMutableArray* rosterPlayers; /** the players in the current roster */
 @property(nonatomic) NSArray* availablePlayers; /** shown in PickPlayer */
 @property(nonatomic) UIView* submitButtonView;
 @property(nonatomic) UILabel* remainingSalaryLabel;
-@property(nonatomic) UILabel* numEntrantsLabel;
+@property(nonatomic) UILabel* numEntrantsLabel; // FIXME: it's not MVC!!! Use models!
 @property(nonatomic) UIView* playerFilterView;
 
 - (void)transitionToState:(FFContestViewControllerState)newState
@@ -45,10 +50,10 @@
 {
     [super viewDidLoad];
 
-    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
+    _tableView = [[FFContestTable alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:_tableView];
+
     if ([self respondsToSelector:@selector(topLayoutGuide)]) {
-        [_tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
         id topGuide = self.topLayoutGuide;
         NSDictionary* viewsDictionary = NSDictionaryOfVariableBindings(_tableView, topGuide);
         [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topGuide][_tableView]|"
@@ -59,24 +64,9 @@
                                                                           options:0
                                                                           metrics:nil
                                                                             views:viewsDictionary]];
-    } else {
-        _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     }
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    [_tableView registerClass:[UITableViewCell class]
-        forCellReuseIdentifier:@"BannerCell"];
-    [_tableView registerClass:[UITableViewCell class]
-        forCellReuseIdentifier:@"ContestCell"];
-    [_tableView registerClass:[UITableViewCell class]
-        forCellReuseIdentifier:@"EnterCell"];
-    [_tableView registerClass:[FFRosterSlotCell class]
-        forCellReuseIdentifier:@"RosterPlayer"];
-    [_tableView registerClass:[FFPlayerSelectCell class]
-        forCellReuseIdentifier:@"PlayerSelect"];
-    [_tableView registerClass:[UITableViewCell class]
-        forCellReuseIdentifier:@"EntrantsCell"];
 
     UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
     [balanceView addTarget:self
@@ -88,6 +78,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    // TODO: move to separate model!!!
 
     if (!_market || !_contest) {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException
@@ -145,29 +137,26 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
-    return 1 + (_state != FFContestViewControllerStateViewContest ? 1 : 0);
+    return _state != FFContestViewControllerStateViewContest ? 2 : 1;
 }
 
 - (NSInteger)tableView:(UITableView*)tableView
     numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        if (_state == FFContestViewControllerStatePickPlayer) {
+        switch (_state) {
+        case FFContestViewControllerStatePickPlayer:
             return 0;
-        }
-        if (_state == FFContestViewControllerStateShowFriendRoster) {
+        case FFContestViewControllerStateShowFriendRoster:
             return 1;
+        case FFContestViewControllerStateViewContest:
+        case FFContestViewControllerStateShowRoster:
+            return 3;
+        case FFContestViewControllerStateContestEntered:
+            return 4;
+        default:
+            return 2;
         }
-        int rows = 2;
-        if (_state == FFContestViewControllerStateViewContest
-            || _state == FFContestViewControllerStateShowRoster
-            || _state == FFContestViewControllerStateContestEntered) {
-            rows++;
-        }
-        if (_state == FFContestViewControllerStateContestEntered) {
-            rows++;
-        }
-        return rows;
     } else {
         switch (_state) {
         case FFContestViewControllerStateShowRoster:
@@ -186,33 +175,66 @@
 - (CGFloat)tableView:(UITableView*)tableView
     heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
-            return 35;
-        } else if (indexPath.row == 1
-                   && ([_roster.live integerValue] || [_roster.market.state isEqualToString:@"complete"])) {
-            return 195;
-        } else if (indexPath.row == 1) {
-            return 150;
-        } else if (indexPath.row == 2) {
-            return 52;
-        } else if (indexPath.row == 3) {
-            return 44;
-        }
+    if (indexPath.section != 0) {
+        return 80.f;
     }
-    return 80;
+    switch (indexPath.row) {
+    case 0:
+        return 35.f;
+    case 1:
+        if ([_roster.live integerValue]
+                ||
+            [_roster.market.state isEqualToString:@"complete"]) {
+            return 195.f;
+        }
+        return 150.f;
+    case 2:
+        return 52.f;
+    case 3:
+        return 44.f;
+    default:
+        WTFLog;
+        return 0.f;
+    }
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView
         cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    UITableViewCell* cell = nil;
-
-    if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"BannerCell"
-                                                   forIndexPath:indexPath];
-            [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    switch (indexPath.section) {
+    case 1: {
+        switch (_state) {
+        case FFContestViewControllerStatePickPlayer: {
+            FFPlayerSelectCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PlayerSelect"
+                                                                       forIndexPath:indexPath];
+            cell.player = _availablePlayers[indexPath.row];
+            cell.delegate = self;
+            return cell;
+        }
+        case FFContestViewControllerStateShowRoster:
+        case FFContestViewControllerStateContestEntered:
+        case FFContestViewControllerStateShowFriendRoster:
+        case FFContestViewControllerStateContestCompleted: {
+            FFRosterSlotCell* cell = [tableView dequeueReusableCellWithIdentifier:@"RosterPlayer"
+                                                                     forIndexPath:indexPath];
+            [cell setPlayer:[_rosterPlayers objectAtIndex:indexPath.row]
+                  andRoster:_roster
+                  andMarket:_market];
+            cell.delegate = self;
+            cell.showButtons = _state != FFContestViewControllerStateShowFriendRoster
+                               && _state != FFContestViewControllerStateContestCompleted;
+            return cell;
+        }
+        default:
+            break;
+        }
+    }
+    case 0: {
+        switch (indexPath.row) {
+        case 0: {
+            FFBannerCell* cell = [tableView dequeueReusableCellWithIdentifier:@"BannerCell"
+                                                                 forIndexPath:indexPath];
+            // TODO: move it customization inside to banner cell
             if ([_roster.live integerValue]) {
                 cell.contentView.backgroundColor = [FFStyle brightGreen];
                 cell.textLabel.font = [FFStyle regularFont:17.f];
@@ -254,125 +276,79 @@
                                                            [tformatter stringFromDate:_market.startedAt]];
                 cell.textLabel.text = str;
             }
-            UIView* sep = [[UIView alloc] initWithFrame:CGRectMake(0.f, CGRectGetMaxY(cell.contentView.frame),
-                                                                   cell.contentView.frame.size.width, 1.f)];
-            sep.backgroundColor = [UIColor colorWithWhite:.8f
-                                                    alpha:1.f];
-            [cell.contentView addSubview:sep];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        } else if (indexPath.row == 1) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"ContestCell"
-                                                   forIndexPath:indexPath];
-            [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-            FFContestView* view = [[FFContestView alloc] initWithFrame:CGRectMake(0, 0, 320, 150)];
-            view.market = _market;
-            view.contest = _contest;
-            view.roster = _roster;
-            [cell.contentView addSubview:view];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        } else if (indexPath.row == 2) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"EnterCell"];
-            [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-            FFCustomButton* butt;
-            if (_state == FFContestViewControllerStateViewContest) {
-                NSString* txt;
-                if (_contest.buyIn.integerValue < 1) {
-                    txt = [NSString stringWithFormat:@"%@ %@ %@",
-                                                     NSLocalizedString(@"Enter", nil),
-                                                     _contest.name,
-                                                     NSLocalizedString(@"For Free!", nil)];
-                } else {
-                    txt = [NSString stringWithFormat:@"%@ %@ with %@ %@",
-                                                     NSLocalizedString(@"Enter", nil),
-                                                     _contest.name,
-                                                     [_contest.buyIn description],
-                                                     NSLocalizedString(@"FanFrees", nil)];
-                }
-                butt = [FFStyle coloredButtonWithText:txt
-                                                color:[FFStyle brightOrange]
-                                          borderColor:[FFStyle brightOrange]];
-                [butt addTarget:self
-                              action:@selector(enterGame:)
-                    forControlEvents:UIControlEventTouchUpInside];
-            } else if (_state == FFContestViewControllerStateShowRoster) {
-                butt = [FFStyle coloredButtonWithText:NSLocalizedString(@"Cancel Entry", nil)
-                                                color:[FFStyle darkGreyTextColor]
-                                          borderColor:[FFStyle lightGrey]];
-                [butt addTarget:self
-                              action:@selector(leaveGame:)
-                    forControlEvents:UIControlEventTouchUpInside];
-            } else if (_state == FFContestViewControllerStateContestEntered) {
-                butt = [FFStyle coloredButtonWithText:NSLocalizedString(@"Invite Friends", nil)
-                                                color:[FFStyle brightOrange]
-                                          borderColor:[FFStyle brightOrange]];
-                [butt addTarget:self
-                              action:@selector(inviteToGame:)
-                    forControlEvents:UIControlEventTouchUpInside];
-            }
-            butt.titleLabel.font = [FFStyle blockFont:19.f];
-            butt.frame = CGRectMake(15, 3, 290, 38);
-            [cell.contentView addSubview:butt];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        } else if (indexPath.row == 3) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"EntrantsCell"
-                                                   forIndexPath:indexPath];
-            [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-
-            UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 14.5, 10, 15)];
-            disclosure.image = [UIImage imageNamed:@"accessory_disclosure"];
-            disclosure.backgroundColor = [UIColor clearColor];
-            [cell.contentView addSubview:disclosure];
-
-            UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 250, 44)];
-            lab.backgroundColor = [UIColor clearColor];
-            lab.font = [FFStyle regularFont:17];
-            lab.textColor = [FFStyle greyTextColor];
-            NSString* text = [NSString stringWithFormat:@"%@ %@",
-                                                        _roster.contest[@"num_rosters"],
-                                                        NSLocalizedString(@"Contest Entrants", nil)];
-            lab.text = text;
-            [cell.contentView addSubview:lab];
-
-            _numEntrantsLabel = lab;
-
-            UIView* sep = [[UIView alloc] initWithFrame:CGRectMake(0, 0,
-                                                                   cell.contentView.frame.size.width, 1)];
-            sep.backgroundColor = [UIColor colorWithWhite:.8
-                                                    alpha:1];
-            [cell.contentView addSubview:sep];
+            return cell;
         }
-    } else if (indexPath.section == 1) {
-        if (_state == FFContestViewControllerStateShowRoster
-            || _state == FFContestViewControllerStateContestEntered
-            || _state == FFContestViewControllerStateShowFriendRoster
-            || _state == FFContestViewControllerStateContestCompleted) {
-            id player = [_rosterPlayers objectAtIndex:indexPath.row];
-            cell = [tableView dequeueReusableCellWithIdentifier:@"RosterPlayer"
-                                                   forIndexPath:indexPath];
-            FFRosterSlotCell* rosterCell = (FFRosterSlotCell*)cell;
-            [rosterCell setPlayer:player
-                        andRoster:_roster
-                        andMarket:_market];
-            rosterCell.delegate = self;
-            if (_state == FFContestViewControllerStateShowFriendRoster
-                || _state == FFContestViewControllerStateContestCompleted) {
-                rosterCell.showButtons = NO;
-            } else {
-                rosterCell.showButtons = YES;
-            }
-        } else if (_state == FFContestViewControllerStatePickPlayer) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"PlayerSelect"
-                                                   forIndexPath:indexPath];
-            FFPlayerSelectCell* s_cell = (FFPlayerSelectCell*)cell;
-            s_cell.player = _availablePlayers[indexPath.row];
-            s_cell.delegate = self;
+        case 1: {
+            FFContestCell* cell = [tableView dequeueReusableCellWithIdentifier:@"ContestCell"
+                                                                  forIndexPath:indexPath];
+            cell.contestView.market = _market;
+            cell.contestView.contest = _contest;
+            cell.contestView.roster = _roster;
+            return cell;
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        case 2: {
+            FFEnterCell* cell = [tableView dequeueReusableCellWithIdentifier:@"EnterCell"
+                                                                forIndexPath:indexPath];
+            switch (_state) {
+            case FFContestViewControllerStateContestEntered: {
+                // TODO: use model in view instead of custom button direct setting
+                cell.button = [FFStyle coloredButtonWithText:NSLocalizedString(@"Invite Friends", nil)
+                                                       color:[FFStyle brightOrange]
+                                                 borderColor:[FFStyle brightOrange]];
+                [cell.button addTarget:self
+                                action:@selector(inviteToGame:)
+                      forControlEvents:UIControlEventTouchUpInside];
+                return cell;
+            }
+            case FFContestViewControllerStateShowRoster: {
+                cell.button = [FFStyle coloredButtonWithText:NSLocalizedString(@"Cancel Entry", nil)
+                                                       color:[FFStyle darkGreyTextColor]
+                                                 borderColor:[FFStyle lightGrey]];
+                [cell.button addTarget:self
+                                action:@selector(leaveGame:)
+                      forControlEvents:UIControlEventTouchUpInside];
+                return cell;
+            }
+            case FFContestViewControllerStateViewContest: {
+                NSString* buttonTittle = _contest.buyIn.integerValue < 1
+                                             ? [NSString stringWithFormat:@"%@ %@ %@",
+                                                                          NSLocalizedString(@"Enter", nil),
+                                                                          _contest.name,
+                                                                          NSLocalizedString(@"For Free!", nil)]
+                                             : [NSString stringWithFormat:@"%@ %@ with %@ %@",
+                                                                          NSLocalizedString(@"Enter", nil),
+                                                                          _contest.name,
+                                                                          [_contest.buyIn description],
+                                                                          NSLocalizedString(@"FanFrees", nil)];
+                cell.button = [FFStyle coloredButtonWithText:buttonTittle
+                                                       color:[FFStyle brightOrange]
+                                                 borderColor:[FFStyle brightOrange]];
+                [cell.button addTarget:self
+                                action:@selector(enterGame:)
+                      forControlEvents:UIControlEventTouchUpInside];
+                return cell;
+            }
+            default:
+                break;
+            }
+        }
+        case 3: {
+            FFEntrantsCell* cell = [tableView dequeueReusableCellWithIdentifier:@"EntrantsCell"
+                                                                   forIndexPath:indexPath];
+            cell.label.text = [NSString stringWithFormat:@"%@ %@",
+                                                         _roster.contest[@"num_rosters"],
+                                                         NSLocalizedString(@"Contest Entrants", nil)];
+            _numEntrantsLabel = cell.label;
+            return cell;
+        }
+        default:
+            break;
+        }
     }
-    if (!cell) {
+    default:
         NSLog(@"fart");
+        return nil;
     }
-    return cell;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
@@ -384,6 +360,8 @@
 - (UIView*)tableView:(UITableView*)tableView
     viewForHeaderInSection:(NSInteger)section
 {
+    // TODO: to separate headers!!!
+
     if (section == 1) {
         UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
         header.backgroundColor = [UIColor colorWithWhite:.9
@@ -466,7 +444,8 @@
     return nil;
 }
 
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
+- (void)tableView:(UITableView*)tableView
+    didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath
                              animated:YES];
@@ -475,6 +454,8 @@
                                   sender:nil];
     }
 }
+
+#pragma mark -
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
 {
@@ -673,7 +654,7 @@ failure:
                                                cancelButtonTitle:nil
                                                  okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                                         autoHide:YES];
-        //        [eAlert showInView:self.navigationController.view];
+        [eAlert showInView:self.navigationController.view];
     }];
 }
 
@@ -685,6 +666,7 @@ failure:
 - (void)transitionToState:(FFContestViewControllerState)newState
               withContext:(id)context
 {
+    // TODO: move to separate model!!!
     if (newState == _state) {
         NSLog(@"tried to transition to the current state... ignoring");
         return;
@@ -852,7 +834,8 @@ failure:
     }];
 }
 
-- (void)showPlayersForPosition:(NSString*)pos poll:(BOOL)shouldContinuePolling
+- (void)showPlayersForPosition:(NSString*)pos
+                          poll:(BOOL)shouldContinuePolling
 {
     if (_state != FFContestViewControllerStatePickPlayer) {
         NSLog(@"attempting to show players but in the wrong state");

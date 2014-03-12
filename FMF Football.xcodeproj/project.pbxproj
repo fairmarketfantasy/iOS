@@ -23,6 +23,10 @@
 		89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89314A7618C8C2B80048E00F /* FFRosterCell.m */; };
 		89314A7A18C8DCF50048E00F /* FFRosterTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 89314A7918C8DCF50048E00F /* FFRosterTableHeader.m */; };
 		89470EC218BF694200E405EF /* FFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89470EC118BF694200E405EF /* FFMenuCell.m */; };
+		8951A33218D08A9E0019384D /* FFBannerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8951A32B18D08A9E0019384D /* FFBannerCell.m */; };
+		8951A33318D08A9E0019384D /* FFContestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8951A32D18D08A9E0019384D /* FFContestCell.m */; };
+		8951A33418D08A9E0019384D /* FFEnterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8951A32F18D08A9E0019384D /* FFEnterCell.m */; };
+		8951A33518D08A9E0019384D /* FFEntrantsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8951A33118D08A9E0019384D /* FFEntrantsCell.m */; };
 		896ACA5018B66376001E9C64 /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */; };
 		896ACA5218B66377001E9C64 /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 896ACA4F18B66376001E9C64 /* UbertestersSDKResources.bundle */; };
 		896ACC5118B664F5001E9C64 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBB918B664F5001E9C64 /* Default-568h@2x.png */; };
@@ -122,6 +126,7 @@
 		89BED93418C7855C003E9E68 /* FFLogo.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BED93318C7855C003E9E68 /* FFLogo.m */; };
 		89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBC218B664F5001E9C64 /* FMF-Small-50.png */; };
 		89C3656618B7CBF2003C7A9C /* playerselectmask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE318B664F5001E9C64 /* playerselectmask@2x.png */; };
+		89D0309B18CF9F2800250D82 /* FFContestTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 89D0309A18CF9F2800250D82 /* FFContestTable.m */; };
 		89DFD28E18B37ECC0079F427 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD28D18B37ECC0079F427 /* AdSupport.framework */; };
 		89DFD29018B37EE30079F427 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD28F18B37EE30079F427 /* CoreImage.framework */; };
 		89DFD29218B37F1B0079F427 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD29118B37F1B0079F427 /* CoreTelephony.framework */; };
@@ -158,6 +163,14 @@
 		89314A7918C8DCF50048E00F /* FFRosterTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterTableHeader.m; sourceTree = "<group>"; };
 		89470EC018BF694200E405EF /* FFMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMenuCell.h; sourceTree = "<group>"; };
 		89470EC118BF694200E405EF /* FFMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMenuCell.m; sourceTree = "<group>"; };
+		8951A32A18D08A9E0019384D /* FFBannerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFBannerCell.h; sourceTree = "<group>"; };
+		8951A32B18D08A9E0019384D /* FFBannerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFBannerCell.m; sourceTree = "<group>"; };
+		8951A32C18D08A9E0019384D /* FFContestCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFContestCell.h; sourceTree = "<group>"; };
+		8951A32D18D08A9E0019384D /* FFContestCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFContestCell.m; sourceTree = "<group>"; };
+		8951A32E18D08A9E0019384D /* FFEnterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFEnterCell.h; sourceTree = "<group>"; };
+		8951A32F18D08A9E0019384D /* FFEnterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFEnterCell.m; sourceTree = "<group>"; };
+		8951A33018D08A9E0019384D /* FFEntrantsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFEntrantsCell.h; sourceTree = "<group>"; };
+		8951A33118D08A9E0019384D /* FFEntrantsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFEntrantsCell.m; sourceTree = "<group>"; };
 		896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
 		896ACA4F18B66376001E9C64 /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
 		896ACBB918B664F5001E9C64 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -306,6 +319,8 @@
 		89BED93018C77D19003E9E68 /* FFRosterTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterTable.m; sourceTree = "<group>"; };
 		89BED93218C7855C003E9E68 /* FFLogo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFLogo.h; sourceTree = "<group>"; };
 		89BED93318C7855C003E9E68 /* FFLogo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFLogo.m; sourceTree = "<group>"; };
+		89D0309918CF9F2800250D82 /* FFContestTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFContestTable.h; sourceTree = "<group>"; };
+		89D0309A18CF9F2800250D82 /* FFContestTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFContestTable.m; sourceTree = "<group>"; };
 		89DFD28D18B37ECC0079F427 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		89DFD28F18B37EE30079F427 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		89DFD29118B37F1B0079F427 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -633,6 +648,14 @@
 				89470EC118BF694200E405EF /* FFMenuCell.m */,
 				89314A7518C8C2B80048E00F /* FFRosterCell.h */,
 				89314A7618C8C2B80048E00F /* FFRosterCell.m */,
+				8951A32A18D08A9E0019384D /* FFBannerCell.h */,
+				8951A32B18D08A9E0019384D /* FFBannerCell.m */,
+				8951A32C18D08A9E0019384D /* FFContestCell.h */,
+				8951A32D18D08A9E0019384D /* FFContestCell.m */,
+				8951A32E18D08A9E0019384D /* FFEnterCell.h */,
+				8951A32F18D08A9E0019384D /* FFEnterCell.m */,
+				8951A33018D08A9E0019384D /* FFEntrantsCell.h */,
+				8951A33118D08A9E0019384D /* FFEntrantsCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -676,6 +699,8 @@
 			children = (
 				89BED92F18C77D19003E9E68 /* FFRosterTable.h */,
 				89BED93018C77D19003E9E68 /* FFRosterTable.m */,
+				89D0309918CF9F2800250D82 /* FFContestTable.h */,
+				89D0309A18CF9F2800250D82 /* FFContestTable.m */,
 				89BED93218C7855C003E9E68 /* FFLogo.h */,
 				89BED93318C7855C003E9E68 /* FFLogo.m */,
 				89314A7818C8DCF50048E00F /* FFRosterTableHeader.h */,
@@ -874,19 +899,24 @@
 				896ACD0918B664F5001E9C64 /* FFUserBitView.m in Sources */,
 				896ACCC518B664F5001E9C64 /* FFRosterViewController.m in Sources */,
 				896ACCAF18B664F5001E9C64 /* FFContestEntrantsViewController.m in Sources */,
+				89D0309B18CF9F2800250D82 /* FFContestTable.m in Sources */,
 				896ACCF918B664F5001E9C64 /* FFAlertView.m in Sources */,
 				89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */,
 				896ACCBF18B664F5001E9C64 /* FFMyAccountViewController.m in Sources */,
 				896ACCF718B664F5001E9C64 /* FFRosterSlotCell.m in Sources */,
+				8951A33518D08A9E0019384D /* FFEntrantsCell.m in Sources */,
 				896ACCE918B664F5001E9C64 /* FFGame.m in Sources */,
+				8951A33418D08A9E0019384D /* FFEnterCell.m in Sources */,
 				896ACCED18B664F5001E9C64 /* FFRoster.m in Sources */,
 				896ACD0718B664F5001E9C64 /* FFTextField.m in Sources */,
 				896ACCFB18B664F5001E9C64 /* FFBalanceButton.m in Sources */,
+				8951A33218D08A9E0019384D /* FFBannerCell.m in Sources */,
 				896ACCB318B664F5001E9C64 /* FFCreateGameViewController.m in Sources */,
 				896ACCAD18B664F5001E9C64 /* FFBaseViewController.m in Sources */,
 				89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */,
 				896ACCC918B664F5001E9C64 /* FFTickerDrawerViewController.m in Sources */,
 				896ACCBB18B664F5001E9C64 /* FFInviteViewController.m in Sources */,
+				8951A33318D08A9E0019384D /* FFContestCell.m in Sources */,
 				896ACCF118B664F5001E9C64 /* FFUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
