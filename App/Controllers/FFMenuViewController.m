@@ -109,7 +109,9 @@
         ofItem:(id)item
 {
     if (!item) {
-        return self.nodes[index];
+        FFNodeItem* parent = self.nodes[index];
+        [self declareOnTouchCellActionsForItem:parent];
+        return parent;
     }
     if (![item isKindOfClass:[FFNodeItem class]]) {
         WTFLog;
