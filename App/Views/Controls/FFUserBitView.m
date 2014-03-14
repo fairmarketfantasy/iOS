@@ -67,11 +67,11 @@
         _wins.text = @"23 wins (0.492 win %)";
         [self addSubview:_wins];
 
-        _finishInProgressRoster = [FFStyle coloredButtonWithText:NSLocalizedString(@"In Progress Roster", nil)
+        _inProgressRosterButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"In Progress Roster", nil)
                                                            color:[FFStyle brightOrange]
                                                      borderColor:[FFStyle white]];
-        _finishInProgressRoster.frame = CGRectMake(15, 110, 290, 35);
-        [self addSubview:_finishInProgressRoster];
+        _inProgressRosterButton.frame = CGRectMake(15, 110, 290, 35);
+        [self addSubview:_inProgressRosterButton];
     }
     return self;
 }
@@ -93,10 +93,10 @@
            placeholderImage:[UIImage imageNamed:@"defaultuser.png"]];
 
     if (user.inProgressRoster != nil) {
-        _finishInProgressRoster.hidden = NO;
+        _inProgressRosterButton.hidden = NO;
         //        self.frame = CGRectMake(0, 0, 320, 162);
     } else {
-        _finishInProgressRoster.hidden = YES;
+        _inProgressRosterButton.hidden = YES;
         //        self.frame = CGRectMake(0, 0, 320, 122);
     }
 }

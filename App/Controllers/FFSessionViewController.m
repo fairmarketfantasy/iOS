@@ -610,7 +610,7 @@ failure:
     return nil;
 }
 
-- (SBSession*)session
+- (FFSession*)session
 {
     return self.sessionController.session;
 }

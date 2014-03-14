@@ -46,11 +46,11 @@
     FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle leftItemRect]];
     self.globalMenuButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.globalMenuButton setImage:[UIImage imageNamed:@"globalmenu.png"]
-                forState:UIControlStateNormal];
+                           forState:UIControlStateNormal];
     [self.globalMenuButton addTarget:self
-                   action:@selector(globalMenuButton:)
-         forControlEvents:UIControlEventTouchUpInside];
-    
+                              action:@selector(globalMenuButton:)
+                    forControlEvents:UIControlEventTouchUpInside];
+
     self.globalMenuButton.contentMode = UIViewContentModeScaleAspectFit;
 
     self.globalMenuButton.frame = [FFStyle leftItemRect];
@@ -444,7 +444,7 @@
             }
             FFUserBitView* userBit = [[FFUserBitView alloc] initWithFrame:CGRectMake(0, 0, 320, height)];
             userBit.user = (FFUser*)self.session.user;
-            [userBit.finishInProgressRoster addTarget:self
+            [userBit.inProgressRosterButton addTarget:self
                                                action:@selector(finishInProgressRoster:)
                                      forControlEvents:UIControlEventTouchUpInside];
             [cell.contentView addSubview:userBit];

@@ -63,12 +63,17 @@
 
 // CUSTOM UI CLASSES ---------------------------------------------------------------------------------------------------
 
+#define kUIButtonBlockTouchUpInside @"TouchInside"
+
 @interface FFCustomButton : UIButton {
 @private
     NSMutableDictionary* backgroundStates;
 @public
 }
 
+@property(nonatomic) NSMutableDictionary* actions;
+
+- (void)setAction:(NSString*)action withBlock:(void (^)())block;
 - (void)setBackgroundColor:(UIColor*)_backgroundColor forState:(UIControlState)_state;
 - (UIColor*)backgroundColorForState:(UIControlState)_state;
 

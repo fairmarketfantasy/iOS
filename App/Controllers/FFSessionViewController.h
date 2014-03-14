@@ -34,6 +34,6 @@
 @interface UIViewController (FFSessionController)
 
 - (FFSessionViewController*)sessionController;
-- (SBSession*)session;
+- (FFSession*)session;
 
 @end

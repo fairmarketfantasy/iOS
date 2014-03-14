@@ -7,13 +7,14 @@
 //
 
 #import <SBSession.h>
+#import "FFUser.h"
 
 #define FFDidReceiveRemoteNotificationAuthorization @"gotpushtoken"
 #define FFDidReceiveRemoteNotification @"gotpush"
 
 @interface FFSession : SBSession
 
-@property(nonatomic) SBUser* user;
+@property(nonatomic) FFUser* user;
 @property(nonatomic) SBSessionData* sessionData;
 
 - (void)registerAndLoginUsingFBAccessToken:(NSString*)accessToken

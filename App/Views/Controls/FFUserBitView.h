@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "FFUser.h"
 
+@class FFCustomButton;
+
 @interface FFUserBitView : UIView
 
 @property(nonatomic) FFUser* user;
 
-@property(nonatomic) UIButton* finishInProgressRoster;
+@property(nonatomic) FFCustomButton* inProgressRosterButton;
 
 @end

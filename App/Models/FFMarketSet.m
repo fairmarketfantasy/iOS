@@ -58,6 +58,7 @@
 
 - (void)fetchType:(FFMarketType)type
 {
+    id q = self.query;
     [self refreshWithParameters:@{
                                     @"sport" : [FFMarketSet sportKey:self.sport],
                                     @"type" : [FFMarketSet typeKey:type]

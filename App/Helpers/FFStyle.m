@@ -370,11 +370,58 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     [[UIToolbar appearance] setBackgroundImage:[UIImage imageNamed:@"darkgreen.png"]
                             forToolbarPosition:UIToolbarPositionAny
                                     barMetrics:UIBarMetricsLandscapePhone];
+    // pager
+    UIPageControl* pageControl = [UIPageControl appearance];
+    pageControl.currentPageIndicatorTintColor = [self white];
+    pageControl.pageIndicatorTintColor = [self darkerColorForColor:pageControl.currentPageIndicatorTintColor];
+    pageControl.backgroundColor = [UIColor clearColor];
 }
 
 @end
 
+#pragma mark - Custom Button
+
+#import <objc/runtime.h>
+
 @implementation FFCustomButton
+
+static char overviewKey;
+
+@dynamic actions;
+
+- (void)setAction:(NSString*)action withBlock:(void (^)())block
+{
+
+    if (!self.actions) {
+        self.actions = [NSMutableDictionary new];
+    }
+
+    [self.actions setObject:block
+                     forKey:action];
+
+    if ([kUIButtonBlockTouchUpInside isEqualToString:action]) {
+        [self addTarget:self
+                      action:@selector(doTouchUpInside:)
+            forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void)setActions:(NSMutableDictionary*)actions
+{
+    objc_setAssociatedObject(self, &overviewKey, actions, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSMutableDictionary*)actions
+{
+    return objc_getAssociatedObject(self, &overviewKey);
+}
+
+- (void)doTouchUpInside:(id)sender
+{
+    void (^block)();
+    block = [[self actions] objectForKey:kUIButtonBlockTouchUpInside];
+    block();
+}
 
 - (void)setBackgroundColor:(UIColor*)_backgroundColor forState:(UIControlState)_state
 {
