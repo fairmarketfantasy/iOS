@@ -116,6 +116,8 @@
 		896ACD0718B664F5001E9C64 /* FFTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 896ACC4918B664F5001E9C64 /* FFTextField.m */; };
 		896ACD0918B664F5001E9C64 /* FFUserBitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 896ACC4B18B664F5001E9C64 /* FFUserBitView.m */; };
 		896ACD0D18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 896ACC4E18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard */; };
+		8972767D18D93FBE008D995C /* FFWideReceiverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8972767C18D93FBE008D995C /* FFWideReceiverController.m */; };
+		8972768018D94920008D995C /* FFWideReceiverTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 8972767F18D94920008D995C /* FFWideReceiverTable.m */; };
 		89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BABFC518BBB98F001AD755 /* FFNodeItem.m */; };
 		89BABFC818BDFC99001AD755 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89BABFC718BDFC99001AD755 /* Localizable.strings */; };
 		89BED92618C4B67B003E9E68 /* tshirt-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92418C4B67B003E9E68 /* tshirt-placeholder.png */; };
@@ -314,6 +316,10 @@
 		896ACC4A18B664F5001E9C64 /* FFUserBitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFUserBitView.h; sourceTree = "<group>"; };
 		896ACC4B18B664F5001E9C64 /* FFUserBitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFUserBitView.m; sourceTree = "<group>"; };
 		896ACC4E18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		8972767B18D93FBE008D995C /* FFWideReceiverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWideReceiverController.h; sourceTree = "<group>"; };
+		8972767C18D93FBE008D995C /* FFWideReceiverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWideReceiverController.m; sourceTree = "<group>"; };
+		8972767E18D94920008D995C /* FFWideReceiverTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWideReceiverTable.h; sourceTree = "<group>"; };
+		8972767F18D94920008D995C /* FFWideReceiverTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWideReceiverTable.m; sourceTree = "<group>"; };
 		89BABFC418BBB98F001AD755 /* FFNodeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNodeItem.h; sourceTree = "<group>"; };
 		89BABFC518BBB98F001AD755 /* FFNodeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNodeItem.m; sourceTree = "<group>"; };
 		89BABFC718BDFC99001AD755 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -562,6 +568,8 @@
 				8961095718D1CD4F006BCFA4 /* FFPagerController.m */,
 				89DE99EB18D2D1AF006A66C4 /* FFYourTeamController.h */,
 				89DE99EC18D2D1AF006A66C4 /* FFYourTeamController.m */,
+				8972767B18D93FBE008D995C /* FFWideReceiverController.h */,
+				8972767C18D93FBE008D995C /* FFWideReceiverController.m */,
 				896ACBF718B664F5001E9C64 /* FFHomeViewController.h */,
 				896ACBF818B664F5001E9C64 /* FFHomeViewController.m */,
 				896ACBED18B664F5001E9C64 /* FFContestEntrantsViewController.h */,
@@ -732,6 +740,8 @@
 				89314A7918C8DCF50048E00F /* FFRosterTableHeader.m */,
 				89DE99EE18D2D3D9006A66C4 /* FFTeamTable.h */,
 				89DE99EF18D2D3D9006A66C4 /* FFTeamTable.m */,
+				8972767E18D94920008D995C /* FFWideReceiverTable.h */,
+				8972767F18D94920008D995C /* FFWideReceiverTable.m */,
 			);
 			path = Partials;
 			sourceTree = "<group>";
@@ -923,12 +933,14 @@
 				89051CB818BFA4E8001E8C78 /* FFDataObjectResultSet.m in Sources */,
 				896ACCDB18B664F5001E9C64 /* FFWeakReference.m in Sources */,
 				896ACCCB18B664F5001E9C64 /* FFTickerMaximizedDrawerViewController.m in Sources */,
+				8972767D18D93FBE008D995C /* FFWideReceiverController.m in Sources */,
 				896ACCEB18B664F5001E9C64 /* FFMarket.m in Sources */,
 				896ACCC318B664F5001E9C64 /* FFOptionSelectController.m in Sources */,
 				896ACCDF18B664F5001E9C64 /* NSDate+ISO8601.m in Sources */,
 				896ACD0918B664F5001E9C64 /* FFUserBitView.m in Sources */,
 				896ACCC518B664F5001E9C64 /* FFRosterViewController.m in Sources */,
 				896ACCAF18B664F5001E9C64 /* FFContestEntrantsViewController.m in Sources */,
+				8972768018D94920008D995C /* FFWideReceiverTable.m in Sources */,
 				89D0309B18CF9F2800250D82 /* FFContestTable.m in Sources */,
 				896ACCF918B664F5001E9C64 /* FFAlertView.m in Sources */,
 				89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */,
