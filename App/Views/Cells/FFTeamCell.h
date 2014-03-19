@@ -10,4 +10,6 @@
 
 @interface FFTeamCell : UITableViewCell
 
+@property(nonatomic, readonly) UILabel* titleLabel;
+
 @end

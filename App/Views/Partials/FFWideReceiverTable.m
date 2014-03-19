@@ -7,6 +7,7 @@
 //
 
 #import "FFWideReceiverTable.h"
+#import "FFWideReceiverCell.h"
 
 @implementation FFWideReceiverTable
 
@@ -14,18 +15,14 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+        self.backgroundColor = [UIColor clearColor];
+        self.separatorStyle = UITableViewCellSeparatorStyleNone;
+
+        [self registerClass:[FFWideReceiverCell class]
+     forCellReuseIdentifier:@"ReceiverCell"];
     }
     return self;
 }
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-}
-*/
 
 @end

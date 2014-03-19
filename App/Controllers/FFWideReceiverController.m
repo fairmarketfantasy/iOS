@@ -8,7 +8,9 @@
 
 #import "FFWideReceiverController.h"
 #import "FFWideReceiverTable.h"
+#import "FFWideReceiverCell.h"
 #import <FlatUIKit.h>
+#import "FFRosterTableHeader.h"
 
 @interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -22,11 +24,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // segment control
-    self.segments = [[FUISegmentedControl alloc] initWithItems:[self gameTypes]];
-    self.segments.frame = CGRectMake(0.f, 0.f, self.view.bounds.size.width, 44.f);
-    [self.view addSubview:self.segments];
-    // table view
     self.tableView = [[FFWideReceiverTable alloc] initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -37,12 +34,15 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView*)tableView
  numberOfRowsInSection:(NSInteger)section
 {
+    if (section == 0) {
+        return 1;
+    }
     return 0;
 }
 
@@ -55,6 +55,11 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 - (UITableViewCell*)tableView:(UITableView*)tableView
         cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
+    if (indexPath.section == 0) {
+        FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:@"ReceiverCell"
+                                                                   forIndexPath:indexPath];
+        return cell;
+    }
     return nil;
 }
 
@@ -63,23 +68,28 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 - (void)tableView:(UITableView*)tableView
 didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    // TODO: imaplement
+    // TODO: implement
 }
 
-#pragma mark - private
-
-// TODO: move to model
-- (NSArray*)gameTypes
+- (UIView *)tableView:(UITableView *)tableView
+viewForHeaderInSection:(NSInteger)section
 {
-    return @[
-             @"PG",
-             @"SG",
-             @"PF",
-             @"C",
-             @"G",
-             @"F",
-             @"UTIL"
-             ];
+    if (section == 1) {
+        FFRosterTableHeader* view = [FFRosterTableHeader new];
+        view.titleLabel.text = NSLocalizedString(@"Wide Receiver", nil);
+        view.priceLabel.text = NSLocalizedString(@"$100000", nil);
+        return view;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView
+heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 1) {
+        return 40.f;
+    }
+    return 0.f;
 }
 
 @end

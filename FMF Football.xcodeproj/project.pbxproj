@@ -21,7 +21,6 @@
 		89051CB818BFA4E8001E8C78 /* FFDataObjectResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 89051CB718BFA4E8001E8C78 /* FFDataObjectResultSet.m */; };
 		89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 89051CBA18BFC253001E8C78 /* FFMarketSet.m */; };
 		89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89314A7618C8C2B80048E00F /* FFRosterCell.m */; };
-		89314A7A18C8DCF50048E00F /* FFRosterTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 89314A7918C8DCF50048E00F /* FFRosterTableHeader.m */; };
 		89470EC218BF694200E405EF /* FFMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89470EC118BF694200E405EF /* FFMenuCell.m */; };
 		8951A33218D08A9E0019384D /* FFBannerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8951A32B18D08A9E0019384D /* FFBannerCell.m */; };
 		8951A33318D08A9E0019384D /* FFContestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8951A32D18D08A9E0019384D /* FFContestCell.m */; };
@@ -118,6 +117,8 @@
 		896ACD0D18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 896ACC4E18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard */; };
 		8972767D18D93FBE008D995C /* FFWideReceiverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8972767C18D93FBE008D995C /* FFWideReceiverController.m */; };
 		8972768018D94920008D995C /* FFWideReceiverTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 8972767F18D94920008D995C /* FFWideReceiverTable.m */; };
+		8972768318D9559D008D995C /* FFWideReceiverCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8972768218D9559D008D995C /* FFWideReceiverCell.m */; };
+		8972768618D95F95008D995C /* FFRosterTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8972768518D95F95008D995C /* FFRosterTableHeader.m */; };
 		89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BABFC518BBB98F001AD755 /* FFNodeItem.m */; };
 		89BABFC818BDFC99001AD755 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89BABFC718BDFC99001AD755 /* Localizable.strings */; };
 		89BED92618C4B67B003E9E68 /* tshirt-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92418C4B67B003E9E68 /* tshirt-placeholder.png */; };
@@ -166,8 +167,6 @@
 		89051CBA18BFC253001E8C78 /* FFMarketSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMarketSet.m; sourceTree = "<group>"; };
 		89314A7518C8C2B80048E00F /* FFRosterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterCell.h; sourceTree = "<group>"; };
 		89314A7618C8C2B80048E00F /* FFRosterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterCell.m; sourceTree = "<group>"; };
-		89314A7818C8DCF50048E00F /* FFRosterTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterTableHeader.h; sourceTree = "<group>"; };
-		89314A7918C8DCF50048E00F /* FFRosterTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterTableHeader.m; sourceTree = "<group>"; };
 		89470EC018BF694200E405EF /* FFMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMenuCell.h; sourceTree = "<group>"; };
 		89470EC118BF694200E405EF /* FFMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMenuCell.m; sourceTree = "<group>"; };
 		8951A32A18D08A9E0019384D /* FFBannerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFBannerCell.h; sourceTree = "<group>"; };
@@ -320,6 +319,10 @@
 		8972767C18D93FBE008D995C /* FFWideReceiverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWideReceiverController.m; sourceTree = "<group>"; };
 		8972767E18D94920008D995C /* FFWideReceiverTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWideReceiverTable.h; sourceTree = "<group>"; };
 		8972767F18D94920008D995C /* FFWideReceiverTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWideReceiverTable.m; sourceTree = "<group>"; };
+		8972768118D9559D008D995C /* FFWideReceiverCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWideReceiverCell.h; sourceTree = "<group>"; };
+		8972768218D9559D008D995C /* FFWideReceiverCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWideReceiverCell.m; sourceTree = "<group>"; };
+		8972768418D95F95008D995C /* FFRosterTableHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterTableHeader.h; sourceTree = "<group>"; };
+		8972768518D95F95008D995C /* FFRosterTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterTableHeader.m; sourceTree = "<group>"; };
 		89BABFC418BBB98F001AD755 /* FFNodeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNodeItem.h; sourceTree = "<group>"; };
 		89BABFC518BBB98F001AD755 /* FFNodeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNodeItem.m; sourceTree = "<group>"; };
 		89BABFC718BDFC99001AD755 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -686,6 +689,8 @@
 				8951A33118D08A9E0019384D /* FFEntrantsCell.m */,
 				89DE99F118D2D44D006A66C4 /* FFTeamCell.h */,
 				89DE99F218D2D44D006A66C4 /* FFTeamCell.m */,
+				8972768118D9559D008D995C /* FFWideReceiverCell.h */,
+				8972768218D9559D008D995C /* FFWideReceiverCell.m */,
 				89DE99F418D34638006A66C4 /* FFMarketsCell.h */,
 				89DE99F518D34638006A66C4 /* FFMarketsCell.m */,
 				89DE99F718D3488B006A66C4 /* FFUserBitCell.h */,
@@ -736,12 +741,12 @@
 				89D0309A18CF9F2800250D82 /* FFContestTable.m */,
 				89BED93218C7855C003E9E68 /* FFLogo.h */,
 				89BED93318C7855C003E9E68 /* FFLogo.m */,
-				89314A7818C8DCF50048E00F /* FFRosterTableHeader.h */,
-				89314A7918C8DCF50048E00F /* FFRosterTableHeader.m */,
 				89DE99EE18D2D3D9006A66C4 /* FFTeamTable.h */,
 				89DE99EF18D2D3D9006A66C4 /* FFTeamTable.m */,
 				8972767E18D94920008D995C /* FFWideReceiverTable.h */,
 				8972767F18D94920008D995C /* FFWideReceiverTable.m */,
+				8972768418D95F95008D995C /* FFRosterTableHeader.h */,
+				8972768518D95F95008D995C /* FFRosterTableHeader.m */,
 			);
 			path = Partials;
 			sourceTree = "<group>";
@@ -896,7 +901,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89314A7A18C8DCF50048E00F /* FFRosterTableHeader.m in Sources */,
 				89BED93418C7855C003E9E68 /* FFLogo.m in Sources */,
 				896ACCD918B664F5001E9C64 /* FFTickerDataSource.m in Sources */,
 				896ACCE118B664F5001E9C64 /* UIView+FindFirstResponder.m in Sources */,
@@ -927,6 +931,7 @@
 				89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */,
 				896ACCC118B664F5001E9C64 /* FFNavigationController.m in Sources */,
 				896ACCF318B664F5001E9C64 /* FFContest2UpTabelViewCell.m in Sources */,
+				8972768318D9559D008D995C /* FFWideReceiverCell.m in Sources */,
 				896ACCD318B664F5001E9C64 /* FFWebViewController.m in Sources */,
 				896ACCD118B664F5001E9C64 /* FFValueEntryController.m in Sources */,
 				896ACCCF18B664F5001E9C64 /* FFTokenPurchaseViewController.m in Sources */,
@@ -962,6 +967,7 @@
 				896ACCBB18B664F5001E9C64 /* FFInviteViewController.m in Sources */,
 				8951A33318D08A9E0019384D /* FFContestCell.m in Sources */,
 				896ACCF118B664F5001E9C64 /* FFUser.m in Sources */,
+				8972768618D95F95008D995C /* FFRosterTableHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

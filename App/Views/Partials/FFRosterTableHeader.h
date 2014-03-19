@@ -11,5 +11,6 @@
 @interface FFRosterTableHeader : UIView
 
 @property(nonatomic, readonly) UILabel* titleLabel;
+@property(nonatomic, readonly) UILabel* priceLabel;
 
 @end

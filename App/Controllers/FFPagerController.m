@@ -36,7 +36,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 7) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.automaticallyAdjustsScrollViewInsets = YES;
+    }
     self.pager = [StyledPageControl new];
+    self.pager.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.pager.frame = CGRectMake(0.f,
                                   self.view.bounds.size.height - 44.f,
                                   self.view.bounds.size.width,
@@ -44,6 +49,10 @@
     [self.pager setPageControlStyle:PageControlStyleDefault];
     [self.view addSubview:self.pager];
     [self.view bringSubviewToFront:self.pager];
+
+//    self.edgesForExtendedLayout = UIRectEdgeNone; // iOS 7 only
+//    self.edgesForExtendedLayout = UIRectEdgeAll;
+//    self.automaticallyAdjustsScrollViewInsets = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -75,7 +84,6 @@
         WTFLog;
         return nil;
     }
-//    self.pager.currentPage = (int)index;
     if (index == 0) {
         return nil;
     }
@@ -90,7 +98,6 @@
         WTFLog;
         return nil;
     }
-//    self.pager.currentPage = (int)index;
     if (index == [self getViewControllers].count - 1) {
         return nil;
     }
@@ -110,18 +117,6 @@
     self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
                                    self.viewControllers.firstObject];
 }
-
-#pragma mark - inheritance
-
-//- (NSInteger)presentationCountForPageViewController:(UIPageViewController*)pageViewController
-//{
-//    return 2;
-//}
-//
-//- (NSInteger)presentationIndexForPageViewController:(UIPageViewController*)pageViewController
-//{
-//    return 0;
-//}
 
 #pragma mark - private
 

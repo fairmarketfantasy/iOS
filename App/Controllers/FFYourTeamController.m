@@ -14,6 +14,7 @@
 #import "FFMarketsCell.h"
 #import "FFTeamCell.h"
 #import "FFAlertView.h"
+#import "FFRosterTableHeader.h"
 // models
 #import "FFUser.h"
 #import "FFRoster.h"
@@ -55,7 +56,7 @@
     if (section == 0) {
         return 2;
     }
-    return 10;
+    return 7;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
@@ -69,7 +70,7 @@
         }
         return 44.f;
     }
-    return 60.f;
+    return 80.f;
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView
@@ -118,6 +119,35 @@
     case 1: {
         FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamCell"
                                                            forIndexPath:indexPath];
+        NSString* text = @"";
+        // TODO: move to model!
+        switch (indexPath.row) {
+            case 0:
+                text = @"PG Not selected";
+                break;
+            case 1:
+                text = @"SG Not selected";
+                break;
+            case 2:
+                text = @"PF Not selected";
+                break;
+            case 3:
+                text = @"C Not selected";
+                break;
+            case 4:
+                text = @"G Not selected";
+                break;
+            case 5:
+                text = @"F Not selected";
+                break;
+            case 6:
+                text = @"UTIL Not selected";
+                break;
+            default:
+                WTFLog;
+                break;
+        }
+        cell.titleLabel.text = NSLocalizedString(text, nil);
         return cell;
     }
     default:
@@ -130,7 +160,29 @@
 - (void)tableView:(UITableView*)tableView
     didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    // TODO: imaplement
+    // TODO: implement
+}
+
+- (UIView *)tableView:(UITableView*)tableView
+viewForHeaderInSection:(NSInteger)section
+{
+    if (section == 1) {
+        FFRosterTableHeader* view = [FFRosterTableHeader new];
+        view.titleLabel.text = NSLocalizedString(@"Your Team", nil);
+        view.priceLabel.text = NSLocalizedString(@"$-100000", nil);
+        view.priceLabel.textColor = [FFStyle brightRed];
+        return view;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView*)tableView
+heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 1) {
+        return 40.f;
+    }
+    return 0.f;
 }
 
 @end
