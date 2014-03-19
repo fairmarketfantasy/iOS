@@ -11,12 +11,16 @@
 #import "FFYourTeamController.h"
 #import "FFWideReceiverController.h"
 #import "StyledPageControl.h"
+#import "FFNavigationBarItemView.h"
+#import "FFLogo.h"
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFYourTeamController* teamController;
 @property(nonatomic) FFWideReceiverController* receiverController;
+@property(nonatomic) UIButton* globalMenuButton;
+@property(nonatomic) UIButton* personalInfoButton;
 
 @end
 
@@ -36,6 +40,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
         self.automaticallyAdjustsScrollViewInsets = YES;
@@ -49,10 +54,50 @@
     [self.pager setPageControlStyle:PageControlStyleDefault];
     [self.view addSubview:self.pager];
     [self.view bringSubviewToFront:self.pager];
+    // left bar item
+    FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle leftItemRect]];
+    self.globalMenuButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.globalMenuButton setImage:[UIImage imageNamed:@"globalmenu"]
+                           forState:UIControlStateNormal];
+    [self.globalMenuButton setImage:[UIImage imageNamed:@"globalmenu-highlighted"]
+                             forState:UIControlStateHighlighted];
+    [self.globalMenuButton addTarget:self
+                              action:@selector(globalMenuButton:)
+                    forControlEvents:UIControlEventTouchUpInside];
+    self.globalMenuButton.contentMode = UIViewContentModeScaleAspectFit;
+    self.globalMenuButton.frame = [FFStyle leftItemRect];
+    [leftItem addSubview:self.globalMenuButton];
+    // right bar item
+    FFNavigationBarItemView* rightItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle leftItemRect]];
+    self.personalInfoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.personalInfoButton setImage:[UIImage imageNamed:@"open"]
+                             forState:UIControlStateNormal];
+    [self.personalInfoButton addTarget:self
+                                action:@selector(personalInfoButton:)
+                      forControlEvents:UIControlEventTouchUpInside];
+    self.personalInfoButton.contentMode = UIViewContentModeScaleAspectFit;
+    self.personalInfoButton.frame = [FFStyle leftItemRect];
+    [rightItem addSubview:self.personalInfoButton];
+    self.personalInfoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
 
-//    self.edgesForExtendedLayout = UIRectEdgeNone; // iOS 7 only
-//    self.edgesForExtendedLayout = UIRectEdgeAll;
-//    self.automaticallyAdjustsScrollViewInsets = YES;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        UIBarButtonItem* spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                   target:nil
+                                                                                   action:NULL];
+        spaceItem.width = -16.f;
+        self.navigationItem.leftBarButtonItems = @[
+                                                   spaceItem,
+                                                   [[UIBarButtonItem alloc] initWithCustomView:leftItem]
+                                                   ];
+        self.navigationItem.rightBarButtonItems = @[
+                                                    [[UIBarButtonItem alloc] initWithCustomView:rightItem]
+                                                    ];
+    } else {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftItem];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightItem];
+    }
+    // title
+    self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -126,6 +171,40 @@
              self.teamController,
              self.receiverController
              ];
+}
+
+- (BOOL)isPersonalInfoOpened
+{
+    return NO;
+}
+
+- (void)hidePersonalInfo
+{
+}
+
+- (void)showPersonalInfo
+{
+}
+
+#pragma mark - button actions
+
+- (void)globalMenuButton:(UIButton*)button
+{
+    [self performSegueWithIdentifier:@"GotoMenu"
+                              sender:nil];
+}
+
+- (void)personalInfoButton:(UIButton*)button
+{
+    if ([self isPersonalInfoOpened]) {
+        [button setImage:[UIImage imageNamed:@"open"]
+                forState:UIControlStateNormal];
+        [self hidePersonalInfo];
+    } else {
+        [button setImage:[UIImage imageNamed:@"close"]
+                forState:UIControlStateNormal];
+        [self showPersonalInfo];
+    }
 }
 
 @end

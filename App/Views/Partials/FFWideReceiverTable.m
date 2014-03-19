@@ -8,6 +8,7 @@
 
 #import "FFWideReceiverTable.h"
 #import "FFWideReceiverCell.h"
+#import "FFTeamAddCell.h"
 
 @implementation FFWideReceiverTable
 
@@ -21,6 +22,8 @@
 
         [self registerClass:[FFWideReceiverCell class]
      forCellReuseIdentifier:@"ReceiverCell"];
+        [self registerClass:[FFTeamAddCell class]
+     forCellReuseIdentifier:@"TeamAddCell"];
     }
     return self;
 }

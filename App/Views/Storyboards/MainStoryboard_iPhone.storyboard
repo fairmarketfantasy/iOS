@@ -43,16 +43,6 @@
             </objects>
             <point key="canvasLocation" x="-579" y="222"/>
         </scene>
-        <!--Pager Controller-->
-        <scene sceneID="L8U-0j-Lig">
-            <objects>
-                <pageViewController storyboardIdentifier="PagerController" autoresizesArchivedViewToFullSize="NO" modalTransitionStyle="flipHorizontal" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="max" id="CRZ-FL-RcX" customClass="FFPagerController" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="uOW-li-ydQ"/>
-                </pageViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Dp8-wg-tuu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-141" y="985"/>
-        </scene>
         <!--Session View Controller-->
         <scene sceneID="Sek-pl-AkR">
             <objects>
@@ -100,7 +90,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="CRZ-FL-RcX" kind="relationship" relationship="rootViewController" id="uhd-hB-u0M"/>
+                        <segue destination="rph-l2-45Y" kind="relationship" relationship="rootViewController" id="4Qx-yD-U2g"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4mY-Sb-Dup" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -142,6 +132,37 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v2y-Mf-pap" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-141" y="1716"/>
+        </scene>
+        <!--Menu View Controller-->
+        <scene sceneID="hUz-sI-4u7">
+            <objects>
+                <viewController storyboardIdentifier="MenuController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cHy-en-DdB" customClass="FFMenuViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dCP-Pt-3Ru"/>
+                        <viewControllerLayoutGuide type="bottom" id="uiN-t5-Zxr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tGE-1z-eHw">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l8H-xE-KjX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="280" y="1704"/>
+        </scene>
+        <!--Pager Controller-->
+        <scene sceneID="Kg9-Su-LtV">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="rph-l2-45Y" customClass="FFPagerController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="zBW-Xq-ahA"/>
+                    <connections>
+                        <segue destination="cHy-en-DdB" kind="modal" identifier="GotoMenu" id="Rnj-Jy-KDQ"/>
+                    </connections>
+                </pageViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XAd-9T-CuK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-141" y="985"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="Vzx-Xm-1VD">
@@ -504,6 +525,24 @@
             </objects>
             <point key="canvasLocation" x="1434" y="1464"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="Ezs-Y7-jYa">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="0Df-Wr-YJ4" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6z1-nI-mzy"/>
+                        <viewControllerLayoutGuide type="bottom" id="q06-5q-eXr"/>
+                    </layoutGuides>
+                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="EP0-DP-D7Q">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aYs-VF-M8h" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -511,11 +550,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="8Up-JT-o81"/>
+        <segue reference="Hte-By-9kI"/>
         <segue reference="TY5-BO-lyU"/>
-        <segue reference="uzu-cf-ckN"/>
-        <segue reference="u0q-yD-ZaH"/>
+        <segue reference="8Up-JT-o81"/>
         <segue reference="3y5-bZ-Hxu"/>
+        <segue reference="u0q-yD-ZaH"/>
         <segue reference="O9s-83-Qzo"/>
     </inferredMetricsTieBreakers>
 </document>

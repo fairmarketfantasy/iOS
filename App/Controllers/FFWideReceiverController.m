@@ -11,6 +11,7 @@
 #import "FFWideReceiverCell.h"
 #import <FlatUIKit.h>
 #import "FFRosterTableHeader.h"
+#import "FFTeamAddCell.h"
 
 @interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -43,13 +44,16 @@
     if (section == 0) {
         return 1;
     }
-    return 0;
+    return 1;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
 heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    return 60.f;
+    if (indexPath.section == 0) {
+        return 60.f;
+    }
+    return 80.f;
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView
@@ -60,7 +64,12 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
                                                                    forIndexPath:indexPath];
         return cell;
     }
-    return nil;
+    FFTeamAddCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamAddCell"
+                                                          forIndexPath:indexPath];
+    cell.titleLabel.text = NSLocalizedString(@"Team: NYG PPG: 11.56", nil);
+    cell.nameLabel.text = NSLocalizedString(@"Victor Cruz", nil);
+    cell.costLabel.text = NSLocalizedString(@"$17287.0", nil);
+    return cell;
 }
 
 #pragma mark - UITableViewDelegate

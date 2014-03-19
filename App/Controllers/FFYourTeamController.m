@@ -9,8 +9,9 @@
 #import "FFYourTeamController.h"
 #import "FFSessionViewController.h"
 #import "FFTeamTable.h"
-#import "FFUserBitCell.h"
-#import "FFUserBitView.h"
+//#import "FFUserBitCell.h"
+//#import "FFUserBitView.h"
+#import "FFAutoFillCell.h"
 #import "FFMarketsCell.h"
 #import "FFTeamCell.h"
 #import "FFAlertView.h"
@@ -64,9 +65,7 @@
 {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-
-            BOOL isComplete = [self.roster.live integerValue] || [self.roster.market.state isEqualToString:@"complete"];
-            return isComplete ? 195.f : 150.f;
+            return 44.f;
         }
         return 44.f;
     }
@@ -79,41 +78,45 @@
     switch (indexPath.section) {
     case 0: {
         if (indexPath.row == 0) {
-            FFUserBitCell* cell = [tableView dequeueReusableCellWithIdentifier:@"UserBitCell"
+//            FFUserBitCell* cell = [tableView dequeueReusableCellWithIdentifier:@"UserBitCell"
+//                                                                  forIndexPath:indexPath];
+//            cell.userBit.user = self.session.user;
+//            [cell.userBit.inProgressRosterButton setAction:kUIButtonBlockTouchUpInside
+//                                                 withBlock:^{
+//                                                     if (!self.roster) {
+//                                                         return;
+//                                                     }
+//                                                     FFAlertView* loading = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
+//                                                                                                      messsage:nil
+//                                                                                                  loadingStyle:FFAlertViewLoadingStylePlain];
+//                                                     [loading showInView:self.navigationController.view];
+//                                                     [self.roster refreshInBackgroundWithBlock:^(id successObj)
+//                                                      {
+//                                                          [loading hide];
+//                                                          [self performSegueWithIdentifier:@"GotoRoster"
+//                                                                                    sender:nil
+//                                                                                   context:successObj];
+//                                                      }
+//                                                                                  failure:
+//                                                      ^(NSError * error)
+//                                                      {
+//                                                          [loading hide];
+//                                                          [[[FFAlertView alloc] initWithError:error
+//                                                                                        title:nil
+//                                                                            cancelButtonTitle:nil
+//                                                                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+//                                                                                     autoHide:YES]
+//                                                           showInView:self.navigationController.view];
+//                                                      }];
+//                                                 }];
+//            return cell;
+//        }
+            FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:@"MarketsCell"
                                                                   forIndexPath:indexPath];
-            cell.userBit.user = self.session.user;
-            [cell.userBit.inProgressRosterButton setAction:kUIButtonBlockTouchUpInside
-                                                 withBlock:^{
-                                                     if (!self.roster) {
-                                                         return;
-                                                     }
-                                                     FFAlertView* loading = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
-                                                                                                      messsage:nil
-                                                                                                  loadingStyle:FFAlertViewLoadingStylePlain];
-                                                     [loading showInView:self.navigationController.view];
-                                                     [self.roster refreshInBackgroundWithBlock:^(id successObj)
-                                                      {
-                                                          [loading hide];
-                                                          [self performSegueWithIdentifier:@"GotoRoster"
-                                                                                    sender:nil
-                                                                                   context:successObj];
-                                                      }
-                                                                                  failure:
-                                                      ^(NSError * error)
-                                                      {
-                                                          [loading hide];
-                                                          [[[FFAlertView alloc] initWithError:error
-                                                                                        title:nil
-                                                                            cancelButtonTitle:nil
-                                                                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                                                                     autoHide:YES]
-                                                           showInView:self.navigationController.view];
-                                                      }];
-                                                 }];
             return cell;
         }
-        FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:@"MarketsCell"
-                                                              forIndexPath:indexPath];
+        FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
+                                                               forIndexPath:indexPath];
         return cell;
     }
     case 1: {

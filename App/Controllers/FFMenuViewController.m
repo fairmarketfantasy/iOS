@@ -11,12 +11,15 @@
 #import <RATreeView.h>
 #import "FFNodeItem.h"
 #import "FFMenuCell.h"
+#import "FFLogo.h"
+#import "TransitionDelegate.h"
 
 @interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate>
 
 @property(nonatomic) RATreeView* treeView;
 @property(nonatomic, readonly) NSArray* nodes;
 @property(nonatomic, readonly) NSDictionary* segueByTitle;
+@property(nonatomic) TransitionDelegate* customTransitioningDelegate;
 
 @end
 
@@ -24,11 +27,19 @@
 
 @implementation FFMenuViewController
 
-- (id)init
+- (id)initWithCoder:(NSCoder*)aDecoder
 {
-    self = [super init];
+    self = [super initWithCoder:aDecoder];
     if (self) {
         self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 504)];
+
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+            self.modalPresentationStyle = UIModalPresentationCustom;
+            self.customTransitioningDelegate = [TransitionDelegate new];
+            self.transitioningDelegate = self.customTransitioningDelegate;
+        } else {
+            self.modalPresentationStyle = UIModalPresentationCurrentContext;
+        }
 
         _nodes = [FFNodeItem nodesFromStrings:
                                  @[
@@ -62,8 +73,59 @@
             @"Settings" : @"GotoAccount"
         };
 
-        self.treeView = [[RATreeView alloc] initWithFrame:self.view.bounds
+        // left bar item
+        FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle leftItemRect]];
+        UIButton* globalMenuButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [globalMenuButton setImage:[UIImage imageNamed:@"globalmenu"]
+                          forState:UIControlStateNormal];
+        [globalMenuButton addTarget:self
+                             action:@selector(globalMenuButton:)
+                   forControlEvents:UIControlEventTouchUpInside];
+        [globalMenuButton setImage:[UIImage imageNamed:@"globalmenu-highlighted"]
+                          forState:UIControlStateHighlighted];
+        globalMenuButton.contentMode = UIViewContentModeScaleAspectFit;
+        globalMenuButton.frame = [FFStyle leftItemRect];
+        [leftItem addSubview:globalMenuButton];
+        // status bar fix for iOS 7
+        CGFloat navBarOffset = 0.f;
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+            navBarOffset = 20.f;
+            UIImageView* fixbar = [[UIImageView alloc] initWithImage:
+                                   [[UINavigationBar appearance] backgroundImageForBarMetrics:UIBarMetricsDefault]];
+            fixbar.frame = CGRectMake(0.f, 0.f, 320.f, navBarOffset);
+            fixbar.backgroundColor = [UINavigationBar appearance].backgroundColor;
+            [self.view addSubview:fixbar];
+        }
+
+        // navigation bar
+        UINavigationItem* buttonCarrier = [[UINavigationItem alloc] initWithTitle:@""];
+        UINavigationBar* navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0.f, navBarOffset,
+                                                                                           320.f, 44.f)];
+        navigationBar.items = @[buttonCarrier];
+        [self.view addSubview:navigationBar];
+
+        if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+            UIBarButtonItem* spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                       target:nil
+                                                                                       action:NULL];
+            spaceItem.width = -16.f;
+            buttonCarrier.leftBarButtonItems = @[
+                                                 spaceItem,
+                                                 [[UIBarButtonItem alloc] initWithCustomView:leftItem]
+                                                 ];
+        } else {
+            buttonCarrier.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftItem];
+        }
+        // title
+        buttonCarrier.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
+        // tree view
+        CGFloat offset = navigationBar.frame.size.height + navigationBar.frame.origin.y;
+        CGRect treeFrame = self.view.bounds;
+        treeFrame.origin.y += offset;
+        treeFrame.size.height -= offset;
+        self.treeView = [[RATreeView alloc] initWithFrame:treeFrame
                                                     style:RATreeViewStylePlain];
+        [self.view addSubview:self.treeView];
     }
 
     return self;
@@ -73,8 +135,8 @@
 {
     [super viewDidLoad];
     // TODO: make proper MVC in whole project!!!
-    self.view.backgroundColor = [UIColor colorWithWhite:0
-                                                  alpha:.9];
+    self.view.backgroundColor = [UIColor colorWithWhite:0.f
+                                                  alpha:.9f];
     self.treeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.treeView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.treeView.separatorColor = [FFStyle lightGrey];
@@ -85,7 +147,6 @@
     self.treeView.delegate = self;
     [self.treeView registerClass:[FFMenuCell class]
           forCellReuseIdentifier:MENU_CELL_ID];
-    [self.view addSubview:self.treeView];
 }
 
 #pragma mark - RATreeViewDataSource
@@ -266,6 +327,14 @@
             }
         };
     }
+}
+
+#pragma mark - button actions
+
+- (void)globalMenuButton:(UIButton*)button
+{
+    [self dismissViewControllerAnimated:YES
+                             completion:nil];
 }
 
 @end
