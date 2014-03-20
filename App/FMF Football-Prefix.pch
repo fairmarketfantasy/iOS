@@ -19,7 +19,8 @@
 #define DLog(format, ...) CFShow((__bridge CFStringRef)LOG_FMT_STR(format, ##__VA_ARGS__))
 #define NSLog(format, ...)                                                             \
     {                                                                                  \
-        [[Ubertesters shared] UTLog:LOG_FMT_STR(format, ##__VA_ARGS__) level:@"info"]; \
+        [[Ubertesters shared] UTLog:LOG_FMT_STR(format, ##__VA_ARGS__)                 \
+                          withLevel:UTLogLevelInfo];                                   \
         DLog(format, ##__VA_ARGS__);                                                   \
     }
 #

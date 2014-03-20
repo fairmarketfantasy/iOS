@@ -22,12 +22,12 @@
         self.backgroundColor = [UIColor clearColor];
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-        [self registerClass:[FFUserBitCell class]
-            forCellReuseIdentifier:@"UserBitCell"];
         [self registerClass:[FFMarketsCell class]
-            forCellReuseIdentifier:@"MarketsCell"];
+     forCellReuseIdentifier:@"MarketsCell"];
+        [self registerClass:[FFUserBitCell class]
+     forCellReuseIdentifier:@"AutoFillCell"];
         [self registerClass:[FFTeamCell class]
-            forCellReuseIdentifier:@"TeamCell"];
+     forCellReuseIdentifier:@"TeamCell"];
     }
     return self;
 }

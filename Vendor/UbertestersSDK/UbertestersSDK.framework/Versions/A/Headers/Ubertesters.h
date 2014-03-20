@@ -1,24 +1,65 @@
 //
 //  Ubertesters.h
-//  UberTestLib
+//  Ubertesters
 //
 //  Created by Ubertesters on 9/7/13.
-//  Copyright (c) 2013 Ubertesters. All rights reserved.
+//  Copyright (c) 2014 Ubertesters. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "UTAlert.h"
-//#import "NetworkClientUberTesters.h"
-//#import "UserHelperUberTesters.h"
 
 @class CustomViewUberTesters;
 @class UserProfileViewController;
 @class LockScreenViewControllerUberTesters;
 
+//enums
+typedef enum {
+    /**Default options (Slider and UTOptionsLockingModeDisableUbertestersIfBuildNotExist).*/
+    UTOptionsDefault = 0,
+    
+    /**Option for using Slider mode.*/
+    UTOptionsSlider = 1 << 0,
+    
+    /**Option for using Shake mode.*/
+    UTOptionsShake = 1 << 1,
+    
+    /**Option for Manual mode.*/
+    UTOptionsManual = 1 << 2,
+    
+    /**Option for Locking mode (default).*/
+    UTOptionsLockingModeDisableUbertestersIfBuildNotExist = 1 << 3,  //is default option, that will not lock your application if auth function receive 74 error - application not found.
+
+    /**Option for Locking mode.*/
+    UTOptionsLockingModeAppIfBuildNotExist = 1 << 4                  //locks app if build not exists.
+} UbertestersOptions;
+
 typedef enum  {
     LockingModeDisableUbertestersIfBuildNotExist = 0,
-    LockingModeLockAppIfBuildNotExist = 1
+    LockingModeLockAppIfBuildNotExist = 1,
 } LockingMode;
+
+typedef enum {
+    /**
+     *  Use slider mode.
+     */
+    UTSlider = 0,
+    /**
+     *  Use shake mode.
+     */
+    UTShake = 1,
+    /**
+     *  Use manual mode.
+     */
+    UTManual = 2
+} ActivationMode;
+
+typedef enum
+{
+    UTLogLevelError,
+    UTLogLevelWarning,
+    UTLogLevelInfo
+} UTLogLevel;
 
 @interface Ubertesters : NSObject <UITextViewDelegate, UTAlertDelegate>
 {
@@ -28,14 +69,9 @@ typedef enum  {
     UIView *feedbackView;
     UIButton *btn_send;
     NSString *_crashFilePath;
-    
     BOOL isFirstTime;
-    
     NSTimer *timerLogs;
 }
-
-
-
 @property (nonatomic, readonly) LockScreenViewControllerUberTesters *lockScreen;
 @property (nonatomic, readonly) UserProfileViewController *userProfileScreen;
 @property (nonatomic, retain) NSString* apiKey;
@@ -45,50 +81,95 @@ typedef enum  {
 @property (nonatomic, assign) BOOL isInit;
 @property (nonatomic, assign) BOOL isHide;
 @property (nonatomic, assign) BOOL autoUpdate;
-@property (nonatomic, assign) BOOL doNotShowLockScreen;
 
+/**
+ *  if customer sends this property in dictionary properties as YES -> after app receive error code APPLICATION NO FOUND -> we will not close the app
+ 
+ Default is LockingModeDisableUbertestersIfBuildNotExist
+ */
+@property (nonatomic, assign)LockingMode lockingMode;
 
-// if customer sends this property in dictionary properties as YES -> after app receive error code APPLICATION NO FOUND -> we will not close the app
-@property (nonatomic, assign) LockingMode lockingMode; // DEFAULT 0
-
+/**
+ *  Main method for accessing Ubertesters singleton.
+ *
+ *  @return Ubertestrs singleton.
+ */
 + (Ubertesters*) shared;
-- (void)initialize;
-- (void)initialize:(LockingMode) mode;
 
-//api
+/**
+ Initialize Ubertesters framework with default properties:
+ LockingMode = LockingModeDisableUbertestersIfBuildNotExist,
+ ActivationMode = UTSlider
+ */
+- (void)initialize;
+
+/**
+ This method is deprecated!
+ @see initializeWithOptions:
+ */
+- (void)initialize:(LockingMode)mode __attribute__((deprecated(" use 'initializeWithOptions:' instead.")));
+
+/**
+ Initialize Ubertesters framework with user`s options:
+ @param UTSlider initialize Ubertesters with menu picker buttons.
+ @param UTShake initialize Ubertesters with shake gesture.
+ @param UTManual initialize Ubertesters with manual mode.
+ */
+- (void)initializeWithOptions:(UbertestersOptions)options;
+
+//API
+/**
+ *  Makes Screenshot of any view (openGL or UIKit).
+ */
 - (void)makeScreenshot;
-- (void)showMenuPicker;
-- (void)hideMenuPicker;
+/**
+ *  Shows menu slider.
+ */
+- (void)showMenuSlider;
+/**
+ *  Hides menu slider.
+ */
+- (void)hideMenuSlider;
+/**
+ *  Shows Ubertesters menu.
+ */
 - (void)showMenu;
+/**
+ *  Hides Ubertesters menu.
+ */
 - (void)hideMenu;
-- (void)UTLog:(NSString *)format level:(NSString *)level;
+/**
+ This method is deprecated!
+ @see UTLog:withLevel:
+ */
+- (void)UTLog:(NSString *)format level:(NSString *)level __attribute__((deprecated(" use 'UTLog:withLevel:' instead.")));
+/**
+ *  Logs custom message into session.
+ *
+ *  @param format of type NSString
+ *  @param level of type UTLogLevel
+ */
+- (void)UTLog:(NSString *)format withLevel:(UTLogLevel)level;
 
 // public functions for lib's classes
-
 - (BOOL)isOnline;
-- (NSString *)checkForUpdate;
 - (NSString *)getPhoneState;
-- (void)postLogs:(NSString*)logs token:(NSString *)token;
-- (void)postLog:(NSDictionary *)dictLog;
-- (void)postCrash:(NSString*)log token:(NSString *)token state:(NSString *)state rid: (NSString *)rid uid: (NSString *)uid;
-- (void)setAppStatus:(int) exitCode;
 - (void)makeAppExit;
-- (void)showUserProfileScreen;
 - (void)showLockScreen;
-- (void)showIpadSoomingSoonScreen;
+- (void)postLogs:(NSString*)logs token:(NSString *)token;
+- (void)postCrash:(NSString*)log token:(NSString *)token state:(NSString *)state rid: (NSString *)rid uid: (NSString *)uid;
 - (void)makeUTLibWindowKeyAndVisible;
-- (void)makeAppWindowKeyAndVisible;
 - (UIWindow *)getUTLibWindow;
-- (void)enableTimer:(BOOL)res;
-
-- (void)registerLocalNotificationWithText:(NSString *)text forDate:(NSDate*)date;
 - (void)playSystemSound:(int)soundID;
+- (void)enableTimer:(BOOL)res;
+- (void)showUserProfileScreen;
+
 @end
 
-// Handle Exception
+/**Handle Exception*/
 void HandleUbertestersException(NSException *exception);
-// calls when signal occures in the system
+/**Calls when signal occures in the system*/
 void SignalUbertestersHandler(int signal);
-// install Urban HandleEception to the app and uber menu
+/**Install Urban HandleEception to the app and uber menu*/
 void installUberErrorHandler(void);
 

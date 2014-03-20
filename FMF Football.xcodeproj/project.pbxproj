@@ -31,6 +31,7 @@
 		8951A33318D08A9E0019384D /* FFContestCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8951A32D18D08A9E0019384D /* FFContestCell.m */; };
 		8951A33418D08A9E0019384D /* FFEnterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8951A32F18D08A9E0019384D /* FFEnterCell.m */; };
 		8951A33518D08A9E0019384D /* FFEntrantsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8951A33118D08A9E0019384D /* FFEntrantsCell.m */; };
+		895E760718DB45F000B00F90 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 895E760618DB45F000B00F90 /* CoreMotion.framework */; };
 		8961095818D1CD4F006BCFA4 /* FFPagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8961095718D1CD4F006BCFA4 /* FFPagerController.m */; };
 		896ACA5018B66376001E9C64 /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */; };
 		896ACA5218B66377001E9C64 /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 896ACA4F18B66376001E9C64 /* UbertestersSDKResources.bundle */; };
@@ -194,6 +195,7 @@
 		8951A32F18D08A9E0019384D /* FFEnterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFEnterCell.m; sourceTree = "<group>"; };
 		8951A33018D08A9E0019384D /* FFEntrantsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFEntrantsCell.h; sourceTree = "<group>"; };
 		8951A33118D08A9E0019384D /* FFEntrantsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFEntrantsCell.m; sourceTree = "<group>"; };
+		895E760618DB45F000B00F90 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		8961095618D1CD4F006BCFA4 /* FFPagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPagerController.h; sourceTree = "<group>"; };
 		8961095718D1CD4F006BCFA4 /* FFPagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPagerController.m; sourceTree = "<group>"; };
 		896ACA4E18B66376001E9C64 /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				895E760718DB45F000B00F90 /* CoreMotion.framework in Frameworks */,
 				89DFD29818B37F420079F427 /* OpenGLES.framework in Frameworks */,
 				89DFD29618B37F3A0079F427 /* AudioToolbox.framework in Frameworks */,
 				89DFD29418B37F2B0079F427 /* CoreLocation.framework in Frameworks */,
@@ -431,6 +434,7 @@
 		153BBC3217DFC2E40071E63B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				895E760618DB45F000B00F90 /* CoreMotion.framework */,
 				896ACA4D18B66376001E9C64 /* UbertestersSDK */,
 				89DFD29718B37F420079F427 /* OpenGLES.framework */,
 				89DFD29518B37F3A0079F427 /* AudioToolbox.framework */,
@@ -1083,7 +1087,7 @@
 				GCC_PREFIX_HEADER = "App/FMF Football-Prefix.pch";
 				INFOPLIST_FILE = "App/FMF Football-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2D04CEE7-2DAB-420A-B962-730CA2E4F18C";
+				PROVISIONING_PROFILE = "666D9467-D004-451F-8672-3C394D52C658";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1103,8 +1107,8 @@
 				GCC_PREFIX_HEADER = "App/FMF Football-Prefix.pch";
 				INFOPLIST_FILE = "App/FMF Football-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2D04CEE7-2DAB-420A-B962-730CA2E4F18C";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2D04CEE7-2DAB-420A-B962-730CA2E4F18C";
+				PROVISIONING_PROFILE = "666D9467-D004-451F-8672-3C394D52C658";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "666D9467-D004-451F-8672-3C394D52C658";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
