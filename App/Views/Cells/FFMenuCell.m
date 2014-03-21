@@ -19,7 +19,7 @@
                 reuseIdentifier:reuseIdentifier];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        self.textLabel.textColor = [FFStyle lightGrey];
+        self.textLabel.textColor = [FFStyle white];
         self.backgroundView = [[UIView alloc] initWithFrame:self.bounds];
         // add custom separator
         self.separator = [self newSeparator];
@@ -62,7 +62,7 @@
                                                        contentHeight,
                                                        self.frame.size.width, separatorHeight)];
     separator.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    separator.backgroundColor = [FFStyle lightGrey];
+    separator.backgroundColor = [FFStyle darkGrey];
     return separator;
 }
 

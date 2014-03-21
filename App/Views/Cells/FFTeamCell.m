@@ -38,20 +38,15 @@
                                                              alpha:1];
         _img = [[UIImageView alloc] initWithFrame:CGRectMake(15, 11, 57, 57)];
         _img.backgroundColor = [UIColor clearColor];
-        _img.image = [UIImage imageNamed:@"tshirt-placeholder"];
+        _img.image = [UIImage imageNamed:@"rosterslotempty"];
         _img.contentMode = UIViewContentModeScaleAspectFill;
         _img.clipsToBounds = YES;
         [self.contentView addSubview:_img];
 
-        UIImageView* mask = [[UIImageView alloc] initWithFrame:CGRectMake(15, 11, 57, 57)];
-        mask.backgroundColor = [UIColor clearColor];
-        mask.image = [UIImage imageNamed:@"playerselectmask"];
-        [self addSubview:mask];
-
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(82.f, 31.f, 140.f, 16.f)];
         self.titleLabel.backgroundColor = [UIColor clearColor];
         self.titleLabel.font = [FFStyle regularFont:14.f];
-        self.titleLabel.textColor = [FFStyle lightGrey];
+        self.titleLabel.textColor = [FFStyle greyTextColor];
         self.titleLabel.adjustsFontSizeToFitWidth = YES;
         [self.contentView addSubview:self.titleLabel];
 

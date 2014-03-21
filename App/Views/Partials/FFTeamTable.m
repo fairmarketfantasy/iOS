@@ -9,7 +9,8 @@
 #import "FFTeamTable.h"
 #import "FFTeamCell.h"
 #import "FFMarketsCell.h"
-#import "FFUserBitCell.h"
+#import "FFAutoFillCell.h"
+#import "FFAccountHeader.h"
 
 @implementation FFTeamTable
 
@@ -17,17 +18,19 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [FFStyle white];
         self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [FFStyle darkGrey];
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
 
         [self registerClass:[FFMarketsCell class]
      forCellReuseIdentifier:@"MarketsCell"];
-        [self registerClass:[FFUserBitCell class]
+        [self registerClass:[FFAutoFillCell class]
      forCellReuseIdentifier:@"AutoFillCell"];
         [self registerClass:[FFTeamCell class]
      forCellReuseIdentifier:@"TeamCell"];
+
+        // header
+        self.tableHeaderView = [[FFAccountHeader alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 90.f)];
     }
     return self;
 }

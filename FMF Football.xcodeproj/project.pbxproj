@@ -59,18 +59,13 @@
 		896ACC7D18B664F5001E9C64 /* checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD118B664F5001E9C64 /* checkmark@2x.png */; };
 		896ACC7F18B664F5001E9C64 /* contestcircle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD218B664F5001E9C64 /* contestcircle@2x.png */; };
 		896ACC8118B664F5001E9C64 /* dailyfantasyfootball@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD318B664F5001E9C64 /* dailyfantasyfootball@2x.png */; };
-		896ACC8318B664F5001E9C64 /* darkgreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD418B664F5001E9C64 /* darkgreen.png */; };
 		896ACC8518B664F5001E9C64 /* defaultuser@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD518B664F5001E9C64 /* defaultuser@2x.png */; };
 		896ACC8F18B664F5001E9C64 /* globalmenu-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */; };
 		896ACC9118B664F5001E9C64 /* globalmenu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDB18B664F5001E9C64 /* globalmenu@2x.png */; };
 		896ACC9318B664F5001E9C64 /* greendot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDC18B664F5001E9C64 /* greendot@2x.png */; };
 		896ACC9518B664F5001E9C64 /* greydot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDD18B664F5001E9C64 /* greydot@2x.png */; };
-		896ACC9718B664F5001E9C64 /* helmet-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDE18B664F5001E9C64 /* helmet-placeholder.png */; };
-		896ACC9918B664F5001E9C64 /* helmet-placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDF18B664F5001E9C64 /* helmet-placeholder@2x.png */; };
 		896ACC9B18B664F5001E9C64 /* leftshuttle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE018B664F5001E9C64 /* leftshuttle@2x.png */; };
 		896ACC9D18B664F5001E9C64 /* loginbg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE118B664F5001E9C64 /* loginbg@2x.png */; };
-		896ACC9F18B664F5001E9C64 /* player-cutout@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE218B664F5001E9C64 /* player-cutout@2x.png */; };
-		896ACCA318B664F5001E9C64 /* reddot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE418B664F5001E9C64 /* reddot@2x.png */; };
 		896ACCA518B664F5001E9C64 /* rightshuttle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE518B664F5001E9C64 /* rightshuttle@2x.png */; };
 		896ACCA718B664F5001E9C64 /* rosterslotempty@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE618B664F5001E9C64 /* rosterslotempty@2x.png */; };
 		896ACCA918B664F5001E9C64 /* sectionback@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE718B664F5001E9C64 /* sectionback@2x.png */; };
@@ -129,14 +124,11 @@
 		8972768A18D9774A008D995C /* open@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8972768818D9774A008D995C /* open@2x.png */; };
 		89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BABFC518BBB98F001AD755 /* FFNodeItem.m */; };
 		89BABFC818BDFC99001AD755 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89BABFC718BDFC99001AD755 /* Localizable.strings */; };
-		89BED92618C4B67B003E9E68 /* tshirt-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92418C4B67B003E9E68 /* tshirt-placeholder.png */; };
-		89BED92718C4B67B003E9E68 /* tshirt-placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92518C4B67B003E9E68 /* tshirt-placeholder@2x.png */; };
 		89BED92D18C77348003E9E68 /* Prohibition-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92B18C77348003E9E68 /* Prohibition-Bold.ttf */; };
 		89BED92E18C77348003E9E68 /* Prohibition-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92C18C77348003E9E68 /* Prohibition-BoldItalic.ttf */; };
 		89BED93118C77D19003E9E68 /* FFRosterTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BED93018C77D19003E9E68 /* FFRosterTable.m */; };
 		89BED93418C7855C003E9E68 /* FFLogo.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BED93318C7855C003E9E68 /* FFLogo.m */; };
 		89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBC218B664F5001E9C64 /* FMF-Small-50.png */; };
-		89C3656618B7CBF2003C7A9C /* playerselectmask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE318B664F5001E9C64 /* playerselectmask@2x.png */; };
 		89D0309B18CF9F2800250D82 /* FFContestTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 89D0309A18CF9F2800250D82 /* FFContestTable.m */; };
 		89DE99ED18D2D1AF006A66C4 /* FFYourTeamController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89DE99EC18D2D1AF006A66C4 /* FFYourTeamController.m */; };
 		89DE99F018D2D3D9006A66C4 /* FFTeamTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 89DE99EF18D2D3D9006A66C4 /* FFTeamTable.m */; };
@@ -149,6 +141,18 @@
 		89DFD29418B37F2B0079F427 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD29318B37F2B0079F427 /* CoreLocation.framework */; };
 		89DFD29618B37F3A0079F427 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD29518B37F3A0079F427 /* AudioToolbox.framework */; };
 		89DFD29818B37F420079F427 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD29718B37F420079F427 /* OpenGLES.framework */; };
+		89F1A08218DC59DC001369E3 /* FFAccountHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A08118DC59DC001369E3 /* FFAccountHeader.m */; };
+		89F1A08818DC7C03001369E3 /* active.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08318DC7C03001369E3 /* active.png */; };
+		89F1A08918DC7C03001369E3 /* defaultuser.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08418DC7C03001369E3 /* defaultuser.png */; };
+		89F1A08A18DC7C03001369E3 /* passive.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08518DC7C03001369E3 /* passive.png */; };
+		89F1A08B18DC7C03001369E3 /* rosterslotempty.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08618DC7C03001369E3 /* rosterslotempty.png */; };
+		89F1A08C18DC7C03001369E3 /* wallet.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08718DC7C03001369E3 /* wallet.png */; };
+		89F1A08F18DC7CAB001369E3 /* active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08D18DC7CAB001369E3 /* active@2x.png */; };
+		89F1A09018DC7CAB001369E3 /* passive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08E18DC7CAB001369E3 /* passive@2x.png */; };
+		89F1A09218DC7D57001369E3 /* wallet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09118DC7D57001369E3 /* wallet@2x.png */; };
+		89F1A09518DC81C4001369E3 /* GBPathImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A09418DC81C4001369E3 /* GBPathImageView.m */; };
+		89F1A09818DC87CB001369E3 /* loginbg-586h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09618DC87CB001369E3 /* loginbg-586h@2x.png */; };
+		89F1A09918DC87CB001369E3 /* loginbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09718DC87CB001369E3 /* loginbg.png */; };
 		89F2E70218BE249A00B23A99 /* accessory_check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E6FD18BE249A00B23A99 /* accessory_check@2x.png */; };
 		89F2E70318BE249A00B23A99 /* accessory_collapse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E6FE18BE249A00B23A99 /* accessory_collapse@2x.png */; };
 		89F2E70418BE249A00B23A99 /* accessory_disclosure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E6FF18BE249A00B23A99 /* accessory_disclosure@2x.png */; };
@@ -225,19 +229,13 @@
 		896ACBD118B664F5001E9C64 /* checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark@2x.png"; sourceTree = "<group>"; };
 		896ACBD218B664F5001E9C64 /* contestcircle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contestcircle@2x.png"; sourceTree = "<group>"; };
 		896ACBD318B664F5001E9C64 /* dailyfantasyfootball@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dailyfantasyfootball@2x.png"; sourceTree = "<group>"; };
-		896ACBD418B664F5001E9C64 /* darkgreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = darkgreen.png; sourceTree = "<group>"; };
 		896ACBD518B664F5001E9C64 /* defaultuser@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defaultuser@2x.png"; sourceTree = "<group>"; };
 		896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "globalmenu-highlighted@2x.png"; sourceTree = "<group>"; };
 		896ACBDB18B664F5001E9C64 /* globalmenu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "globalmenu@2x.png"; sourceTree = "<group>"; };
 		896ACBDC18B664F5001E9C64 /* greendot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greendot@2x.png"; sourceTree = "<group>"; };
 		896ACBDD18B664F5001E9C64 /* greydot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greydot@2x.png"; sourceTree = "<group>"; };
-		896ACBDE18B664F5001E9C64 /* helmet-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "helmet-placeholder.png"; sourceTree = "<group>"; };
-		896ACBDF18B664F5001E9C64 /* helmet-placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "helmet-placeholder@2x.png"; sourceTree = "<group>"; };
 		896ACBE018B664F5001E9C64 /* leftshuttle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "leftshuttle@2x.png"; sourceTree = "<group>"; };
 		896ACBE118B664F5001E9C64 /* loginbg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginbg@2x.png"; sourceTree = "<group>"; };
-		896ACBE218B664F5001E9C64 /* player-cutout@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player-cutout@2x.png"; sourceTree = "<group>"; };
-		896ACBE318B664F5001E9C64 /* playerselectmask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "playerselectmask@2x.png"; sourceTree = "<group>"; };
-		896ACBE418B664F5001E9C64 /* reddot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "reddot@2x.png"; sourceTree = "<group>"; };
 		896ACBE518B664F5001E9C64 /* rightshuttle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rightshuttle@2x.png"; sourceTree = "<group>"; };
 		896ACBE618B664F5001E9C64 /* rosterslotempty@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rosterslotempty@2x.png"; sourceTree = "<group>"; };
 		896ACBE718B664F5001E9C64 /* sectionback@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sectionback@2x.png"; sourceTree = "<group>"; };
@@ -347,8 +345,6 @@
 		89BABFC418BBB98F001AD755 /* FFNodeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNodeItem.h; sourceTree = "<group>"; };
 		89BABFC518BBB98F001AD755 /* FFNodeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNodeItem.m; sourceTree = "<group>"; };
 		89BABFC718BDFC99001AD755 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
-		89BED92418C4B67B003E9E68 /* tshirt-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tshirt-placeholder.png"; sourceTree = "<group>"; };
-		89BED92518C4B67B003E9E68 /* tshirt-placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tshirt-placeholder@2x.png"; sourceTree = "<group>"; };
 		89BED92B18C77348003E9E68 /* Prohibition-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Prohibition-Bold.ttf"; sourceTree = "<group>"; };
 		89BED92C18C77348003E9E68 /* Prohibition-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Prohibition-BoldItalic.ttf"; sourceTree = "<group>"; };
 		89BED92F18C77D19003E9E68 /* FFRosterTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterTable.h; sourceTree = "<group>"; };
@@ -373,6 +369,20 @@
 		89DFD29318B37F2B0079F427 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		89DFD29518B37F3A0079F427 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		89DFD29718B37F420079F427 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		89F1A08018DC59DC001369E3 /* FFAccountHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFAccountHeader.h; sourceTree = "<group>"; };
+		89F1A08118DC59DC001369E3 /* FFAccountHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFAccountHeader.m; sourceTree = "<group>"; };
+		89F1A08318DC7C03001369E3 /* active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = active.png; sourceTree = "<group>"; };
+		89F1A08418DC7C03001369E3 /* defaultuser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultuser.png; sourceTree = "<group>"; };
+		89F1A08518DC7C03001369E3 /* passive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = passive.png; sourceTree = "<group>"; };
+		89F1A08618DC7C03001369E3 /* rosterslotempty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rosterslotempty.png; sourceTree = "<group>"; };
+		89F1A08718DC7C03001369E3 /* wallet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wallet.png; sourceTree = "<group>"; };
+		89F1A08D18DC7CAB001369E3 /* active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active@2x.png"; sourceTree = "<group>"; };
+		89F1A08E18DC7CAB001369E3 /* passive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "passive@2x.png"; sourceTree = "<group>"; };
+		89F1A09118DC7D57001369E3 /* wallet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wallet@2x.png"; sourceTree = "<group>"; };
+		89F1A09318DC81C4001369E3 /* GBPathImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBPathImageView.h; sourceTree = "<group>"; };
+		89F1A09418DC81C4001369E3 /* GBPathImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBPathImageView.m; sourceTree = "<group>"; };
+		89F1A09618DC87CB001369E3 /* loginbg-586h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginbg-586h@2x.png"; sourceTree = "<group>"; };
+		89F1A09718DC87CB001369E3 /* loginbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginbg.png; sourceTree = "<group>"; };
 		89F2E6FD18BE249A00B23A99 /* accessory_check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_check@2x.png"; sourceTree = "<group>"; };
 		89F2E6FE18BE249A00B23A99 /* accessory_collapse@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_collapse@2x.png"; sourceTree = "<group>"; };
 		89F2E6FF18BE249A00B23A99 /* accessory_disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_disclosure@2x.png"; sourceTree = "<group>"; };
@@ -559,26 +569,28 @@
 				896ACBD118B664F5001E9C64 /* checkmark@2x.png */,
 				896ACBD218B664F5001E9C64 /* contestcircle@2x.png */,
 				896ACBD318B664F5001E9C64 /* dailyfantasyfootball@2x.png */,
-				896ACBD418B664F5001E9C64 /* darkgreen.png */,
 				896ACBD518B664F5001E9C64 /* defaultuser@2x.png */,
 				896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */,
 				896ACBDB18B664F5001E9C64 /* globalmenu@2x.png */,
 				896ACBDC18B664F5001E9C64 /* greendot@2x.png */,
 				896ACBDD18B664F5001E9C64 /* greydot@2x.png */,
-				896ACBDE18B664F5001E9C64 /* helmet-placeholder.png */,
-				896ACBDF18B664F5001E9C64 /* helmet-placeholder@2x.png */,
 				896ACBE018B664F5001E9C64 /* leftshuttle@2x.png */,
 				896ACBE118B664F5001E9C64 /* loginbg@2x.png */,
-				896ACBE218B664F5001E9C64 /* player-cutout@2x.png */,
-				896ACBE318B664F5001E9C64 /* playerselectmask@2x.png */,
-				896ACBE418B664F5001E9C64 /* reddot@2x.png */,
 				896ACBE518B664F5001E9C64 /* rightshuttle@2x.png */,
 				896ACBE618B664F5001E9C64 /* rosterslotempty@2x.png */,
 				896ACBE718B664F5001E9C64 /* sectionback@2x.png */,
-				89BED92418C4B67B003E9E68 /* tshirt-placeholder.png */,
-				89BED92518C4B67B003E9E68 /* tshirt-placeholder@2x.png */,
 				8972768718D9774A008D995C /* close@2x.png */,
 				8972768818D9774A008D995C /* open@2x.png */,
+				89F1A08318DC7C03001369E3 /* active.png */,
+				89F1A08418DC7C03001369E3 /* defaultuser.png */,
+				89F1A08518DC7C03001369E3 /* passive.png */,
+				89F1A08618DC7C03001369E3 /* rosterslotempty.png */,
+				89F1A08718DC7C03001369E3 /* wallet.png */,
+				89F1A08D18DC7CAB001369E3 /* active@2x.png */,
+				89F1A08E18DC7CAB001369E3 /* passive@2x.png */,
+				89F1A09118DC7D57001369E3 /* wallet@2x.png */,
+				89F1A09618DC87CB001369E3 /* loginbg-586h@2x.png */,
+				89F1A09718DC87CB001369E3 /* loginbg.png */,
 			);
 			path = Pictures;
 			sourceTree = "<group>";
@@ -655,6 +667,8 @@
 				890504CC18D9EEC7006CD2EA /* AnimatedTransitioning.m */,
 				890504CD18D9EEC7006CD2EA /* TransitionDelegate.h */,
 				890504CE18D9EEC7006CD2EA /* TransitionDelegate.m */,
+				89F1A09318DC81C4001369E3 /* GBPathImageView.h */,
+				89F1A09418DC81C4001369E3 /* GBPathImageView.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -782,6 +796,8 @@
 				8972767F18D94920008D995C /* FFWideReceiverTable.m */,
 				8972768418D95F95008D995C /* FFRosterTableHeader.h */,
 				8972768518D95F95008D995C /* FFRosterTableHeader.m */,
+				89F1A08018DC59DC001369E3 /* FFAccountHeader.h */,
+				89F1A08118DC59DC001369E3 /* FFAccountHeader.m */,
 			);
 			path = Partials;
 			sourceTree = "<group>";
@@ -841,13 +857,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				89F2E70618BE249A00B23A99 /* accessory_uncollapse@2x.png in Resources */,
-				896ACC9718B664F5001E9C64 /* helmet-placeholder.png in Resources */,
 				89BABFC818BDFC99001AD755 /* Localizable.strings in Resources */,
 				89F2E70318BE249A00B23A99 /* accessory_collapse@2x.png in Resources */,
 				896ACC9B18B664F5001E9C64 /* leftshuttle@2x.png in Resources */,
 				896ACCA718B664F5001E9C64 /* rosterslotempty@2x.png in Resources */,
 				896ACC7D18B664F5001E9C64 /* checkmark@2x.png in Resources */,
 				896ACC9318B664F5001E9C64 /* greendot@2x.png in Resources */,
+				89F1A08A18DC7C03001369E3 /* passive.png in Resources */,
 				896ACC5318B664F5001E9C64 /* Default.png in Resources */,
 				896ACCA918B664F5001E9C64 /* sectionback@2x.png in Resources */,
 				8972768918D9774A008D995C /* close@2x.png in Resources */,
@@ -857,8 +873,8 @@
 				896ACD0D18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard in Resources */,
 				896ACC6318B664F5001E9C64 /* FMF-Small-50@2x.png in Resources */,
 				896ACC5F18B664F5001E9C64 /* FMF-80.png in Resources */,
-				896ACC9918B664F5001E9C64 /* helmet-placeholder@2x.png in Resources */,
 				89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */,
+				89F1A08C18DC7C03001369E3 /* wallet.png in Resources */,
 				89F2E70218BE249A00B23A99 /* accessory_check@2x.png in Resources */,
 				896ACC7918B664F5001E9C64 /* bannerclose@2x.png in Resources */,
 				896ACC8118B664F5001E9C64 /* dailyfantasyfootball@2x.png in Resources */,
@@ -869,14 +885,14 @@
 				896ACC7718B664F5001E9C64 /* backbtn@2x.png in Resources */,
 				896ACC5118B664F5001E9C64 /* Default-568h@2x.png in Resources */,
 				896ACC7318B664F5001E9C64 /* 40-percent.png in Resources */,
-				89BED92718C4B67B003E9E68 /* tshirt-placeholder@2x.png in Resources */,
 				896ACC8518B664F5001E9C64 /* defaultuser@2x.png in Resources */,
 				896ACC7B18B664F5001E9C64 /* bluedot@2x.png in Resources */,
+				89F1A09818DC87CB001369E3 /* loginbg-586h@2x.png in Resources */,
 				896ACC6D18B664F5001E9C64 /* iTunesArtwork.png in Resources */,
 				89BED92E18C77348003E9E68 /* Prohibition-BoldItalic.ttf in Resources */,
 				8972768A18D9774A008D995C /* open@2x.png in Resources */,
 				896ACC5B18B664F5001E9C64 /* FMF-72.png in Resources */,
-				896ACC8318B664F5001E9C64 /* darkgreen.png in Resources */,
+				89F1A08918DC7C03001369E3 /* defaultuser.png in Resources */,
 				89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */,
 				896ACC7118B664F5001E9C64 /* 0-percent.png in Resources */,
 				896ACC9118B664F5001E9C64 /* globalmenu@2x.png in Resources */,
@@ -885,17 +901,19 @@
 				896ACC7F18B664F5001E9C64 /* contestcircle@2x.png in Resources */,
 				896ACC8F18B664F5001E9C64 /* globalmenu-highlighted@2x.png in Resources */,
 				896ACC6518B664F5001E9C64 /* FMF-Small.png in Resources */,
-				89C3656618B7CBF2003C7A9C /* playerselectmask@2x.png in Resources */,
 				896ACC5518B664F5001E9C64 /* Default@2x.png in Resources */,
-				89BED92618C4B67B003E9E68 /* tshirt-placeholder.png in Resources */,
+				89F1A08F18DC7CAB001369E3 /* active@2x.png in Resources */,
 				896ACC9D18B664F5001E9C64 /* loginbg@2x.png in Resources */,
+				89F1A08B18DC7C03001369E3 /* rosterslotempty.png in Resources */,
 				896ACC6918B664F5001E9C64 /* FMF.png in Resources */,
-				896ACCA318B664F5001E9C64 /* reddot@2x.png in Resources */,
-				896ACC9F18B664F5001E9C64 /* player-cutout@2x.png in Resources */,
+				89F1A09918DC87CB001369E3 /* loginbg.png in Resources */,
 				896ACC6718B664F5001E9C64 /* FMF-Small@2x.png in Resources */,
+				89F1A08818DC7C03001369E3 /* active.png in Resources */,
 				896ACC5718B664F5001E9C64 /* FMF-120.png in Resources */,
 				89F2E70418BE249A00B23A99 /* accessory_disclosure@2x.png in Resources */,
 				896ACC5D18B664F5001E9C64 /* FMF-72@2x.png in Resources */,
+				89F1A09018DC7CAB001369E3 /* passive@2x.png in Resources */,
+				89F1A09218DC7D57001369E3 /* wallet@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -939,6 +957,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89BED93418C7855C003E9E68 /* FFLogo.m in Sources */,
+				89F1A08218DC59DC001369E3 /* FFAccountHeader.m in Sources */,
 				896ACCD918B664F5001E9C64 /* FFTickerDataSource.m in Sources */,
 				896ACCE118B664F5001E9C64 /* UIView+FindFirstResponder.m in Sources */,
 				896ACD0318B664F5001E9C64 /* FFMarketSelector.m in Sources */,
@@ -979,6 +998,7 @@
 				8972767D18D93FBE008D995C /* FFWideReceiverController.m in Sources */,
 				896ACCEB18B664F5001E9C64 /* FFMarket.m in Sources */,
 				896ACCC318B664F5001E9C64 /* FFOptionSelectController.m in Sources */,
+				89F1A09518DC81C4001369E3 /* GBPathImageView.m in Sources */,
 				896ACCDF18B664F5001E9C64 /* NSDate+ISO8601.m in Sources */,
 				896ACD0918B664F5001E9C64 /* FFUserBitView.m in Sources */,
 				896ACCC518B664F5001E9C64 /* FFRosterViewController.m in Sources */,

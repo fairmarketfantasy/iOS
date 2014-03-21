@@ -15,7 +15,6 @@
 
 @interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate>
 
-@property(nonatomic) FFWideReceiverTable* tableView;
 @property(nonatomic) FUISegmentedControl* segments;
 
 @end

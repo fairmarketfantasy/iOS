@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class FUISwitch;
+
 @interface FFAutoFillCell : UITableViewCell
 
 @property(nonatomic, readonly) UIButton* autoFillButton;
-@property(nonatomic, readonly) UISwitch* autoRemovedBenched;
+@property(nonatomic, readonly) FUISwitch* autoRemovedBenched;
 
 @end

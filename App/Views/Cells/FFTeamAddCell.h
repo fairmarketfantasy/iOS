@@ -8,13 +8,11 @@
 
 #import "FFTeamCell.h"
 
-@class FUIButton;
-
 @interface FFTeamAddCell : FFTeamCell
 
 @property(nonatomic, readonly) UILabel* nameLabel;
 @property(nonatomic, readonly) UILabel* costLabel;
 @property(nonatomic, readonly) UIButton* PTButton;
-@property(nonatomic, readonly) FUIButton* AddButton;
+@property(nonatomic, readonly) UIButton* AddButton;
 
 @end

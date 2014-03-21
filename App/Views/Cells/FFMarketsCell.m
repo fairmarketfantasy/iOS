@@ -16,6 +16,7 @@
     self = [super initWithStyle:style
                 reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.contentView.backgroundColor = [FFStyle white];
         UIView* separator = [[UIView alloc] initWithFrame:CGRectMake(10.f, CGRectGetMaxY(self.contentView.frame) - 1.f,
                                                                      300.f, 1.f)];
         separator.backgroundColor = [FFStyle tableViewSeparatorColor];

@@ -21,6 +21,7 @@
 @property(nonatomic) FFWideReceiverController* receiverController;
 @property(nonatomic) UIButton* globalMenuButton;
 @property(nonatomic) UIButton* personalInfoButton;
+@property(nonatomic, assign) BOOL isPersonalInfoOpened;
 
 @end
 
@@ -30,6 +31,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        self.isPersonalInfoOpened = NO;
         self.view.backgroundColor = [FFStyle darkGreen];
         self.dataSource = self;
         self.delegate = self;
@@ -48,10 +50,13 @@
     self.pager = [StyledPageControl new];
     self.pager.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.pager.frame = CGRectMake(0.f,
-                                  self.view.bounds.size.height - 44.f,
+                                  self.view.bounds.size.height - 39.f,
                                   self.view.bounds.size.width,
                                   44.f);
-    [self.pager setPageControlStyle:PageControlStyleDefault];
+    [self.pager setGapWidth:2];
+    [self.pager setPageControlStyle:PageControlStyleThumb];
+    [self.pager setThumbImage:[UIImage imageNamed:@"passive"]];
+    [self.pager setSelectedThumbImage:[UIImage imageNamed:@"active"]];
     [self.view addSubview:self.pager];
     [self.view bringSubviewToFront:self.pager];
     // left bar item
@@ -117,6 +122,7 @@
                   completion:nil];
     self.pager.numberOfPages = (int)[self getViewControllers].count;
     [self.view bringSubviewToFront:self.pager];
+    [self hidePersonalInfo];
 }
 
 #pragma mark - UIPageViewControllerDataSource
@@ -156,11 +162,18 @@
    previousViewControllers:(NSArray *)previousViewControllers
        transitionCompleted:(BOOL)completed
 {
+    [self hidePersonalInfo];
     if (!completed) {
         return;
     }
     self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
                                    self.viewControllers.firstObject];
+}
+
+- (void)pageViewController:(UIPageViewController*)pageViewController
+willTransitionToViewControllers:(NSArray*)pendingViewControllers
+{
+    [self hidePersonalInfo];
 }
 
 #pragma mark - private
@@ -173,17 +186,46 @@
              ];
 }
 
-- (BOOL)isPersonalInfoOpened
-{
-    return NO;
-}
-
 - (void)hidePersonalInfo
 {
+    [self hidePersonalInfoAnimated:NO];
+}
+
+- (void)hidePersonalInfoAnimated:(BOOL)animated
+{
+    [UIView animateWithDuration:(NSTimeInterval)(animated ? .3f : 0.f)
+                     animations:^{
+                         [self.personalInfoButton setImage:[UIImage imageNamed:@"open"]
+                                                  forState:UIControlStateNormal];
+                         self.teamController.tableView.contentInset =
+                         UIEdgeInsetsMake(-self.teamController.tableView.tableHeaderView.bounds.size.height, 0.f, 0.f, 0.f);
+                         self.teamController.tableView.contentOffset =
+                         CGPointMake(0.f, self.teamController.tableView.tableHeaderView.bounds.size.height);
+                         self.receiverController.tableView.contentInset =
+                         UIEdgeInsetsMake(-self.receiverController.tableView.tableHeaderView.bounds.size.height, 0.f, 0.f, 0.f);
+                         self.receiverController.tableView.contentOffset =
+                         CGPointMake(0.f, self.receiverController.tableView.tableHeaderView.bounds.size.height);
+                         self.isPersonalInfoOpened = NO;
+                     }];
 }
 
 - (void)showPersonalInfo
 {
+    [self showPersonalInfoAnimated:NO];
+}
+
+- (void)showPersonalInfoAnimated:(BOOL)animated
+{
+    [UIView animateWithDuration:(NSTimeInterval)(animated ? .3f : 0.f)
+                     animations:^{
+                         [self.personalInfoButton setImage:[UIImage imageNamed:@"close"]
+                                                  forState:UIControlStateNormal];
+                         self.teamController.tableView.contentInset = UIEdgeInsetsZero;
+                         self.teamController.tableView.contentOffset = CGPointZero;
+                         self.receiverController.tableView.contentInset = UIEdgeInsetsZero;
+                         self.receiverController.tableView.contentOffset = CGPointZero;
+                         self.isPersonalInfoOpened = YES;
+                     }];
 }
 
 #pragma mark - button actions
@@ -196,14 +238,10 @@
 
 - (void)personalInfoButton:(UIButton*)button
 {
-    if ([self isPersonalInfoOpened]) {
-        [button setImage:[UIImage imageNamed:@"open"]
-                forState:UIControlStateNormal];
-        [self hidePersonalInfo];
+    if (self.isPersonalInfoOpened) {
+        [self hidePersonalInfoAnimated:YES];
     } else {
-        [button setImage:[UIImage imageNamed:@"close"]
-                forState:UIControlStateNormal];
-        [self showPersonalInfo];
+        [self showPersonalInfoAnimated:YES];
     }
 }
 

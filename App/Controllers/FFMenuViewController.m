@@ -228,11 +228,20 @@
     [cell setAccessoryNamed:accessoryName];
     // set background color
     if (nodeItem.type == FFNodeItemTypeParent) {
-        cell.backgroundView.backgroundColor = [FFStyle darkBlue];
+        cell.backgroundView.backgroundColor = [FFStyle brightBlue];
+        cell.separator.backgroundColor = [UIColor colorWithRed:36.f / 255.f
+                                                         green:79.f / 255.f
+                                                          blue:113.f / 255.f
+                                                         alpha:1.f];
     } else if (treeNodeInfo.treeDepthLevel > 0) {
-        cell.backgroundView.backgroundColor = [FFStyle darkerColorForColor:[FFStyle darkBlue]];
+        cell.backgroundView.backgroundColor = [UIColor colorWithRed:36.f / 255.f
+                                                              green:79.f / 255.f
+                                                               blue:113.f / 255.f
+                                                              alpha:1.f];
+        cell.separator.backgroundColor = [UIColor clearColor];
     } else {
         cell.backgroundView.backgroundColor = [UIColor clearColor];
+        cell.separator.backgroundColor = [FFStyle darkGrey];
     }
     return cell;
 }

@@ -9,6 +9,7 @@
 #import "FFWideReceiverTable.h"
 #import "FFWideReceiverCell.h"
 #import "FFTeamAddCell.h"
+#import "FFAccountHeader.h"
 
 @implementation FFWideReceiverTable
 
@@ -17,13 +18,16 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [FFStyle darkGrey];
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
 
         [self registerClass:[FFWideReceiverCell class]
      forCellReuseIdentifier:@"ReceiverCell"];
         [self registerClass:[FFTeamAddCell class]
      forCellReuseIdentifier:@"TeamAddCell"];
+
+        // header
+        self.tableHeaderView = [[FFAccountHeader alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 90.f)];
     }
     return self;
 }

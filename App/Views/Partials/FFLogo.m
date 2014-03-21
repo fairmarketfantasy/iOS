@@ -14,6 +14,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor clearColor];
         self.textAlignment = NSTextAlignmentLeft;
 
         NSMutableAttributedString* attributedTitle = [[NSMutableAttributedString alloc]

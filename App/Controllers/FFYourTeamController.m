@@ -22,7 +22,6 @@
 
 @interface FFYourTeamController () <UITableViewDataSource, UITableViewDelegate>
 
-@property(nonatomic) FFTeamTable* tableView;
 @property(nonatomic) FFRoster* roster;
 
 @end
@@ -65,9 +64,9 @@
 {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            return 44.f;
+            return 60.f;
         }
-        return 44.f;
+        return 50.f;
     }
     return 80.f;
 }
@@ -78,39 +77,6 @@
     switch (indexPath.section) {
     case 0: {
         if (indexPath.row == 0) {
-//            FFUserBitCell* cell = [tableView dequeueReusableCellWithIdentifier:@"UserBitCell"
-//                                                                  forIndexPath:indexPath];
-//            cell.userBit.user = self.session.user;
-//            [cell.userBit.inProgressRosterButton setAction:kUIButtonBlockTouchUpInside
-//                                                 withBlock:^{
-//                                                     if (!self.roster) {
-//                                                         return;
-//                                                     }
-//                                                     FFAlertView* loading = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
-//                                                                                                      messsage:nil
-//                                                                                                  loadingStyle:FFAlertViewLoadingStylePlain];
-//                                                     [loading showInView:self.navigationController.view];
-//                                                     [self.roster refreshInBackgroundWithBlock:^(id successObj)
-//                                                      {
-//                                                          [loading hide];
-//                                                          [self performSegueWithIdentifier:@"GotoRoster"
-//                                                                                    sender:nil
-//                                                                                   context:successObj];
-//                                                      }
-//                                                                                  failure:
-//                                                      ^(NSError * error)
-//                                                      {
-//                                                          [loading hide];
-//                                                          [[[FFAlertView alloc] initWithError:error
-//                                                                                        title:nil
-//                                                                            cancelButtonTitle:nil
-//                                                                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-//                                                                                     autoHide:YES]
-//                                                           showInView:self.navigationController.view];
-//                                                      }];
-//                                                 }];
-//            return cell;
-//        }
             FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:@"MarketsCell"
                                                                   forIndexPath:indexPath];
             return cell;

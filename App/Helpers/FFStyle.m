@@ -27,20 +27,26 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 // COLORS --------------------------------------------------------------------------------------------------------------
 
++ (UIColor*)darkGrey
+{
+    return [UIColor colorWithWhite:71.f / 255.f
+                             alpha:1.f];
+}
+
 + (UIColor*)darkBlue
 {
-    return [UIColor colorWithRed:28.f / 255.f
-                           green:27.f / 255.f
-                            blue:163.f / 255.f
+    return [UIColor colorWithRed:0.f
+                           green:201.f / 255.f
+                            blue:120.f / 255.f
                            alpha:1.f];
 }
 
 + (UIColor*)darkGreen
 {
-    return [UIColor colorWithRed:51.0 / 255.0
-                           green:96.0 / 255.0
-                            blue:48.0 / 255.0
-                           alpha:1];
+    return [UIColor colorWithRed:62.f / 255.f
+                           green:111.f / 255.f
+                            blue:67.f / 255.f
+                           alpha:1.f];
 }
 
 + (UIColor*)white
@@ -56,18 +62,18 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 + (UIColor*)brightGreen
 {
-    return [UIColor colorWithRed:75.0 / 255.0
-                           green:172.0 / 255.0
-                            blue:69.0 / 255.0
+    return [UIColor colorWithRed:108.f / 255.f
+                           green:164.f / 255.f
+                            blue:81.f / 255.f
                            alpha:1];
 }
 
 + (UIColor*)brightBlue
 {
-    return [UIColor colorWithRed:59.0 / 255.0
-                           green:104.0 / 255.0
-                            blue:1
-                           alpha:1];
+    return [UIColor colorWithRed:41.f / 255.f
+                           green:95.f / 255.f
+                            blue:135.f / 255.f
+                           alpha:1.f];
 }
 
 + (UIColor*)lightGrey
@@ -83,14 +89,15 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 + (UIColor*)brightRed
 {
-    return [UIColor colorWithRed:190.0 / 255.0
-                           green:30.0 / 255.0
-                            blue:45.0 / 255.0
-                           alpha:1];
+    return [UIColor colorWithRed:242.f / 255.f
+                           green:68.f / 255.f
+                            blue:62.f / 255.f
+                           alpha:1.f];
 }
 
 + (UIColor*)yellowErrorColor
 {
+#warning YELLOW
     return [UIColor yellowColor]; // TODO: this
 }
 
@@ -102,8 +109,8 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 + (UIColor*)darkGreyTextColor
 {
-    return [UIColor colorWithWhite:.25
-                             alpha:1];
+    return [UIColor colorWithWhite:.25f
+                             alpha:1.f];
 }
 
 + (UIColor*)tableViewSeparatorColor
@@ -122,10 +129,10 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 + (UIColor*)brightOrange
 {
-    return [UIColor colorWithRed:246.0 / 255.0
-                           green:146.0 / 255.0
-                            blue:30.0 / 255.0
-                           alpha:1];
+    return [UIColor colorWithRed:1.f
+                           green:163.f / 255.f
+                            blue:42.f / 255.f
+                           alpha:1.f];
 }
 
 // FONTS ---------------------------------------------------------------------------------------------------------------
@@ -336,11 +343,27 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 }
 
 // customize uiappearance ----------------------------------------------------------------------------------------------
+
++ (UIImage *)imageWithColor:(UIColor*)color
+{
+    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return image;
+}
+
 + (void)customizeAppearance
 {
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"darkgreen.png"]
+    [[UINavigationBar appearance] setBackgroundImage:[self imageWithColor:[self darkGreen]]
                                        forBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"darkgreen.png"]
+    [[UINavigationBar appearance] setBackgroundImage:[self imageWithColor:[self darkGreen]]
                                        forBarMetrics:UIBarMetricsLandscapePhone];
 
     if ([[UINavigationBar appearance] respondsToSelector:@selector(setBarTintColor:)]) {
@@ -364,10 +387,10 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     }
     [[UIToolbar appearance] setTintColor:[FFStyle white]];
 
-    [[UIToolbar appearance] setBackgroundImage:[UIImage imageNamed:@"darkgreen.png"]
+    [[UIToolbar appearance] setBackgroundImage:[self imageWithColor:[self darkGreen]]
                             forToolbarPosition:UIToolbarPositionAny
                                     barMetrics:UIBarMetricsDefault];
-    [[UIToolbar appearance] setBackgroundImage:[UIImage imageNamed:@"darkgreen.png"]
+    [[UIToolbar appearance] setBackgroundImage:[self imageWithColor:[self darkGreen]]
                             forToolbarPosition:UIToolbarPositionAny
                                     barMetrics:UIBarMetricsLandscapePhone];
     // pager

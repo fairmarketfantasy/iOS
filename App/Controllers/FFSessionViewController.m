@@ -75,6 +75,7 @@
                 action:@selector(dismissKeyboard:)];
     _dismissKeyboardRecognizer.delegate = self;
     [self.view addGestureRecognizer:_dismissKeyboardRecognizer];
+    self.navigationController.navigationBar.translucent = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -179,6 +180,9 @@
                                                       color:[FFStyle brightGreen]
                                                 borderColor:[FFStyle white]];
     signInButton.frame = CGRectMake(15.f, 265.f, 290.f, 38.f);
+    signInButton.titleEdgeInsets = UIEdgeInsetsMake(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ?
+                                                    3.f : 5.5f,
+                                                    0.f, 0.f, 0.f);
     [signInButton addTarget:self
                      action:@selector(signIn:)
            forControlEvents:UIControlEventTouchUpInside];
@@ -191,6 +195,9 @@
                                                   color:[FFStyle brightBlue]
                                             borderColor:[FFStyle white]];
     fbSignIn.frame = CGRectMake(15.f, 315.f, 290.f, 38.f);
+    fbSignIn.titleEdgeInsets = UIEdgeInsetsMake(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ?
+                                                3.f : 5.5f,
+                                                0.f, 0.f, 0.f);
     [fbSignIn addTarget:self
                   action:@selector(signInFacebook:)
         forControlEvents:UIControlEventTouchUpInside];
@@ -230,6 +237,10 @@
 
 - (void)signIn:(id)sender
 {
+#warning for TESTING only >>>
+    [self performSegueWithIdentifier:@"GotoHome"
+                              sender:nil];
+#warning for TESTING only <<<
     // get/compile the regex we'll be using
     __strong static NSRegularExpression* regex = nil; // ???: rewrite
     if (regex == nil) {

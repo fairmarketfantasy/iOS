@@ -44,11 +44,6 @@
         _img.clipsToBounds = YES;
         [self.contentView addSubview:_img];
 
-        UIImageView* mask = [[UIImageView alloc] initWithFrame:CGRectMake(15, 11, 57, 57)];
-        mask.backgroundColor = [UIColor clearColor];
-        mask.image = [UIImage imageNamed:@"playerselectmask.png"];
-        [self addSubview:mask];
-
         _team = [[UILabel alloc] initWithFrame:CGRectMake(82, 32, 140, 16)];
         _team.backgroundColor = [UIColor clearColor];
         _team.font = [FFStyle regularFont:14];

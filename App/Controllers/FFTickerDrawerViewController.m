@@ -221,13 +221,7 @@
     img.contentMode = UIViewContentModeScaleAspectFit;
     [cell.contentView addSubview:img];
     [img setImageWithURL:[NSURL URLWithString:player[@"headshot_url"]]
-        placeholderImage:[UIImage imageNamed:@"helmet-placeholder.png"]];
-
-    UIImageView* overlay = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, itemHeight, itemHeight)];
-    overlay.contentMode = UIViewContentModeScaleAspectFit;
-    overlay.image = [UIImage imageNamed:@"player-cutout.png"];
-    overlay.backgroundColor = [UIColor clearColor];
-    [cell.contentView addSubview:overlay];
+        placeholderImage:[UIImage imageNamed:@"rosterslotempty"]];
 
     NSString* nameValue = [NSString stringWithFormat:@"%@ (%@)", player[@"name"], player[@"position"]];
     CGFloat namw = [nameValue sizeWithFont:[FFStyle regularFont:14.f]

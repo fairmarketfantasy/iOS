@@ -19,12 +19,17 @@
     self = [super initWithStyle:style
                 reuseIdentifier:reuseIdentifier];
     if (self) {
+        self.contentView.backgroundColor = [FFStyle white];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.segments = [[FUISegmentedControl alloc] initWithItems:[self gameTypes]];
+        self.segments.cornerRadius = 3.f;
+        self.segments.dividerColor = [FFStyle white];
+        self.segments.selectedFontColor = [FFStyle white];
+        self.segments.deselectedFontColor = [FFStyle white];
         self.segments.selectedFont = [FFStyle regularFont:14.f];
         self.segments.deselectedFont = [FFStyle regularFont:14.f];
         self.segments.deselectedColor = [FFStyle brightGreen];
-        self.segments.selectedColor = [UIColor darkGrayColor];
+        self.segments.selectedColor = [FFStyle darkGrey];
         self.segments.frame = CGRectMake(5.f, 16.f, 310.f, 30.f);
         self.segments.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.segments.selectedSegmentIndex = 0;

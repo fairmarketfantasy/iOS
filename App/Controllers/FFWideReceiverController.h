@@ -10,4 +10,6 @@
 
 @interface FFWideReceiverController : FFBaseViewController
 
+@property(nonatomic) UITableView* tableView;
+
 @end
