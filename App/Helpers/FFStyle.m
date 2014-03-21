@@ -249,9 +249,9 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     }
 }
 
-+ (UIButton*)coloredButtonWithText:(NSString*)text
-                             color:(UIColor*)color
-                       borderColor:(UIColor*)borderColor
++ (FFCustomButton*)coloredButtonWithText:(NSString*)text
+                                   color:(UIColor*)color
+                             borderColor:(UIColor*)borderColor
 {
     FFCustomButton* button = [FFCustomButton new];
     button.autoresizesSubviews = YES;

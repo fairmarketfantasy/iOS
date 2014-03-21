@@ -17,12 +17,12 @@
 #define LOG_FMT_STR(format, ...) [NSString stringWithFormat:(@"%s [Line %d] " format), \
                                                             __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__]
 #define DLog(format, ...) CFShow((__bridge CFStringRef)LOG_FMT_STR(format, ##__VA_ARGS__))
-#define NSLog(format, ...)                                                             \
-    {                                                                                  \
-        [[Ubertesters shared] UTLog:LOG_FMT_STR(format, ##__VA_ARGS__)                 \
-                          withLevel:UTLogLevelInfo];                                   \
-        DLog(format, ##__VA_ARGS__);                                                   \
-    }
-#
+//#define NSLog(format, ...)                                                             \
+//    {                                                                                  \
+//        [[Ubertesters shared] UTLog:LOG_FMT_STR(format, ##__VA_ARGS__)                 \
+//                          withLevel:UTLogLevelInfo];                                   \
+//        DLog(format, ##__VA_ARGS__);                                                   \
+//    }
+//#
 #define WTFLog NSLog(@"How did we even get here?")
 #endif

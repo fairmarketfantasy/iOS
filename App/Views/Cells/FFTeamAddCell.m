@@ -9,6 +9,7 @@
 #import "FFTeamAddCell.h"
 #import <FlatUIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import "FFStyle.h"
 
 @implementation FFTeamAddCell
 
@@ -32,7 +33,7 @@
         self.costLabel.adjustsFontSizeToFitWidth = YES;
         [self.contentView addSubview:self.costLabel];
         _PTButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"PT", nil)
-                                             color:[UIColor clearColor]
+                                             color:self.contentView.backgroundColor
                                        borderColor:[FFStyle brightBlue]];
         self.PTButton.frame = CGRectMake(222.f,
                                          20.f,

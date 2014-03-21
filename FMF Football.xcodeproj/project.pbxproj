@@ -153,6 +153,9 @@
 		89F1A09518DC81C4001369E3 /* GBPathImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A09418DC81C4001369E3 /* GBPathImageView.m */; };
 		89F1A09818DC87CB001369E3 /* loginbg-586h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09618DC87CB001369E3 /* loginbg-586h@2x.png */; };
 		89F1A09918DC87CB001369E3 /* loginbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09718DC87CB001369E3 /* loginbg.png */; };
+		89F1A09C18DCC951001369E3 /* FFPTController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A09B18DCC951001369E3 /* FFPTController.m */; };
+		89F1A09F18DCCABD001369E3 /* FFPTCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A09E18DCCABD001369E3 /* FFPTCell.m */; };
+		89F1A0A218DCCAE5001369E3 /* FFPTTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A0A118DCCAE5001369E3 /* FFPTTable.m */; };
 		89F2E70218BE249A00B23A99 /* accessory_check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E6FD18BE249A00B23A99 /* accessory_check@2x.png */; };
 		89F2E70318BE249A00B23A99 /* accessory_collapse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E6FE18BE249A00B23A99 /* accessory_collapse@2x.png */; };
 		89F2E70418BE249A00B23A99 /* accessory_disclosure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E6FF18BE249A00B23A99 /* accessory_disclosure@2x.png */; };
@@ -383,6 +386,12 @@
 		89F1A09418DC81C4001369E3 /* GBPathImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBPathImageView.m; sourceTree = "<group>"; };
 		89F1A09618DC87CB001369E3 /* loginbg-586h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginbg-586h@2x.png"; sourceTree = "<group>"; };
 		89F1A09718DC87CB001369E3 /* loginbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginbg.png; sourceTree = "<group>"; };
+		89F1A09A18DCC951001369E3 /* FFPTController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPTController.h; sourceTree = "<group>"; };
+		89F1A09B18DCC951001369E3 /* FFPTController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPTController.m; sourceTree = "<group>"; };
+		89F1A09D18DCCABD001369E3 /* FFPTCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPTCell.h; sourceTree = "<group>"; };
+		89F1A09E18DCCABD001369E3 /* FFPTCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPTCell.m; sourceTree = "<group>"; };
+		89F1A0A018DCCAE5001369E3 /* FFPTTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPTTable.h; sourceTree = "<group>"; };
+		89F1A0A118DCCAE5001369E3 /* FFPTTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPTTable.m; sourceTree = "<group>"; };
 		89F2E6FD18BE249A00B23A99 /* accessory_check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_check@2x.png"; sourceTree = "<group>"; };
 		89F2E6FE18BE249A00B23A99 /* accessory_collapse@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_collapse@2x.png"; sourceTree = "<group>"; };
 		89F2E6FF18BE249A00B23A99 /* accessory_disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_disclosure@2x.png"; sourceTree = "<group>"; };
@@ -610,6 +619,8 @@
 				89DE99EC18D2D1AF006A66C4 /* FFYourTeamController.m */,
 				8972767B18D93FBE008D995C /* FFWideReceiverController.h */,
 				8972767C18D93FBE008D995C /* FFWideReceiverController.m */,
+				89F1A09A18DCC951001369E3 /* FFPTController.h */,
+				89F1A09B18DCC951001369E3 /* FFPTController.m */,
 				896ACBF718B664F5001E9C64 /* FFHomeViewController.h */,
 				896ACBF818B664F5001E9C64 /* FFHomeViewController.m */,
 				896ACBED18B664F5001E9C64 /* FFContestEntrantsViewController.h */,
@@ -730,6 +741,8 @@
 				8951A32F18D08A9E0019384D /* FFEnterCell.m */,
 				8951A33018D08A9E0019384D /* FFEntrantsCell.h */,
 				8951A33118D08A9E0019384D /* FFEntrantsCell.m */,
+				89F1A09D18DCCABD001369E3 /* FFPTCell.h */,
+				89F1A09E18DCCABD001369E3 /* FFPTCell.m */,
 				89DE99F118D2D44D006A66C4 /* FFTeamCell.h */,
 				89DE99F218D2D44D006A66C4 /* FFTeamCell.m */,
 				890504D718D9FA44006CD2EA /* FFTeamAddCell.h */,
@@ -790,6 +803,8 @@
 				89D0309A18CF9F2800250D82 /* FFContestTable.m */,
 				89BED93218C7855C003E9E68 /* FFLogo.h */,
 				89BED93318C7855C003E9E68 /* FFLogo.m */,
+				89F1A0A018DCCAE5001369E3 /* FFPTTable.h */,
+				89F1A0A118DCCAE5001369E3 /* FFPTTable.m */,
 				89DE99EE18D2D3D9006A66C4 /* FFTeamTable.h */,
 				89DE99EF18D2D3D9006A66C4 /* FFTeamTable.m */,
 				8972767E18D94920008D995C /* FFWideReceiverTable.h */,
@@ -965,11 +980,13 @@
 				8961095818D1CD4F006BCFA4 /* FFPagerController.m in Sources */,
 				896ACCFD18B664F5001E9C64 /* FFBubblePicker.m in Sources */,
 				896ACD0118B664F5001E9C64 /* FFGameButtonView.m in Sources */,
+				89F1A09F18DCCABD001369E3 /* FFPTCell.m in Sources */,
 				896ACD0518B664F5001E9C64 /* FFNavigationBarItemView.m in Sources */,
 				896ACCB118B664F5001E9C64 /* FFContestViewController.m in Sources */,
 				89470EC218BF694200E405EF /* FFMenuCell.m in Sources */,
 				896ACCE718B664F5001E9C64 /* FFContestType.m in Sources */,
 				896ACCBD18B664F5001E9C64 /* FFMenuViewController.m in Sources */,
+				89F1A0A218DCCAE5001369E3 /* FFPTTable.m in Sources */,
 				896ACCEF18B664F5001E9C64 /* FFSession.m in Sources */,
 				896ACCE518B664F5001E9C64 /* main.m in Sources */,
 				896ACCD718B664F5001E9C64 /* FFStyle.m in Sources */,
@@ -987,6 +1004,7 @@
 				89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */,
 				896ACCC118B664F5001E9C64 /* FFNavigationController.m in Sources */,
 				896ACCF318B664F5001E9C64 /* FFContest2UpTabelViewCell.m in Sources */,
+				89F1A09C18DCC951001369E3 /* FFPTController.m in Sources */,
 				8972768318D9559D008D995C /* FFWideReceiverCell.m in Sources */,
 				890504DF18DA0C3A006CD2EA /* FFAutoFillCell.m in Sources */,
 				896ACCD318B664F5001E9C64 /* FFWebViewController.m in Sources */,

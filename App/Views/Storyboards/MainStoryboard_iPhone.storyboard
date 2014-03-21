@@ -133,6 +133,25 @@
             </objects>
             <point key="canvasLocation" x="-141" y="1716"/>
         </scene>
+        <!--Controller-->
+        <scene sceneID="ii7-q2-cYv">
+            <objects>
+                <viewController id="PAh-XD-0Ot" customClass="FFPTController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ohs-r9-65y"/>
+                        <viewControllerLayoutGuide type="bottom" id="hbN-td-Zvd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xvO-qp-JqU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="6qT-Cf-Bc5"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="60j-FL-1pg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="109" y="2502"/>
+        </scene>
         <!--Menu View Controller-->
         <scene sceneID="hUz-sI-4u7">
             <objects>
@@ -158,6 +177,7 @@
                     <navigationItem key="navigationItem" id="zBW-Xq-ahA"/>
                     <connections>
                         <segue destination="cHy-en-DdB" kind="modal" identifier="GotoMenu" id="Rnj-Jy-KDQ"/>
+                        <segue destination="PAh-XD-0Ot" kind="push" identifier="GotoPT" id="VKf-XQ-Fws"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XAd-9T-CuK" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -7,6 +7,7 @@
 //
 
 #import "FFTeamCell.h"
+#import "FFStyle.h"
 
 @interface FFTeamCell ()
 

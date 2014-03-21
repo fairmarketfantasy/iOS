@@ -12,6 +12,7 @@
 #import <FlatUIKit.h>
 #import "FFRosterTableHeader.h"
 #import "FFTeamAddCell.h"
+#import "FFStyle.h"
 
 @interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -68,6 +69,12 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
     cell.titleLabel.text = NSLocalizedString(@"Team: NYG PPG: 11.56", nil);
     cell.nameLabel.text = NSLocalizedString(@"Victor Cruz", nil);
     cell.costLabel.text = NSLocalizedString(@"$17287.0", nil);
+    __block FFWideReceiverController* blockSelf = self;
+    [cell.PTButton setAction:kUIButtonBlockTouchUpInside
+                   withBlock:^{
+                       [blockSelf.parentViewController performSegueWithIdentifier:@"GotoPT"
+                                                                           sender:nil];
+                   }];
     return cell;
 }
 
