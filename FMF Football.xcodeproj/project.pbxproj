@@ -18,6 +18,7 @@
 		15CD295517F7804A0027DFEC /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295317F7804A0027DFEC /* AddressBook.framework */; };
 		15CD295617F7804A0027DFEC /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295417F7804A0027DFEC /* AddressBookUI.framework */; };
 		61A0C8A5904D4788A81F9EA6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A0D11613844A1D9BF1BC9E /* libPods.a */; };
+		890126B918E04F7100C27299 /* FFPTHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 890126B818E04F7100C27299 /* FFPTHeader.m */; };
 		890504CF18D9EEC7006CD2EA /* AnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 890504CC18D9EEC7006CD2EA /* AnimatedTransitioning.m */; };
 		890504D018D9EEC7006CD2EA /* TransitionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 890504CE18D9EEC7006CD2EA /* TransitionDelegate.m */; };
 		890504DB18D9FA44006CD2EA /* FFTeamAddCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 890504D818D9FA44006CD2EA /* FFTeamAddCell.m */; };
@@ -176,6 +177,8 @@
 		15A2379E17E2865A00225942 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		15CD295317F7804A0027DFEC /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		15CD295417F7804A0027DFEC /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		890126B718E04F7100C27299 /* FFPTHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPTHeader.h; sourceTree = "<group>"; };
+		890126B818E04F7100C27299 /* FFPTHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPTHeader.m; sourceTree = "<group>"; };
 		890504CB18D9EEC7006CD2EA /* AnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedTransitioning.h; sourceTree = "<group>"; };
 		890504CC18D9EEC7006CD2EA /* AnimatedTransitioning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimatedTransitioning.m; sourceTree = "<group>"; };
 		890504CD18D9EEC7006CD2EA /* TransitionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransitionDelegate.h; sourceTree = "<group>"; };
@@ -803,6 +806,8 @@
 				89D0309A18CF9F2800250D82 /* FFContestTable.m */,
 				89BED93218C7855C003E9E68 /* FFLogo.h */,
 				89BED93318C7855C003E9E68 /* FFLogo.m */,
+				890126B718E04F7100C27299 /* FFPTHeader.h */,
+				890126B818E04F7100C27299 /* FFPTHeader.m */,
 				89F1A0A018DCCAE5001369E3 /* FFPTTable.h */,
 				89F1A0A118DCCAE5001369E3 /* FFPTTable.m */,
 				89DE99EE18D2D3D9006A66C4 /* FFTeamTable.h */,
@@ -987,6 +992,7 @@
 				896ACCE718B664F5001E9C64 /* FFContestType.m in Sources */,
 				896ACCBD18B664F5001E9C64 /* FFMenuViewController.m in Sources */,
 				89F1A0A218DCCAE5001369E3 /* FFPTTable.m in Sources */,
+				890126B918E04F7100C27299 /* FFPTHeader.m in Sources */,
 				896ACCEF18B664F5001E9C64 /* FFSession.m in Sources */,
 				896ACCE518B664F5001E9C64 /* main.m in Sources */,
 				896ACCD718B664F5001E9C64 /* FFStyle.m in Sources */,

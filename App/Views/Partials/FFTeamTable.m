@@ -11,6 +11,7 @@
 #import "FFMarketsCell.h"
 #import "FFAutoFillCell.h"
 #import "FFAccountHeader.h"
+#import "FFStyle.h"
 
 @implementation FFTeamTable
 

@@ -137,43 +137,43 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 // FONTS ---------------------------------------------------------------------------------------------------------------
 
-+ (UIFont*)blockFont:(int)size
++ (UIFont*)blockFont:(CGFloat)size
 {
     return [UIFont fontWithName:@"Prohibition-Bold"
                            size:size];
 }
 
-+ (UIFont*)italicBlockFont:(int)size
++ (UIFont*)italicBlockFont:(CGFloat)size
 {
     return [UIFont fontWithName:@"Prohibition-BoldItalic"
                            size:size];
 }
 
-+ (UIFont*)regularFont:(int)size
++ (UIFont*)regularFont:(CGFloat)size
 {
     return [UIFont fontWithName:@"HelveticaNeue-Light"
                            size:size];
 }
 
-+ (UIFont*)italicFont:(int)size
++ (UIFont*)italicFont:(CGFloat)size
 {
     return [UIFont fontWithName:@"HelveticaNeue-LightItalic"
                            size:size];
 }
 
-+ (UIFont*)lightFont:(int)size
++ (UIFont*)lightFont:(CGFloat)size
 {
     return [UIFont fontWithName:@"HelveticaNeue-UltraLight"
                            size:size];
 }
 
-+ (UIFont*)boldFont:(int)size
++ (UIFont*)boldFont:(CGFloat)size
 {
     return [UIFont fontWithName:@"HelveticaNeue-Bold"
                            size:size];
 }
 
-+ (UIFont*)mediumFont:(int)size
++ (UIFont*)mediumFont:(CGFloat)size
 {
     return [UIFont fontWithName:@"HelveticaNeue-Medium"
                            size:size];

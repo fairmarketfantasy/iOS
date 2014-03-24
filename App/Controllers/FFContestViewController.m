@@ -22,6 +22,7 @@
 #import "FFContestCell.h"
 #import "FFEnterCell.h"
 #import "FFEntrantsCell.h"
+#import <libextobjc/EXTScope.h>
 
 @interface FFContestViewController () <UITableViewDataSource,
                                        UITableViewDelegate,
@@ -587,29 +588,31 @@ failure:
                                                    messsage:nil
                                                loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
-    __block FFContestViewController* blockSelf = self;
+    @weakify(self)
     [_roster addPlayer:cell.player
             toPosition:self.currentPickPlayer
                success:^(id successObj)
     {
+        @strongify(self)
         [alert hide];
-        if (blockSelf->_delegate
-            && [blockSelf->_delegate respondsToSelector:@selector(contestController:
+        if (self->_delegate
+            && [self->_delegate respondsToSelector:@selector(contestController:
                                                                       didPickPlayer:)]) {
-            [blockSelf->_delegate contestController:blockSelf
+            [self->_delegate contestController:self
                                       didPickPlayer:cell.player];
         }
     }
 failure:
     ^(NSError * error)
     {
+        @strongify(self)
         [alert hide];
         FFAlertView* eAlert = [[FFAlertView alloc] initWithError:error
                                                            title:nil
                                                cancelButtonTitle:nil
                                                  okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                                         autoHide:YES];
-        [eAlert showInView:blockSelf.view];
+        [eAlert showInView:self.view];
     }];
 }
 

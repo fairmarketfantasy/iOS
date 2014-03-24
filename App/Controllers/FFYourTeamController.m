@@ -136,7 +136,7 @@
 viewForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
-        FFRosterTableHeader* view = [FFRosterTableHeader new];
+        FFRosterTableHeader* view = FFRosterTableHeader.new;
         view.titleLabel.text = NSLocalizedString(@"Your Team", nil);
         view.priceLabel.text = NSLocalizedString(@"$-100000", nil);
         view.priceLabel.textColor = [FFStyle brightRed];

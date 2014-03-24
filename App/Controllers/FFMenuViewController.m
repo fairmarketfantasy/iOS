@@ -13,6 +13,7 @@
 #import "FFMenuCell.h"
 #import "FFLogo.h"
 #import "TransitionDelegate.h"
+#import <libextobjc/EXTScope.h>
 
 @interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate>
 
@@ -315,24 +316,27 @@
     if (item.type != FFNodeItemTypeLeaf || item.action) {
         return;
     }
-    __block FFMenuViewController* blockSelf = self;
+    @weakify(self)
     if ([item.title isEqualToString:@"NBA"]) {
         item.action = ^{
-            if ([blockSelf.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-                [blockSelf.delegate didUpdateToNewSport:FFMarketSportNBA];
+            @strongify(self)
+            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
+                [self.delegate didUpdateToNewSport:FFMarketSportNBA];
             }
         };
     } else if ([item.title isEqualToString:@"NFL"]) {
         item.action = ^{
-            if ([blockSelf.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-                [blockSelf.delegate didUpdateToNewSport:FFMarketSportNFL];
+            @strongify(self)
+            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
+                [self.delegate didUpdateToNewSport:FFMarketSportNFL];
             }
         };
     } else {
         __block FFNodeItem* blockItem = item;
         item.action = ^{
-            if (blockSelf.delegate) {
-                [blockSelf.delegate performMenuSegue:blockSelf.segueByTitle[blockItem.title]];
+            @strongify(self)
+            if (self.delegate) {
+                [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
             }
         };
     }

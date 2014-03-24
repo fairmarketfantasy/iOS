@@ -35,8 +35,8 @@
     self = [super initWithStyle:style
                 reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.contentView.backgroundColor = [UIColor colorWithWhite:.94
-                                                             alpha:1];
+        self.contentView.backgroundColor = [UIColor colorWithWhite:.94f
+                                                             alpha:1.f];
         _img = [[UIImageView alloc] initWithFrame:CGRectMake(15, 11, 57, 57)];
         _img.backgroundColor = [UIColor clearColor];
         _img.image = [UIImage imageNamed:@"rosterslotempty"];

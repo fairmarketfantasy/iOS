@@ -37,13 +37,13 @@
 + (UIColor*)brightOrange;
 + (UIColor*)tableViewSectionHeaderColor;
 
-+ (UIFont*)blockFont:(int)size;
-+ (UIFont*)italicBlockFont:(int)size;
-+ (UIFont*)regularFont:(int)size;
-+ (UIFont*)italicFont:(int)size;
-+ (UIFont*)lightFont:(int)size;
-+ (UIFont*)boldFont:(int)size;
-+ (UIFont*)mediumFont:(int)size;
++ (UIFont*)blockFont:(CGFloat)size;
++ (UIFont*)italicBlockFont:(CGFloat)size;
++ (UIFont*)regularFont:(CGFloat)size;
++ (UIFont*)italicFont:(CGFloat)size;
++ (UIFont*)lightFont:(CGFloat)size;
++ (UIFont*)boldFont:(CGFloat)size;
++ (UIFont*)mediumFont:(CGFloat)size;
 
 + (UIColor*)lighterColorForColor:(UIColor*)c;
 + (UIColor*)darkerColorForColor:(UIColor*)c;

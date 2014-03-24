@@ -47,6 +47,9 @@ PODS:
   - GCJSONKit (1.5.0)
   - IAPManager (0.2.3)
   - ISO8601DateFormatter (0.7)
+  - libextobjc/EXTScope (0.4):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/RuntimeExtensions (0.4)
   - NSData+Base64 (1.0.0)
   - RATreeView (0.2.0)
   - Reachability (3.0.0)
@@ -74,6 +77,7 @@ DEPENDENCIES:
   - FormatterKit (~> 1.2.1)
   - IAPManager (~> 0.2.2)
   - ISO8601DateFormatter (~> 0.6)
+  - libextobjc/EXTScope (~> 0.4)
   - NSData+Base64 (~> 1.0.0)
   - RATreeView (~> 0.2.0)
   - Reachability (~> 3.0.0)
@@ -91,7 +95,7 @@ SPEC CHECKSUMS:
   AFHTTPRequestOperationLogger: c6ad1f4bfd64fc9a8dbe94c8489420d195f15cb0
   AFNetworking: 61fdd49e2ffe6380378df37b3b6e70630bb9dd66
   AFOAuth2Client: 579d6f298b0047dfd5a6eec6ab5b28c01f6b4547
-  BlocksKit: 1b106f407a11997fd79e1da31453758e51277613
+  BlocksKit: c10ccd83f4027d6a0af928d55d20e03b9280f73d
   Facebook-iOS-SDK: 5788541337dc88265bc940cb5ffb05915f9b64e3
   FlatUIKit: 43b2acaa6f4ef57539b51b00e4ce62d506e33e11
   FMDB: 97472cfacf0d9e445e915704fb43b4b142799c36
@@ -99,6 +103,7 @@ SPEC CHECKSUMS:
   GCJSONKit: af54b753897015ab02c0f76a01e121f0053426af
   IAPManager: 457e0007440e6ce81e7a6b16031c860bffac8d82
   ISO8601DateFormatter: 00944e437ea647f4244454ce8809d313861d08de
+  libextobjc: 2c9fc8226f0f38e562587f65172f93f0c9b4a47a
   NSData+Base64: 4819562faee4544e3cf5703f2139820b09732b28
   RATreeView: fe5d5a7d6bdff3bdd63921b3f94503cda8788f1a
   Reachability: 500bd76bf6cd8ff2c6fb715fc5f44ef6e4c024f2

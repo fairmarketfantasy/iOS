@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class FUISegmentedControl;
+
 @interface FFPTCell : UITableViewCell
+
+@property(nonatomic, readonly) FUISegmentedControl* segments;
+@property(nonatomic, readonly) UILabel* titleLabel;
 
 @end
