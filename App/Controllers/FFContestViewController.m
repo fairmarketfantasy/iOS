@@ -68,12 +68,12 @@
     }
     _tableView.delegate = self;
     _tableView.dataSource = self;
-
-    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
-    [balanceView addTarget:self
-                    action:@selector(showBalance:)
-          forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
+//
+//    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
+//    [balanceView addTarget:self
+//                    action:@selector(showBalance:)
+//          forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
 }
 
 - (void)viewWillAppear:(BOOL)animated

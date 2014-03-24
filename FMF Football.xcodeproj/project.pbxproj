@@ -108,7 +108,6 @@
 		896ACCF518B664F5001E9C64 /* FFPlayerSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 896ACC3618B664F5001E9C64 /* FFPlayerSelectCell.m */; };
 		896ACCF718B664F5001E9C64 /* FFRosterSlotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 896ACC3818B664F5001E9C64 /* FFRosterSlotCell.m */; };
 		896ACCF918B664F5001E9C64 /* FFAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 896ACC3B18B664F5001E9C64 /* FFAlertView.m */; };
-		896ACCFB18B664F5001E9C64 /* FFBalanceButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 896ACC3D18B664F5001E9C64 /* FFBalanceButton.m */; };
 		896ACCFD18B664F5001E9C64 /* FFBubblePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 896ACC3F18B664F5001E9C64 /* FFBubblePicker.m */; };
 		896ACCFF18B664F5001E9C64 /* FFContestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 896ACC4118B664F5001E9C64 /* FFContestView.m */; };
 		896ACD0118B664F5001E9C64 /* FFGameButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 896ACC4318B664F5001E9C64 /* FFGameButtonView.m */; };
@@ -195,6 +194,7 @@
 		89051CBA18BFC253001E8C78 /* FFMarketSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMarketSet.m; sourceTree = "<group>"; };
 		89314A7518C8C2B80048E00F /* FFRosterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterCell.h; sourceTree = "<group>"; };
 		89314A7618C8C2B80048E00F /* FFRosterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterCell.m; sourceTree = "<group>"; };
+		893D27A818E0A14500899094 /* FFControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFControllerProtocol.h; sourceTree = "<group>"; };
 		89470EC018BF694200E405EF /* FFMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMenuCell.h; sourceTree = "<group>"; };
 		89470EC118BF694200E405EF /* FFMenuCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMenuCell.m; sourceTree = "<group>"; };
 		8951A32A18D08A9E0019384D /* FFBannerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFBannerCell.h; sourceTree = "<group>"; };
@@ -321,8 +321,6 @@
 		896ACC3818B664F5001E9C64 /* FFRosterSlotCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterSlotCell.m; sourceTree = "<group>"; };
 		896ACC3A18B664F5001E9C64 /* FFAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFAlertView.h; sourceTree = "<group>"; };
 		896ACC3B18B664F5001E9C64 /* FFAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFAlertView.m; sourceTree = "<group>"; };
-		896ACC3C18B664F5001E9C64 /* FFBalanceButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFBalanceButton.h; sourceTree = "<group>"; };
-		896ACC3D18B664F5001E9C64 /* FFBalanceButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFBalanceButton.m; sourceTree = "<group>"; };
 		896ACC3E18B664F5001E9C64 /* FFBubblePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFBubblePicker.h; sourceTree = "<group>"; };
 		896ACC3F18B664F5001E9C64 /* FFBubblePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFBubblePicker.m; sourceTree = "<group>"; };
 		896ACC4018B664F5001E9C64 /* FFContestView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFContestView.h; sourceTree = "<group>"; };
@@ -683,6 +681,7 @@
 				890504CE18D9EEC7006CD2EA /* TransitionDelegate.m */,
 				89F1A09318DC81C4001369E3 /* GBPathImageView.h */,
 				89F1A09418DC81C4001369E3 /* GBPathImageView.m */,
+				893D27A818E0A14500899094 /* FFControllerProtocol.h */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -769,8 +768,6 @@
 			children = (
 				896ACC3A18B664F5001E9C64 /* FFAlertView.h */,
 				896ACC3B18B664F5001E9C64 /* FFAlertView.m */,
-				896ACC3C18B664F5001E9C64 /* FFBalanceButton.h */,
-				896ACC3D18B664F5001E9C64 /* FFBalanceButton.m */,
 				896ACC3E18B664F5001E9C64 /* FFBubblePicker.h */,
 				896ACC3F18B664F5001E9C64 /* FFBubblePicker.m */,
 				896ACC4018B664F5001E9C64 /* FFContestView.h */,
@@ -1042,7 +1039,6 @@
 				890504DB18D9FA44006CD2EA /* FFTeamAddCell.m in Sources */,
 				896ACD0718B664F5001E9C64 /* FFTextField.m in Sources */,
 				89DE99F618D34638006A66C4 /* FFMarketsCell.m in Sources */,
-				896ACCFB18B664F5001E9C64 /* FFBalanceButton.m in Sources */,
 				8951A33218D08A9E0019384D /* FFBannerCell.m in Sources */,
 				896ACCB318B664F5001E9C64 /* FFCreateGameViewController.m in Sources */,
 				896ACCAD18B664F5001E9C64 /* FFBaseViewController.m in Sources */,

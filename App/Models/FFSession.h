@@ -9,12 +9,14 @@
 #import <SBSession.h>
 #import "FFUser.h"
 
-#define FFDidReceiveRemoteNotificationAuthorization @"gotpushtoken"
-#define FFDidReceiveRemoteNotification @"gotpush"
+extern NSString* const FFDidReceiveRemoteNotificationAuthorization;
+extern NSString* const FFDidReceiveRemoteNotification;
+extern NSString* const FFSessionDidUpdateUserNotification;
+extern NSString* const FFUserKey;
 
 @interface FFSession : SBSession
 
-@property(nonatomic) FFUser* user;
+@property(nonatomic, readonly) FFUser* user;
 @property(nonatomic) SBSessionData* sessionData;
 
 - (void)registerAndLoginUsingFBAccessToken:(NSString*)accessToken
@@ -22,5 +24,16 @@
                                    success:(SBSuccessBlock)success
                                    failure:(SBErrorBlock)failure;
 - (void)clearCredentials;
+
+#pragma mark -
+
+- (void)pollUser;
+
+/**
+ * updates a user immediately
+ * eg the user just bought some tokens,
+ * or an in-progress roster changed
+ */
+- (void)updateUserNow;
 
 @end

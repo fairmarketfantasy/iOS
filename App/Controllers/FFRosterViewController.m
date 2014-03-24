@@ -46,11 +46,11 @@
                                                                           metrics:nil
                                                                             views:viewsDictionary]];
     }
-    FFBalanceButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
-    [balanceView addTarget:self
-                    action:@selector(showBalance:)
-          forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
+//    FFBalanceButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
+//    [balanceView addTarget:self
+//                    action:@selector(showBalance:)
+//          forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
 }
 
 - (void)viewWillAppear:(BOOL)animated

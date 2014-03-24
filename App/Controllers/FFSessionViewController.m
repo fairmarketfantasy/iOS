@@ -100,7 +100,7 @@
         [self.tickerDataSource refresh];
         return;
     }
-    [self pollUser];
+    [self.session pollUser];
     [self.session syncPushToken];
     [self performSegueWithIdentifier:@"GoImmediatelyToHome"
                               sender:nil];
@@ -237,10 +237,6 @@
 
 - (void)signIn:(id)sender
 {
-#warning for TESTING only >>>
-    [self performSegueWithIdentifier:@"GotoHome"
-                              sender:nil];
-#warning for TESTING only <<<
     // get/compile the regex we'll be using
     __strong static NSRegularExpression* regex = nil; // ???: rewrite
     if (regex == nil) {
@@ -293,7 +289,7 @@
         [progressAlert hide];
         [[self.view findFirstResponder] resignFirstResponder];
         self.session = sesh;
-        [self pollUser];
+        [self.session pollUser];
         [self.session syncPushToken];
         [FFSession setLastUsedSession:sesh];
         [self performSegueWithIdentifier:@"GotoHome"
@@ -304,7 +300,7 @@ failure:
     ^(NSError * err)
     {
         [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"SignInError: %@", err]
-                              level:@"error"];
+                          withLevel:UTLogLevelError];
         [progressAlert hide];
         [[[FFAlertView alloc] initWithError:err
                                       title:nil
@@ -321,8 +317,11 @@ failure:
                               sender:nil];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
+- (void)prepareForSegue:(UIStoryboardSegue*)segue
+                 sender:(id)sender
 {
+    [super prepareForSegue:segue
+                    sender:sender];
     if ([segue.identifier isEqualToString:@"GotoForgotPassword"]) {
         NSString* baseUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:SBApiBaseURLKey];
         FFWebViewController* vc = [segue.destinationViewController viewControllers][0];
@@ -363,7 +362,7 @@ failure:
         return;
     }
     [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"FBSessionError: %@", error]
-                          level:@"error"];
+                      withLevel:UTLogLevelError];
     [[[UIAlertView alloc]
              initWithTitle:@"Error"
                    message:error.localizedDescription
@@ -383,7 +382,7 @@ failure:
     {
         if (error) {
             [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"FBGetMeError: %@", error]
-                                  level:@"error"];
+                              withLevel:UTLogLevelError];
             [alert hide];
             FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
                                                                title:nil
@@ -396,7 +395,7 @@ failure:
         if (!result[@"email"] || [result[@"email"] isEqual:[NSNull null]]) {
             [alert hide];
             [[Ubertesters shared] UTLog:@"FBNoEmailError: There was no email for a provided account"
-                                  level:@"error"];
+                              withLevel:UTLogLevelError];
             FFAlertView* ealert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil)
                                                              message:NSLocalizedString(@"The provided Facebook account does not have a verified email address associated with it. It could be a new account, to which Facebook does not yet give us access to the email. For now, you'll have to use a regular username and password to create an account.", nil)
                                                    cancelButtonTitle:nil
@@ -414,7 +413,7 @@ failure:
             [[self.view findFirstResponder] resignFirstResponder];
             [FFSession setLastUsedSession:sesh];
             self.session = sesh;
-            [self pollUser];
+            [self.session pollUser];
             [self.session syncPushToken];
             [self performSegueWithIdentifier:@"GotoHome"
                                       sender:nil];
@@ -423,7 +422,7 @@ failure:
         ^(NSError * error)
         {
             [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"FBRegisterOAuthError: %@", error]
-                                  level:@"error"];
+                              withLevel:UTLogLevelError];
             [alert hide];
             FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
                                                                title:nil
@@ -435,8 +434,7 @@ failure:
     }];
 }
 
-#pragma mark -
-// GESTURE RECOGNIZER --------------------------------------------------------------------------------------------------
+#pragma mark - gestures
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer
        shouldReceiveTouch:(UITouch*)touch
@@ -449,8 +447,7 @@ failure:
     [[self.view findFirstResponder] resignFirstResponder];
 }
 
-#pragma mark -
-// TEXT FIELDS ---------------------------------------------------------------------------------------------------------
+#pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField*)textField
 {
@@ -475,7 +472,7 @@ failure:
     return YES;
 }
 
-#pragma mark -
+#pragma mark - notifications callback
 
 - (void)keyboardWillShow:(NSNotification*)note
 {
@@ -519,111 +516,6 @@ failure:
                          self.navigationController.navigationBarHidden = NO;
                          self.container.frame = viewFrame;
                      }];
-}
-
-#pragma mark -
-// session controller stuff --------------------------------------------------------------------------------------------
-
-- (NSInteger)balanceViewGetBalance:(FFBalanceButton*)view
-{
-    FFUser* user = (FFUser*)self.session.user;
-    return [user.tokenBalance integerValue];
-}
-
-- (void)pollUser
-{
-    [self.session syncUserSuccess:^(id successObj)
-    {
-        FFUser* user = successObj;
-
-        [[NSNotificationCenter defaultCenter] postNotificationName:FFSessionDidUpdateUserNotification
-                                                            object:nil
-                                                          userInfo:@{
-                                                                       FFUserKey : user
-                                                                   }];
-
-        double delayInSeconds = 10.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-            [self pollUser];
-        });
-    }
-failure:
-    ^(NSError * error)
-    {
-        double delayInSeconds = 10.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-            [self pollUser];
-        });
-    }];
-}
-
-- (void)updateUserNow
-{
-    [self.session syncUserSuccess:^(id successObj)
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:FFSessionDidUpdateUserNotification
-                                                            object:nil
-                                                          userInfo:@{
-                                                                       FFUserKey : successObj
-                                                                   }];
-    }
-failure:
-    ^(NSError * error)
-    {
-        NSLog(@"failed to get user");
-    }];
-}
-
-@end
-
-#pragma mark -
-
-@implementation UIViewController (FFSessionController)
-
-- (FFSessionViewController*)sessionController
-{
-    return [self lookForSessionController:self];
-}
-
-- (FFSessionViewController*)lookForSessionController:(UIViewController*)vc
-{
-    if ([vc isKindOfClass:[FFSessionViewController class]]) {
-        return (FFSessionViewController*)vc;
-    }
-    if (vc.parentViewController) {
-        id ret = [self lookForSessionController:vc.parentViewController];
-        if (ret) {
-            return ret;
-        }
-    }
-    if (vc.presentingViewController) {
-        id ret = [self lookForSessionController:vc.presentingViewController];
-        if (ret) {
-            return ret;
-        }
-    }
-    UINavigationController* navVc = nil;
-    if (vc.navigationController) {
-        navVc = vc.navigationController;
-    } else if ([vc isKindOfClass:[UINavigationController class]]) {
-        navVc = (UINavigationController*)vc;
-    }
-    if (navVc) {
-        for (UIViewController* nvc in navVc.viewControllers) {
-            id ret = [self lookForSessionController:nvc];
-            if (ret) {
-                return ret;
-            }
-        }
-    }
-    return nil;
-}
-
-- (FFSession*)session
-{
-    return self.sessionController.session;
 }
 
 @end

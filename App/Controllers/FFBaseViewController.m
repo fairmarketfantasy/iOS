@@ -10,6 +10,9 @@
 #import "FFStyle.h"
 #import "FFSessionViewController.h"
 #import "FFLogo.h"
+#import "FFControllerProtocol.h"
+
+// TODO: move DRAWER into completely separate class
 
 @interface FFDrawerBackingView : UIView
 
@@ -378,72 +381,72 @@
     }];
 }
 
-- (void)showMenuController
-{
-    if (_menuController) {
-        NSLog(@"already showing a menu controller");
-        return;
-    }
-    _menuController = [FFMenuViewController new];
-    _menuController.delegate = self;
-    _menuController.session = (FFSession*)self.session;
-    _menuController.view.frame = CGRectMake(0.f, CGRectGetMaxY(self.view.frame),
-                                            self.view.frame.size.width, self.view.frame.size.height);
-    [_menuController viewDidLoad];
-    [_menuController viewWillAppear:YES];
-    _menuController.view.alpha = 0.f;
-    [self.view addSubview:_menuController.view];
+//- (void)showMenuController
+//{
+//    if (_menuController) {
+//        NSLog(@"already showing a menu controller");
+//        return;
+//    }
+//    _menuController = [FFMenuViewController new];
+//    _menuController.delegate = self;
+//    _menuController.session = (FFSession*)self.session;
+//    _menuController.view.frame = CGRectMake(0.f, CGRectGetMaxY(self.view.frame),
+//                                            self.view.frame.size.width, self.view.frame.size.height);
+//    [_menuController viewDidLoad];
+//    [_menuController viewWillAppear:YES];
+//    _menuController.view.alpha = 0.f;
+//    [self.view addSubview:_menuController.view];
+//
+//    CGFloat topOffset = 0;
+//    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
+//        topOffset = self.topLayoutGuide.length;
+//    }
+//    [UIView animateWithDuration: .25f
+//                     animations: ^{
+//        _menuController.view.alpha = 1.f;
+//        _menuController.view.frame = CGRectMake(0.f, topOffset, self.view.frame.size.width, self.view.frame.size.height);
+//    }
+//                     completion: ^(BOOL finished)
+//    {
+//        if (finished) {
+//            [_menuController viewDidAppear:YES];
+//        }
+//    }];
+//}
 
-    CGFloat topOffset = 0;
-    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
-        topOffset = self.topLayoutGuide.length;
-    }
-    [UIView animateWithDuration: .25f
-                     animations: ^{
-        _menuController.view.alpha = 1.f;
-        _menuController.view.frame = CGRectMake(0.f, topOffset, self.view.frame.size.width, self.view.frame.size.height);
-    }
-                     completion: ^(BOOL finished)
-    {
-        if (finished) {
-            [_menuController viewDidAppear:YES];
-        }
-    }];
-}
+//- (void)hideMenuController
+//{
+//    if (!_menuController) {
+//        NSLog(@"tried to hide the menu controller there's nothing to hide");
+//        return;
+//    }
+//    [_menuController viewWillDisappear:YES];
+//    [UIView animateWithDuration:.25f
+//                     animations:^{
+//        _menuController.view.alpha = 0.f;
+//        _menuController.view.frame = CGRectMake(0.f, CGRectGetMaxY(self.view.frame),
+//                                                self.view.frame.size.width, self.view.frame.size.height);
+//    }
+//                     completion:^(BOOL finished)
+//    {
+//        [_menuController viewDidDisappear:YES];
+//        [_menuController.view removeFromSuperview];
+//        _menuController = nil;
+//    }];
+//}
 
-- (void)hideMenuController
-{
-    if (!_menuController) {
-        NSLog(@"tried to hide the menu controller there's nothing to hide");
-        return;
-    }
-    [_menuController viewWillDisappear:YES];
-    [UIView animateWithDuration:.25f
-                     animations:^{
-        _menuController.view.alpha = 0.f;
-        _menuController.view.frame = CGRectMake(0.f, CGRectGetMaxY(self.view.frame),
-                                                self.view.frame.size.width, self.view.frame.size.height);
-    }
-                     completion:^(BOOL finished)
-    {
-        [_menuController viewDidDisappear:YES];
-        [_menuController.view removeFromSuperview];
-        _menuController = nil;
-    }];
-}
-
-#pragma mark - FFMenuViewControllerDelegate
-
-- (void)performMenuSegue:(NSString*)ident
-{
-    if (!self.menuController) {
-        WTFLog;
-        return;
-    }
-    [self hideMenuController];
-    [self performSegueWithIdentifier:ident
-                              sender:self.menuController];
-}
+//#pragma mark - FFMenuViewControllerDelegate
+//
+//- (void)performMenuSegue:(NSString*)ident
+//{
+//    if (!self.menuController) {
+//        WTFLog;
+//        return;
+//    }
+//    [self hideMenuController];
+//    [self performSegueWithIdentifier:ident
+//                              sender:self.menuController];
+//}
 
 #pragma mark - Ticker
 
@@ -477,6 +480,8 @@
     return _minimizedTicker;
 }
 
+#pragma mark - LifeCycle
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -495,6 +500,15 @@
 - (NSUInteger)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationPortrait;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue
+                 sender:(id)sender
+{
+    id <FFControllerProtocol> vc = [segue.destinationViewController viewControllers].firstObject;
+    if ([vc conformsToProtocol:@protocol(FFControllerProtocol)]) {
+        vc.session = self.session;
+    }
 }
 
 @end

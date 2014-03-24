@@ -14,7 +14,9 @@
 #import "FFTickerMaximizedDrawerViewController.h"
 #import "FFTickerMinimizedDrawerViewController.h"
 
-@interface FFBaseViewController : UIViewController <FFMenuViewControllerDelegate>
+@interface FFBaseViewController : UIViewController
+
+@property(nonatomic) FFSession* session;
 
 @property(nonatomic) FFTickerMaximizedDrawerViewController* maximizedTicker;
 @property(nonatomic) FFTickerMinimizedDrawerViewController* minimizedTicker;
@@ -24,7 +26,7 @@
 @property(nonatomic, readonly) FFDrawerViewController* maximizedDrawerController;
 @property(nonatomic, readonly) FFDrawerViewController* minimizedDrawerController;
 @property(nonatomic, readonly) BOOL drawerIsMinimized;
-@property(nonatomic, readonly) FFMenuViewController* menuController;
+//@property(nonatomic, readonly) FFMenuViewController* menuController;
 
 - (void)showBanner:(NSString*)text
             target:(id)target
@@ -56,7 +58,7 @@
 - (void)maximizeDrawerAnimated:(BOOL)animated;
 - (void)minimizeDrawerAnimated:(BOOL)animated;
 - (void)closeDrawerAnimated:(BOOL)animated;
-- (void)showMenuController;
-- (void)hideMenuController;
+//- (void)showMenuController;
+//- (void)hideMenuController;
 
 @end

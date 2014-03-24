@@ -52,11 +52,11 @@
     [_tableView registerClass:[UITableViewCell class]
         forCellReuseIdentifier:@"Cell"];
 
-    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
-    [balanceView addTarget:self
-                    action:@selector(showBalance:)
-          forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
+//    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
+//    [balanceView addTarget:self
+//                    action:@selector(showBalance:)
+//          forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
 }
 
 - (void)didReceiveMemoryWarning

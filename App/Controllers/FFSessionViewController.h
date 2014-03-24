@@ -13,27 +13,7 @@
 #import "FFTickerMinimizedDrawerViewController.h"
 #import "FFBaseViewController.h"
 #import "FFTickerDataSource.h"
-#import "FFBalanceButton.h"
 
-#define FFSessionDidUpdateUserNotification @"didupdateuser"
-#define FFUserKey @"user"
-
-@interface FFSessionViewController : FFBaseViewController <FFBalanceViewDataSource>
-
-@property(nonatomic) SBSession* session;
-
-/**
- * updates a user immediately
- * eg the user just bought some tokens,
- * or an in-progress roster changed
- */
-- (void)updateUserNow;
-
-@end
-
-@interface UIViewController (FFSessionController)
-
-- (FFSessionViewController*)sessionController;
-- (FFSession*)session;
+@interface FFSessionViewController : FFBaseViewController
 
 @end

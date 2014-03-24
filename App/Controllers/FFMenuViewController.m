@@ -13,6 +13,7 @@
 #import "FFMenuCell.h"
 #import "FFLogo.h"
 #import "TransitionDelegate.h"
+#import "FFNavigationBarItemView.h"
 #import <libextobjc/EXTScope.h>
 
 @interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate>

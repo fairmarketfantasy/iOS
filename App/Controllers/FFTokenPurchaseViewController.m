@@ -65,8 +65,8 @@
                                                                               selector:@selector(close:)
                                                                          leftElseRight:YES];
 
-    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
+//    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
 
     //    self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 45.f)];
 }
@@ -311,7 +311,7 @@ failure:
                                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                                     autoHide:YES];
     [ealert showInView:self.view];
-    [self.sessionController updateUserNow];
+    [self.session updateUserNow];
 }
 
 - (void)addTokens:(SKPaymentTransaction*)transaction
@@ -328,7 +328,7 @@ failure:
     {
 
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-        [self.sessionController updateUserNow];
+        [self.session updateUserNow];
     }
 failure:
     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)

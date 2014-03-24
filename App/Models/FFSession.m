@@ -13,6 +13,19 @@
 #import "FFContestType.h"
 #import "FFRoster.h"
 
+NSString* const FFDidReceiveRemoteNotificationAuthorization = @"gotpushtoken";
+NSString* const FFDidReceiveRemoteNotification
+= @"gotpush";
+NSString* const FFSessionDidUpdateUserNotification = @"didupdateuser";
+NSString* const FFUserKey = @"user";
+
+@interface FFSession ()
+{
+    FFUser* _user;
+}
+
+@end
+
 @implementation FFSession
 
 - (void)clearCredentials
@@ -72,7 +85,7 @@
         NSLog(@"got fb login response response %@", responseObject);
         [user setValuesForKeysWithNetworkDictionary:responseObject];
         [user save];
-        self.user = user;
+        _user = user;
         [self.sessionData save];
         [self getOAuth:user fbAccessToken:accessToken success:^(id successObj)
         {
@@ -133,7 +146,7 @@ failure:
      ^void (NSURLRequest *req, NSHTTPURLResponse *resp, NSError *err, id res)
     {
         [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"AuthorizedRequestError: %@", err]
-                              level:@"error"];
+                          withLevel:UTLogLevelError];
         failure(req, resp, err, res);
     }];
 }
@@ -149,7 +162,7 @@ failure:
      ^void (NSURLRequest *req, NSHTTPURLResponse *resp, NSError *err, id ret)
     {
         [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"AnonymousRequestError: %@", err]
-                              level:@"error"];
+                          withLevel:UTLogLevelError];
         failure(req, resp, err, ret);
     }];
 }
@@ -168,6 +181,54 @@ failure:
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [super logout];
+}
+
+#pragma mark -
+
+- (void)pollUser
+{
+    [self syncUserSuccess:^(id successObj)
+     {
+         FFUser* user = successObj;
+
+         [[NSNotificationCenter defaultCenter] postNotificationName:FFSessionDidUpdateUserNotification
+                                                             object:nil
+                                                           userInfo:@{
+                                                                      FFUserKey : user
+                                                                      }];
+
+         double delayInSeconds = 10.0;
+         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+         dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+             [self pollUser];
+         });
+     }
+                          failure:
+     ^(NSError * error)
+     {
+         double delayInSeconds = 10.0;
+         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+         dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+             [self pollUser];
+         });
+     }];
+}
+
+- (void)updateUserNow
+{
+    [self syncUserSuccess:^(id successObj)
+     {
+         [[NSNotificationCenter defaultCenter] postNotificationName:FFSessionDidUpdateUserNotification
+                                                             object:nil
+                                                           userInfo:@{
+                                                                      FFUserKey : successObj
+                                                                      }];
+     }
+                          failure:
+     ^(NSError * error)
+     {
+         NSLog(@"failed to get user");
+     }];
 }
 
 @end

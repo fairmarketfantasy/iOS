@@ -47,9 +47,41 @@ PODS:
   - GCJSONKit (1.5.0)
   - IAPManager (0.2.3)
   - ISO8601DateFormatter (0.7)
+  - libextobjc (0.4):
+    - libextobjc/EXTADT
+    - libextobjc/EXTConcreteProtocol
+    - libextobjc/EXTKeyPathCoding
+    - libextobjc/EXTNil
+    - libextobjc/EXTSafeCategory
+    - libextobjc/EXTScope
+    - libextobjc/EXTSelectorChecking
+    - libextobjc/EXTSynthesize
+    - libextobjc/NSInvocation+EXT
+    - libextobjc/NSMethodSignature+EXT
+    - libextobjc/RuntimeExtensions
+    - libextobjc/UmbrellaHeader
+  - libextobjc/EXTADT (0.4):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTConcreteProtocol (0.4):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTKeyPathCoding (0.4):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTNil (0.4):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTSafeCategory (0.4):
+    - libextobjc/RuntimeExtensions
   - libextobjc/EXTScope (0.4):
     - libextobjc/RuntimeExtensions
+  - libextobjc/EXTSelectorChecking (0.4):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/EXTSynthesize (0.4):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/NSInvocation+EXT (0.4):
+    - libextobjc/RuntimeExtensions
+  - libextobjc/NSMethodSignature+EXT (0.4):
+    - libextobjc/RuntimeExtensions
   - libextobjc/RuntimeExtensions (0.4)
+  - libextobjc/UmbrellaHeader (0.4)
   - NSData+Base64 (1.0.0)
   - RATreeView (0.2.0)
   - Reachability (3.0.0)
@@ -77,7 +109,7 @@ DEPENDENCIES:
   - FormatterKit (~> 1.2.1)
   - IAPManager (~> 0.2.2)
   - ISO8601DateFormatter (~> 0.6)
-  - libextobjc/EXTScope (~> 0.4)
+  - libextobjc (~> 0.4)
   - NSData+Base64 (~> 1.0.0)
   - RATreeView (~> 0.2.0)
   - Reachability (~> 3.0.0)

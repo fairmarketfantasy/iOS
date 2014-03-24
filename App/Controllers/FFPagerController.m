@@ -13,8 +13,15 @@
 #import "StyledPageControl.h"
 #import "FFNavigationBarItemView.h"
 #import "FFLogo.h"
+// model
+#import "FFControllerProtocol.h"
+#import "FFMarketSet.h"
+#import "FFSessionViewController.h"
+#import "FFMarketSelector.h"
+#import "FFContestType.h"
 
-@interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
+@interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
+SBDataObjectResultSetDelegate, FFControllerProtocol>
 
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFYourTeamController* teamController;
@@ -22,10 +29,17 @@
 @property(nonatomic) UIButton* globalMenuButton;
 @property(nonatomic) UIButton* personalInfoButton;
 @property(nonatomic, assign) BOOL isPersonalInfoOpened;
+// models
+@property(nonatomic) FFMarketSet* markets;
+@property(nonatomic) FFMarketSelector* marketSelector;
+@property(nonatomic) SBDataObjectResultSet* contests;
+@property(nonatomic) NSArray* filteredContests;
 
 @end
 
 @implementation FFPagerController
+
+@synthesize session;
 
 - (id)initWithCoder:(NSCoder*)aDecoder
 {
@@ -103,6 +117,10 @@
     }
     // title
     self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
+    // markets
+    _markets = [FFMarket getBulkWithSession:self.session
+                                 authorized:YES];
+    self.markets.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -122,7 +140,17 @@
                   completion:nil];
     self.pager.numberOfPages = (int)[self getViewControllers].count;
     [self.view bringSubviewToFront:self.pager];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(didUpdateUser:)
+                                                 name:FFSessionDidUpdateUserNotification
+                                               object:nil];
     [self hidePersonalInfo];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UIPageViewControllerDataSource
@@ -226,6 +254,50 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                          self.receiverController.tableView.contentOffset = CGPointZero;
                          self.isPersonalInfoOpened = YES;
                      }];
+}
+
+- (void)updateMarkets
+{
+    _markets.clearsCollectionBeforeSaving = YES;
+    [_markets fetchType:FFMarketTypeRegularSeason];
+    _markets.clearsCollectionBeforeSaving = NO;
+    [_markets fetchType:FFMarketTypeSingleElimination];
+    _marketSelector.markets = [FFMarket filteredMarkets:_markets.allObjects];
+}
+
+#pragma mark - notification callback
+
+- (void)didUpdateUser:(NSNotification*)note
+{
+    [self performSelectorOnMainThread:@selector(updateUserCell)
+                           withObject:nil
+                        waitUntilDone:NO];
+}
+
+- (void)updateUserCell
+{
+    // TODO: update header
+}
+
+#pragma mark - SBDataObjectResultSetDelegate
+
+- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
+{
+    if (resultSet == _markets) {
+        _marketSelector.markets = [FFMarket filteredMarkets:[resultSet allObjects]];
+    } else if (resultSet == _contests) {
+        // the server does not filter, and the result set by defaults shows what the server shows, hence we must
+        // do our own pass of filtering to show only takesTokens==True contest types
+        NSMutableArray* filtered = [NSMutableArray array];
+        for (FFContestType* contest in [_contests allObjects]) {
+            if ([contest.takesTokens integerValue]) {
+                [filtered addObject:contest];
+            }
+        }
+        _filteredContests = filtered;
+
+        // TODO: refresh table view
+    }
 }
 
 #pragma mark - button actions

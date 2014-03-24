@@ -42,7 +42,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    // UI customization
     FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle leftItemRect]];
     self.globalMenuButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.globalMenuButton setImage:[UIImage imageNamed:@"globalmenu.png"]
@@ -69,12 +69,12 @@
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftItem];
     }
 
-    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
-    [balanceView addTarget:self
-                    action:@selector(showBalance:)
-          forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
-
+//    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
+//    [balanceView addTarget:self
+//                    action:@selector(showBalance:)
+//          forControlEvents:UIControlEventTouchUpInside];
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
+    // table view
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:_tableView];
     if ([self respondsToSelector:@selector(topLayoutGuide)]) {
@@ -101,7 +101,7 @@
         forCellReuseIdentifier:@"UserBitCell"];
     [_tableView registerClass:[FFContest2UpTabelViewCell class]
         forCellReuseIdentifier:@"ContestCell"];
-
+    // market selector
     _marketSelector = [[FFMarketSelector alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
     _marketSelector.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _marketSelector.delegate = self;
@@ -206,15 +206,6 @@
 
 - (void)globalMenuButton:(UIButton*)button
 {
-    if (self.menuController) {
-        [button setImage:[UIImage imageNamed:@"globalmenu.png"]
-                forState:UIControlStateNormal];
-        [self hideMenuController];
-    } else {
-        [button setImage:[UIImage imageNamed:@"globalmenu-highlighted.png"]
-                forState:UIControlStateNormal];
-        [self showMenuController];
-    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
@@ -283,9 +274,6 @@
 
 - (void)hideMenuController
 {
-    [super hideMenuController];
-    [_globalMenuButton setImage:[UIImage imageNamed:@"globalmenu.png"]
-                       forState:UIControlStateNormal];
 }
 
 #pragma mark - ffcreategame controller delegate
