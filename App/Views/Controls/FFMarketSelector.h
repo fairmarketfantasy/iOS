@@ -7,18 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FFMarket.h"
 
-@protocol FFMarketSelectorDelegate <NSObject>
+@class FFMarket;
 
-- (void)didUpdateToNewMarket:(FFMarket*)market;
+@protocol FFMarketSelectorDelegate <UICollectionViewDataSource>
+
+@property(nonatomic, readonly) NSArray* markets;
+
+@optional
+- (void)marketSelected:(FFMarket*)selectedMarket;
 
 @end
 
 @interface FFMarketSelector : UIView
 
-@property(nonatomic) NSArray* markets;
-@property(nonatomic) FFMarket* selectedMarket;
+@property(nonatomic) NSUInteger selectedMarket;
 @property(nonatomic, weak) id<FFMarketSelectorDelegate> delegate;
 
 @end

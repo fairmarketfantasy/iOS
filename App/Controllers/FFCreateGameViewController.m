@@ -153,7 +153,7 @@
                                  authorized:YES];
     _markets.clearsCollectionBeforeSaving = YES;
     _markets.delegate = self;
-    _filteredMarkets = [FFMarket filteredMarkets:[_markets allObjects]];
+//    _filteredMarkets = [FFMarket filteredMarkets:[_markets allObjects]];
     [_markets refresh];
 
     if (!_selectedContestType) {
@@ -252,15 +252,15 @@ failure:
 
 - (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
 {
-    if (!_selectedMarket && [[resultSet allObjects] count]) {
-        _filteredMarkets = [FFMarket filteredMarkets:[resultSet allObjects]];
-        _selectedMarket = [[resultSet allObjects] objectAtIndex:0];
-        [_tableView reloadRowsAtIndexPaths:@[
-                                               [NSIndexPath indexPathForRow:0
-                                                                  inSection:2]
-                                           ]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
+//    if (!_selectedMarket && [[resultSet allObjects] count]) {
+//        _filteredMarkets = [FFMarket filteredMarkets:[resultSet allObjects]];
+//        _selectedMarket = [[resultSet allObjects] objectAtIndex:0];
+//        [_tableView reloadRowsAtIndexPaths:@[
+//                                               [NSIndexPath indexPathForRow:0
+//                                                                  inSection:2]
+//                                           ]
+//                          withRowAnimation:UITableViewRowAnimationAutomatic];
+//    }
 }
 
 // table view delegate -------------------------------------------------------------------------------------------------

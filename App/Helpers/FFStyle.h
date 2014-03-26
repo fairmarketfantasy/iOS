@@ -21,6 +21,7 @@
 @interface FFStyle : NSObject
 
 + (NSNumberFormatter*)funbucksFormatter;
++ (NSDateFormatter*)marketDateFormatter;
 + (NSDateFormatter*)dateFormatter;
 
 + (UIColor*)darkGrey;

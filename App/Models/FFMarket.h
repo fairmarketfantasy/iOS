@@ -24,7 +24,6 @@
 @property(nonatomic) NSString* state;
 @property(nonatomic) SBFloat* totalBets;
 
-+ (NSArray*)filteredMarkets:(NSArray*)markets;
 + (FFMarketSet*)getBulkWithSession:(SBSession*)session
                         authorized:(BOOL)isAuthorizedRequest;
 

@@ -26,7 +26,7 @@
      FFMarketSelectorDelegate, FFGameButtonViewDelegate, FFContest2UpTableViewCellDelegate,
      FFCreateGameViewControllerDelegate>
 
-@property(nonatomic) FFMarketSet* markets;
+//@property(nonatomic) FFMarketSet* markets;
 @property(nonatomic) UITableView* tableView;
 @property(nonatomic) FFMarketSelector* marketSelector;
 @property(nonatomic) FFUserBitView* userBit;
@@ -121,9 +121,9 @@
 
     [self.tickerDataSource refresh];
 
-    _markets = [FFMarket getBulkWithSession:self.session
-                                 authorized:YES];
-    _markets.delegate = self;
+//    _markets = [FFMarket getBulkWithSession:self.session
+//                                 authorized:YES];
+//    _markets.delegate = self;
 
     [self updateMarkets];
 
@@ -151,11 +151,11 @@
 
 - (void)updateMarkets
 {
-    _markets.clearsCollectionBeforeSaving = YES;
-    [_markets fetchType:FFMarketTypeRegularSeason];
-    _markets.clearsCollectionBeforeSaving = NO;
-    [_markets fetchType:FFMarketTypeSingleElimination];
-    _marketSelector.markets = [FFMarket filteredMarkets:_markets.allObjects];
+//    _markets.clearsCollectionBeforeSaving = YES;
+//    [_markets fetchType:FFMarketTypeRegularSeason];
+//    _markets.clearsCollectionBeforeSaving = NO;
+//    [_markets fetchType:FFMarketTypeSingleElimination];
+//    _marketSelector.markets = [FFMarket filteredMarkets:_markets.allObjects];
     [_tableView reloadData];
 }
 
@@ -291,12 +291,12 @@
 
 - (void)didChooseContest:(FFContestType*)contest
 {
-    [self performSegueWithIdentifier:@"GotoContest"
-                              sender:self
-                             context:@[
-                                         contest,
-                                         _marketSelector.selectedMarket
-                                     ]];
+//    [self performSegueWithIdentifier:@"GotoContest"
+//                              sender:self
+//                             context:@[
+//                                         contest,
+//                                         _marketSelector.selectedMarket
+//                                     ]];
 }
 
 #pragma mark - GameButtonViewDelegate
@@ -355,22 +355,22 @@
 
 - (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
 {
-    if (resultSet == _markets) {
-        _marketSelector.markets = [FFMarket filteredMarkets:[resultSet allObjects]];
-    } else if (resultSet == _contests) {
-        // the server does not filter, and the result set by defaults shows what the server shows, hence we must
-        // do our own pass of filtering to show only takesTokens==True contest types
-        NSMutableArray* filtered = [NSMutableArray array];
-        for (FFContestType* contest in [_contests allObjects]) {
-            if ([contest.takesTokens integerValue]) {
-                [filtered addObject:contest];
-            }
-        }
-        _filteredContests = filtered;
-
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
+//    if (resultSet == _markets) {
+//        _marketSelector.markets = [FFMarket filteredMarkets:[resultSet allObjects]];
+//    } else if (resultSet == _contests) {
+//        // the server does not filter, and the result set by defaults shows what the server shows, hence we must
+//        // do our own pass of filtering to show only takesTokens==True contest types
+//        NSMutableArray* filtered = [NSMutableArray array];
+//        for (FFContestType* contest in [_contests allObjects]) {
+//            if ([contest.takesTokens integerValue]) {
+//                [filtered addObject:contest];
+//            }
+//        }
+//        _filteredContests = filtered;
+//
+//        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+//                      withRowAnimation:UITableViewRowAnimationAutomatic];
+//    }
 }
 
 #pragma mark - FFMenuViewControllerDelegate
@@ -378,13 +378,14 @@
 - (void)didUpdateToNewSport:(FFMarketSport)sport
 {
     [self hideMenuController];
-    _markets.sport = sport;
+//    _markets.sport = sport;
     [self updateMarkets];
 }
 
 - (FFMarketSport)currentMarketSport
 {
-    return _markets.sport;
+    return nil;
+//    return _markets.sport;
 }
 
 #pragma mark - UITableViewDataSource

@@ -21,7 +21,7 @@
 #import "FFContestType.h"
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
-SBDataObjectResultSetDelegate, FFControllerProtocol, FFUserProtocol>
+FFControllerProtocol, FFUserProtocol>
 
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFYourTeamController* teamController;
@@ -29,13 +29,6 @@ SBDataObjectResultSetDelegate, FFControllerProtocol, FFUserProtocol>
 @property(nonatomic) UIButton* globalMenuButton;
 @property(nonatomic) UIButton* personalInfoButton;
 @property(nonatomic, assign) BOOL isPersonalInfoOpened;
-// models
-@property(nonatomic) FFMarketSet* markets;
-@property(nonatomic) FFMarketSelector* marketSelector;
-@property(nonatomic) SBDataObjectResultSet* contests;
-@property(nonatomic) NSArray* filteredContests;
-
-@property(nonatomic) FFUser* user;
 
 @end
 
@@ -51,6 +44,12 @@ SBDataObjectResultSetDelegate, FFControllerProtocol, FFUserProtocol>
         self.view.backgroundColor = [FFStyle darkGreen];
         self.dataSource = self;
         self.delegate = self;
+        self.teamController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
+                                                         bundle:[NSBundle mainBundle]]
+                               instantiateViewControllerWithIdentifier:@"TeamController"];
+        self.receiverController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
+                                                             bundle:[NSBundle mainBundle]]
+                                   instantiateViewControllerWithIdentifier:@"ReceiverController"];
     }
     return self;
 }
@@ -99,7 +98,6 @@ SBDataObjectResultSetDelegate, FFControllerProtocol, FFUserProtocol>
     self.personalInfoButton.contentMode = UIViewContentModeScaleAspectFit;
     self.personalInfoButton.frame = [FFStyle leftItemRect];
     [rightItem addSubview:self.personalInfoButton];
-//    self.personalInfoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
 
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         UIBarButtonItem* spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
@@ -120,32 +118,26 @@ SBDataObjectResultSetDelegate, FFControllerProtocol, FFUserProtocol>
     }
     // title
     self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
-    // markets
-    _markets = [FFMarket getBulkWithSession:self.session
-                                 authorized:YES];
-    self.markets.delegate = self;
+}
+
+- (void)willMoveToParentViewController:(UIViewController *)parent
+{
+    [super willMoveToParentViewController:parent];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    self.teamController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
-                                                     bundle:[NSBundle mainBundle]]
-        instantiateViewControllerWithIdentifier:@"TeamController"];
-    self.receiverController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
-                                                         bundle:[NSBundle mainBundle]]
-                               instantiateViewControllerWithIdentifier:@"ReceiverController"];
-
+    self.pager.numberOfPages = (int)[self getViewControllers].count;
+    // session
+    self.session.delegate = self;
+    self.teamController.session = self.session;
+    self.receiverController.session = self.session;
     [self setViewControllers:@[[self getViewControllers].firstObject]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:NO
                   completion:nil];
-    self.pager.numberOfPages = (int)[self getViewControllers].count;
     [self.view bringSubviewToFront:self.pager];
-    self.session.delegate = self;
-    self.teamController.session = self.session;
-    self.receiverController.session = self.session;
     [self hidePersonalInfo];
 }
 
@@ -252,42 +244,12 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                      }];
 }
 
-- (void)updateMarkets
-{
-    _markets.clearsCollectionBeforeSaving = YES;
-    [_markets fetchType:FFMarketTypeRegularSeason];
-    _markets.clearsCollectionBeforeSaving = NO;
-    [_markets fetchType:FFMarketTypeSingleElimination];
-    _marketSelector.markets = [FFMarket filteredMarkets:_markets.allObjects];
-}
-
 #pragma mark - FFUserProtocol
 
-- (void)didUpdateUser:(FFUser *)user
+- (void)didUpdateUser:(FFUser*)user
 {
     [self.teamController updateHeader];
     [self.receiverController updateHeader];
-}
-
-#pragma mark - SBDataObjectResultSetDelegate
-
-- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
-{
-    if (resultSet == _markets) {
-        _marketSelector.markets = [FFMarket filteredMarkets:[resultSet allObjects]];
-    } else if (resultSet == _contests) {
-        // the server does not filter, and the result set by defaults shows what the server shows, hence we must
-        // do our own pass of filtering to show only takesTokens==True contest types
-        NSMutableArray* filtered = [NSMutableArray array];
-        for (FFContestType* contest in [_contests allObjects]) {
-            if ([contest.takesTokens integerValue]) {
-                [filtered addObject:contest];
-            }
-        }
-        _filteredContests = filtered;
-
-        // TODO: refresh table view
-    }
 }
 
 #pragma mark - button actions

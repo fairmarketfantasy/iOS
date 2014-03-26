@@ -144,7 +144,7 @@ static CGFloat const LINE_BORDER_WIDTH = 1.f;
     rectImage.size.height += LINE_BORDER_WIDTH+centerLineWidth;
     
     CGContextSetStrokeColorWithColor(ctx, [_pathColor CGColor]);
-    CGContextSetLineWidth(ctx, centerLineWidth);
+    CGContextSetLineWidth(ctx, centerLineWidth > 0.f ? centerLineWidth : 0.f);
     
     switch (_pathType) {
         case FFPathImageViewTypeCircle:

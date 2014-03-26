@@ -33,6 +33,14 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     return formatter;
 }
 
++ (NSDateFormatter*)marketDateFormatter
+{
+
+    NSDateFormatter* dateFormatter = NSDateFormatter.new;
+    [dateFormatter setDateFormat:@"E d @ h:mm a"];
+    return dateFormatter;
+}
+
 + (NSDateFormatter*)dateFormatter
 {
     NSDateFormatter* formatter = NSDateFormatter.new;

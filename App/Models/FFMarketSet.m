@@ -40,11 +40,11 @@
 }
 
 - (id)initWithDataObjectClass:(Class)klass
-                      session:(SBSession*)sesh
+                      session:(SBSession*)session
                    authorized:(BOOL)makeAuthroizedRequests
 {
     self = [super initWithDataObjectClass:klass
-                                  session:sesh
+                                  session:session
                                authorized:makeAuthroizedRequests];
     if (self) {
         self.sport = FFMarketSportNFL;
@@ -58,7 +58,7 @@
 
 - (void)fetchType:(FFMarketType)type
 {
-    id q = self.query;
+    NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
                                     @"sport" : [FFMarketSet sportKey:self.sport],
                                     @"type" : [FFMarketSet typeKey:type]

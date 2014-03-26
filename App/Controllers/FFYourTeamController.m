@@ -17,14 +17,17 @@
 #import "FFAccountHeader.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
+#import "FFMarketSelector.h"
+#import "FFCollectionMarketCell.h"
 // models
 #import "FFUser.h"
 #import "FFRoster.h"
 
-@interface FFYourTeamController () <UITableViewDataSource, UITableViewDelegate>
-
+@interface FFYourTeamController () <UITableViewDataSource, UITableViewDelegate,
+FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
+// models
 @property(nonatomic) FFRoster* roster;
-
+@property(nonatomic) FFMarketSet* marketsSet;
 @end
 
 @implementation FFYourTeamController
@@ -41,6 +44,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.marketsSet = [FFMarket getBulkWithSession:self.session
+                                        authorized:YES];
+    self.marketsSet.delegate = self;
+    [self updateMarkets];
+    // roster
     self.roster = [self.session.user getInProgressRoster];
     [self updateHeader];
 }
@@ -68,6 +76,16 @@
     header.winsLabel.text = [NSString stringWithFormat:@"%i wins (%.2f win %%)",
                              self.session.user.totalWins.integerValue,
                              self.session.user.winPercentile.floatValue];
+}
+
+#pragma mark - private
+
+- (void)updateMarkets
+{
+    self.marketsSet.clearsCollectionBeforeSaving = YES;
+    [self.marketsSet fetchType:FFMarketTypeRegularSeason];
+    self.marketsSet.clearsCollectionBeforeSaving = NO;
+    [self.marketsSet fetchType:FFMarketTypeSingleElimination];
 }
 
 #pragma mark - UITableViewDataSource
@@ -106,6 +124,7 @@
         if (indexPath.row == 0) {
             FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:@"MarketsCell"
                                                                   forIndexPath:indexPath];
+            cell.marketSelector.delegate = self;
             return cell;
         }
         FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
@@ -179,6 +198,51 @@ heightForHeaderInSection:(NSInteger)section
         return 40.f;
     }
     return 0.f;
+}
+
+#pragma mark - FFMarketSelectorDelegate
+
+- (NSArray*)markets
+{
+    return self.marketsSet.allObjects;
+}
+
+- (void)marketSelected:(FFMarket*)selectedMarket
+{
+    // TODO: get some info for market(?)
+}
+
+#pragma mark - SBDataObjectResultSetDelegate
+
+- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
+{
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                inSection:0]]
+                          withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView*)collectionView
+{
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView*)collectionView
+     numberOfItemsInSection:(NSInteger)section
+{
+    return self.markets.count;
+}
+
+- (UICollectionViewCell*)collectionView:(UICollectionView*)collectionView
+                 cellForItemAtIndexPath:(NSIndexPath*)indexPath
+{
+    FFCollectionMarketCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MarketCell"
+                                                                             forIndexPath:indexPath];
+    FFMarket* market = self.markets[indexPath.item];
+    cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
+    cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
+    return cell;
 }
 
 @end
