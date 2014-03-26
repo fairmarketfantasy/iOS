@@ -99,7 +99,7 @@ SBDataObjectResultSetDelegate, FFControllerProtocol, FFUserProtocol>
     self.personalInfoButton.contentMode = UIViewContentModeScaleAspectFit;
     self.personalInfoButton.frame = [FFStyle leftItemRect];
     [rightItem addSubview:self.personalInfoButton];
-    self.personalInfoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+//    self.personalInfoButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
 
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         UIBarButtonItem* spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
@@ -111,6 +111,7 @@ SBDataObjectResultSetDelegate, FFControllerProtocol, FFUserProtocol>
                                                    [[UIBarButtonItem alloc] initWithCustomView:leftItem]
                                                    ];
         self.navigationItem.rightBarButtonItems = @[
+                                                    spaceItem,
                                                     [[UIBarButtonItem alloc] initWithCustomView:rightItem]
                                                     ];
     } else {

@@ -24,8 +24,12 @@
                                              pathColor:[UIColor clearColor]
                                            borderColor:[UIColor clearColor]
                                              pathWidth:0.f];
-        _avatar.center = CGPointMake(275.f, 0.5f * self.bounds.size.height);
-        [self.avatar setPathType:FFPathImageViewTypeCircle];
+        self.avatar.center = CGPointMake(275.f, 0.5f * self.bounds.size.height);
+        self.avatar.contentMode = UIViewContentModeScaleAspectFit;
+        self.avatar.pathType = FFPathImageViewTypeCircle;
+        self.avatar.pathColor = [FFStyle white];
+        self.avatar.borderColor = self.avatar.pathColor;
+        self.avatar.pathWidth = 2.f;
         [self addSubview:self.avatar];
         [self.avatar draw];
         _nameLabel = [UILabel.alloc  initWithFrame:CGRectMake(15.f, 5.f, 100.f, 30.f)];
