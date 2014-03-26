@@ -127,10 +127,10 @@
 
     [self updateMarkets];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didUpdateUser:)
-                                                 name:FFSessionDidUpdateUserNotification
-                                               object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(didUpdateUser:)
+//                                                 name:FFSessionDidUpdateUserNotification
+//                                               object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated

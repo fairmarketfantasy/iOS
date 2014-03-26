@@ -1,23 +1,26 @@
 //
-//  GBPathImageView.m
-//  GBControls
+//  FFPathImageView.m
+//  FMF Football
 //
-//  Created by Matteo Gobbi on 15/08/13.
-//  Copyright (c) 2013 Matteo Gobbi. All rights reserved.
+//  Created by Yuriy Pitomets on 3/24/14.
+//  Copyright (c) 2014 FairMarketFantasy. All rights reserved.
 //
 
-#define LINE_BORDER_WIDTH 1.0
+#import "FFPathImageView.h"
 
-#import "GBPathImageView.h"
 
-@interface GBPathImageView () {
-    UIImage *originalImage;
+static CGFloat const LINE_BORDER_WIDTH = 1.f;
+
+
+@interface FFPathImageView ()
+{
+    UIImage* _originalImage;
 }
 
 @end
 
 
-@implementation GBPathImageView
+@implementation FFPathImageView
 
 - (id)initWithFrame:(CGRect)frame
               image:(UIImage *)image
@@ -25,7 +28,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        originalImage = image;
+        _originalImage = image;
         
         [self setDefaultParam];
         
@@ -36,7 +39,7 @@
 
 - (id)initWithFrame:(CGRect)frame
               image:(UIImage *)image
-           pathType:(GBPathImageViewType)pathType
+           pathType:(FFPathImageViewType)pathType
           pathColor:(UIColor *)pathColor
         borderColor:(UIColor *)borderColor
           pathWidth:(float)pathWidth
@@ -44,7 +47,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        originalImage = image;
+        _originalImage = image;
         _pathType = pathType;
         _pathColor = pathColor;
         _borderColor = borderColor;
@@ -55,19 +58,29 @@
     return self;
 }
 
--(void)awakeFromNib {
+- (void)awakeFromNib
+{
     [super awakeFromNib];
     
-    originalImage = self.image;
+    _originalImage = self.image;
     
     [self setDefaultParam];
     
     [self draw];
 }
 
+- (void)setNeedsLayout
+{
+    [super setNeedsLayout];
+    [self draw];
+}
 
--(void)draw {
-    
+- (void)draw
+{
+    if (self.image) {
+        _originalImage = self.image;
+    }
+
     CGRect rect;
     rect.size = self.frame.size;
     rect.origin = CGPointMake(0, 0);
@@ -78,15 +91,14 @@
     rectImage.size.width -= _pathWidth*2.0;
     rectImage.size.height -= _pathWidth*2.0;
     
-    
     UIGraphicsBeginImageContextWithOptions(rect.size,0,0);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     
     switch (_pathType) {
-        case GBPathImageViewTypeCircle:
+        case FFPathImageViewTypeCircle:
             CGContextAddEllipseInRect(ctx, rect);
             break;
-        case GBPathImageViewTypeSquare:
+        case FFPathImageViewTypeSquare:
             CGContextAddRect(ctx, rect);
             break;
         default:
@@ -94,9 +106,7 @@
     }
     
     CGContextClip(ctx);
-    [originalImage drawInRect:rectImage];
-    
-    
+    [_originalImage drawInRect:rectImage];
     
     //Add intern and extern line
     rectImage.origin.x -= LINE_BORDER_WIDTH/2.0;
@@ -113,18 +123,17 @@
     CGContextSetLineWidth(ctx, LINE_BORDER_WIDTH);
     
     switch (_pathType) {
-        case GBPathImageViewTypeCircle:
+        case FFPathImageViewTypeCircle:
             CGContextStrokeEllipseInRect(ctx, rectImage);
             CGContextStrokeEllipseInRect(ctx, rect);
             break;
-        case GBPathImageViewTypeSquare:
+        case FFPathImageViewTypeSquare:
             CGContextStrokeRect(ctx, rectImage);
             CGContextStrokeRect(ctx, rect);
             break;
         default:
             break;
     }
-    
     
     //Add center line
     float centerLineWidth = _pathWidth - LINE_BORDER_WIDTH*2.0;
@@ -138,28 +147,27 @@
     CGContextSetLineWidth(ctx, centerLineWidth);
     
     switch (_pathType) {
-        case GBPathImageViewTypeCircle:
+        case FFPathImageViewTypeCircle:
             CGContextStrokeEllipseInRect(ctx, rectImage);
             break;
-        case GBPathImageViewTypeSquare:
+        case FFPathImageViewTypeSquare:
             CGContextStrokeRect(ctx, rectImage);
             break;
         default:
             break;
     }
     
-    
     self.image = UIGraphicsGetImageFromCurrentImageContext();
     
     UIGraphicsEndImageContext();
 }
 
--(void)setDefaultParam {
-    _pathType = GBPathImageViewTypeCircle;
+- (void)setDefaultParam
+{
+    _pathType = FFPathImageViewTypeCircle;
     _pathColor = [UIColor whiteColor];
     _borderColor = [UIColor darkGrayColor];
-    _pathWidth = 5.0;
+    _pathWidth = 5.f;
 }
-
 
 @end

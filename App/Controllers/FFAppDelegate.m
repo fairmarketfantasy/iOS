@@ -98,11 +98,12 @@
 - (void)application:(UIApplication*)application
     didReceiveRemoteNotification:(NSDictionary*)userInfo
 {
-    NSLog(@"did receive push notification %@", userInfo);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:FFDidReceiveRemoteNotification
-                      object:nil
-                    userInfo:userInfo];
+    // TODO: implement push notifications if needed
+//    NSLog(@"did receive push notification %@", userInfo);
+//    [[NSNotificationCenter defaultCenter]
+//        postNotificationName:FFDidReceiveRemoteNotification
+//                      object:nil
+//                    userInfo:userInfo];
 }
 
 @end

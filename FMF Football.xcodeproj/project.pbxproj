@@ -150,7 +150,7 @@
 		89F1A08F18DC7CAB001369E3 /* active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08D18DC7CAB001369E3 /* active@2x.png */; };
 		89F1A09018DC7CAB001369E3 /* passive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08E18DC7CAB001369E3 /* passive@2x.png */; };
 		89F1A09218DC7D57001369E3 /* wallet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09118DC7D57001369E3 /* wallet@2x.png */; };
-		89F1A09518DC81C4001369E3 /* GBPathImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A09418DC81C4001369E3 /* GBPathImageView.m */; };
+		89F1A09518DC81C4001369E3 /* FFPathImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A09418DC81C4001369E3 /* FFPathImageView.m */; };
 		89F1A09818DC87CB001369E3 /* loginbg-586h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09618DC87CB001369E3 /* loginbg-586h@2x.png */; };
 		89F1A09918DC87CB001369E3 /* loginbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09718DC87CB001369E3 /* loginbg.png */; };
 		89F1A09C18DCC951001369E3 /* FFPTController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A09B18DCC951001369E3 /* FFPTController.m */; };
@@ -383,8 +383,8 @@
 		89F1A08D18DC7CAB001369E3 /* active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active@2x.png"; sourceTree = "<group>"; };
 		89F1A08E18DC7CAB001369E3 /* passive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "passive@2x.png"; sourceTree = "<group>"; };
 		89F1A09118DC7D57001369E3 /* wallet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wallet@2x.png"; sourceTree = "<group>"; };
-		89F1A09318DC81C4001369E3 /* GBPathImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBPathImageView.h; sourceTree = "<group>"; };
-		89F1A09418DC81C4001369E3 /* GBPathImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GBPathImageView.m; sourceTree = "<group>"; };
+		89F1A09318DC81C4001369E3 /* FFPathImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPathImageView.h; sourceTree = "<group>"; };
+		89F1A09418DC81C4001369E3 /* FFPathImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPathImageView.m; sourceTree = "<group>"; };
 		89F1A09618DC87CB001369E3 /* loginbg-586h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginbg-586h@2x.png"; sourceTree = "<group>"; };
 		89F1A09718DC87CB001369E3 /* loginbg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginbg.png; sourceTree = "<group>"; };
 		89F1A09A18DCC951001369E3 /* FFPTController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPTController.h; sourceTree = "<group>"; };
@@ -679,8 +679,8 @@
 				890504CC18D9EEC7006CD2EA /* AnimatedTransitioning.m */,
 				890504CD18D9EEC7006CD2EA /* TransitionDelegate.h */,
 				890504CE18D9EEC7006CD2EA /* TransitionDelegate.m */,
-				89F1A09318DC81C4001369E3 /* GBPathImageView.h */,
-				89F1A09418DC81C4001369E3 /* GBPathImageView.m */,
+				89F1A09318DC81C4001369E3 /* FFPathImageView.h */,
+				89F1A09418DC81C4001369E3 /* FFPathImageView.m */,
 				893D27A818E0A14500899094 /* FFControllerProtocol.h */,
 			);
 			path = Helpers;
@@ -1019,7 +1019,7 @@
 				8972767D18D93FBE008D995C /* FFWideReceiverController.m in Sources */,
 				896ACCEB18B664F5001E9C64 /* FFMarket.m in Sources */,
 				896ACCC318B664F5001E9C64 /* FFOptionSelectController.m in Sources */,
-				89F1A09518DC81C4001369E3 /* GBPathImageView.m in Sources */,
+				89F1A09518DC81C4001369E3 /* FFPathImageView.m in Sources */,
 				896ACCDF18B664F5001E9C64 /* NSDate+ISO8601.m in Sources */,
 				896ACD0918B664F5001E9C64 /* FFUserBitView.m in Sources */,
 				896ACCC518B664F5001E9C64 /* FFRosterViewController.m in Sources */,

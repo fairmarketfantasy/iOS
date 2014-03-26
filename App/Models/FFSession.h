@@ -9,15 +9,18 @@
 #import <SBSession.h>
 #import "FFUser.h"
 
-extern NSString* const FFDidReceiveRemoteNotificationAuthorization;
-extern NSString* const FFDidReceiveRemoteNotification;
-extern NSString* const FFSessionDidUpdateUserNotification;
-extern NSString* const FFUserKey;
+@protocol FFUserProtocol <NSObject>
+
+@optional
+- (void)didUpdateUser:(FFUser*)user;
+
+@end
 
 @interface FFSession : SBSession
 
 @property(nonatomic, readonly) FFUser* user;
 @property(nonatomic) SBSessionData* sessionData;
+@property(nonatomic, weak) id <FFUserProtocol> delegate;
 
 - (void)registerAndLoginUsingFBAccessToken:(NSString*)accessToken
                                      fbUid:(NSString*)fbUid

@@ -1,22 +1,22 @@
 //
-//  GBPathImageView.h
-//  GBControls
+//  FFPathImageView.h
+//  FMF Football
 //
-//  Created by Matteo Gobbi on 15/08/13.
-//  Copyright (c) 2013 Matteo Gobbi. All rights reserved.
+//  Created by Yuriy Pitomets on 3/24/14.
+//  Copyright (c) 2014 FairMarketFantasy. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    GBPathImageViewTypeCircle,
-    GBPathImageViewTypeSquare
-} GBPathImageViewType;
+    FFPathImageViewTypeCircle,
+    FFPathImageViewTypeSquare
+} FFPathImageViewType;
 
 
-@interface GBPathImageView : UIImageView
+@interface FFPathImageView : UIImageView
 
-@property (nonatomic) GBPathImageViewType pathType;
+@property (nonatomic) FFPathImageViewType pathType;
 @property (nonatomic, strong) UIColor *borderColor;
 @property (nonatomic, strong) UIColor *pathColor;
 @property float pathWidth;
@@ -27,7 +27,7 @@ typedef enum {
 
 - (id)initWithFrame:(CGRect)frame
               image:(UIImage *)image
-           pathType:(GBPathImageViewType)pathType
+           pathType:(FFPathImageViewType)pathType
           pathColor:(UIColor *)pathColor
         borderColor:(UIColor *)borderColor
           pathWidth:(float)pathWidth;

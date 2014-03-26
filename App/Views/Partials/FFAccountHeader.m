@@ -8,7 +8,7 @@
 
 #import "FFAccountHeader.h"
 #import <FlatUIKit.h>
-#import "GBPathImageView.h"
+#import "FFPathImageView.h"
 #import "FFStyle.h"
 
 @implementation FFAccountHeader
@@ -18,14 +18,14 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [FFStyle darkGrey];
-        _avatar = [GBPathImageView.alloc initWithFrame:CGRectMake(0.f, 0.f, 60.f, 60.f)
+        _avatar = [FFPathImageView.alloc initWithFrame:CGRectMake(0.f, 0.f, 60.f, 60.f)
                                                  image:[UIImage imageNamed:@"defaultuser"]
-                                              pathType:GBPathImageViewTypeCircle
+                                              pathType:FFPathImageViewTypeCircle
                                              pathColor:[UIColor clearColor]
                                            borderColor:[UIColor clearColor]
                                              pathWidth:0.f];
         _avatar.center = CGPointMake(275.f, 0.5f * self.bounds.size.height);
-        [self.avatar setPathType:GBPathImageViewTypeCircle];
+        [self.avatar setPathType:FFPathImageViewTypeCircle];
         [self addSubview:self.avatar];
         [self.avatar draw];
         _nameLabel = [UILabel.alloc  initWithFrame:CGRectMake(15.f, 5.f, 100.f, 30.f)];
@@ -56,13 +56,6 @@
         self.winsLabel.font = [FFStyle regularFont:14.f];
         self.winsLabel.textColor = [FFStyle darkBlue];
         [self addSubview:self.winsLabel];
-#warning for TESTING only >>>
-        self.nameLabel.text = @"John Doe";
-        self.walletLabel.text = @"1000";
-        self.pointsLabel.text = @"0 points";
-        self.dateLabel.text = @"Member Since Oct 18, 2013";
-        self.winsLabel.text = @"0 wins (0.00 win %%)";
-#warning for TESTING only <<<
     }
     return self;
 }

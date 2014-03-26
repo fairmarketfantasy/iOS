@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class GBPathImageView;
+@class FFPathImageView;
 
 @interface FFAccountHeader : UIView
 
-@property(nonatomic) GBPathImageView* avatar;
+@property(nonatomic) FFPathImageView* avatar;
 @property(nonatomic, readonly) UILabel* nameLabel;
 @property(nonatomic, readonly) UILabel* walletLabel;
 @property(nonatomic, readonly) UILabel* dateLabel;

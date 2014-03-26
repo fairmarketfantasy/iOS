@@ -25,6 +25,23 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 @implementation FFStyle
 
++ (NSNumberFormatter*)funbucksFormatter
+{
+    NSNumberFormatter* formatter = NSNumberFormatter.new;
+//    formatter.numberStyle = NSNumberFormatterCurrencyStyle;
+    formatter.numberStyle = NSNumberFormatterPercentStyle;
+    return formatter;
+}
+
++ (NSDateFormatter*)dateFormatter
+{
+    NSDateFormatter* formatter = NSDateFormatter.new;
+    formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMM d, y"
+                                                           options:0
+                                                            locale:[NSLocale currentLocale]];
+    return formatter;
+}
+
 // COLORS --------------------------------------------------------------------------------------------------------------
 
 + (UIColor*)darkGrey

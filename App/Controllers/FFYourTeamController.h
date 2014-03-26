@@ -11,5 +11,6 @@
 @interface FFYourTeamController : FFBaseViewController
 
 @property(nonatomic) UITableView* tableView;
+- (void)updateHeader;
 
 @end

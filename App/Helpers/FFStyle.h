@@ -20,6 +20,9 @@
 
 @interface FFStyle : NSObject
 
++ (NSNumberFormatter*)funbucksFormatter;
++ (NSDateFormatter*)dateFormatter;
+
 + (UIColor*)darkGrey;
 + (UIColor*)darkBlue;
 + (UIColor*)darkGreen;

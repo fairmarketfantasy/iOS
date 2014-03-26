@@ -13,12 +13,6 @@
 #import "FFContestType.h"
 #import "FFRoster.h"
 
-NSString* const FFDidReceiveRemoteNotificationAuthorization = @"gotpushtoken";
-NSString* const FFDidReceiveRemoteNotification
-= @"gotpush";
-NSString* const FFSessionDidUpdateUserNotification = @"didupdateuser";
-NSString* const FFUserKey = @"user";
-
 @interface FFSession ()
 {
     FFUser* _user;
@@ -108,7 +102,10 @@ failure:
     [self.anonymousHttpClient enqueueHTTPRequestOperation:op];
 }
 
-- (void)getOAuth:(FFUser*)user fbAccessToken:(NSString*)accessToken success:(SBSuccessBlock)success failure:(SBErrorBlock)err
+- (void)getOAuth:(FFUser*)user
+   fbAccessToken:(NSString*)accessToken
+         success:(SBSuccessBlock)success
+         failure:(SBErrorBlock)err
 {
     [self clearCredentials];
 
@@ -183,20 +180,18 @@ failure:
     [super logout];
 }
 
-#pragma mark -
+#pragma mark - user retrieving
 
 - (void)pollUser
 {
     [self syncUserSuccess:^(id successObj)
      {
          FFUser* user = successObj;
-
-         [[NSNotificationCenter defaultCenter] postNotificationName:FFSessionDidUpdateUserNotification
-                                                             object:nil
-                                                           userInfo:@{
-                                                                      FFUserKey : user
-                                                                      }];
-
+         if ([self.delegate respondsToSelector:@selector(didUpdateUser:)]) {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [self.delegate didUpdateUser:user];
+             });
+         }
          double delayInSeconds = 10.0;
          dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
          dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
@@ -218,11 +213,12 @@ failure:
 {
     [self syncUserSuccess:^(id successObj)
      {
-         [[NSNotificationCenter defaultCenter] postNotificationName:FFSessionDidUpdateUserNotification
-                                                             object:nil
-                                                           userInfo:@{
-                                                                      FFUserKey : successObj
-                                                                      }];
+         FFUser* user = successObj;
+         if ([self.delegate respondsToSelector:@selector(didUpdateUser:)]) {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [self.delegate didUpdateUser:user];
+             });
+         }
      }
                           failure:
      ^(NSError * error)

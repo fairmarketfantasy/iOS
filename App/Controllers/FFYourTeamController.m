@@ -9,13 +9,14 @@
 #import "FFYourTeamController.h"
 #import "FFSessionViewController.h"
 #import "FFTeamTable.h"
-//#import "FFUserBitCell.h"
-//#import "FFUserBitView.h"
 #import "FFAutoFillCell.h"
 #import "FFMarketsCell.h"
 #import "FFTeamCell.h"
 #import "FFAlertView.h"
 #import "FFRosterTableHeader.h"
+#import "FFAccountHeader.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "FFPathImageView.h"
 // models
 #import "FFUser.h"
 #import "FFRoster.h"
@@ -41,6 +42,32 @@
 {
     [super viewWillAppear:animated];
     self.roster = [self.session.user getInProgressRoster];
+    [self updateHeader];
+}
+
+#pragma mark - public
+
+- (void)updateHeader
+{
+    FFAccountHeader* header = (FFAccountHeader*)self.tableView.tableHeaderView;
+    if (![header isKindOfClass:[FFAccountHeader class]]) {
+        return;
+    }
+    [header.avatar setImageWithURL: [NSURL URLWithString:self.session.user.imageUrl]
+                  placeholderImage: [UIImage imageNamed:@"defaultuser"]
+       usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [header.avatar draw];
+
+    header.nameLabel.text = self.session.user.name;
+    header.walletLabel.text = [FFStyle.funbucksFormatter
+                               stringFromNumber:@(self.session.user.balance.floatValue)];
+    NSDate* join = self.session.user.joinDate;
+    header.dateLabel.text = join ? [NSString stringWithFormat:@"Member Since %@",
+                                    [FFStyle.dateFormatter stringFromDate:join]] : @"";
+    header.pointsLabel.text = [NSString stringWithFormat:@"%i points", self.session.user.totalPoints.integerValue];
+    header.winsLabel.text = [NSString stringWithFormat:@"%i wins (%.2f win %%)",
+                             self.session.user.totalWins.integerValue,
+                             self.session.user.winPercentile.floatValue];
 }
 
 #pragma mark - UITableViewDataSource

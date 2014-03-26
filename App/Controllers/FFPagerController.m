@@ -21,7 +21,7 @@
 #import "FFContestType.h"
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
-SBDataObjectResultSetDelegate, FFControllerProtocol>
+SBDataObjectResultSetDelegate, FFControllerProtocol, FFUserProtocol>
 
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFYourTeamController* teamController;
@@ -34,6 +34,8 @@ SBDataObjectResultSetDelegate, FFControllerProtocol>
 @property(nonatomic) FFMarketSelector* marketSelector;
 @property(nonatomic) SBDataObjectResultSet* contests;
 @property(nonatomic) NSArray* filteredContests;
+
+@property(nonatomic) FFUser* user;
 
 @end
 
@@ -140,17 +142,10 @@ SBDataObjectResultSetDelegate, FFControllerProtocol>
                   completion:nil];
     self.pager.numberOfPages = (int)[self getViewControllers].count;
     [self.view bringSubviewToFront:self.pager];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didUpdateUser:)
-                                                 name:FFSessionDidUpdateUserNotification
-                                               object:nil];
+    self.session.delegate = self;
+    self.teamController.session = self.session;
+    self.receiverController.session = self.session;
     [self hidePersonalInfo];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UIPageViewControllerDataSource
@@ -265,18 +260,12 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     _marketSelector.markets = [FFMarket filteredMarkets:_markets.allObjects];
 }
 
-#pragma mark - notification callback
+#pragma mark - FFUserProtocol
 
-- (void)didUpdateUser:(NSNotification*)note
+- (void)didUpdateUser:(FFUser *)user
 {
-    [self performSelectorOnMainThread:@selector(updateUserCell)
-                           withObject:nil
-                        waitUntilDone:NO];
-}
-
-- (void)updateUserCell
-{
-    // TODO: update header
+    [self.teamController updateHeader];
+    [self.receiverController updateHeader];
 }
 
 #pragma mark - SBDataObjectResultSetDelegate
