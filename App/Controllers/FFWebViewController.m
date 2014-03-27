@@ -128,7 +128,7 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
-#pragma mark - Button actions
+#pragma mark - button actions
 
 - (void)action:(id)sender
 {

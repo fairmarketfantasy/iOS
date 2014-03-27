@@ -15,6 +15,7 @@
 @optional
 - (void)didUpdateToNewSport:(FFMarketSport)sport;
 - (FFMarketSport)currentMarketSport;
+- (void)logout;
 
 @end
 

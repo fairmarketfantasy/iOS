@@ -21,7 +21,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [FFStyle white];
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.f, 0.f, 320.f, 50.f)];
         self.titleLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         self.titleLabel.backgroundColor = [UIColor clearColor];

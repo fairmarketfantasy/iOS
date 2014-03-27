@@ -27,8 +27,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
+    _tableView.backgroundColor = [UIColor clearColor];
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+    [_tableView registerClass:[UITableViewCell class]
+       forCellReuseIdentifier:@"Cell"];
     [self.view addSubview:_tableView];
     if ([self respondsToSelector:@selector(topLayoutGuide)]) {
         [_tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -45,32 +50,75 @@
     } else {
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     }
-    _tableView.backgroundColor = [UIColor clearColor];
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    [_tableView registerClass:[UITableViewCell class]
-        forCellReuseIdentifier:@"Cell"];
-
-//    UIButton* balanceView = [FFBalanceButton buttonWithDataSource:self.sessionController];
-//    [balanceView addTarget:self
-//                    action:@selector(showBalance:)
-//          forControlEvents:UIControlEventTouchUpInside];
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:balanceView];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewWillAppear:animated];
+    // TODO: fill content
 }
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (_shouldSave) {
+        FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Saving", nil)
+                                                       messsage:nil
+                                                   loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.navigationController.view];
+        FFUser* user = (FFUser*)self.session.user;
+        [user updateInBackgroundWithBlock:^(id successObj)
+         {
+             [alert hide];
+         }
+                                  failure:
+         ^(NSError * error)
+         {
+             [alert hide];
+             FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
+                                                                title:nil
+                                                    cancelButtonTitle:nil
+                                                      okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                                             autoHide:YES];
+             [ealert showInView:self.navigationController.view];
+         }];
+        _shouldSave = NO;
+    }
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue
+                 sender:(id)sender
+{
+    FFUser* user = (FFUser*)self.session.user;
+    if ([segue.identifier isEqualToString:@"GotoName"]) {
+        FFValueEntryController* vc = segue.destinationViewController;
+        vc.keyboardType = UIKeyboardTypeDefault;
+        vc.autocapitalizationType = UITextAutocapitalizationTypeWords;
+        vc.value = user.name;
+        vc.name = segue.identifier;
+        vc.delegate = self;
+        vc.sectionTitle = NSLocalizedString(@"Set Name", nil);
+    } else if ([segue.identifier isEqualToString:@"GotoEmail"]) {
+        FFValueEntryController* vc = segue.destinationViewController;
+        vc.keyboardType = UIKeyboardTypeEmailAddress;
+        vc.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        vc.value = user.email;
+        vc.name = segue.identifier;
+        vc.delegate = self;
+        vc.sectionTitle = NSLocalizedString(@"Set Email", nil);
+    }
+    _shouldSave = YES;
+}
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
     return 5;
 }
 
-- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView*)tableView
+ numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
         return 0;
@@ -81,65 +129,13 @@
     return 1;
 }
 
-- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
-{
-    if (indexPath.section == 1) {
-        return 50;
-    }
-    return 44;
-}
-
-- (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if (section == 0) {
-        return 50;
-    }
-    return 35;
-}
-
-- (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if (section == 0) {
-        UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-        header.backgroundColor = [FFStyle white];
-        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 290, 50)];
-        lab.backgroundColor = [UIColor clearColor];
-        lab.font = [FFStyle lightFont:26];
-        lab.textColor = [FFStyle tableViewSectionHeaderColor];
-        lab.text = NSLocalizedString(@"Settings", nil);
-        [header addSubview:lab];
-        return header;
-    } else {
-        UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 35)];
-        header.backgroundColor = [UIColor colorWithWhite:.9
-                                                   alpha:1];
-        UIView* sep = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
-        sep.backgroundColor = [UIColor colorWithWhite:.8
-                                                alpha:1];
-        [header addSubview:sep];
-
-        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 290, 35)];
-        lab.font = [FFStyle regularFont:14];
-        lab.backgroundColor = [UIColor clearColor];
-        lab.textColor = [FFStyle darkGreyTextColor];
-        if (section == 1) {
-            lab.text = NSLocalizedString(@"Avatar", nil);
-        } else if (section == 2) {
-            lab.text = NSLocalizedString(@"Name", nil);
-        } else if (section == 3) {
-            lab.text = NSLocalizedString(@"Email Address", nil);
-        } else if (section == 4) {
-            lab.text = NSLocalizedString(@"", nil);
-        }
-        [header addSubview:lab];
-        return header;
-    }
-}
-
-- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
+- (UITableViewCell*)tableView:(UITableView*)tableView
+        cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"
                                                             forIndexPath:indexPath];
+    cell.contentView.backgroundColor = [UIColor colorWithWhite:.94f
+                                                         alpha:1.f];
     [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 14.5, 10, 15)];
@@ -158,7 +154,8 @@
         [imgView setImageWithURL:url
                 placeholderImage:[UIImage imageNamed:@"defaultuser.png"]];
     } else if (indexPath.section == 2) {
-        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320, cell.contentView.frame.size.height)];
+        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320,
+                                                                 cell.contentView.frame.size.height)];
         lab.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         lab.font = [FFStyle regularFont:17];
         lab.textColor = [FFStyle darkGreyTextColor];
@@ -169,14 +166,16 @@
             lab.text = NSLocalizedString(@"No Name Set", nil);
         }
     } else if (indexPath.section == 3) {
-        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320, cell.contentView.frame.size.height)];
+        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320,
+                                                                 cell.contentView.frame.size.height)];
         lab.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         lab.font = [FFStyle regularFont:17];
         lab.textColor = [FFStyle darkGreyTextColor];
         [cell.contentView addSubview:lab];
         lab.text = user.email;
     } else if (indexPath.section == 4) {
-        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320, cell.contentView.frame.size.height)];
+        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320,
+                                                                 cell.contentView.frame.size.height)];
         lab.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         lab.font = [FFStyle regularFont:17];
         lab.textColor = [FFStyle darkGreyTextColor];
@@ -185,22 +184,78 @@
         if (indexPath.row == 0) {
             lab.text = NSLocalizedString(@"Change Password", nil);
         }
-        //        else if (indexPath.row == 1) {
-        //            lab.text = NSLocalizedString(@"Delete Account", nil);
-        //        }
         else if (indexPath.row == 1) {
             lab.text = NSLocalizedString(@"Sign out", nil);
         }
     }
-
     return cell;
 }
 
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView*)tableView
+heightForRowAtIndexPath:(NSIndexPath*)indexPath
+{
+    if (indexPath.section == 1) {
+        return 50;
+    }
+    return 44;
+}
+
+- (CGFloat)tableView:(UITableView*)tableView
+heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return 50;
+    }
+    return 35;
+}
+
+- (UIView*)tableView:(UITableView*)tableView
+ viewForHeaderInSection:(NSInteger)section
+{
+    if (section == 0) {
+        UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+        header.backgroundColor = [FFStyle white];
+        UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 290, 50)];
+        titleLabel.backgroundColor = [UIColor clearColor];
+        titleLabel.font = [FFStyle lightFont:26.f];
+        titleLabel.textColor = [FFStyle tableViewSectionHeaderColor];
+        titleLabel.text = NSLocalizedString(@"Settings", nil);
+        [header addSubview:titleLabel];
+        return header;
+    } else {
+        UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 35)];
+        header.backgroundColor = [UIColor colorWithWhite:.9f
+                                                   alpha:1.f];
+        UIView* separator = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+        separator.backgroundColor = [UIColor colorWithWhite:.8
+                                                      alpha:1];
+        [header addSubview:separator];
+
+        UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 290, 35)];
+        titleLabel.font = [FFStyle regularFont:17.f];
+        titleLabel.backgroundColor = [UIColor clearColor];
+        titleLabel.textColor = [FFStyle darkGreyTextColor];
+        if (section == 1) {
+            titleLabel.text = NSLocalizedString(@"Avatar", nil);
+        } else if (section == 2) {
+            titleLabel.text = NSLocalizedString(@"Name", nil);
+        } else if (section == 3) {
+            titleLabel.text = NSLocalizedString(@"Email Address", nil);
+        } else if (section == 4) {
+            titleLabel.text = NSLocalizedString(@"", nil);
+        }
+        [header addSubview:titleLabel];
+        return header;
+    }
+}
+
+- (void)tableView:(UITableView*)tableView
+ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath
                              animated:YES];
-
     if (indexPath.section == 1) {
         UIButton* camera = [FFAlertView blueButtonTitled:NSLocalizedString(@"Take Photo", nil)];
         [camera addTarget:self
@@ -242,9 +297,11 @@
     }
 }
 
-- (void)takePhoto:(id)s
+#pragma mark - button actions
+
+- (void)takePhoto:(id)sender
 {
-    UIImagePickerController* picker = [[UIImagePickerController alloc] init];
+    UIImagePickerController* picker = UIImagePickerController.new;
     picker.sourceType = UIImagePickerControllerSourceTypeCamera;
     picker.mediaTypes = [NSArray arrayWithObject:(id)kUTTypeImage];
     picker.delegate = self;
@@ -253,9 +310,9 @@
                      completion:nil];
 }
 
-- (void)choosePhoto:(id)s
+- (void)choosePhoto:(id)sender
 {
-    UIImagePickerController* picker = [[UIImagePickerController alloc] init];
+    UIImagePickerController* picker = UIImagePickerController.new;
     picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     picker.mediaTypes = [NSArray arrayWithObject:(id)kUTTypeImage];
     picker.delegate = self;
@@ -264,7 +321,16 @@
                      completion:nil];
 }
 
-- (void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary*)info
+- (void)cancelPhoto:(id)sender
+{
+    [_alert hide];
+    _alert = nil;
+}
+
+#pragma mark - UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController*)picker
+didFinishPickingMediaWithInfo:(NSDictionary*)info
 {
     //    UIImage *img = info[UIImagePickerControllerOriginalImage];
 
@@ -278,36 +344,10 @@
                              completion:nil];
 }
 
-- (void)cancelPhoto:(id)s
-{
-    [_alert hide];
-    _alert = nil;
-}
+#pragma mark - FFValueEntryControllerDelegate
 
-- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
-{
-    FFUser* user = (FFUser*)self.session.user;
-    if ([segue.identifier isEqualToString:@"GotoName"]) {
-        FFValueEntryController* c = segue.destinationViewController;
-        c.keyboardType = UIKeyboardTypeDefault;
-        c.autocapitalizationType = UITextAutocapitalizationTypeWords;
-        c.value = user.name;
-        c.name = segue.identifier;
-        c.delegate = self;
-        c.sectionTitle = NSLocalizedString(@"Set Name", nil);
-    } else if ([segue.identifier isEqualToString:@"GotoEmail"]) {
-        FFValueEntryController* c = segue.destinationViewController;
-        c.keyboardType = UIKeyboardTypeEmailAddress;
-        c.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        c.value = user.email;
-        c.name = segue.identifier;
-        c.delegate = self;
-        c.sectionTitle = NSLocalizedString(@"Set Email", nil);
-    }
-    _shouldSave = YES;
-}
-
-- (void)valueEntryController:(FFValueEntryController*)cont didEnterValue:(NSString*)value
+- (void)valueEntryController:(FFValueEntryController*)cont
+               didEnterValue:(NSString*)value
 {
     FFUser* user = (FFUser*)self.session.user;
     if ([cont.name isEqualToString:@"GotoName"]) {
@@ -319,41 +359,14 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)valueEntryController:(FFValueEntryController*)cont didUpdateValue:(NSString*)value
+- (void)valueEntryController:(FFValueEntryController*)cont
+              didUpdateValue:(NSString*)value
 {
     FFUser* user = (FFUser*)self.session.user;
     if ([cont.name isEqualToString:@"GotoName"]) {
         user.name = value;
     } else if ([cont.name isEqualToString:@"GotoEmail"]) {
         user.email = value;
-    }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    if (_shouldSave) {
-        FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Saving", nil)
-                                                       messsage:nil
-                                                   loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
-        FFUser* user = (FFUser*)self.session.user;
-        [user updateInBackgroundWithBlock:^(id successObj)
-        {
-            [alert hide];
-        }
-    failure:
-        ^(NSError * error)
-        {
-            [alert hide];
-            FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
-                                                               title:nil
-                                                   cancelButtonTitle:nil
-                                                     okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                                            autoHide:YES];
-            [ealert showInView:self.navigationController.view];
-        }];
-        _shouldSave = NO;
     }
 }
 

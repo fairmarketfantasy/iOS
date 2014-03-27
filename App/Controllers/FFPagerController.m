@@ -149,17 +149,8 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate>
     if ([segue.identifier isEqualToString:@"GotoMenu"]) {
         FFMenuViewController* vc = segue.destinationViewController;
         vc.delegate = self;
-//    } else if ([segue.identifier isEqualToString:@"GotoContest"]) {
-//        WTFLog;
-//        ((FFContestViewController*)segue.destinationViewController).contest = segue.context[0];
-//        ((FFContestViewController*)segue.destinationViewController).market = segue.context[1];
-//    } else if ([segue.identifier isEqualToString:@"GotoCreateGame"]) {
-//        WTFLog;
-//        ((FFCreateGameViewController*)[segue.destinationViewController viewControllers][0]).delegate = self;
-//    } else if ([segue.identifier isEqualToString:@"GotoRoster"]) {
-//        WTFLog;
-//        FFRoster* roster = segue.context;
-//        ((FFContestViewController*)segue.destinationViewController).roster = roster;
+    } else if ([segue.identifier isEqualToString:@"GotoPredictions"]) {
+        // TODO: implement
     } else {
         NSString* baseUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:SBApiBaseURLKey];
         if ([segue.identifier isEqualToString:@"GotoRules"]) {
@@ -305,6 +296,12 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 #pragma mark - FFMenuViewControllerDelegate
 
+- (void)performMenuSegue:(NSString*)ident
+{
+    [self performSegueWithIdentifier:ident
+                              sender:nil];
+}
+
 - (void)didUpdateToNewSport:(FFMarketSport)sport
 {
     self.teamController.marketsSet.sport = sport;
@@ -316,10 +313,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     return self.teamController.marketsSet.sport;
 }
 
-- (void)performMenuSegue:(NSString*)ident
+- (void)logout
 {
-   [self performSegueWithIdentifier:ident
-                             sender:nil];
+    [self.session logout];
+    [self.navigationController dismissViewControllerAnimated:YES
+                                                  completion:nil];
 }
 
 @end

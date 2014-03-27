@@ -73,7 +73,6 @@
             @"Legal Stuff" : @"GotoTerms",
             @"Support" : @"GotoSupport",
             @"Settings" : @"GotoAccount",
-            @"Sign Out" : @"GotoSignOut"
         };
 
         // left bar item
@@ -345,6 +344,15 @@
                 [self.delegate didUpdateToNewSport:FFMarketSportNFL];
             }
             [self dismissViewControllerAnimated:YES completion:nil];
+        };
+    } else if ([item.title isEqualToString:@"Sign Out"]) {
+        item.action = ^{
+            @strongify(self)
+            [self dismissViewControllerAnimated:YES completion:^{
+                if ([self.delegate respondsToSelector:@selector(logout)]) {
+                    [self.delegate logout];
+                }
+            }];
         };
     } else {
         __block FFNodeItem* blockItem = item;

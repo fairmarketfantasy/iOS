@@ -327,7 +327,6 @@ failure:
         FFWebViewController* vc = [segue.destinationViewController viewControllers][0];
         vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/forgot_password"]];
     }
-    self.navigationController.navigationBar.translucent = NO;
 }
 
 #pragma mark - Facebook stuff
