@@ -333,7 +333,9 @@ failure:
 
 - (void)signInFacebook:(id)sender
 {
-    [FBSession openActiveSessionWithReadPermissions:@[@"basic_info"] allowLoginUI:YES completionHandler:
+    [FBSession openActiveSessionWithReadPermissions:@[@"basic_info"]
+                                       allowLoginUI:YES
+                                  completionHandler:
      ^(FBSession *session, FBSessionState status, NSError *error)
     {
         [self fbSessionStateChanged:session

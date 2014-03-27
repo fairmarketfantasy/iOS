@@ -292,6 +292,9 @@ heightForHeaderInSection:(NSInteger)section
     } else if (indexPath.section == 3) {
         [self performSegueWithIdentifier:@"GotoEmail"
                                   sender:nil];
+    } else if (indexPath.section == 4) {
+        [self performSegueWithIdentifier:@"GotoPassword"
+                                  sender:nil];
     }
 }
 
