@@ -27,7 +27,6 @@
 FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 // models
 @property(nonatomic) FFRoster* roster;
-@property(nonatomic) FFMarketSet* marketsSet;
 @end
 
 @implementation FFYourTeamController
@@ -77,8 +76,6 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                              self.session.user.totalWins.integerValue,
                              self.session.user.winPercentile.floatValue];
 }
-
-#pragma mark - private
 
 - (void)updateMarkets
 {

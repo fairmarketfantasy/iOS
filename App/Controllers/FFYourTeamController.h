@@ -10,7 +10,9 @@
 
 @interface FFYourTeamController : FFBaseViewController
 
+@property(nonatomic) FFMarketSet* marketsSet;
 @property(nonatomic) UITableView* tableView;
 - (void)updateHeader;
+- (void)updateMarkets;
 
 @end

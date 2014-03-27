@@ -9,6 +9,7 @@
         <scene sceneID="t8J-Pa-n9W">
             <objects>
                 <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="cHg-D4-mfC" customClass="FFNavigationController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="28b-yU-IH1"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="O4K-zR-KET">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -22,7 +23,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4SF-yI-Psg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-999" y="222"/>
+            <point key="canvasLocation" x="-1159" y="86"/>
         </scene>
         <!--Web View Controller-->
         <scene sceneID="nZJ-d5-kHC">
@@ -41,7 +42,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fEB-cW-UuO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-579" y="222"/>
+            <point key="canvasLocation" x="-279" y="-18"/>
         </scene>
         <!--Session View Controller-->
         <scene sceneID="Sek-pl-AkR">
@@ -178,42 +179,21 @@
                     <connections>
                         <segue destination="cHy-en-DdB" kind="modal" identifier="GotoMenu" id="Rnj-Jy-KDQ"/>
                         <segue destination="PAh-XD-0Ot" kind="push" identifier="GotoPT" id="VKf-XQ-Fws"/>
+                        <segue destination="OTg-9K-tZw" kind="push" identifier="GotoAccount" id="4yT-Q6-Rhb"/>
+                        <segue destination="grh-Mm-aP7" kind="push" identifier="GotoFindGame" id="ilI-c5-Ws2"/>
+                        <segue destination="cHg-D4-mfC" kind="modal" identifier="GotoSupport" id="9Ye-9C-EZa"/>
+                        <segue destination="cHg-D4-mfC" kind="modal" identifier="GotoRules" id="Hsk-c4-cEm"/>
+                        <segue destination="cHg-D4-mfC" kind="modal" identifier="GotoTerms" id="lP5-7E-jJw"/>
+                        <segue destination="p8F-hD-oki" kind="push" identifier="GotoContest" id="Xef-hb-5vV"/>
+                        <segue destination="p8F-hD-oki" kind="push" identifier="GotoRoster" id="wO2-z2-bkb"/>
+                        <segue destination="gvr-Qo-eMi" kind="modal" identifier="GotoCreateGame" id="k9L-Ly-UTo"/>
+                        <segue destination="hCT-9z-KON" kind="push" identifier="GotoMyGames" id="JD7-w8-AeG"/>
+                        <segue destination="dLz-wm-uBh" kind="modal" identifier="GotoTokenPurchase" id="eDH-b8-2gb"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XAd-9T-CuK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-141" y="985"/>
-        </scene>
-        <!--Home View Controller-->
-        <scene sceneID="Vzx-Xm-1VD">
-            <objects>
-                <viewController storyboardIdentifier="HomeController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="jlJ-fd-tQu" customClass="FFHomeViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Us4-WD-VvG"/>
-                        <viewControllerLayoutGuide type="bottom" id="FxQ-se-JaL"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="HH2-Ui-QX7">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="T3d-ve-48l"/>
-                    <connections>
-                        <segue destination="grh-Mm-aP7" kind="push" identifier="GotoFindGame" id="jEr-zx-nET"/>
-                        <segue destination="p8F-hD-oki" kind="push" identifier="GotoContest" id="TY5-BO-lyU"/>
-                        <segue destination="hCT-9z-KON" kind="push" identifier="GotoMyGames" id="LS3-BI-IKJ"/>
-                        <segue destination="gvr-Qo-eMi" kind="modal" identifier="GotoCreateGame" id="XNP-sm-m6o"/>
-                        <segue destination="p8F-hD-oki" kind="push" identifier="GotoRoster" id="BCy-eg-VQx"/>
-                        <segue destination="cHg-D4-mfC" kind="modal" identifier="GotoTerms" id="Hte-By-9kI"/>
-                        <segue destination="cHg-D4-mfC" kind="modal" identifier="GotoRules" id="4v0-56-RT2"/>
-                        <segue destination="dLz-wm-uBh" kind="modal" identifier="GotoTokenPurchase" id="8Up-JT-o81"/>
-                        <segue destination="OTg-9K-tZw" kind="push" identifier="GotoAccount" id="82M-rw-5uG"/>
-                        <segue destination="cHg-D4-mfC" kind="modal" identifier="GotoSupport" id="uzu-cf-ckN"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="r19-DN-mIG" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="364" y="985"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="AbY-Zq-EXM">
@@ -543,7 +523,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6vq-Cb-eCp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1434" y="1464"/>
+            <point key="canvasLocation" x="1454" y="1160"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Ezs-Y7-jYa">
@@ -570,11 +550,11 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="Hte-By-9kI"/>
-        <segue reference="TY5-BO-lyU"/>
-        <segue reference="8Up-JT-o81"/>
+        <segue reference="lP5-7E-jJw"/>
+        <segue reference="O9s-83-Qzo"/>
+        <segue reference="eDH-b8-2gb"/>
+        <segue reference="0q8-z9-AZT"/>
         <segue reference="3y5-bZ-Hxu"/>
         <segue reference="u0q-yD-ZaH"/>
-        <segue reference="O9s-83-Qzo"/>
     </inferredMetricsTieBreakers>
 </document>

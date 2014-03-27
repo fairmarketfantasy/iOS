@@ -324,6 +324,7 @@
             if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
                 [self.delegate didUpdateToNewSport:FFMarketSportNBA];
             }
+            [self dismissViewControllerAnimated:YES completion:nil];
         };
     } else if ([item.title isEqualToString:@"NFL"]) {
         item.action = ^{
@@ -331,14 +332,17 @@
             if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
                 [self.delegate didUpdateToNewSport:FFMarketSportNFL];
             }
+            [self dismissViewControllerAnimated:YES completion:nil];
         };
     } else {
         __block FFNodeItem* blockItem = item;
         item.action = ^{
             @strongify(self)
-            if (self.delegate) {
-                [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
-            }
+            [self dismissViewControllerAnimated:YES completion:^{
+                if (self.delegate) {
+                    [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
+                }
+            }];
         };
     }
 }
