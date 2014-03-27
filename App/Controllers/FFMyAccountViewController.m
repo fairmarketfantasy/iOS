@@ -138,11 +138,13 @@
                                                          alpha:1.f];
     [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
-    UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 14.5, 10, 15)];
+    UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295.f,
+                                                                            indexPath.section == 1 ? 18.5 : 23.5,
+                                                                            8.f, 13.f)];
     disclosure.image = [UIImage imageNamed:@"accessory_disclosure_dark"];
     disclosure.backgroundColor = [UIColor clearColor];
     [cell.contentView addSubview:disclosure];
-    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
 
     FFUser* user = (FFUser*)self.session.user;
 
@@ -184,7 +186,7 @@
         [cell.contentView addSubview:label];
 
         if (indexPath.row == 0) {
-            label.text = NSLocalizedString(@"Change", nil);
+            label.text = NSLocalizedString(@"Change...", nil);
         }
     }
     return cell;
