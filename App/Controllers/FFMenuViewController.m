@@ -15,6 +15,7 @@
 #import "TransitionDelegate.h"
 #import "FFNavigationBarItemView.h"
 #import <libextobjc/EXTScope.h>
+#import "FFAlertView.h"
 
 @interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate>
 
@@ -52,7 +53,7 @@
                                          ]
                                      },
                                      @{
-                                         @"Fantasy Enternainment" : @[
+                                         @"Enternainment" : @[
                                          ]
                                      },
                                      @{
@@ -314,10 +315,21 @@
 - (void)declareOnTouchCellActionsForItem:(FFNodeItem*)item
 {
     NSParameterAssert([item isKindOfClass:[FFNodeItem class]]);
+    @weakify(self)
     if (item.type != FFNodeItemTypeLeaf || item.action) {
+        if ([item.title isEqualToString:@"Enternainment"] ||
+            [item.title isEqualToString:@"Politics"]) {
+            item.action = ^{
+                @strongify(self)
+                [[[FFAlertView alloc] initWithTitle:nil
+                                            message:NSLocalizedString(@"Coming soon!", nil)
+                                  cancelButtonTitle:nil
+                                    okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                                           autoHide:YES] showInView:self.view];
+            };
+        }
         return;
     }
-    @weakify(self)
     if ([item.title isEqualToString:@"NBA"]) {
         item.action = ^{
             @strongify(self)

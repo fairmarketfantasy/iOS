@@ -272,7 +272,7 @@
         [[[FFAlertView alloc] initWithTitle:nil
                                     message:errorTitle
                           cancelButtonTitle:nil
-                            okayButtonTitle:NSLocalizedString(@"Okay", nil)
+                            okayButtonTitle:NSLocalizedString(@"Ok", nil)
                                    autoHide:YES] showInView:self.view];
         return;
     }
