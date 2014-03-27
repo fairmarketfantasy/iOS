@@ -29,8 +29,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor clearColor];
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
-    _tableView.backgroundColor = [UIColor clearColor];
+    _tableView.backgroundColor = [FFStyle darkGreen];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.dataSource = self;
     _tableView.delegate = self;
@@ -197,7 +198,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
     if (indexPath.section == 1) {
         return 50;
     }
-    return 44;
+    return 60;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
@@ -214,7 +215,8 @@ heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
         UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
-        header.backgroundColor = [FFStyle white];
+        header.backgroundColor = [UIColor colorWithWhite:.9f
+                                                   alpha:1.f];
         UILabel* titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 290, 50)];
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.font = [FFStyle lightFont:26.f];

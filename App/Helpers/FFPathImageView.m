@@ -26,7 +26,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
         _originalImage = image;
         
         [self setDefaultParam];
@@ -45,7 +44,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
         _originalImage = image;
         _pathType = pathType;
         _pathColor = pathColor;
@@ -82,7 +80,7 @@
 
     CGRect rect = self.bounds;
 
-    CGRect rectImage = [self frameFitImage:_originalImage];
+    CGRect rectImage = [self squaredRect:[self frameFitImage:_originalImage]];
     rectImage.origin.x += _pathWidth;
     rectImage.origin.y += _pathWidth;
     rectImage.size.width -= _pathWidth*2.0;
@@ -103,9 +101,7 @@
     }
 
     CGContextClip(ctx);
-    [_originalImage drawInRect: //cyrcleRect];
-     [self frameFitImage:_originalImage]];
-    rectImage = [self squaredRect:rectImage];
+    [_originalImage drawInRect:[self frameFitImage:_originalImage]];
 
     //Add intern and extern line
     rectImage.origin.x -= LINE_BORDER_WIDTH/2.0;
