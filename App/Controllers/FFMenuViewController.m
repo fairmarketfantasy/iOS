@@ -60,20 +60,20 @@
                                          @"Politics" : @[
                                          ]
                                      },
-                                     @"My Games",
-                                     @"Create Game",
+                                     @"Predictions",
                                      @"Rules",
                                      @"Legal Stuff",
                                      @"Support",
-                                     @"Settings"
+                                     @"Settings",
+                                     @"Sign Out"
                                  ]];
         _segueByTitle = @{
-            @"My Games" : @"GotoMyGames",
-            @"Create Game" : @"GotoCreateGame",
+            @"Predictions" : @"GotoPredictions",
             @"Rules" : @"GotoRules",
             @"Legal Stuff" : @"GotoTerms",
             @"Support" : @"GotoSupport",
-            @"Settings" : @"GotoAccount"
+            @"Settings" : @"GotoAccount",
+            @"Sign Out" : @"GotoSignOut"
         };
 
         // left bar item

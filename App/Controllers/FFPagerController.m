@@ -149,15 +149,15 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate>
     if ([segue.identifier isEqualToString:@"GotoMenu"]) {
         FFMenuViewController* vc = segue.destinationViewController;
         vc.delegate = self;
-    } else if ([segue.identifier isEqualToString:@"GotoContest"]) {
-        WTFLog;
+//    } else if ([segue.identifier isEqualToString:@"GotoContest"]) {
+//        WTFLog;
 //        ((FFContestViewController*)segue.destinationViewController).contest = segue.context[0];
 //        ((FFContestViewController*)segue.destinationViewController).market = segue.context[1];
-    } else if ([segue.identifier isEqualToString:@"GotoCreateGame"]) {
-        WTFLog;
+//    } else if ([segue.identifier isEqualToString:@"GotoCreateGame"]) {
+//        WTFLog;
 //        ((FFCreateGameViewController*)[segue.destinationViewController viewControllers][0]).delegate = self;
-    } else if ([segue.identifier isEqualToString:@"GotoRoster"]) {
-        WTFLog;
+//    } else if ([segue.identifier isEqualToString:@"GotoRoster"]) {
+//        WTFLog;
 //        FFRoster* roster = segue.context;
 //        ((FFContestViewController*)segue.destinationViewController).roster = roster;
     } else {
