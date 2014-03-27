@@ -9,8 +9,7 @@
 #import "FFPathImageView.h"
 
 
-static CGFloat const LINE_BORDER_WIDTH = 1.f;
-
+#define LINE_BORDER_WIDTH (1.f)
 
 @interface FFPathImageView ()
 {
@@ -81,11 +80,9 @@ static CGFloat const LINE_BORDER_WIDTH = 1.f;
         _originalImage = self.image;
     }
 
-    CGRect rect;
-    rect.size = self.frame.size;
-    rect.origin = CGPointMake(0, 0);
-    
-    CGRect rectImage = rect;
+    CGRect rect = self.bounds;
+
+    CGRect rectImage = [self frameFitImage:_originalImage];
     rectImage.origin.x += _pathWidth;
     rectImage.origin.y += _pathWidth;
     rectImage.size.width -= _pathWidth*2.0;
@@ -104,10 +101,12 @@ static CGFloat const LINE_BORDER_WIDTH = 1.f;
         default:
             break;
     }
-    
+
     CGContextClip(ctx);
-    [_originalImage drawInRect:rectImage];
-    
+    [_originalImage drawInRect: //cyrcleRect];
+     [self frameFitImage:_originalImage]];
+    rectImage = [self squaredRect:rectImage];
+
     //Add intern and extern line
     rectImage.origin.x -= LINE_BORDER_WIDTH/2.0;
     rectImage.origin.y -= LINE_BORDER_WIDTH/2.0;
@@ -134,7 +133,7 @@ static CGFloat const LINE_BORDER_WIDTH = 1.f;
         default:
             break;
     }
-    
+
     //Add center line
     float centerLineWidth = _pathWidth - LINE_BORDER_WIDTH*2.0;
     
@@ -156,10 +155,29 @@ static CGFloat const LINE_BORDER_WIDTH = 1.f;
         default:
             break;
     }
-    
+
     self.image = UIGraphicsGetImageFromCurrentImageContext();
     
     UIGraphicsEndImageContext();
+}
+
+- (CGRect)frameFitImage:(UIImage*)image
+{
+    CGSize size = self.bounds.size;
+    CGPoint origin = CGPointZero;
+    CGFloat aspect = image.size.width / image.size.height;
+    return size.width / aspect <= size.height
+           ? CGRectMake(origin.x - .5f * size.height * (aspect - 1), origin.y, size.height * aspect, size.height)
+           : CGRectMake(origin.x, origin.y - .5f * (size.width / aspect - size.width), size.width, size.width / aspect);
+}
+
+- (CGRect)squaredRect:(CGRect)rect
+{
+    CGSize size = rect.size;
+    CGPoint origin = rect.origin;
+    return size.width > size.height
+        ? CGRectMake(origin.x + .5f * (size.width - size.height), origin.y, size.height, size.height)
+        : CGRectMake(origin.x, origin.y + .5f * (size.height - size.width), size.width, size.width);
 }
 
 - (void)setDefaultParam

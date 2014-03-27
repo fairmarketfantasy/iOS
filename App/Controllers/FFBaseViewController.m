@@ -438,9 +438,14 @@
 - (void)prepareForSegue:(UIStoryboardSegue*)segue
                  sender:(id)sender
 {
-    id <FFControllerProtocol> vc = [segue.destinationViewController viewControllers].firstObject;
+    id <FFControllerProtocol> vc = segue.destinationViewController;
     if ([vc conformsToProtocol:@protocol(FFControllerProtocol)]) {
         vc.session = self.session;
+    } else if ([vc isKindOfClass:[UINavigationController class]]) {
+        vc = [(UINavigationController*)vc viewControllers].firstObject;
+        if ([vc conformsToProtocol:@protocol(FFControllerProtocol)]) {
+            vc.session = self.session;
+        }
     }
 }
 

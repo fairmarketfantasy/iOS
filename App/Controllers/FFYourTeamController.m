@@ -63,7 +63,9 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     [header.avatar setImageWithURL: [NSURL URLWithString:self.session.user.imageUrl]
                   placeholderImage: [UIImage imageNamed:@"defaultuser"]
        usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    header.avatar.contentMode = UIViewContentModeScaleAspectFit;
     [header.avatar draw];
+    header.avatar.contentMode = UIViewContentModeScaleAspectFit;
 
     header.nameLabel.text = self.session.user.name;
     header.walletLabel.text = [FFStyle.funbucksFormatter

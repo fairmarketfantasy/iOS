@@ -10,11 +10,13 @@
 #import "FFSessionViewController.h"
 #import "FFValueEntryController.h"
 #import "FFAlertView.h"
+#import "FFControllerProtocol.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
 @interface FFMyAccountViewController ()
     <UITableViewDataSource, UITableViewDelegate, FFValueEntryControllerDelegate,
-     UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+     UIImagePickerControllerDelegate, UINavigationControllerDelegate, FFControllerProtocol>
 
 @property(nonatomic) UITableView* tableView;
 @property(nonatomic) FFAlertView* alert;
@@ -123,9 +125,6 @@
     if (section == 0) {
         return 0;
     }
-    if (section == 4) {
-        return 2;
-    }
     return 1;
 }
 
@@ -139,7 +138,7 @@
     [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     UIImageView* disclosure = [[UIImageView alloc] initWithFrame:CGRectMake(295, 14.5, 10, 15)];
-    disclosure.image = [UIImage imageNamed:@"accessory_disclosure"];
+    disclosure.image = [UIImage imageNamed:@"accessory_disclosure_dark"];
     disclosure.backgroundColor = [UIColor clearColor];
     [cell.contentView addSubview:disclosure];
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
@@ -147,45 +146,44 @@
     FFUser* user = (FFUser*)self.session.user;
 
     if (indexPath.section == 1) {
-        UIImageView* imgView = [[UIImageView alloc] initWithFrame:CGRectMake(15, 5, 40, 40)];
-        [cell.contentView addSubview:imgView];
+        UIImageView* avatar = [[UIImageView alloc] initWithFrame:CGRectMake(15, 5, 40, 40)];
+        avatar.contentMode = UIViewContentModeScaleAspectFit;
+        [cell.contentView addSubview:avatar];
 
-        NSURL* url = [NSURL URLWithString:user.imageUrl];
-        [imgView setImageWithURL:url
-                placeholderImage:[UIImage imageNamed:@"defaultuser.png"]];
+        [avatar setImageWithURL: [NSURL URLWithString:user.imageUrl]
+                      placeholderImage: [UIImage imageNamed:@"defaultuser"]
+           usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+
     } else if (indexPath.section == 2) {
-        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320,
-                                                                 cell.contentView.frame.size.height)];
-        lab.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        lab.font = [FFStyle regularFont:17];
-        lab.textColor = [FFStyle darkGreyTextColor];
-        [cell.contentView addSubview:lab];
+        UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320,
+                                                                   cell.contentView.frame.size.height)];
+        label.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        label.font = [FFStyle regularFont:17];
+        label.textColor = [FFStyle greyTextColor];
+        [cell.contentView addSubview:label];
         if (user.name != nil && user.name.length) {
-            lab.text = user.name;
+            label.text = user.name;
         } else {
-            lab.text = NSLocalizedString(@"No Name Set", nil);
+            label.text = NSLocalizedString(@"No Name Set", nil);
         }
     } else if (indexPath.section == 3) {
-        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320,
-                                                                 cell.contentView.frame.size.height)];
-        lab.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        lab.font = [FFStyle regularFont:17];
-        lab.textColor = [FFStyle darkGreyTextColor];
-        [cell.contentView addSubview:lab];
-        lab.text = user.email;
+        UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320,
+                                                                   cell.contentView.frame.size.height)];
+        label.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        label.font = [FFStyle regularFont:17];
+        label.textColor = [FFStyle greyTextColor];
+        [cell.contentView addSubview:label];
+        label.text = user.email;
     } else if (indexPath.section == 4) {
-        UILabel* lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320,
-                                                                 cell.contentView.frame.size.height)];
-        lab.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        lab.font = [FFStyle regularFont:17];
-        lab.textColor = [FFStyle darkGreyTextColor];
-        [cell.contentView addSubview:lab];
+        UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320,
+                                                                   cell.contentView.frame.size.height)];
+        label.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        label.font = [FFStyle regularFont:17];
+        label.textColor = [FFStyle greyTextColor];
+        [cell.contentView addSubview:label];
 
         if (indexPath.row == 0) {
-            lab.text = NSLocalizedString(@"Change Password", nil);
-        }
-        else if (indexPath.row == 1) {
-            lab.text = NSLocalizedString(@"Sign out", nil);
+            label.text = NSLocalizedString(@"Change", nil);
         }
     }
     return cell;
@@ -242,9 +240,9 @@ heightForHeaderInSection:(NSInteger)section
         } else if (section == 2) {
             titleLabel.text = NSLocalizedString(@"Name", nil);
         } else if (section == 3) {
-            titleLabel.text = NSLocalizedString(@"Email Address", nil);
+            titleLabel.text = NSLocalizedString(@"Email", nil);
         } else if (section == 4) {
-            titleLabel.text = NSLocalizedString(@"", nil);
+            titleLabel.text = NSLocalizedString(@"Password", nil);
         }
         [header addSubview:titleLabel];
         return header;
@@ -290,10 +288,6 @@ heightForHeaderInSection:(NSInteger)section
     } else if (indexPath.section == 3) {
         [self performSegueWithIdentifier:@"GotoEmail"
                                   sender:nil];
-    } else if (indexPath.section == 4) {
-        if (indexPath.row == 1) {
-            [self.session logout];
-        }
     }
 }
 

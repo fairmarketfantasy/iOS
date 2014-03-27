@@ -56,6 +56,7 @@
                   placeholderImage: [UIImage imageNamed:@"defaultuser"]
        usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [header.avatar draw];
+    header.avatar.contentMode = UIViewContentModeScaleAspectFit;
 
     header.nameLabel.text = self.session.user.name;
     header.walletLabel.text = [FFStyle.funbucksFormatter

@@ -144,8 +144,18 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate>
     [self hidePersonalInfo];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
+- (void)prepareForSegue:(UIStoryboardSegue*)segue
+                 sender:(id)sender
 {
+    id <FFControllerProtocol> vc = segue.destinationViewController;
+    if ([vc conformsToProtocol:@protocol(FFControllerProtocol)]) {
+        vc.session = self.session;
+    } else if ([vc isKindOfClass:[UINavigationController class]]) {
+        vc = [(UINavigationController*)vc viewControllers].firstObject;
+        if ([vc conformsToProtocol:@protocol(FFControllerProtocol)]) {
+            vc.session = self.session;
+        }
+    } // TODO: maybe move session handling to Base controller too?
     if ([segue.identifier isEqualToString:@"GotoMenu"]) {
         FFMenuViewController* vc = segue.destinationViewController;
         vc.delegate = self;
