@@ -8,7 +8,7 @@
         <!--Navigation Controller-->
         <scene sceneID="t8J-Pa-n9W">
             <objects>
-                <navigationController definesPresentationContext="YES" toolbarHidden="NO" id="cHg-D4-mfC" customClass="FFNavigationController" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="cHg-D4-mfC" customClass="FFNavigationController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="28b-yU-IH1"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="O4K-zR-KET">
                         <autoresizingMask key="autoresizingMask"/>
@@ -174,7 +174,7 @@
         <!--Pager Controller-->
         <scene sceneID="Kg9-Su-LtV">
             <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="rph-l2-45Y" customClass="FFPagerController" sceneMemberID="viewController">
+                <pageViewController useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="rph-l2-45Y" customClass="FFPagerController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="zBW-Xq-ahA"/>
                     <connections>
                         <segue destination="cHy-en-DdB" kind="modal" identifier="GotoMenu" id="Rnj-Jy-KDQ"/>
@@ -553,7 +553,7 @@
         <segue reference="lP5-7E-jJw"/>
         <segue reference="O9s-83-Qzo"/>
         <segue reference="eDH-b8-2gb"/>
-        <segue reference="0q8-z9-AZT"/>
+        <segue reference="wO2-z2-bkb"/>
         <segue reference="3y5-bZ-Hxu"/>
         <segue reference="u0q-yD-ZaH"/>
     </inferredMetricsTieBreakers>

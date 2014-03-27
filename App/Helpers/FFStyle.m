@@ -213,9 +213,9 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     b.layer.borderWidth = 1;
     b.layer.cornerRadius = 3;
     b.layer.masksToBounds = YES;
-    [b setBackgroundImage:[UIImage imageNamed:@"0-percent.png"]
+    [b setBackgroundImage:[UIImage imageNamed:@"button_normal"]
                   forState:UIControlStateNormal];
-    [b setBackgroundImage:[UIImage imageNamed:@"40-percent.png"]
+    [b setBackgroundImage:[UIImage imageNamed:@"button_pressed"]
                   forState:UIControlStateHighlighted];
     b.titleLabel.font = [FFStyle blockFont:14];
     [b setTitle:text
@@ -229,47 +229,50 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
                                     selector:(SEL)selector
                                leftElseRight:(BOOL)left
 {
-    UIButton* b = [FFNavigationBarItemButton buttonWithType:UIButtonTypeCustom];
-    b.frame = CGRectMake(0, 0, 65, 27);
-    b.layer.borderColor = color.CGColor;
-    b.layer.borderWidth = 1;
-    b.layer.cornerRadius = 3;
-    b.layer.masksToBounds = YES;
-    [b setBackgroundImage:[UIImage imageNamed:@"0-percent.png"]
+    UIButton* button = [FFNavigationBarItemButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(0.f, 0.f, 65.f, 27.f);
+    button.layer.borderColor = color.CGColor;
+    button.layer.borderWidth = 1.f;
+    button.layer.cornerRadius = 3.f;
+    button.layer.masksToBounds = YES;
+    [button setBackgroundImage:[UIImage imageNamed:@"button_normal"]
                   forState:UIControlStateNormal];
-    [b setBackgroundImage:[UIImage imageNamed:@"40-percent.png"]
+    [button setBackgroundImage:[UIImage imageNamed:@"button_pressed"]
                   forState:UIControlStateHighlighted];
-    b.titleLabel.font = [FFStyle blockFont:14];
-    [b setTitle:text
-        forState:UIControlStateNormal];
-    [b addTarget:target
-                  action:selector
-        forControlEvents:UIControlEventTouchUpInside];
+    button.titleLabel.font = [FFStyle blockFont:14.f];
+    button.titleEdgeInsets = UIEdgeInsetsMake(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ?
+                                         1.5f : 4.f,
+                                         0.f, 0.f, 0.f);
+    [button setTitle:text
+            forState:UIControlStateNormal];
+    [button addTarget:target
+               action:selector
+     forControlEvents:UIControlEventTouchUpInside];
 
-    UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithCustomView:b];
+    UIBarButtonItem* item = [[UIBarButtonItem alloc] initWithCustomView:button];
 
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-        UIBarButtonItem* spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-                                                                                target:nil
-                                                                                action:NULL];
-        spacer.width = -8;
+        UIBarButtonItem* spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                                                                   target:nil
+                                                                                   action:NULL];
+        spaceItem.width = -8.f;
         if (left) {
             return @[
-                spacer,
-                item
+                     spaceItem,
+                     item
             ];
         } else {
-            UIView* cont = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 65, 27)];
-            cont.backgroundColor = [UIColor clearColor];
-            b.frame = CGRectOffset(b.frame, 7, 0);
-            [cont addSubview:b];
+            UIView* content = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, 65.f, 27.f)];
+            content.backgroundColor = [UIColor clearColor];
+            button.frame = CGRectOffset(button.frame, 7.f, 0.f);
+            [content addSubview:button];
             return @[
-                [[UIBarButtonItem alloc] initWithCustomView:cont]
+                     [[UIBarButtonItem alloc] initWithCustomView:content]
             ];
         }
     } else {
         return @[
-            item
+                 item
         ];
     }
 }
@@ -386,6 +389,41 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 + (void)customizeAppearance
 {
+    // bar button item
+    if (SYSTEM_VERSION_LESS_THAN(@"7.0")) {
+        [[UIBarButtonItem appearance] setTintColor:[self darkGreen]];
+        [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextShadowColor:[UIColor clearColor],
+                                                               UITextAttributeTextShadowOffset:[NSValue valueWithUIOffset:UIOffsetZero]}
+                                                    forState:UIControlStateNormal];
+        [[UIBarButtonItem appearance] setTitleTextAttributes:@{UITextAttributeTextShadowColor:[UIColor clearColor],
+                                                               UITextAttributeTextShadowOffset:[NSValue valueWithUIOffset:UIOffsetZero]}
+                                                    forState:UIControlStateHighlighted];
+        [[UIBarButtonItem appearance] setBackgroundImage:[UIImage imageNamed:@"button_normal"]
+                                                forState:UIControlStateNormal
+                                                   style:UIBarButtonItemStyleBordered
+                                              barMetrics:UIBarMetricsDefault];
+        [[UIBarButtonItem appearance] setBackgroundImage:[UIImage imageNamed:@"button_pressed"]
+                                                forState:UIControlStateHighlighted
+                                                   style:UIBarButtonItemStyleBordered
+                                              barMetrics:UIBarMetricsDefault];
+        [[UIBarButtonItem appearance] setBackgroundImage:[UIImage imageNamed:@"button_normal"]
+                                                forState:UIControlStateNormal
+                                                   style:UIBarButtonItemStyleDone
+                                              barMetrics:UIBarMetricsDefault];
+        [[UIBarButtonItem appearance] setBackgroundImage:[UIImage imageNamed:@"button_pressed"]
+                                                forState:UIControlStateHighlighted
+                                                   style:UIBarButtonItemStyleDone
+                                              barMetrics:UIBarMetricsDefault];
+        [[UIBarButtonItem appearance] setBackgroundImage:[UIImage imageNamed:@"button_normal"]
+                                                forState:UIControlStateNormal
+                                                   style:UIBarButtonItemStylePlain
+                                              barMetrics:UIBarMetricsDefault];
+        [[UIBarButtonItem appearance] setBackgroundImage:[UIImage imageNamed:@"button_pressed"]
+                                                forState:UIControlStateHighlighted
+                                                   style:UIBarButtonItemStylePlain
+                                              barMetrics:UIBarMetricsDefault];
+    }
+    // navigation bar
     [[UINavigationBar appearance] setBackgroundImage:[self imageWithColor:[self darkGreen]]
                                        forBarMetrics:UIBarMetricsDefault];
     [[UINavigationBar appearance] setBackgroundImage:[self imageWithColor:[self darkGreen]]

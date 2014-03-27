@@ -52,8 +52,8 @@
 		896ACC6B18B664F5001E9C64 /* FMF@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBC718B664F5001E9C64 /* FMF@2x.png */; };
 		896ACC6D18B664F5001E9C64 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBC818B664F5001E9C64 /* iTunesArtwork.png */; };
 		896ACC6F18B664F5001E9C64 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBC918B664F5001E9C64 /* iTunesArtwork@2x.png */; };
-		896ACC7118B664F5001E9C64 /* 0-percent.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBCB18B664F5001E9C64 /* 0-percent.png */; };
-		896ACC7318B664F5001E9C64 /* 40-percent.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBCC18B664F5001E9C64 /* 40-percent.png */; };
+		896ACC7118B664F5001E9C64 /* button_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBCB18B664F5001E9C64 /* button_normal.png */; };
+		896ACC7318B664F5001E9C64 /* button_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBCC18B664F5001E9C64 /* button_pressed.png */; };
 		896ACC7518B664F5001E9C64 /* avatarmask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBCD18B664F5001E9C64 /* avatarmask@2x.png */; };
 		896ACC7718B664F5001E9C64 /* backbtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBCE18B664F5001E9C64 /* backbtn@2x.png */; };
 		896ACC7918B664F5001E9C64 /* bannerclose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBCF18B664F5001E9C64 /* bannerclose@2x.png */; };
@@ -229,8 +229,8 @@
 		896ACBC718B664F5001E9C64 /* FMF@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FMF@2x.png"; sourceTree = "<group>"; };
 		896ACBC818B664F5001E9C64 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iTunesArtwork.png; sourceTree = "<group>"; };
 		896ACBC918B664F5001E9C64 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iTunesArtwork@2x.png"; sourceTree = "<group>"; };
-		896ACBCB18B664F5001E9C64 /* 0-percent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "0-percent.png"; sourceTree = "<group>"; };
-		896ACBCC18B664F5001E9C64 /* 40-percent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "40-percent.png"; sourceTree = "<group>"; };
+		896ACBCB18B664F5001E9C64 /* button_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_normal.png; sourceTree = "<group>"; };
+		896ACBCC18B664F5001E9C64 /* button_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_pressed.png; sourceTree = "<group>"; };
 		896ACBCD18B664F5001E9C64 /* avatarmask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "avatarmask@2x.png"; sourceTree = "<group>"; };
 		896ACBCE18B664F5001E9C64 /* backbtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backbtn@2x.png"; sourceTree = "<group>"; };
 		896ACBCF18B664F5001E9C64 /* bannerclose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bannerclose@2x.png"; sourceTree = "<group>"; };
@@ -568,8 +568,8 @@
 		896ACBCA18B664F5001E9C64 /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
-				896ACBCB18B664F5001E9C64 /* 0-percent.png */,
-				896ACBCC18B664F5001E9C64 /* 40-percent.png */,
+				896ACBCB18B664F5001E9C64 /* button_normal.png */,
+				896ACBCC18B664F5001E9C64 /* button_pressed.png */,
 				89F2E6FD18BE249A00B23A99 /* accessory_check@2x.png */,
 				89F2E6FE18BE249A00B23A99 /* accessory_collapse@2x.png */,
 				89F2E6FF18BE249A00B23A99 /* accessory_disclosure@2x.png */,
@@ -906,7 +906,7 @@
 				896ACCE318B664F5001E9C64 /* InfoPlist.strings in Resources */,
 				896ACC7718B664F5001E9C64 /* backbtn@2x.png in Resources */,
 				896ACC5118B664F5001E9C64 /* Default-568h@2x.png in Resources */,
-				896ACC7318B664F5001E9C64 /* 40-percent.png in Resources */,
+				896ACC7318B664F5001E9C64 /* button_pressed.png in Resources */,
 				896ACC8518B664F5001E9C64 /* defaultuser@2x.png in Resources */,
 				896ACC7B18B664F5001E9C64 /* bluedot@2x.png in Resources */,
 				89F1A09818DC87CB001369E3 /* loginbg-586h@2x.png in Resources */,
@@ -916,7 +916,7 @@
 				896ACC5B18B664F5001E9C64 /* FMF-72.png in Resources */,
 				89F1A08918DC7C03001369E3 /* defaultuser.png in Resources */,
 				89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */,
-				896ACC7118B664F5001E9C64 /* 0-percent.png in Resources */,
+				896ACC7118B664F5001E9C64 /* button_normal.png in Resources */,
 				896ACC9118B664F5001E9C64 /* globalmenu@2x.png in Resources */,
 				896ACC6F18B664F5001E9C64 /* iTunesArtwork@2x.png in Resources */,
 				896ACC7518B664F5001E9C64 /* avatarmask@2x.png in Resources */,

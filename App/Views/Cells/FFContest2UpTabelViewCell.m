@@ -47,7 +47,7 @@
         _label.textColor = [FFStyle greyTextColor];
         [self addSubview:_label];
 
-        [self setBackgroundImage:[UIImage imageNamed:@"40-percent.png"]
+        [self setBackgroundImage:[UIImage imageNamed:@"button_pressed"]
                         forState:UIControlStateHighlighted];
     }
     return self;

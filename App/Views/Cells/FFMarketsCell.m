@@ -25,6 +25,7 @@
         self.marketSelector = [[FFMarketSelector alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 60.f)];
         self.marketSelector.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [self.contentView addSubview:self.marketSelector];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return self;
 }

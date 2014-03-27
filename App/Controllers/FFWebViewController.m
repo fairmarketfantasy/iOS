@@ -7,59 +7,38 @@
 //
 
 #import "FFWebViewController.h"
+#import "FFLogo.h"
 
 @interface FFWebViewController () <UIWebViewDelegate>
 
 @property(strong, nonatomic) UIWebView* webView;
-
 @property(strong, nonatomic) UIBarButtonItem* stopLoadingButton;
 @property(strong, nonatomic) UIBarButtonItem* reloadButton;
-//@property (strong, nonatomic) UIBarButtonItem *backButton;
-//@property (strong, nonatomic) UIBarButtonItem *forwardButton;
 
 @end
 
 @implementation FFWebViewController
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil
-                           bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
-- (void)load
-{
-    NSURLRequest* request = [NSURLRequest requestWithURL:self.URL];
-    [self.webView loadRequest:request];
-
-    if (self.navigationController.toolbarHidden) {
-        [self.navigationController setToolbarHidden:NO
-                                           animated:YES];
-    }
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    //    UIButton *cancel = [FFStyle clearNavigationBarButtonWithText:NSLocalizedString(@"Close", nil) borderColor:[FFStyle white]];
-    //    cancel.frame = CGRectMake(0, 0, 70, 30);
-    //    [cancel addTarget:self action:@selector(close:) forControlEvents:UIControlEventTouchUpInside];
-    //
-    //    UIBarButtonItem *close = [[UIBarButtonItem alloc] initWithCustomView:cancel];
-
-    self.navigationItem.leftBarButtonItems = [FFStyle clearNavigationBarButtonWithText:NSLocalizedString(@"Close", nil)
-                                                                           borderColor:[FFStyle white]
-                                                                                target:self
-                                                                              selector:@selector(close:)
-                                                                         leftElseRight:YES];
-    [self setupToolBarItems];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
+    self.stopLoadingButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
+                                                                           target:self.webView
+                                                                           action:@selector(stopLoading)];
+    self.reloadButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                                                      target:self.webView
+                                                                      action:@selector(reload)];
+    self.navigationItem.rightBarButtonItems = [FFStyle clearNavigationBarButtonWithText:NSLocalizedString(@"Close", nil)
+                                                                            borderColor:[FFStyle white]
+                                                                                 target:self
+                                                                               selector:@selector(close:)
+                                                                          leftElseRight:YES];
+    [self updateState];
 
     self.webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+    self.webView.backgroundColor = [FFStyle darkGreen];
     self.webView.scalesPageToFit = YES;
     [self.view addSubview:self.webView];
 
@@ -86,7 +65,7 @@
     [super viewWillAppear:animated];
     self.webView.delegate = self;
     if (self.URL) {
-        [self load];
+        [self.webView loadRequest:[NSURLRequest requestWithURL:self.URL]];
     }
 }
 
@@ -132,65 +111,20 @@
                          orientation:UIImageOrientationDown];
 }
 
-- (void)setupToolBarItems
+- (void)updateState
 {
-    self.stopLoadingButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
-                                                                           target:self.webView
-                                                                           action:@selector(stopLoading)];
-
-    self.reloadButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                                                      target:self.webView
-                                                                      action:@selector(reload)];
-
-    //    self.backButton = [[UIBarButtonItem alloc] initWithImage:[self leftTriangleImage]
-    //                                                       style:UIBarButtonItemStylePlain
-    //                                                      target:self.webView
-    //                                                      action:@selector(goBack)];
-    //
-    //    self.forwardButton = [[UIBarButtonItem alloc] initWithImage:[self rightTriangleImage]
-    //                                                          style:UIBarButtonItemStylePlain
-    //                                                         target:self.webView
-    //                                                         action:@selector(goForward)];
-    //
-    //    self.backButton.enabled = NO;
-    //    self.forwardButton.enabled = NO;
-
-    //    UIBarButtonItem *actionButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-    //                                                                                  target:self
-    //                                                                                  action:@selector(action:)];
-
-    UIBarButtonItem* space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                           target:nil
-                                                                           action:nil];
-
-    //    UIBarButtonItem *space_ = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
-    //                                                                            target:nil
-    //                                                                            action:nil];
-    //    space_.width = 60.0f;
-
-    self.toolbarItems = @[
-        self.stopLoadingButton,
-        space
-    ]; // , self.backButton, space_, self.forwardButton, space, actionButton];
-}
-
-- (void)toggleState
-{
-    //    self.backButton.enabled = self.webView.canGoBack;
-    //    self.forwardButton.enabled = self.webView.canGoForward;
-
-    NSMutableArray* toolbarItems = [self.toolbarItems mutableCopy];
-    if (self.webView.loading) {
-        toolbarItems[0] = self.stopLoadingButton;
+    if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
+        self.navigationItem.leftBarButtonItems = @[
+                                                   self.webView.loading ? self.stopLoadingButton : self.reloadButton,
+                                                   ];
     } else {
-        toolbarItems[0] = self.reloadButton;
+        self.navigationItem.leftBarButtonItem = self.webView.loading ? self.stopLoadingButton : self.reloadButton;
     }
-    self.toolbarItems = [toolbarItems copy];
 }
 
 - (void)finishLoad
 {
-    [self toggleState];
+    [self updateState];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
@@ -223,25 +157,18 @@
 - (void)webViewDidStartLoad:(UIWebView*)webView
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    [self toggleState];
+    [self updateState];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView*)webView
 {
     [self finishLoad];
-    self.title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
     self.URL = self.webView.request.URL;
 }
 
 - (void)webView:(UIWebView*)webView didFailLoadWithError:(NSError*)error
 {
     [self finishLoad];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)close:(id)sender

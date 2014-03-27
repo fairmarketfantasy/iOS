@@ -58,6 +58,8 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate>
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.navigationController.navigationBar.translucent = NO;
 
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;

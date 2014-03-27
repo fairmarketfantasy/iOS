@@ -15,6 +15,4 @@
 @property(strong, nonatomic) NSArray* applicationActivities;
 @property(strong, nonatomic) NSArray* excludedActivityTypes;
 
-- (void)load;
-
 @end
