@@ -298,14 +298,14 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     return button;
 }
 
-+ (CGRect)leftItemRect
++ (CGRect)itemRect
 {
     return CGRectMake(0.f, 0.f, 44.f, 44.f);
 }
 
 + (NSArray*)backBarItemsForController:(UIViewController*)controller
 {
-    UIView* leftView = [[FFNavigationBarItemButton alloc] initWithFrame:[self leftItemRect]];
+    UIView* leftView = [[FFNavigationBarItemButton alloc] initWithFrame:[self itemRect]];
     UIButton* gmenu = [UIButton buttonWithType:UIButtonTypeCustom];
     [gmenu setImage:[UIImage imageNamed:@"backbtn.png"]
            forState:UIControlStateNormal];

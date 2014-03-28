@@ -523,10 +523,10 @@
             </objects>
             <point key="canvasLocation" x="917" y="1716"/>
         </scene>
-        <!--View Controller-->
+        <!--Predict History Controller-->
         <scene sceneID="7eQ-RV-wBr">
             <objects>
-                <viewController id="TGx-03-fiv" sceneMemberID="viewController">
+                <viewController id="TGx-03-fiv" customClass="FFPredictHistoryController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="pfY-gq-b54"/>
                         <viewControllerLayoutGuide type="bottom" id="VVb-Yf-rwm"/>

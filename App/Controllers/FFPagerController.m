@@ -78,7 +78,7 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate>
     [self.view addSubview:self.pager];
     [self.view bringSubviewToFront:self.pager];
     // left bar item
-    FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle leftItemRect]];
+    FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle itemRect]];
     self.globalMenuButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.globalMenuButton setImage:[UIImage imageNamed:@"globalmenu"]
                            forState:UIControlStateNormal];
@@ -88,10 +88,10 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate>
                               action:@selector(globalMenuButton:)
                     forControlEvents:UIControlEventTouchUpInside];
     self.globalMenuButton.contentMode = UIViewContentModeScaleAspectFit;
-    self.globalMenuButton.frame = [FFStyle leftItemRect];
+    self.globalMenuButton.frame = [FFStyle itemRect];
     [leftItem addSubview:self.globalMenuButton];
     // right bar item
-    FFNavigationBarItemView* rightItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle leftItemRect]];
+    FFNavigationBarItemView* rightItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle itemRect]];
     self.personalInfoButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.personalInfoButton setImage:[UIImage imageNamed:@"open"]
                              forState:UIControlStateNormal];
@@ -99,7 +99,7 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate>
                                 action:@selector(personalInfoButton:)
                       forControlEvents:UIControlEventTouchUpInside];
     self.personalInfoButton.contentMode = UIViewContentModeScaleAspectFit;
-    self.personalInfoButton.frame = [FFStyle leftItemRect];
+    self.personalInfoButton.frame = [FFStyle itemRect];
     [rightItem addSubview:self.personalInfoButton];
 
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {

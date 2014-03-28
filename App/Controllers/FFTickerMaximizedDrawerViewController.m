@@ -30,7 +30,7 @@
         titleLabel.textColor = [FFStyle white];
         titleLabel.backgroundColor = [UIColor clearColor];
 
-        self.errorLabel.frame = CGRectMake(10, 0, 300, 95);
+        self.errorLabel.frame = CGRectMake(10, 10, 300, 85);
         self.loadingLabel.frame = CGRectMake(42, 0, 300, 95);
         self.activityIndicator.frame = CGRectMake(18, 43, 10, 10);
 

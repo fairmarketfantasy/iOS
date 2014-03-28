@@ -43,7 +43,7 @@
 {
     [super viewDidLoad];
     // UI customization
-    FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle leftItemRect]];
+    FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle itemRect]];
     self.globalMenuButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.globalMenuButton setImage:[UIImage imageNamed:@"globalmenu.png"]
                            forState:UIControlStateNormal];
@@ -53,7 +53,7 @@
 
     self.globalMenuButton.contentMode = UIViewContentModeScaleAspectFit;
 
-    self.globalMenuButton.frame = [FFStyle leftItemRect];
+    self.globalMenuButton.frame = [FFStyle itemRect];
     [leftItem addSubview:self.globalMenuButton];
 
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {

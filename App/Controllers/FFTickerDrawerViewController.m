@@ -40,7 +40,7 @@
                                              collectionViewLayout:_flowLayout];
         [self.view addSubview:_collectionView];
 
-        _errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 300, 48)];
+        _errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 38)];
         _errorLabel.numberOfLines = 0;
         _errorLabel.textColor = [FFStyle yellowErrorColor];
         _errorLabel.font = [FFStyle boldFont:17.f];

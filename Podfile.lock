@@ -45,6 +45,7 @@ PODS:
   - GCJSONKit (1.5.0)
   - IAPManager (0.2.3)
   - ISO8601DateFormatter (0.7)
+  - LBActionSheet (0.0.1)
   - libextobjc (0.4):
     - libextobjc/EXTADT
     - libextobjc/EXTConcreteProtocol
@@ -112,6 +113,7 @@ DEPENDENCIES:
   - FormatterKit (~> 1.2.1)
   - IAPManager (~> 0.2.2)
   - ISO8601DateFormatter (~> 0.6)
+  - LBActionSheet (~> 0.0.1)
   - libextobjc (~> 0.4)
   - NSData+Base64 (~> 1.0.0)
   - RATreeView (~> 0.2.0)
@@ -140,6 +142,7 @@ SPEC CHECKSUMS:
   GCJSONKit: af54b753897015ab02c0f76a01e121f0053426af
   IAPManager: 457e0007440e6ce81e7a6b16031c860bffac8d82
   ISO8601DateFormatter: 00944e437ea647f4244454ce8809d313861d08de
+  LBActionSheet: e33e9ea73cdbca27e90f926b09ae6991f915ee49
   libextobjc: 2c9fc8226f0f38e562587f65172f93f0c9b4a47a
   NSData+Base64: 4819562faee4544e3cf5703f2139820b09732b28
   RATreeView: fe5d5a7d6bdff3bdd63921b3f94503cda8788f1a

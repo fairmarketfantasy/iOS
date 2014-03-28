@@ -198,18 +198,18 @@
 heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.section == 1) {
-        return 50;
+        return 50.f;
     }
-    return 60;
+    return 60.f;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
 heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 50;
+        return 50.f;
     }
-    return 35;
+    return 35.f;
 }
 
 - (UIView*)tableView:(UITableView*)tableView

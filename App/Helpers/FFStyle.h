@@ -61,7 +61,7 @@
 + (FFCustomButton*)coloredButtonWithText:(NSString*)text
                                    color:(UIColor*)color
                              borderColor:(UIColor*)color;
-+ (CGRect)leftItemRect;
++ (CGRect)itemRect;
 + (NSArray*)backBarItemsForController:(UIViewController*)controller;
 
 + (void)customizeAppearance;

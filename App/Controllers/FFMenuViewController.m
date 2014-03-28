@@ -76,7 +76,7 @@
         };
 
         // left bar item
-        FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle leftItemRect]];
+        FFNavigationBarItemView* leftItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle itemRect]];
         UIButton* globalMenuButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [globalMenuButton setImage:[UIImage imageNamed:@"globalmenu"]
                           forState:UIControlStateNormal];
@@ -86,7 +86,7 @@
         [globalMenuButton setImage:[UIImage imageNamed:@"globalmenu-highlighted"]
                           forState:UIControlStateHighlighted];
         globalMenuButton.contentMode = UIViewContentModeScaleAspectFit;
-        globalMenuButton.frame = [FFStyle leftItemRect];
+        globalMenuButton.frame = [FFStyle itemRect];
         [leftItem addSubview:globalMenuButton];
         // status bar fix for iOS 7
         CGFloat navBarOffset = 0.f;
