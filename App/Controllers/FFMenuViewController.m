@@ -37,7 +37,7 @@
         self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 504)];
 
         if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
-            self.modalPresentationStyle = UIModalPresentationCustom;
+            self.modalPresentationStyle = UIModalPresentationCustom; // transparency fix
             self.customTransitioningDelegate = [TransitionDelegate new];
             self.transitioningDelegate = self.customTransitioningDelegate;
         } else {

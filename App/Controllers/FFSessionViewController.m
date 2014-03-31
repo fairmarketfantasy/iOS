@@ -148,7 +148,7 @@
     [self.container addSubview:signInLabel];
 
     // mail text field
-    UITextField* mailField = [FFTextField new];
+    UITextField* mailField = FFTextField.new;
     mailField.layer.borderWidth = 1.f;
     mailField.frame = CGRectMake(15.f, 155.f, 290.f, 44.f);
     mailField.layer.borderColor = [FFStyle greyBorder].CGColor;

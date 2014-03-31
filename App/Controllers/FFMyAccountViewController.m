@@ -9,18 +9,18 @@
 #import "FFMyAccountViewController.h"
 #import "FFSessionViewController.h"
 #import "FFValueEntryController.h"
+#import "FFPasswordController.h"
 #import "FFAlertView.h"
 #import "FFControllerProtocol.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 
 @interface FFMyAccountViewController ()
-    <UITableViewDataSource, UITableViewDelegate, FFValueEntryControllerDelegate,
+    <UITableViewDataSource, UITableViewDelegate, FFValueEntryControllerDelegate, FFPasswordControllerDelegate,
      UIImagePickerControllerDelegate, UINavigationControllerDelegate, FFControllerProtocol>
 
 @property(nonatomic) UITableView* tableView;
-@property(nonatomic) FFAlertView* alert;
-@property(nonatomic) BOOL shouldSave;
+@property(nonatomic) FFAlertView* photoAlert;
 
 @end
 
@@ -55,40 +55,6 @@
     }
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    // TODO: fill content
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    if (_shouldSave) {
-        FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Saving", nil)
-                                                       messsage:nil
-                                                   loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
-        FFUser* user = (FFUser*)self.session.user;
-        [user updateInBackgroundWithBlock:^(id successObj)
-         {
-             [alert hide];
-         }
-                                  failure:
-         ^(NSError * error)
-         {
-             [alert hide];
-             FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
-                                                                title:nil
-                                                    cancelButtonTitle:nil
-                                                      okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                                             autoHide:YES];
-             [ealert showInView:self.navigationController.view];
-         }];
-        _shouldSave = NO;
-    }
-}
-
 - (void)prepareForSegue:(UIStoryboardSegue*)segue
                  sender:(id)sender
 {
@@ -109,8 +75,10 @@
         vc.name = segue.identifier;
         vc.delegate = self;
         vc.sectionTitle = NSLocalizedString(@"Set Email", nil);
+    } else if ([segue.identifier isEqualToString:@"GotoPassword"]) {
+        FFPasswordController* vc = segue.destinationViewController;
+        vc.delegate = self;
     }
-    _shouldSave = YES;
 }
 
 #pragma mark - UITableViewDataSource
@@ -278,14 +246,14 @@ heightForHeaderInSection:(NSInteger)section
                       action:@selector(cancelPhoto:)
             forControlEvents:UIControlEventTouchUpInside];
 
-        _alert = [[FFAlertView alloc] initWithTitle:nil
+        _photoAlert = [[FFAlertView alloc] initWithTitle:nil
                                             message:nil
                                             buttons:@[
                                                         camera,
                                                         roll,
                                                         cancel
                                                     ]];
-        [_alert showInView:self.navigationController.view];
+        [_photoAlert showInView:self.navigationController.view];
     } else if (indexPath.section == 2) {
         [self performSegueWithIdentifier:@"GotoName"
                                   sender:nil];
@@ -324,8 +292,8 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)cancelPhoto:(id)sender
 {
-    [_alert hide];
-    _alert = nil;
+    [_photoAlert hide];
+    _photoAlert = nil;
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -347,28 +315,75 @@ didFinishPickingMediaWithInfo:(NSDictionary*)info
 
 #pragma mark - FFValueEntryControllerDelegate
 
-- (void)valueEntryController:(FFValueEntryController*)cont
+- (void)valueEntryController:(FFValueEntryController*)controller
                didEnterValue:(NSString*)value
 {
-    FFUser* user = (FFUser*)self.session.user;
-    if ([cont.name isEqualToString:@"GotoName"]) {
-        user.name = value;
-    } else if ([cont.name isEqualToString:@"GotoEmail"]) {
-        user.email = value;
+    FFAlertView* alert = [self showAlert];
+    if ([controller.name isEqualToString:@"GotoName"]) {
+        [self.session.user updateName:value
+                            withBlock:
+         ^(id successObj) {
+             [alert hide];
+             [self.tableView reloadData];
+         }
+                              failure:
+         ^(NSError * error) {
+             [alert hide];
+             [self showError:error];
+         }];
+    } else if ([controller.name isEqualToString:@"GotoEmail"]) {
+        [self.session.user updateEmail:value
+                             withBlock:
+         ^(id successObj) {
+             [alert hide];
+             [self.tableView reloadData];
+         }
+                               failure:
+         ^(NSError * error) {
+             [alert hide];
+             [self showError:error];
+         }];
     }
-    [self.tableView reloadData];
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)valueEntryController:(FFValueEntryController*)cont
-              didUpdateValue:(NSString*)value
+#pragma mark - FFPasswordControllerDelegate
+
+- (void)updatePassword:(NSString*)password
+               current:(NSString*)current
 {
-    FFUser* user = (FFUser*)self.session.user;
-    if ([cont.name isEqualToString:@"GotoName"]) {
-        user.name = value;
-    } else if ([cont.name isEqualToString:@"GotoEmail"]) {
-        user.email = value;
-    }
+    FFAlertView* alert = [self showAlert];
+    [self.session.user updatePassword:password
+                              current:current
+                            withBlock:
+     ^(id successObj) {
+         [alert hide];
+     }
+                              failure:
+     ^(NSError * error) {
+         [alert hide];
+         [self showError:error];
+     }];
+}
+
+#pragma mark - private
+
+- (FFAlertView*)showAlert
+{
+    FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Saving", nil)
+                                                   messsage:nil
+                                               loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    return alert;
+}
+
+- (void)showError:(NSError*)error
+{
+    FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
+                                                       title:nil
+                                           cancelButtonTitle:nil
+                                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                                    autoHide:YES];
+    [ealert showInView:self.navigationController.view];
 }
 
 @end

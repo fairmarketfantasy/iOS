@@ -13,8 +13,8 @@
 @protocol FFValueEntryControllerDelegate <NSObject>
 
 @optional
-- (void)valueEntryController:(FFValueEntryController*)cont didEnterValue:(NSString*)value;
-- (void)valueEntryController:(FFValueEntryController*)cont didUpdateValue:(NSString*)value;
+- (void)valueEntryController:(FFValueEntryController*)controller
+               didEnterValue:(NSString*)value;
 
 @end
 
@@ -22,7 +22,7 @@
 
 @property(nonatomic) NSString* value;
 @property(nonatomic) NSString* name;
-@property(nonatomic, weak) id<FFValueEntryControllerDelegate> delegate;
+@property(nonatomic, weak) UINavigationController<FFValueEntryControllerDelegate>* delegate;
 @property(nonatomic) UIKeyboardType keyboardType;
 @property(nonatomic) UITextAutocapitalizationType autocapitalizationType;
 @property(nonatomic) NSString* sectionTitle;

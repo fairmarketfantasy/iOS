@@ -485,10 +485,10 @@
             </objects>
             <point key="canvasLocation" x="1079" y="2502"/>
         </scene>
-        <!--View Controller-->
+        <!--Password Controller-->
         <scene sceneID="l3d-z0-C64">
             <objects>
-                <viewController id="NCS-KC-5im" sceneMemberID="viewController">
+                <viewController id="NCS-KC-5im" customClass="FFPasswordController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="M24-I7-XMa"/>
                         <viewControllerLayoutGuide type="bottom" id="eCB-8K-2Am"/>

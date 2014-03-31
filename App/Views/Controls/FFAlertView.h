@@ -10,9 +10,10 @@
 
 typedef void (^FFAlertViewBlock)(id);
 
-typedef enum {
+typedef NS_ENUM(NSUInteger, FFAlertViewLoadingStyle) {
+    FFAlertViewLoadingStyleNone,
     FFAlertViewLoadingStylePlain
-} FFAlertViewLoadingStyle;
+};
 
 @interface FFAlertView : UIView
 
