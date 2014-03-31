@@ -19,6 +19,7 @@
 #import "FFPathImageView.h"
 #import "FFMarketSelector.h"
 #import "FFCollectionMarketCell.h"
+#import <libextobjc/EXTScope.h>
 // models
 #import "FFUser.h"
 #import "FFRoster.h"
@@ -42,18 +43,22 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     [self.view addSubview:self.tableView];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)didMoveToParentViewController:(UIViewController *)parent
 {
-    [super viewWillAppear:animated];
     self.marketsSet = [FFMarket getBulkWithSession:self.session
                                         authorized:YES];
     self.marketsSet.delegate = self;
     [self updateMarkets];
     // roster
-    self.roster = [self.session.user getInProgressRoster];
+//    self.roster = [self.session.user getInProgressRoster];
     [self createRoster];
     [self updateHeader];
 }
+
+//- (void)viewWillAppear:(BOOL)animated
+//{
+//    [super viewWillAppear:animated];
+//}
 
 #pragma mark - public
 
@@ -70,10 +75,15 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                                session:self.session
                                success:
      ^(id successObj) {
+         self.roster = successObj;
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
      }
                                failure:
      ^(NSError * error) {
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
@@ -82,8 +92,6 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                                     autoHide:YES]
           showInView:self.navigationController.view];
      }];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                  withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)updateHeader
@@ -132,7 +140,8 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     if (section == 0) {
         return 2;
     }
-    return 7;
+//    return 7;
+    return self.roster.players.count;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
@@ -155,50 +164,57 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
         if (indexPath.row == 0) {
             FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:@"MarketsCell"
                                                                   forIndexPath:indexPath];
-            cell.marketSelector.leftButton.hidden = !self.selectedMarket ||
-            [self.markets indexOfObject:self.selectedMarket] == 0;
-            cell.marketSelector.rightButton.hidden = !self.selectedMarket ||
-            [self.markets indexOfObject:self.selectedMarket] >= self.markets.count - 1;
             cell.marketSelector.delegate = self;
             [cell.marketSelector reloadData];
+            if (self.selectedMarket && self.markets) {
+                NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
+                if (selectedMarket != NSNotFound) {
+                    cell.marketSelector.selectedMarket = selectedMarket;
+                }
+            }
             return cell;
         }
         FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
                                                                forIndexPath:indexPath];
+        [cell.autoFillButton addTarget:self
+                                action:@selector(autoFill:)
+                      forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
     case 1: {
         FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamCell"
                                                            forIndexPath:indexPath];
-        NSString* text = @"";
-        // TODO: move to model!
-        switch (indexPath.row) {
-            case 0:
-                text = @"PG Not selected";
-                break;
-            case 1:
-                text = @"SG Not selected";
-                break;
-            case 2:
-                text = @"PF Not selected";
-                break;
-            case 3:
-                text = @"C Not selected";
-                break;
-            case 4:
-                text = @"G Not selected";
-                break;
-            case 5:
-                text = @"F Not selected";
-                break;
-            case 6:
-                text = @"UTIL Not selected";
-                break;
-            default:
-                WTFLog;
-                break;
-        }
-        cell.titleLabel.text = NSLocalizedString(text, nil);
+        NSDictionary* player = self.roster.players[indexPath.row];
+        cell.titleLabel.text = player[@"name"];
+//        NSString* text = @"";
+//        // TODO: move to model!
+//        switch (indexPath.row) {
+//            case 0:
+//                text = @"PG Not selected";
+//                break;
+//            case 1:
+//                text = @"SG Not selected";
+//                break;
+//            case 2:
+//                text = @"PF Not selected";
+//                break;
+//            case 3:
+//                text = @"C Not selected";
+//                break;
+//            case 4:
+//                text = @"G Not selected";
+//                break;
+//            case 5:
+//                text = @"F Not selected";
+//                break;
+//            case 6:
+//                text = @"UTIL Not selected";
+//                break;
+//            default:
+//                WTFLog;
+//                break;
+//        }
+//        cell.titleLabel.text = NSLocalizedString(text, nil);
         return cell;
     }
     default:
@@ -236,6 +252,30 @@ heightForHeaderInSection:(NSInteger)section
     return 0.f;
 }
 
+#pragma mark - button actions
+
+- (void)autoFill:(UIButton*)button
+{
+    @weakify(self)
+    [self.roster autofillSuccess:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+     }
+                         failure:
+     ^(NSError *error) {
+         @strongify(self)
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
+}
+
 #pragma mark - FFMarketSelectorDelegate
 
 - (NSArray*)markets
@@ -246,17 +286,21 @@ heightForHeaderInSection:(NSInteger)section
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
     self.selectedMarket = selectedMarket;
-    [self createRoster];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
                                                                 inSection:0]]
                           withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self createRoster];
 }
 
 #pragma mark - SBDataObjectResultSetDelegate
 
 - (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
 {
-    self.selectedMarket = self.markets.count > 0 ? self.markets.firstObject : nil;
+    if (self.markets.count > 0) {
+        [self marketSelected:self.markets.firstObject];
+    } else {
+        self.selectedMarket = nil;
+    }
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
                                                                 inSection:0]]
                           withRowAnimation:UITableViewRowAnimationAutomatic];

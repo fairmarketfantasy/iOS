@@ -114,7 +114,12 @@
         self.delegate.markets.count <= selectedMarket) {
         return;
     }
+
     _selectedMarket = selectedMarket;
+
+    self.leftButton.hidden = self.delegate.markets.count == 0 || selectedMarket == 0;
+    self.rightButton.hidden = self.delegate.markets.count == 0 || selectedMarket >= self.delegate.markets.count - 1;
+
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.selectedMarket
                                                                      inSection:0]
                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally

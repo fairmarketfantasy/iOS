@@ -64,5 +64,7 @@
              failure:(SBErrorBlock)failure;
 - (void)submitSuccess:(SBSuccessBlock)success
               failure:(SBErrorBlock)failure;
+- (void)autofillSuccess:(SBSuccessBlock)success
+                failure:(SBErrorBlock)failure;
 
 @end

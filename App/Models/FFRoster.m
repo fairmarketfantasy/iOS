@@ -215,6 +215,40 @@ failure:
     }];
 }
 
+- (void)autofillSuccess:(SBSuccessBlock)success
+                failure:(SBErrorBlock)failure
+{
+    NSString* path = [[FFRoster bulkPath] stringByAppendingFormat:@"/%@/autofill", self.objId];
+    [self.session authorizedJSONRequestWithMethod:@"POST"
+                                             path:path
+                                        paramters:[self toNetworkRepresentation]
+                                          success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
+     {
+         [FFRoster createWithNetworkRepresentation:JSON
+                                           session:self.session
+                                           success:^(id successObj) {
+                                               success(successObj);
+                                           }
+                                           failure:^(NSError *error) {
+                                               failure(error);
+                                           }];
+//         [self updateWithNetworkRepresentation:JSON
+//                                       success:^(id successObj) {
+//                                           success(successObj);
+//                                       }
+//                                       failure:^(NSError *error) {
+//                                           failure(error);
+//                                       }];
+     }
+                                          failure:
+     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
+     {
+         failure(error);
+     }];
+}
+
+#pragma mark -
+
 - (void)submitSuccess:(SBSuccessBlock)success
               failure:(SBErrorBlock)failure
 {
