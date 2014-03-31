@@ -38,6 +38,10 @@
 @property(nonatomic) FFMarket* market;
 @property(nonatomic) NSString* marketId;
 #pragma mark -
++ (void)createNewRosterForMarket:(NSString*)marketId
+                         session:(SBSession*)sesh
+                         success:(SBSuccessBlock)success
+                         failure:(SBErrorBlock)failure;
 /**
  *  Rosters don't have a contest_type_id,
  *  so we have to post that separately

@@ -27,6 +27,8 @@
 FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 // models
 @property(nonatomic) FFRoster* roster;
+@property(nonatomic) FFMarket* selectedMarket;
+
 @end
 
 @implementation FFYourTeamController
@@ -49,10 +51,40 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     [self updateMarkets];
     // roster
     self.roster = [self.session.user getInProgressRoster];
+    [self createRoster];
     [self updateHeader];
 }
 
 #pragma mark - public
+
+- (void)createRoster
+{
+    if (!self.selectedMarket) {
+        return;
+    }
+    FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Creating Roster"
+                                                   messsage:nil
+                                               loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    [FFRoster createNewRosterForMarket:self.selectedMarket.objId
+                               session:self.session
+                               success:
+     ^(id successObj) {
+         [alert hide];
+     }
+                               failure:
+     ^(NSError * error) {
+         [alert hide];
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                  withRowAnimation:UITableViewRowAnimationAutomatic];
+}
 
 - (void)updateHeader
 {
@@ -123,7 +155,12 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
         if (indexPath.row == 0) {
             FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:@"MarketsCell"
                                                                   forIndexPath:indexPath];
+            cell.marketSelector.leftButton.hidden = !self.selectedMarket ||
+            [self.markets indexOfObject:self.selectedMarket] == 0;
+            cell.marketSelector.rightButton.hidden = !self.selectedMarket ||
+            [self.markets indexOfObject:self.selectedMarket] >= self.markets.count - 1;
             cell.marketSelector.delegate = self;
+            [cell.marketSelector reloadData];
             return cell;
         }
         FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
@@ -208,13 +245,18 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
-    // TODO: get some info for market(?)
+    self.selectedMarket = selectedMarket;
+    [self createRoster];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                inSection:0]]
+                          withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - SBDataObjectResultSetDelegate
 
 - (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
 {
+    self.selectedMarket = self.markets.count > 0 ? self.markets.firstObject : nil;
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
                                                                 inSection:0]]
                           withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -238,9 +280,11 @@ heightForHeaderInSection:(NSInteger)section
 {
     FFCollectionMarketCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MarketCell"
                                                                              forIndexPath:indexPath];
-    FFMarket* market = self.markets[indexPath.item];
-    cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
-    cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
+    if (self.markets.count > indexPath.item) {
+        FFMarket* market = self.markets[indexPath.item];
+        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
+        cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
+    }
     return cell;
 }
 

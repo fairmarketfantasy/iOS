@@ -12,6 +12,7 @@
 
 @property(nonatomic) FFMarketSet* marketsSet;
 @property(nonatomic) UITableView* tableView;
+- (void)createRoster;
 - (void)updateHeader;
 - (void)updateMarkets;
 

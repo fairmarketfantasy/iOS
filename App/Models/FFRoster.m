@@ -102,6 +102,31 @@
             ]];
 }
 
++ (void)createNewRosterForMarket:(NSString*)marketId
+                         session:(SBSession*)sesh
+                         success:(SBSuccessBlock)success
+                         failure:(SBErrorBlock)failure
+{
+    NSDictionary* params = @{
+                             @"market_id" : marketId
+                             };
+    [sesh authorizedJSONRequestWithMethod:@"POST"
+                                     path:[self bulkPath]
+                                paramters:params
+                                  success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
+     {
+         [self createWithNetworkRepresentation:JSON
+                                       session:sesh
+                                       success:success
+                                       failure:failure];
+     }
+                                  failure:
+     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
+     {
+         failure(error);
+     }];
+}
+
 + (void)createRosterWithContestTypeId:(NSInteger)cTyp
                               session:(SBSession*)sesh
                               success:(SBSuccessBlock)success

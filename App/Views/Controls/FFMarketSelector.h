@@ -23,5 +23,9 @@
 
 @property(nonatomic) NSUInteger selectedMarket;
 @property(nonatomic, weak) id<FFMarketSelectorDelegate> delegate;
+@property(nonatomic, readonly) UIButton* rightButton;
+@property(nonatomic, readonly) UIButton* leftButton;
+
+- (void)reloadData;
 
 @end

@@ -22,12 +22,13 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        // flow layout
+        _flowLayout = UICollectionViewFlowLayout.new;
         _flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         _flowLayout.sectionInset = UIEdgeInsetsZero;
         _flowLayout.minimumInteritemSpacing = 0.f;
         _flowLayout.minimumLineSpacing = 0.f;
-
+        // collectin view
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(45.f,
                                                                              0.f,
                                                                              frame.size.width - 90.f,
@@ -42,32 +43,32 @@
         [_collectionView registerClass:[FFCollectionMarketCell class]
             forCellWithReuseIdentifier:@"MarketCell"];
         [self addSubview:_collectionView];
-
-        UIButton* left = [UIButton buttonWithType:UIButtonTypeCustom];
-        [left setImage:[UIImage imageNamed:@"leftshuttle.png"]
-              forState:UIControlStateNormal];
-        left.frame = CGRectMake(10.f,
-                                0.f,
-                                35.f,
-                                frame.size.height);
-        left.autoresizingMask = UIViewAutoresizingNone;
-        [left addTarget:self
-                      action:@selector(onLeft:)
-            forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:left];
-
-        UIButton* right = [UIButton buttonWithType:UIButtonTypeCustom];
-        [right setImage:[UIImage imageNamed:@"rightshuttle.png"]
-               forState:UIControlStateNormal];
-        right.frame = CGRectMake(frame.size.width - 45.f,
-                                 0.f,
-                                 35.f,
-                                 frame.size.height);
-        right.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        [right addTarget:self
-                      action:@selector(onRight:)
-            forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:right];
+        // left button
+        _leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.leftButton setImage:[UIImage imageNamed:@"leftshuttle.png"]
+                         forState:UIControlStateNormal];
+        self.leftButton.frame = CGRectMake(10.f,
+                                           0.f,
+                                           35.f,
+                                           frame.size.height);
+        self.leftButton.autoresizingMask = UIViewAutoresizingNone;
+        [self.leftButton addTarget:self
+                            action:@selector(onLeft:)
+                  forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.leftButton];
+        // right button
+        _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.rightButton setImage:[UIImage imageNamed:@"rightshuttle.png"]
+                          forState:UIControlStateNormal];
+        self.rightButton.frame = CGRectMake(frame.size.width - 45.f,
+                                            0.f,
+                                            35.f,
+                                            frame.size.height);
+        self.rightButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        [self.rightButton addTarget:self
+                             action:@selector(onRight:)
+                   forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.rightButton];
     }
     return self;
 }
@@ -130,6 +131,11 @@
     }
     _delegate = delegate;
     self.collectionView.dataSource = delegate;
+}
+
+- (void)reloadData
+{
+    [self.collectionView reloadData];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
