@@ -47,7 +47,7 @@
                                   session:session
                                authorized:makeAuthroizedRequests];
     if (self) {
-        self.sport = FFMarketSportNFL;
+        self.sport = FFMarketSportNBA;
     }
     return self;
 }

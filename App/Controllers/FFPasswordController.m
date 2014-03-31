@@ -85,6 +85,7 @@
     if (!self.delegate) {
         return;
     }
+    // validation
     if (self.currentPassword.text.length < 6) {
         [[[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Password will not changed", nil)
                                     message:NSLocalizedString(@"Current password shold be at least 6 characters long", nil)
@@ -129,6 +130,7 @@
     }
     if (textField == self.confirmPassword) {
         [textField endEditing:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }
     return YES;
 }

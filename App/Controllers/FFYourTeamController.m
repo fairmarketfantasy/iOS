@@ -81,9 +81,9 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 
 - (void)updateMarkets
 {
-    self.marketsSet.clearsCollectionBeforeSaving = YES;
-    [self.marketsSet fetchType:FFMarketTypeRegularSeason];
     self.marketsSet.clearsCollectionBeforeSaving = NO;
+    [self.marketsSet fetchType:FFMarketTypeRegularSeason];
+    self.marketsSet.clearsCollectionBeforeSaving = YES;
     [self.marketsSet fetchType:FFMarketTypeSingleElimination];
 }
 
