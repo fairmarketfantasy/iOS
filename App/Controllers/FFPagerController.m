@@ -22,7 +22,7 @@
 #import "FFContestType.h"
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
-FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate>
+FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol>
 
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFYourTeamController* teamController;
@@ -51,6 +51,7 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate>
         self.receiverController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
                                                              bundle:[NSBundle mainBundle]]
                                    instantiateViewControllerWithIdentifier:@"ReceiverController"];
+        self.receiverController.delegate = self;
     }
     return self;
 }
@@ -328,6 +329,18 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [self.session logout];
     [self.navigationController dismissViewControllerAnimated:YES
                                                   completion:nil];
+}
+
+#pragma mark - FFPlayersProtocol
+
+- (FFRoster *)roster
+{
+    return self.teamController.roster;
+}
+
+- (NSArray*)positions
+{
+    return [self.teamController positions];
 }
 
 @end

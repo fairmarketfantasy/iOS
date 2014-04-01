@@ -20,6 +20,7 @@
 #import "FFPathImageView.h"
 // model
 #import "FFUser.h"
+#import "FFRoster.h"
 
 @interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -38,9 +39,15 @@
     [self.view addSubview:self.tableView];
 }
 
-- (void)didMoveToParentViewController:(UIViewController *)parent
+- (void)didMoveToParentViewController:(UIViewController*)parent
 {
     [self updateHeader];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
 }
 
 #pragma mark - public
@@ -79,10 +86,13 @@
 - (NSInteger)tableView:(UITableView*)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 1;
+    if (self.delegate.roster) {
+        if (section == 0) {
+            return 1;
+        }
+        return self.delegate.roster.players.count;
     }
-    return 1;
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
@@ -100,13 +110,23 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
     if (indexPath.section == 0) {
         FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:@"ReceiverCell"
                                                                    forIndexPath:indexPath];
+        [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
         return cell;
     }
     FFTeamAddCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamAddCell"
                                                           forIndexPath:indexPath];
-    cell.titleLabel.text = NSLocalizedString(@"Team: NYG PPG: 11.56", nil);
-    cell.nameLabel.text = NSLocalizedString(@"Victor Cruz", nil);
-    cell.costLabel.text = NSLocalizedString(@"$17287.0", nil);
+    if (self.delegate.roster && self.delegate.roster.players.count > indexPath.row) {
+        NSDictionary* player = self.delegate.roster.players[indexPath.row];
+
+        cell.titleLabel.text = player[@"team"];
+        cell.nameLabel.text = player[@"name"];
+        cell.costLabel.text = [FFStyle.priceFormatter
+                               stringFromNumber:@([player[@"purchase_price"] floatValue])];
+        [cell.avatar setImageWithURL: [NSURL URLWithString:player[@"headshot_url"]]
+                    placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
+         usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+        [cell.avatar draw];
+    }
     @weakify(self)
     [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                    withBlock:^{

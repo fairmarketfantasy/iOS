@@ -21,16 +21,15 @@
     if (self) {
         self.contentView.backgroundColor = [FFStyle white];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.segments = [[FUISegmentedControl alloc] initWithItems:[self gameTypes]];
+        self.segments = [[FUISegmentedControl alloc] initWithFrame:CGRectMake(5.f, 16.f, 310.f, 30.f)];
         self.segments.cornerRadius = 3.f;
         self.segments.dividerColor = [FFStyle white];
         self.segments.selectedFontColor = [FFStyle white];
         self.segments.deselectedFontColor = [FFStyle white];
-        self.segments.selectedFont = [FFStyle regularFont:14.f];
-        self.segments.deselectedFont = [FFStyle regularFont:14.f];
+        self.segments.selectedFont = [FFStyle regularFont:12.f];
+        self.segments.deselectedFont = [FFStyle regularFont:12.f];
         self.segments.deselectedColor = [FFStyle brightGreen];
         self.segments.selectedColor = [FFStyle darkGrey];
-        self.segments.frame = CGRectMake(5.f, 16.f, 310.f, 30.f);
         self.segments.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.segments.selectedSegmentIndex = 0;
         [self.contentView addSubview:self.segments];
@@ -38,20 +37,18 @@
     return self;
 }
 
-#pragma mark - private
-
-// TODO: move to model
-- (NSArray*)gameTypes
+- (void)setItems:(NSArray*)items
 {
-    return @[
-             @"PG",
-             @"SG",
-             @"PF",
-             @"C",
-             @"G",
-             @"F",
-             @"UTIL"
-             ];
+    for (NSUInteger index = self.segments.numberOfSegments; index > 0; index--) {
+        [self.segments removeSegmentAtIndex:index - 1
+                                   animated:NO];
+    }
+    for (NSString* item in items) {
+        [self.segments insertSegmentWithTitle:item
+                                      atIndex:self.segments.numberOfSegments
+                                     animated:NO];
+    }
+    self.segments.selectedSegmentIndex = 0;
 }
 
 @end

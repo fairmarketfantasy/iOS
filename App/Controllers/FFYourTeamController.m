@@ -57,15 +57,12 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     [self updateHeader];
 }
 
-#pragma mark - private
+#pragma mark - public
 
-// TODO: move it to model
 - (NSArray*)positions
 {
     return [self.roster.positions componentsSeparatedByString:@","];
 }
-
-#pragma mark - public
 
 - (void)createRoster
 {

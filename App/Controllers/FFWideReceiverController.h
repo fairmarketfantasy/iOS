@@ -8,8 +8,18 @@
 
 #import "FFBaseViewController.h"
 
+@class FFRoster;
+
+@protocol FFPlayersProtocol <NSObject>
+
+@property(nonatomic, readonly) FFRoster* roster;
+@property(nonatomic, readonly) NSArray* positions;
+
+@end
+
 @interface FFWideReceiverController : FFBaseViewController
 
+@property(nonatomic, weak) id<FFPlayersProtocol> delegate;
 @property(nonatomic) UITableView* tableView;
 - (void)updateHeader;
 

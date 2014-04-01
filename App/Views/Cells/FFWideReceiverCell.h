@@ -13,5 +13,6 @@
 @interface FFWideReceiverCell : UITableViewCell
 
 @property(nonatomic) FUISegmentedControl* segments;
+- (void)setItems:(NSArray*)items;
 
 @end

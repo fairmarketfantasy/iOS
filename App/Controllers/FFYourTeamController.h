@@ -10,8 +10,10 @@
 
 @interface FFYourTeamController : FFBaseViewController
 
+@property(nonatomic, readonly) FFRoster* roster;
 @property(nonatomic) FFMarketSet* marketsSet;
 @property(nonatomic) UITableView* tableView;
+- (NSArray*)positions;
 - (void)createRoster;
 - (void)updateHeader;
 - (void)updateMarkets;
