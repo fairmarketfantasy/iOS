@@ -47,6 +47,7 @@
                                   session:session
                                authorized:makeAuthroizedRequests];
     if (self) {
+        self.clearsCollectionBeforeSaving = YES;
         self.sport = FFMarketSportNBA;
     }
     return self;

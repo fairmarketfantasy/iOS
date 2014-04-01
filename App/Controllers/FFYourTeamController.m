@@ -70,6 +70,9 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 - (void)createRoster
 {
     if (!self.selectedMarket) {
+        self.roster = nil;
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
         return;
     }
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Creating Roster"
@@ -109,6 +112,19 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
      }];
 }
 
+- (void)marketsUpdated
+{
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                inSection:0]]
+                          withRowAnimation:UITableViewRowAnimationAutomatic];
+    if (self.markets.count > 0) {
+        [self marketSelected:self.markets.firstObject];
+    } else {
+        self.selectedMarket = nil;
+        [self createRoster];
+    }
+}
+
 - (void)updateHeader
 {
     FFAccountHeader* header = (FFAccountHeader*)self.tableView.tableHeaderView;
@@ -134,9 +150,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 
 - (void)updateMarkets
 {
-    self.marketsSet.clearsCollectionBeforeSaving = NO;
     [self.marketsSet fetchType:FFMarketTypeRegularSeason];
-    self.marketsSet.clearsCollectionBeforeSaving = YES;
     [self.marketsSet fetchType:FFMarketTypeSingleElimination];
 }
 
@@ -304,14 +318,7 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
 {
-    if (self.markets.count > 0) {
-        [self marketSelected:self.markets.firstObject];
-    } else {
-        self.selectedMarket = nil;
-    }
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
-                                                                inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self marketsUpdated];
 }
 
 #pragma mark - UICollectionViewDataSource
