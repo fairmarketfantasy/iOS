@@ -12,6 +12,7 @@
 #import "FFAutoFillCell.h"
 #import "FFMarketsCell.h"
 #import "FFTeamCell.h"
+#import "FFTeamTradeCell.h"
 #import "FFAlertView.h"
 #import "FFRosterTableHeader.h"
 #import "FFAccountHeader.h"
@@ -50,15 +51,17 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     self.marketsSet.delegate = self;
     [self updateMarkets];
     // roster
-//    self.roster = [self.session.user getInProgressRoster];
     [self createRoster];
     [self updateHeader];
 }
 
-//- (void)viewWillAppear:(BOOL)animated
-//{
-//    [super viewWillAppear:animated];
-//}
+#pragma mark - private
+
+// TODO: move it to model
+- (NSArray*)positions
+{
+    return [self.roster.positions componentsSeparatedByString:@","];
+}
 
 #pragma mark - public
 
@@ -82,6 +85,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
      }
                                failure:
      ^(NSError * error) {
+         self.roster = nil;
          [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                        withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
@@ -103,9 +107,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     [header.avatar setImageWithURL: [NSURL URLWithString:self.session.user.imageUrl]
                   placeholderImage: [UIImage imageNamed:@"defaultuser"]
        usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    header.avatar.contentMode = UIViewContentModeScaleAspectFit;
     [header.avatar draw];
-    header.avatar.contentMode = UIViewContentModeScaleAspectFit;
 
     header.nameLabel.text = self.session.user.name;
     header.walletLabel.text = [FFStyle.funbucksFormatter
@@ -140,8 +142,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     if (section == 0) {
         return 2;
     }
-//    return 7;
-    return self.roster.players.count;
+    return [self positions].count;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
@@ -182,39 +183,30 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
         return cell;
     }
     case 1: {
+        NSString* position = [self positions][indexPath.row];
+        for (NSDictionary* player in self.roster.players) { // TODO: make players MODEL(!!!)
+            if ([player[@"position"] isEqualToString:position]) {
+                FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamTradeCell"
+                                                                        forIndexPath:indexPath];
+                cell.titleLabel.text = player[@"team"];
+                cell.nameLabel.text = player[@"name"];
+                NSNumberFormatter* formatter = NSNumberFormatter.new;
+                [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+                cell.costLabel.text = [FFStyle.priceFormatter
+                                       stringFromNumber:[formatter numberFromString:player[@"purchase_price"]]];
+                cell.centLabel.text = @"";
+                [cell.avatar setImageWithURL: [NSURL URLWithString:player[@"headshot_url"]]
+                              placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
+                   usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+                [cell.avatar draw];
+
+                return cell;
+            }
+        }
         FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamCell"
                                                            forIndexPath:indexPath];
-        NSDictionary* player = self.roster.players[indexPath.row];
-        cell.titleLabel.text = player[@"name"];
-//        NSString* text = @"";
-//        // TODO: move to model!
-//        switch (indexPath.row) {
-//            case 0:
-//                text = @"PG Not selected";
-//                break;
-//            case 1:
-//                text = @"SG Not selected";
-//                break;
-//            case 2:
-//                text = @"PF Not selected";
-//                break;
-//            case 3:
-//                text = @"C Not selected";
-//                break;
-//            case 4:
-//                text = @"G Not selected";
-//                break;
-//            case 5:
-//                text = @"F Not selected";
-//                break;
-//            case 6:
-//                text = @"UTIL Not selected";
-//                break;
-//            default:
-//                WTFLog;
-//                break;
-//        }
-//        cell.titleLabel.text = NSLocalizedString(text, nil);
+        cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", position,
+                                NSLocalizedString(@"Not Selected", nil)];
         return cell;
     }
     default:

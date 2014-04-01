@@ -15,6 +15,6 @@
 @property(nonatomic, readonly) UILabel* nameLabel;
 @property(nonatomic, readonly) UILabel* costLabel;
 @property(nonatomic, readonly) FFCustomButton* PTButton;
-@property(nonatomic, readonly) FFCustomButton* AddButton;
+@property(nonatomic, readonly) FFCustomButton* addButton;
 
 @end

@@ -25,6 +25,13 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 @implementation FFStyle
 
++ (NSNumberFormatter*)priceFormatter
+{
+    NSNumberFormatter* formatter = NSNumberFormatter.new;
+    formatter.numberStyle = NSNumberFormatterCurrencyStyle;
+    return formatter;
+}
+
 + (NSNumberFormatter*)funbucksFormatter
 {
     NSNumberFormatter* formatter = NSNumberFormatter.new;
@@ -122,8 +129,7 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 + (UIColor*)yellowErrorColor
 {
-#warning YELLOW
-    return [UIColor yellowColor]; // TODO: this
+    return [UIColor yellowColor]; // ???: another maybe
 }
 
 + (UIColor*)greyTextColor

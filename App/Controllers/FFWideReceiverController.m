@@ -38,9 +38,8 @@
     [self.view addSubview:self.tableView];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)didMoveToParentViewController:(UIViewController *)parent
 {
-    [super viewWillAppear:animated];
     [self updateHeader];
 }
 

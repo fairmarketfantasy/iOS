@@ -18,6 +18,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [FFStyle darkGrey];
+        // avatar
         _avatar = [FFPathImageView.alloc initWithFrame:CGRectMake(0.f, 0.f, 60.f, 60.f)
                                                  image:[UIImage imageNamed:@"defaultuser"]
                                               pathType:FFPathImageViewTypeCircle
@@ -32,6 +33,7 @@
         self.avatar.pathWidth = 2.f;
         [self addSubview:self.avatar];
         [self.avatar draw];
+        // name label
         _nameLabel = [UILabel.alloc  initWithFrame:CGRectMake(15.f, 5.f, 100.f, 30.f)];
         self.nameLabel.backgroundColor = [UIColor clearColor];
         self.nameLabel.font = [FFStyle regularFont:19.f];

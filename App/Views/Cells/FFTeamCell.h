@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class FFPathImageView;
+
 @interface FFTeamCell : UITableViewCell
 
+@property(nonatomic, readonly) FFPathImageView* avatar;
 @property(nonatomic, readonly) UILabel* titleLabel;
 
 @end

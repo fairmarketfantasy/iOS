@@ -8,6 +8,14 @@
 
 #import "FFTeamCell.h"
 
+@class FFCustomButton;
+
 @interface FFTeamTradeCell : FFTeamCell
+
+@property(nonatomic, readonly) UILabel* nameLabel;
+@property(nonatomic, readonly) UILabel* costLabel;
+@property(nonatomic, readonly) UILabel* centLabel;
+@property(nonatomic, readonly) FFCustomButton* PTButton;
+@property(nonatomic, readonly) FFCustomButton* tradeButton;
 
 @end

@@ -20,6 +20,7 @@
 
 @interface FFStyle : NSObject
 
++ (NSNumberFormatter*)priceFormatter;
 + (NSNumberFormatter*)funbucksFormatter;
 + (NSDateFormatter*)marketDateFormatter;
 + (NSDateFormatter*)dateFormatter;

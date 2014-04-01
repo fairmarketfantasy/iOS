@@ -8,6 +8,7 @@
 
 #import "FFTeamTable.h"
 #import "FFTeamCell.h"
+#import "FFTeamTradeCell.h"
 #import "FFMarketsCell.h"
 #import "FFAutoFillCell.h"
 #import "FFAccountHeader.h"
@@ -29,6 +30,8 @@
      forCellReuseIdentifier:@"AutoFillCell"];
         [self registerClass:[FFTeamCell class]
      forCellReuseIdentifier:@"TeamCell"];
+        [self registerClass:[FFTeamTradeCell class]
+     forCellReuseIdentifier:@"TeamTradeCell"];
 
         // header
         self.tableHeaderView = [[FFAccountHeader alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 90.f)];

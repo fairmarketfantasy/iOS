@@ -19,6 +19,10 @@
     self = [super initWithStyle:style
                 reuseIdentifier:reuseIdentifier];
     if (self) {
+        CGRect titleRect = self.titleLabel.frame;
+        titleRect.size.width = 140.f;
+        self.titleLabel.frame = titleRect;
+        
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(82.f, 14.f, 140.f, 16.f)];
         self.nameLabel.backgroundColor = [UIColor clearColor];
         self.nameLabel.font = [FFStyle regularFont:14.f];
@@ -47,20 +51,20 @@
                                                          3.f : 5.5f,
                                                          0.f, 0.f, 0.f);
         [self.contentView addSubview:self.PTButton];
-        _AddButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"Add", nil)
+        _addButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"Add", nil)
                                              color:[FFStyle brightGreen]
                                        borderColor:[FFStyle white]];
-        self.AddButton.frame = CGRectMake(267.f,
+        self.addButton.frame = CGRectMake(267.f,
                                           20.f,
                                           45.f,
                                           40.f);
-        self.AddButton.titleLabel.font = [FFStyle blockFont:17.f];
-        [self.AddButton setTitleColor:[FFStyle black]
+        self.addButton.titleLabel.font = [FFStyle blockFont:17.f];
+        [self.addButton setTitleColor:[FFStyle black]
                              forState:UIControlStateNormal];
-        self.AddButton.titleEdgeInsets = UIEdgeInsetsMake(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ?
+        self.addButton.titleEdgeInsets = UIEdgeInsetsMake(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ?
                                                           3.f : 5.5f,
                                                           0.f, 0.f, 0.f);
-        [self.contentView addSubview:self.AddButton];
+        [self.contentView addSubview:self.addButton];
     }
     return self;
 }
