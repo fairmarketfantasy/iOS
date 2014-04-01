@@ -30,6 +30,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 // models
 @property(nonatomic) FFRoster* roster;
 @property(nonatomic) FFMarket* selectedMarket;
+@property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
 @end
 
@@ -51,6 +52,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     self.marketsSet.delegate = self;
     [self updateMarkets];
     // roster
+    self.tryCreateRosterTimes = 3;
     [self createRoster];
     [self updateHeader];
 }
@@ -70,14 +72,16 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     if (!self.selectedMarket) {
         return;
     }
-    FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Creating Roster"
-                                                   messsage:nil
-                                               loadingStyle:FFAlertViewLoadingStylePlain];
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Creating Roster"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
+    @weakify(self)
     [FFRoster createNewRosterForMarket:self.selectedMarket.objId
                                session:self.session
                                success:
      ^(id successObj) {
+         @strongify(self)
          self.roster = successObj;
          [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                        withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -85,16 +89,23 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
      }
                                failure:
      ^(NSError * error) {
-         self.roster = nil;
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
-         [alert hide];
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
+         @strongify(self)
+         if (self.tryCreateRosterTimes > 0) {
+             [alert hide];
+             self.tryCreateRosterTimes--;
+             [self createRoster];
+         } else {
+             self.roster = nil;
+             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                           withRowAnimation:UITableViewRowAnimationAutomatic];
+             [alert hide];
+             [[[FFAlertView alloc] initWithError:error
+                                           title:nil
+                               cancelButtonTitle:nil
+                                 okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                        autoHide:YES]
+              showInView:self.navigationController.view];
+         }
      }];
 }
 
@@ -190,10 +201,8 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                                                                         forIndexPath:indexPath];
                 cell.titleLabel.text = player[@"team"];
                 cell.nameLabel.text = player[@"name"];
-                NSNumberFormatter* formatter = NSNumberFormatter.new;
-                [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
                 cell.costLabel.text = [FFStyle.priceFormatter
-                                       stringFromNumber:[formatter numberFromString:player[@"purchase_price"]]];
+                                       stringFromNumber:@([player[@"purchase_price"] floatValue])];
                 cell.centLabel.text = @"";
                 [cell.avatar setImageWithURL: [NSURL URLWithString:player[@"headshot_url"]]
                               placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
@@ -248,6 +257,10 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)autoFill:(UIButton*)button
 {
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Auto Fill Roster"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
     @weakify(self)
     [self.roster autofillSuccess:
      ^(id successObj) {
@@ -255,10 +268,12 @@ heightForHeaderInSection:(NSInteger)section
          self.roster = successObj;
          [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                        withRowAnimation:UITableViewRowAnimationAutomatic];
+         [alert hide];
      }
                          failure:
      ^(NSError *error) {
          @strongify(self)
+         [alert hide];
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil
@@ -281,6 +296,7 @@ heightForHeaderInSection:(NSInteger)section
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
                                                                 inSection:0]]
                           withRowAnimation:UITableViewRowAnimationAutomatic];
+    self.tryCreateRosterTimes = 3;
     [self createRoster];
 }
 
