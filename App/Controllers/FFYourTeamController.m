@@ -21,6 +21,7 @@
 #import "FFMarketSelector.h"
 #import "FFCollectionMarketCell.h"
 #import <libextobjc/EXTScope.h>
+#import <FlatUIKit.h>
 // models
 #import "FFUser.h"
 #import "FFRoster.h"
@@ -39,6 +40,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self->_autoRemovedBenched = NO;
     self.tableView = [[FFTeamTable alloc] initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -199,6 +201,10 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
         }
         FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
                                                                forIndexPath:indexPath];
+        [cell.autoRemovedBenched addTarget:self
+                                    action:@selector(autoRemovedBenched:)
+                          forControlEvents:UIControlEventValueChanged];
+        cell.autoRemovedBenched.on = self.autoRemovedBenched;
         [cell.autoFillButton addTarget:self
                                 action:@selector(autoFill:)
                       forControlEvents:UIControlEventTouchUpInside];
@@ -265,6 +271,11 @@ heightForHeaderInSection:(NSInteger)section
 }
 
 #pragma mark - button actions
+
+- (void)autoRemovedBenched:(FUISwitch*)sender
+{
+    self->_autoRemovedBenched = sender.on;
+}
 
 - (void)autoFill:(UIButton*)button
 {

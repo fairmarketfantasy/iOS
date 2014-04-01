@@ -24,6 +24,12 @@
 
 @implementation FFDataObjectResultSet
 
+- (void)initWithParameters:(NSDictionary*)parameters
+{
+    
+}
+
+
 - (void)refreshWithParameters:(NSDictionary*)parameters
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(resultSetWillReload:)]) {

@@ -18,13 +18,17 @@
 #import "FFAccountHeader.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
+#import "FFAlertView.h"
 // model
 #import "FFUser.h"
 #import "FFRoster.h"
+#import "FFPlayer.h"
 
 @interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate>
 
-@property(nonatomic) FUISegmentedControl* segments;
+//@property(nonatomic) FUISegmentedControl* segments;
+@property(nonatomic) NSArray* players; // should contain FFPlayer*
+@property(nonatomic, assign) NSUInteger position;
 
 @end
 
@@ -33,6 +37,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.position = 0;
     self.tableView = [[FFWideReceiverTable alloc] initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -47,7 +52,51 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self fetchPlayers];
     [self.tableView reloadData];
+}
+
+#pragma mark - private
+
+- (void)fetchPlayers
+{
+    if (!self.delegate.rosterId) {
+        self.players = @[];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
+        return;
+    }
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Loading Players"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [FFPlayer fetchPlayersForRoster:self.delegate.rosterId
+                           position:self.delegate.positions[self.position]
+                     removedBenched:self.delegate.autoRemovedBenched
+                            session:self.session
+                            success:
+     ^(id successObj) {
+         @strongify(self)
+         self.players = successObj;
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [alert hide];
+     }
+                            failure:
+     ^(NSError *error) {
+         @strongify(self)
+         self.players = @[];
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [alert hide];
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
 }
 
 #pragma mark - public
@@ -86,13 +135,10 @@
 - (NSInteger)tableView:(UITableView*)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    if (self.delegate.roster) {
-        if (section == 0) {
-            return 1;
-        }
-        return self.delegate.roster.players.count;
+    if (section == 0) {
+        return 1;
     }
-    return 0;
+    return self.players.count;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
@@ -111,18 +157,23 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
         FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:@"ReceiverCell"
                                                                    forIndexPath:indexPath];
         [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
+        if (cell.segments.numberOfSegments > self.position) {
+            cell.segments.selectedSegmentIndex = self.position;
+        }
+        [cell.segments addTarget:self
+                          action:@selector(segments:)
+                forControlEvents:UIControlEventValueChanged];
         return cell;
     }
     FFTeamAddCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamAddCell"
                                                           forIndexPath:indexPath];
-    if (self.delegate.roster && self.delegate.roster.players.count > indexPath.row) {
-        NSDictionary* player = self.delegate.roster.players[indexPath.row];
+    if (self.players.count > indexPath.row) {
+        FFPlayer* player = self.players[indexPath.row];
 
-        cell.titleLabel.text = player[@"team"];
-        cell.nameLabel.text = player[@"name"];
-        cell.costLabel.text = [FFStyle.priceFormatter
-                               stringFromNumber:@([player[@"purchase_price"] floatValue])];
-        [cell.avatar setImageWithURL: [NSURL URLWithString:player[@"headshot_url"]]
+        cell.titleLabel.text =  player.team;
+        cell.nameLabel.text = player.name;
+        cell.costLabel.text = [FFStyle.priceFormatter stringFromNumber:@([player.buyPrice floatValue])];
+        [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
                     placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
          usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [cell.avatar draw];
@@ -164,6 +215,14 @@ heightForHeaderInSection:(NSInteger)section
         return 40.f;
     }
     return 0.f;
+}
+
+#pragma mark - button actions
+
+- (void)segments:(FUISegmentedControl*)segments
+{
+    self.position = segments.selectedSegmentIndex;
+    [self fetchPlayers];
 }
 
 @end

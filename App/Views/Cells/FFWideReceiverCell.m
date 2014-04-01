@@ -21,7 +21,7 @@
     if (self) {
         self.contentView.backgroundColor = [FFStyle white];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.segments = [[FUISegmentedControl alloc] initWithFrame:CGRectMake(5.f, 16.f, 310.f, 30.f)];
+        self.segments = [[FUISegmentedControl alloc] initWithFrame:CGRectMake(5.f, 18.f, 310.f, 26.f)];
         self.segments.cornerRadius = 3.f;
         self.segments.dividerColor = [FFStyle white];
         self.segments.selectedFontColor = [FFStyle white];
@@ -48,7 +48,6 @@
                                       atIndex:self.segments.numberOfSegments
                                      animated:NO];
     }
-    self.segments.selectedSegmentIndex = 0;
 }
 
 @end

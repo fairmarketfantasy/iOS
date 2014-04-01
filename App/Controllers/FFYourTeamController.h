@@ -10,6 +10,7 @@
 
 @interface FFYourTeamController : FFBaseViewController
 
+@property(nonatomic, readonly) BOOL autoRemovedBenched;
 @property(nonatomic, readonly) FFRoster* roster;
 @property(nonatomic) FFMarketSet* marketsSet;
 @property(nonatomic) UITableView* tableView;

@@ -12,8 +12,9 @@
 
 @protocol FFPlayersProtocol <NSObject>
 
-@property(nonatomic, readonly) FFRoster* roster;
+@property(nonatomic, readonly) NSString* rosterId;
 @property(nonatomic, readonly) NSArray* positions;
+@property(nonatomic, readonly) BOOL autoRemovedBenched;
 
 @end
 

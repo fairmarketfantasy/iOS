@@ -20,6 +20,7 @@
 #import "FFSessionViewController.h"
 #import "FFMarketSelector.h"
 #import "FFContestType.h"
+#import "FFRoster.h"
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
 FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol>
@@ -333,14 +334,19 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 #pragma mark - FFPlayersProtocol
 
-- (FFRoster *)roster
+- (NSString*)rosterId
 {
-    return self.teamController.roster;
+    return self.teamController.roster.objId;
 }
 
 - (NSArray*)positions
 {
     return [self.teamController positions];
+}
+
+- (BOOL)autoRemovedBenched
+{
+    return self.teamController.autoRemovedBenched;
 }
 
 @end

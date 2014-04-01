@@ -131,6 +131,7 @@
 		89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BABFC518BBB98F001AD755 /* FFNodeItem.m */; };
 		89BABFC818BDFC99001AD755 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89BABFC718BDFC99001AD755 /* Localizable.strings */; };
 		89BB56E018E997B1003EE7DA /* FFPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BB56DF18E997B1003EE7DA /* FFPasswordController.m */; };
+		89BB9F8118EB0CDC002D0C78 /* FFPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BB9F8018EB0CDC002D0C78 /* FFPlayer.m */; };
 		89BED92D18C77348003E9E68 /* Prohibition-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92B18C77348003E9E68 /* Prohibition-Bold.ttf */; };
 		89BED92E18C77348003E9E68 /* Prohibition-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89BED92C18C77348003E9E68 /* Prohibition-BoldItalic.ttf */; };
 		89BED93118C77D19003E9E68 /* FFRosterTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BED93018C77D19003E9E68 /* FFRosterTable.m */; };
@@ -376,6 +377,8 @@
 		89BABFC718BDFC99001AD755 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		89BB56DE18E997B1003EE7DA /* FFPasswordController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPasswordController.h; sourceTree = "<group>"; };
 		89BB56DF18E997B1003EE7DA /* FFPasswordController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPasswordController.m; sourceTree = "<group>"; };
+		89BB9F7F18EB0CDC002D0C78 /* FFPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPlayer.h; sourceTree = "<group>"; };
+		89BB9F8018EB0CDC002D0C78 /* FFPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPlayer.m; sourceTree = "<group>"; };
 		89BED92B18C77348003E9E68 /* Prohibition-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Prohibition-Bold.ttf"; sourceTree = "<group>"; };
 		89BED92C18C77348003E9E68 /* Prohibition-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Prohibition-BoldItalic.ttf"; sourceTree = "<group>"; };
 		89BED92F18C77D19003E9E68 /* FFRosterTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterTable.h; sourceTree = "<group>"; };
@@ -750,6 +753,8 @@
 				89051CBA18BFC253001E8C78 /* FFMarketSet.m */,
 				896ACC2B18B664F5001E9C64 /* FFRoster.h */,
 				896ACC2C18B664F5001E9C64 /* FFRoster.m */,
+				89BB9F7F18EB0CDC002D0C78 /* FFPlayer.h */,
+				89BB9F8018EB0CDC002D0C78 /* FFPlayer.m */,
 				896ACC2D18B664F5001E9C64 /* FFSession.h */,
 				896ACC2E18B664F5001E9C64 /* FFSession.m */,
 				896ACC2F18B664F5001E9C64 /* FFUser.h */,
@@ -1077,6 +1082,7 @@
 				89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */,
 				893D691518E5CDEA005E305B /* FFPredictHistoryCell.m in Sources */,
 				896ACCC118B664F5001E9C64 /* FFNavigationController.m in Sources */,
+				89BB9F8118EB0CDC002D0C78 /* FFPlayer.m in Sources */,
 				896ACCF318B664F5001E9C64 /* FFContest2UpTabelViewCell.m in Sources */,
 				89F1A09C18DCC951001369E3 /* FFPTController.m in Sources */,
 				8972768318D9559D008D995C /* FFWideReceiverCell.m in Sources */,
