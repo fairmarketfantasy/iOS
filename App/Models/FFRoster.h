@@ -60,7 +60,7 @@
 - (void)addPlayer:(FFPlayer*)player
           success:(SBSuccessBlock)success
           failure:(SBErrorBlock)failure;
-- (void)removePlayer:(NSDictionary*)player
+- (void)removePlayer:(FFPlayer*)player
              success:(SBSuccessBlock)success
              failure:(SBErrorBlock)failure;
 - (void)submitSuccess:(SBSuccessBlock)success

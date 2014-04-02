@@ -218,13 +218,28 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                                                                         forIndexPath:indexPath];
                 cell.titleLabel.text = player.team;
                 cell.nameLabel.text = player.name;
+//                cell.costLabel.text = [FFStyle.priceFormatter
+//                                       stringFromNumber:@([player.purchasePrice floatValue])];
+#warning CHECK PRICE!
                 cell.costLabel.text = [FFStyle.priceFormatter
-                                       stringFromNumber:@([player.purchasePrice floatValue])];
+                                       stringFromNumber:@([player.sellPrice floatValue])];
                 cell.centLabel.text = @"";
                 [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
                             placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
                  usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
                 [cell.avatar draw];
+                @weakify(self)
+                [cell.PTButton setAction:kUIButtonBlockTouchUpInside
+                               withBlock:^{
+                                   @strongify(self)
+                                   [self.parentViewController performSegueWithIdentifier:@"GotoPT"
+                                                                                  sender:player]; // TODO: refactode it (?)
+                               }];
+                [cell.tradeButton setAction:kUIButtonBlockTouchUpInside
+                                  withBlock:^{
+                                      @strongify(self)
+                                      [self removePlayer:player];
+                                  }];
                 return cell;
             }
         }
@@ -292,6 +307,37 @@ heightForHeaderInSection:(NSInteger)section
          [alert hide];
      }
                          failure:
+     ^(NSError *error) {
+         @strongify(self)
+         [alert hide];
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
+}
+
+- (void)removePlayer:(FFPlayer*)player
+{
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Removing Player", nil)
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [self.roster  removePlayer:player
+                       success:
+     ^(id successObj) {
+         @strongify(self)
+         NSDictionary* priceDictionary = (NSDictionary*)successObj;
+         NSString* price = priceDictionary[@"price"]; // TODO: use the Model, Luke...
+         self.roster.remainingSalary = [SBFloat.alloc initWithFloat:[price floatValue]];
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [alert hide];
+     }
+                                  failure:
      ^(NSError *error) {
          @strongify(self)
          [alert hide];

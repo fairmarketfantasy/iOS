@@ -186,6 +186,7 @@ failure:
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
         if (success) {
+            self.players = [self.players arrayByAddingObject:player];
             success(JSON);
         }
     }
@@ -209,6 +210,17 @@ failure:
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
         if (success) {
+            FFPlayer* traded = nil;
+            for (FFPlayer* ownPlayer in self.players) {
+                if ([(NSNumber*)ownPlayer.objId isEqualToNumber:(NSNumber*)player.objId]) { // ???: why not NSString?
+                    traded = ownPlayer;
+                }
+            }
+            if (traded) {
+                NSMutableArray* newPlayers = [NSMutableArray arrayWithArray:self.players];
+                [newPlayers removeObject:traded];
+                self.players = [newPlayers copy];
+            }
             success(JSON);
         }
     }
