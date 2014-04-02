@@ -8,10 +8,13 @@
 
 #import "FFBaseViewController.h"
 
+@class FFMarket;
+
 @interface FFYourTeamController : FFBaseViewController
 
 @property(nonatomic, readonly) BOOL autoRemovedBenched;
 @property(nonatomic, readonly) FFRoster* roster;
+@property(nonatomic) FFMarket* selectedMarket;
 @property(nonatomic) FFMarketSet* marketsSet;
 @property(nonatomic) UITableView* tableView;
 - (NSArray*)positions;

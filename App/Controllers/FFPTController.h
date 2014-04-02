@@ -8,6 +8,17 @@
 
 #import "FFBaseViewController.h"
 
+@class FFPlayer;
+
+@protocol FFEventsProtocol <NSObject>
+
+@property(nonatomic, readonly) NSString* marketId;
+
+@end
+
 @interface FFPTController : FFBaseViewController
+
+@property(nonatomic, weak) id<FFEventsProtocol> delegate;
+@property(nonatomic) FFPlayer* player;
 
 @end

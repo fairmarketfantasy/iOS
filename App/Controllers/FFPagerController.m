@@ -10,6 +10,7 @@
 #import "FFStyle.h"
 #import "FFYourTeamController.h"
 #import "FFWideReceiverController.h"
+#import "FFPTController.h"
 #import "StyledPageControl.h"
 #import "FFNavigationBarItemView.h"
 #import "FFLogo.h"
@@ -21,9 +22,10 @@
 #import "FFMarketSelector.h"
 #import "FFContestType.h"
 #import "FFRoster.h"
+#import "FFPlayer.h"
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
-FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol>
+FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtocol>
 
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFYourTeamController* teamController;
@@ -161,6 +163,11 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
     if ([segue.identifier isEqualToString:@"GotoMenu"]) {
         FFMenuViewController* vc = segue.destinationViewController;
         vc.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"GotoPT"]) {
+        FFPTController* vc = segue.destinationViewController;
+        vc.session = self.session;
+        vc.delegate = self;
+        vc.player = (FFPlayer*)sender;
     } else if ([segue.identifier isEqualToString:@"GotoPredictions"]) {
         // TODO: implement
     } else {
@@ -347,6 +354,13 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (BOOL)autoRemovedBenched
 {
     return self.teamController.autoRemovedBenched;
+}
+
+#pragma mark - FFEventsProtocol
+
+- (NSString*)marketId
+{
+    return self.teamController.selectedMarket.objId;
 }
 
 @end

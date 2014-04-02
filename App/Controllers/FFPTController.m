@@ -10,9 +10,14 @@
 #import "FFPTTable.h"
 #import "FFPTCell.h"
 #import "FFPTHeader.h"
+#import "FFAlertView.h"
+// model
+#import "FFEvent.h"
+#import "FFPlayer.h"
 
 @interface FFPTController () <UITableViewDelegate, UITableViewDataSource>
 
+@property(nonatomic) NSArray* events; // should contain FFEvent*
 @property(nonatomic) FFPTTable* tableView;
 
 @end
@@ -28,6 +33,52 @@
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
     self.navigationController.navigationBar.translucent = NO;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self fetchEvents];
+    [self.tableView reloadData];
+}
+
+#pragma mark - private
+
+- (void)fetchEvents
+{
+    if (!self.delegate.marketId || !self.player.statsId) {
+        self.events = @[];
+        [self.tableView reloadData];
+        return;
+    }
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Loading Events"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [FFEvent fetchEventsForMarket:self.delegate.marketId
+                           player:self.player.statsId
+                          session:self.session
+                          success:
+     ^(id successObj) {
+         @strongify(self)
+         self.events = successObj;
+         [self.tableView reloadData];
+         [alert hide];
+     }
+                          failure:
+     ^(NSError *error) {
+         @strongify(self)
+         self.events = @[];
+         [self.tableView reloadData];
+         [alert hide];
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
 }
 
 #pragma mark - UITableViewDelegate
@@ -48,7 +99,7 @@ heightForHeaderInSection:(NSInteger)section
 viewForHeaderInSection:(NSInteger)section
 {
     FFPTHeader* header = FFPTHeader.new;
-    header.title = @"Kobe Bryant";
+    header.title = self.player.name ? self.player.name : @"";
     return header;
 }
 
@@ -63,7 +114,7 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 - (NSInteger)tableView:(UITableView *)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return self.events.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -71,7 +122,12 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     FFPTCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PTCell"
                                                      forIndexPath:indexPath];
-    cell.titleLabel.text = @"Points: 4";
+    if (self.events.count > indexPath.row) {
+        FFEvent* event = self.events[indexPath.row];
+        cell.titleLabel.text = [NSString stringWithFormat:@"%@ : %@", event.name, event.value];
+    } else {
+        cell.titleLabel.text = @"";
+    }
     return cell;
 }
 

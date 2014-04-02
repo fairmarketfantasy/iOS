@@ -30,7 +30,6 @@
 FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 // models
 @property(nonatomic) FFRoster* roster;
-@property(nonatomic) FFMarket* selectedMarket;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
 @end

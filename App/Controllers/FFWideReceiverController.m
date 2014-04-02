@@ -19,6 +19,7 @@
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
 #import "FFAlertView.h"
+#import "FFPTController.h"
 // model
 #import "FFUser.h"
 #import "FFRoster.h"
@@ -26,8 +27,6 @@
 
 @interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate>
 
-//@property(nonatomic) FUISegmentedControl* segments;
-@property(nonatomic) NSArray* players; // should contain FFPlayer*
 @property(nonatomic, assign) NSUInteger position;
 
 @end
@@ -177,14 +176,14 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
                     placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
          usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [cell.avatar draw];
+        @weakify(self)
+        [cell.PTButton setAction:kUIButtonBlockTouchUpInside
+                       withBlock:^{
+                           @strongify(self)
+                           [self.parentViewController performSegueWithIdentifier:@"GotoPT"
+                                                                          sender:player]; // TODO: refactode it (?)
+                       }];
     }
-    @weakify(self)
-    [cell.PTButton setAction:kUIButtonBlockTouchUpInside
-                   withBlock:^{
-                       @strongify(self)
-                       [self.parentViewController performSegueWithIdentifier:@"GotoPT"
-                                                                           sender:nil];
-                   }];
     return cell;
 }
 

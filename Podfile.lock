@@ -98,9 +98,9 @@ PODS:
     - SDWebImage/Core
   - SDWebImage/Core (3.6)
   - SecureUDID (1.1)
-  - sqlite3 (3.8.4.1):
+  - sqlite3 (3.8.4.2):
     - sqlite3/common
-  - sqlite3/common (3.8.4.1)
+  - sqlite3/common (3.8.4.2)
   - StyledPageControl (1.0)
   - UIActivityIndicator-for-SDWebImage (1.0.3):
     - SDWebImage (~> 3.2)
@@ -151,7 +151,7 @@ SPEC CHECKSUMS:
   SBData: 1e24e03d4aaea50c1387939c037ededa2797a768
   SDWebImage: 7eb273e54ca8a2e506ad9bd5e80c35b2a4d7c95e
   SecureUDID: f29e17c7fc56968b6c42ce328b901a9fec87bb44
-  sqlite3: 57a39929a85779a68c62f4e6d12cfaa6e7ef475e
+  sqlite3: e22d4be08a913cc3b4b3737c7e2a4290c25b3803
   StyledPageControl: c63d0d5eed3151241ac2ee10f3dc01305c3ae421
   UIActivityIndicator-for-SDWebImage: e712b97826395022ce7b4a4b56eb7194090c19d5
 

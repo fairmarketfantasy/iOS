@@ -128,6 +128,7 @@
 		8972768618D95F95008D995C /* FFRosterTableHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 8972768518D95F95008D995C /* FFRosterTableHeader.m */; };
 		8972768918D9774A008D995C /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8972768718D9774A008D995C /* close@2x.png */; };
 		8972768A18D9774A008D995C /* open@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8972768818D9774A008D995C /* open@2x.png */; };
+		897C869118EC1FC40068D03F /* FFEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 897C869018EC1FC40068D03F /* FFEvent.m */; };
 		89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BABFC518BBB98F001AD755 /* FFNodeItem.m */; };
 		89BABFC818BDFC99001AD755 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 89BABFC718BDFC99001AD755 /* Localizable.strings */; };
 		89BB56E018E997B1003EE7DA /* FFPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BB56DF18E997B1003EE7DA /* FFPasswordController.m */; };
@@ -372,6 +373,8 @@
 		8972768518D95F95008D995C /* FFRosterTableHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterTableHeader.m; sourceTree = "<group>"; };
 		8972768718D9774A008D995C /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
 		8972768818D9774A008D995C /* open@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "open@2x.png"; sourceTree = "<group>"; };
+		897C868F18EC1FC40068D03F /* FFEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFEvent.h; sourceTree = "<group>"; };
+		897C869018EC1FC40068D03F /* FFEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFEvent.m; sourceTree = "<group>"; };
 		89BABFC418BBB98F001AD755 /* FFNodeItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNodeItem.h; sourceTree = "<group>"; };
 		89BABFC518BBB98F001AD755 /* FFNodeItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNodeItem.m; sourceTree = "<group>"; };
 		89BABFC718BDFC99001AD755 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -755,6 +758,8 @@
 				896ACC2C18B664F5001E9C64 /* FFRoster.m */,
 				89BB9F7F18EB0CDC002D0C78 /* FFPlayer.h */,
 				89BB9F8018EB0CDC002D0C78 /* FFPlayer.m */,
+				897C868F18EC1FC40068D03F /* FFEvent.h */,
+				897C869018EC1FC40068D03F /* FFEvent.m */,
 				896ACC2D18B664F5001E9C64 /* FFSession.h */,
 				896ACC2E18B664F5001E9C64 /* FFSession.m */,
 				896ACC2F18B664F5001E9C64 /* FFUser.h */,
@@ -1109,6 +1114,7 @@
 				896ACCBF18B664F5001E9C64 /* FFMyAccountViewController.m in Sources */,
 				896ACCF718B664F5001E9C64 /* FFRosterSlotCell.m in Sources */,
 				890504CF18D9EEC7006CD2EA /* AnimatedTransitioning.m in Sources */,
+				897C869118EC1FC40068D03F /* FFEvent.m in Sources */,
 				8951A33518D08A9E0019384D /* FFEntrantsCell.m in Sources */,
 				896ACCE918B664F5001E9C64 /* FFGame.m in Sources */,
 				8951A33418D08A9E0019384D /* FFEnterCell.m in Sources */,
