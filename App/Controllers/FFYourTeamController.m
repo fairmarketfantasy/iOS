@@ -25,6 +25,7 @@
 // models
 #import "FFUser.h"
 #import "FFRoster.h"
+#import "FFPlayer.h"
 
 @interface FFYourTeamController () <UITableViewDataSource, UITableViewDelegate,
 FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
@@ -211,20 +212,19 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     }
     case 1: {
         NSString* position = [self positions][indexPath.row];
-        for (NSDictionary* player in self.roster.players) { // TODO: make players MODEL(!!!)
-            if ([player[@"position"] isEqualToString:position]) {
+        for (FFPlayer* player in self.roster.players) {
+            if ([player.position isEqualToString:position]) {
                 FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamTradeCell"
                                                                         forIndexPath:indexPath];
-                cell.titleLabel.text = player[@"team"];
-                cell.nameLabel.text = player[@"name"];
+                cell.titleLabel.text = player.team;
+                cell.nameLabel.text = player.name;
                 cell.costLabel.text = [FFStyle.priceFormatter
-                                       stringFromNumber:@([player[@"purchase_price"] floatValue])];
+                                       stringFromNumber:@([player.purchasePrice floatValue])];
                 cell.centLabel.text = @"";
-                [cell.avatar setImageWithURL: [NSURL URLWithString:player[@"headshot_url"]]
-                              placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
-                   usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+                [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
+                            placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
+                 usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
                 [cell.avatar draw];
-
                 return cell;
             }
         }
@@ -253,7 +253,7 @@ viewForHeaderInSection:(NSInteger)section
     if (section == 1) {
         FFRosterTableHeader* view = FFRosterTableHeader.new;
         view.titleLabel.text = NSLocalizedString(@"Your Team", nil);
-        view.priceLabel.text = NSLocalizedString(@"$-100000", nil);
+        view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.roster.remainingSalary.floatValue)];
         view.priceLabel.textColor = [FFStyle brightRed];
         return view;
     }

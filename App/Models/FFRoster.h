@@ -11,6 +11,8 @@
 #import "FFContestType.h"
 #import "FFMarket.h"
 
+@class FFPlayer;
+
 @interface FFRoster : SBDataObject
 
 @property(nonatomic) SBInteger* amountPaid;
@@ -55,8 +57,7 @@
                      session:(SBSession*)sesh
                      success:(SBSuccessBlock)success
                      failure:(SBErrorBlock)failure;
-- (void)addPlayer:(NSDictionary*)player
-       toPosition:(NSString*)position
+- (void)addPlayer:(FFPlayer*)player
           success:(SBSuccessBlock)success
           failure:(SBErrorBlock)failure;
 - (void)removePlayer:(NSDictionary*)player

@@ -43,5 +43,9 @@
                       session:(SBSession*)session
                       success:(SBSuccessBlock)success
                       failure:(SBErrorBlock)failure;
++ (void)makePlayersFromDictionaries:(NSArray*)dictionaries
+                            session:(SBSession*)session
+                            success:(SBSuccessBlock)success
+                            failure:(SBErrorBlock)failure;
 
 @end

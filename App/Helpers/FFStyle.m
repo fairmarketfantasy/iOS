@@ -36,7 +36,7 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 {
     NSNumberFormatter* formatter = NSNumberFormatter.new;
 //    formatter.numberStyle = NSNumberFormatterCurrencyStyle;
-    formatter.numberStyle = NSNumberFormatterPercentStyle;
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
     return formatter;
 }
 

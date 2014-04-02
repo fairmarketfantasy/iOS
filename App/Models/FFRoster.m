@@ -11,6 +11,7 @@
 #import "FFContestType.h"
 #import <objc/runtime.h>
 #import <dispatch/dispatch.h>
+#import "FFPlayer.h"
 
 @implementation FFRoster
 
@@ -27,7 +28,6 @@
 @dynamic ownerId;
 @dynamic ownerName;
 @dynamic paidAt;
-@dynamic players;
 @dynamic positions;
 @dynamic remainingSalary;
 @dynamic score;
@@ -66,7 +66,6 @@
             @"ownerId":             @"owner_id",
             @"ownerName":           @"owner_name",
             @"paidAt":              @"paid_at",
-            @"players":             @"players",
             @"positions":           @"positions",
             @"remainingSalary":     @"remaining_salary",
             @"score":               @"score",
@@ -176,42 +175,49 @@ failure:
 
 #pragma mark -
 
-- (void)addPlayer:(NSDictionary*)player
-       toPosition:(NSString*)position
+- (void)addPlayer:(FFPlayer*)player
           success:(SBSuccessBlock)success
           failure:(SBErrorBlock)failure
 {
-    NSString* path = [[self path] stringByAppendingFormat:@"/add_player/%@/%@", player[@"id"], position];
+    NSString* path = [[self path] stringByAppendingFormat:@"/add_player/%@/%@", player.objId, player.position];
     [self.session authorizedJSONRequestWithMethod:@"POST"
                                              path:path
                                         paramters:@{}
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
-        success(JSON);
+        if (success) {
+            success(JSON);
+        }
     }
 failure:
     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
     {
-        failure(error);
+        if (failure) {
+            failure(error);
+        }
     }];
 }
 
-- (void)removePlayer:(NSDictionary*)player
+- (void)removePlayer:(FFPlayer*)player
              success:(SBSuccessBlock)success
              failure:(SBErrorBlock)failure
 {
-    NSString* path = [[self path] stringByAppendingFormat:@"/remove_player/%@", player[@"id"]];
+    NSString* path = [[self path] stringByAppendingFormat:@"/remove_player/%@", player.objId];
     [self.session authorizedJSONRequestWithMethod:@"POST"
                                              path:path
                                         paramters:@{}
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
-        success(JSON);
+        if (success) {
+            success(JSON);
+        }
     }
 failure:
     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
     {
-        failure(error);
+        if (failure) {
+            failure(error);
+        }
     }];
 }
 
@@ -232,13 +238,6 @@ failure:
                                            failure:^(NSError *error) {
                                                failure(error);
                                            }];
-//         [self updateWithNetworkRepresentation:JSON
-//                                       success:^(id successObj) {
-//                                           success(successObj);
-//                                       }
-//                                       failure:^(NSError *error) {
-//                                           failure(error);
-//                                       }];
      }
                                           failure:
      ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
@@ -287,6 +286,15 @@ failure:
                                                   session:self.session
                                                      save:YES];
     }
+
+    NSArray* playerDictionaries = keyedValues[@"players"];
+    NSMutableArray* players = [NSMutableArray arrayWithCapacity:playerDictionaries.count];
+    for (NSDictionary* playerDictionary in playerDictionaries) {
+        [players addObject:[FFPlayer fromNetworkRepresentation:playerDictionary
+                                                       session:self.session
+                                                          save:YES]];
+    }
+    self.players = [players copy];
 }
 
 - (FFContestType*)contestType

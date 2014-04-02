@@ -15,6 +15,7 @@
 #import "FFNavigationBarItemView.h"
 #import "FFLogo.h"
 #import "FFWebViewController.h"
+#import "FFAlertView.h"
 // model
 #import "FFControllerProtocol.h"
 #import "FFMarketSet.h"
@@ -23,6 +24,7 @@
 #import "FFContestType.h"
 #import "FFRoster.h"
 #import "FFPlayer.h"
+#import <SBData/SBTypes.h>
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
 FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtocol>
@@ -346,6 +348,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     return self.teamController.roster.objId;
 }
 
+- (CGFloat)rosterSalary
+{
+    return self.teamController.roster.remainingSalary.floatValue;
+}
+
 - (NSArray*)positions
 {
     return [self.teamController positions];
@@ -355,6 +362,40 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 {
     return self.teamController.autoRemovedBenched;
 }
+
+- (void)addPlayer:(FFPlayer*)player
+{
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Buying Player", nil)
+                                                   messsage:nil
+                                               loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [self.teamController.roster addPlayer:player
+                                  success:
+     ^(id successObj) {
+         @strongify(self)
+         NSDictionary* priceDictionary = (NSDictionary*)successObj;
+         NSString* price = priceDictionary[@"price"]; // TODO: use the Model, Luke...
+         self.teamController.roster.remainingSalary = [SBFloat.alloc initWithFloat:[price floatValue]];
+         [self.teamController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                                          withRowAnimation:UITableViewRowAnimationAutomatic];
+         [alert hide];
+     }
+                                  failure:
+     ^(NSError *error) {
+         @strongify(self)
+         [alert hide];
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
+}
+
 
 #pragma mark - FFEventsProtocol
 

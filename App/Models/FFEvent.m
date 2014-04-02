@@ -128,6 +128,7 @@
 #pragma mark - private
 
 // TODO: should be refactored in future !!!
+// @see + (instancetype)fromNetworkRepresentation:(NSDictionary *)dict session:(SBSession *)session save:(BOOL)persist
 + (void)makeEvents:(NSArray*)events
    fromDictionaries:(NSArray*)dictionaries
             session:(SBSession*)session

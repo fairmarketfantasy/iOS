@@ -588,32 +588,32 @@ failure:
                                                    messsage:nil
                                                loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
-    @weakify(self)
-    [_roster addPlayer:cell.player
-            toPosition:self.currentPickPlayer
-               success:^(id successObj)
-    {
-        @strongify(self)
-        [alert hide];
-        if (self->_delegate
-            && [self->_delegate respondsToSelector:@selector(contestController:
-                                                                      didPickPlayer:)]) {
-            [self->_delegate contestController:self
-                                      didPickPlayer:cell.player];
-        }
-    }
-failure:
-    ^(NSError * error)
-    {
-        @strongify(self)
-        [alert hide];
-        FFAlertView* eAlert = [[FFAlertView alloc] initWithError:error
-                                                           title:nil
-                                               cancelButtonTitle:nil
-                                                 okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                                        autoHide:YES];
-        [eAlert showInView:self.view];
-    }];
+//    @weakify(self)
+//    [_roster addPlayer:cell.player
+//            toPosition:self.currentPickPlayer
+//               success:^(id successObj)
+//    {
+//        @strongify(self)
+//        [alert hide];
+//        if (self->_delegate
+//            && [self->_delegate respondsToSelector:@selector(contestController:
+//                                                                      didPickPlayer:)]) {
+//            [self->_delegate contestController:self
+//                                      didPickPlayer:cell.player];
+//        }
+//    }
+//failure:
+//    ^(NSError * error)
+//    {
+//        @strongify(self)
+//        [alert hide];
+//        FFAlertView* eAlert = [[FFAlertView alloc] initWithError:error
+//                                                           title:nil
+//                                               cancelButtonTitle:nil
+//                                                 okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+//                                                        autoHide:YES];
+//        [eAlert showInView:self.view];
+//    }];
 }
 
 - (void)contestController:(id)cont

@@ -167,7 +167,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
     FFTeamAddCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamAddCell"
                                                           forIndexPath:indexPath];
     if (self.players.count > indexPath.row) {
-        FFPlayer* player = self.players[indexPath.row];
+        __block FFPlayer* player = self.players[indexPath.row];
 
         cell.titleLabel.text =  player.team;
         cell.nameLabel.text = player.name;
@@ -183,6 +183,13 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
                            [self.parentViewController performSegueWithIdentifier:@"GotoPT"
                                                                           sender:player]; // TODO: refactode it (?)
                        }];
+        [cell.addButton setAction:kUIButtonBlockTouchUpInside
+                        withBlock:^{
+                            @strongify(self)
+                            if (self.delegate) {
+                                [self.delegate addPlayer:player];
+                            }
+                        }];
     }
     return cell;
 }
@@ -201,7 +208,8 @@ viewForHeaderInSection:(NSInteger)section
     if (section == 1) {
         FFRosterTableHeader* view = [FFRosterTableHeader new];
         view.titleLabel.text = NSLocalizedString(@"Wide Receiver", nil);
-        view.priceLabel.text = NSLocalizedString(@"$100000", nil);
+        view.priceLabel.text = self.delegate ?
+        [[FFStyle priceFormatter] stringFromNumber:@(self.delegate.rosterSalary)] : @"";
         return view;
     }
     return nil;

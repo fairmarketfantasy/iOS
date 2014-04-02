@@ -9,6 +9,7 @@
 #import "FFPlayer.h"
 #import <SBData/NSDictionary+Convenience.h>
 #import "FFDataObjectResultSet.h"
+#import <objc/runtime.h>
 
 @implementation FFPlayer
 
@@ -112,11 +113,10 @@
              return;
          }
          NSArray* dictionaries = (NSArray*)JSON;
-         [self makePlayers:@[]
-          fromDictionaries:dictionaries
-                   session:session
-                   success:success
-                   failure:failure];
+         [self makePlayersFromDictionaries:dictionaries
+                                   session:session
+                                   success:success
+                                   failure:failure];
      }
                                      failure:
      ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON) {
@@ -126,9 +126,24 @@
      }];
 }
 
++ (void)makePlayersFromDictionaries:(NSArray*)dictionaries
+                            session:(SBSession*)session
+                            success:(SBSuccessBlock)success
+                            failure:(SBErrorBlock)failure
+{
+    @autoreleasepool {
+        [self makePlayers:@[]
+         fromDictionaries:dictionaries
+                  session:session
+                  success:success
+                  failure:failure];
+    }
+}
+
 #pragma mark - private
 
 // TODO: should be refactored in future !!!
+// @see + (instancetype)fromNetworkRepresentation:(NSDictionary *)dict session:(SBSession *)session save:(BOOL)persist
 + (void)makePlayers:(NSArray*)players
    fromDictionaries:(NSArray*)dictionaries
             session:(SBSession*)session

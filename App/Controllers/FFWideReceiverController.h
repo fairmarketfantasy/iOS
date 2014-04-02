@@ -9,12 +9,15 @@
 #import "FFBaseViewController.h"
 
 @class FFRoster;
+@class FFPlayer;
 
 @protocol FFPlayersProtocol <NSObject>
 
 @property(nonatomic, readonly) NSString* rosterId;
+@property(nonatomic, readonly) CGFloat rosterSalary;
 @property(nonatomic, readonly) NSArray* positions;
 @property(nonatomic, readonly) BOOL autoRemovedBenched;
+- (void)addPlayer:(FFPlayer*)player;
 
 @end
 
