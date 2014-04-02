@@ -89,6 +89,42 @@
      }];
 }
 
+- (void)individualPredictionsForMarket:(NSString*)marketId
+                                player:(NSString*)statId
+                                roster:(NSString*)rosterId
+                                  diff:(NSString*)diff
+                               success:(SBSuccessBlock)success
+                               failure:(SBErrorBlock)failure
+{
+    NSParameterAssert(self.session != nil);
+    NSDictionary* params = @{
+                             @"player_id" : statId,
+                             @"market_id" : marketId,
+                             @"roster_id" : rosterId,
+                             @"events" : @[@{
+                                               @"diff" : diff,
+                                               @"name" : self.name,
+                                               @"value" : self.value
+                                               }]};
+    AFHTTPClient* client = self.authorized ? self.session.authorizedHttpClient : self.session.anonymousHttpClient;
+    AFHTTPRequestOperation* operation = [[AFHTTPRequestOperation alloc] initWithRequest:
+                                         [client requestWithMethod:@"POST"
+                                                              path:@"/individual_predictions/"
+                                                        parameters:params]];
+
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (success) {
+            success([NSString stringWithUTF8String:[responseObject bytes]]);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+    [client enqueueHTTPRequestOperation:operation];
+
+}
+
 #pragma mark - private
 
 // TODO: should be refactored in future !!!

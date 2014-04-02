@@ -12,6 +12,7 @@
 
 @protocol FFEventsProtocol <NSObject>
 
+@property(nonatomic, readonly) NSString* rosterId;
 @property(nonatomic, readonly) NSString* marketId;
 
 @end
