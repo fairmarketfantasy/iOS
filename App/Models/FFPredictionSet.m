@@ -26,11 +26,18 @@
 
 - (void)fetch
 {
+    [self fetchWithParameters:@{}];
+}
+
+- (void)fetchWithParameters:(NSDictionary*)parameters
+{
     NSAssert(self.query, @"Query shouldn't be nil!");
-    [self refreshWithParameters:@{
-                                  @"sport" : [FFSport stringFromSport:self.sport],
-                                  @"all" : @"true"
-                                  }];
+    NSMutableDictionary* param = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    [param addEntriesFromDictionary:@{
+                                     @"sport" : [FFSport stringFromSport:self.sport],
+                                     @"all" : @"true"
+                                     }];
+    [self refreshWithParameters:[param copy]];
 }
 
 @end

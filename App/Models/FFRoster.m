@@ -12,6 +12,8 @@
 #import <objc/runtime.h>
 #import <dispatch/dispatch.h>
 #import "FFPlayer.h"
+#import "FFContestType.h"
+#import "FFMarket.h"
 
 @implementation FFRoster
 

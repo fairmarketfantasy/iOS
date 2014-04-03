@@ -69,14 +69,11 @@
 		896ACC7318B664F5001E9C64 /* button_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBCC18B664F5001E9C64 /* button_pressed.png */; };
 		896ACC7718B664F5001E9C64 /* backbtn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBCE18B664F5001E9C64 /* backbtn@2x.png */; };
 		896ACC7918B664F5001E9C64 /* bannerclose@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBCF18B664F5001E9C64 /* bannerclose@2x.png */; };
-		896ACC7B18B664F5001E9C64 /* bluedot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD018B664F5001E9C64 /* bluedot@2x.png */; };
 		896ACC7D18B664F5001E9C64 /* checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD118B664F5001E9C64 /* checkmark@2x.png */; };
 		896ACC7F18B664F5001E9C64 /* contestcircle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD218B664F5001E9C64 /* contestcircle@2x.png */; };
 		896ACC8518B664F5001E9C64 /* defaultuser@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBD518B664F5001E9C64 /* defaultuser@2x.png */; };
 		896ACC8F18B664F5001E9C64 /* globalmenu-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */; };
 		896ACC9118B664F5001E9C64 /* globalmenu@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDB18B664F5001E9C64 /* globalmenu@2x.png */; };
-		896ACC9318B664F5001E9C64 /* greendot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDC18B664F5001E9C64 /* greendot@2x.png */; };
-		896ACC9518B664F5001E9C64 /* greydot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBDD18B664F5001E9C64 /* greydot@2x.png */; };
 		896ACC9B18B664F5001E9C64 /* leftshuttle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE018B664F5001E9C64 /* leftshuttle@2x.png */; };
 		896ACC9D18B664F5001E9C64 /* loginbg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE118B664F5001E9C64 /* loginbg@2x.png */; };
 		896ACCA518B664F5001E9C64 /* rightshuttle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBE518B664F5001E9C64 /* rightshuttle@2x.png */; };
@@ -278,14 +275,11 @@
 		896ACBCC18B664F5001E9C64 /* button_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_pressed.png; sourceTree = "<group>"; };
 		896ACBCE18B664F5001E9C64 /* backbtn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backbtn@2x.png"; sourceTree = "<group>"; };
 		896ACBCF18B664F5001E9C64 /* bannerclose@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bannerclose@2x.png"; sourceTree = "<group>"; };
-		896ACBD018B664F5001E9C64 /* bluedot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bluedot@2x.png"; sourceTree = "<group>"; };
 		896ACBD118B664F5001E9C64 /* checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkmark@2x.png"; sourceTree = "<group>"; };
 		896ACBD218B664F5001E9C64 /* contestcircle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "contestcircle@2x.png"; sourceTree = "<group>"; };
 		896ACBD518B664F5001E9C64 /* defaultuser@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "defaultuser@2x.png"; sourceTree = "<group>"; };
 		896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "globalmenu-highlighted@2x.png"; sourceTree = "<group>"; };
 		896ACBDB18B664F5001E9C64 /* globalmenu@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "globalmenu@2x.png"; sourceTree = "<group>"; };
-		896ACBDC18B664F5001E9C64 /* greendot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greendot@2x.png"; sourceTree = "<group>"; };
-		896ACBDD18B664F5001E9C64 /* greydot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greydot@2x.png"; sourceTree = "<group>"; };
 		896ACBE018B664F5001E9C64 /* leftshuttle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "leftshuttle@2x.png"; sourceTree = "<group>"; };
 		896ACBE118B664F5001E9C64 /* loginbg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginbg@2x.png"; sourceTree = "<group>"; };
 		896ACBE518B664F5001E9C64 /* rightshuttle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rightshuttle@2x.png"; sourceTree = "<group>"; };
@@ -637,14 +631,11 @@
 				89F2E70118BE249A00B23A99 /* accessory_uncollapse@2x.png */,
 				896ACBCE18B664F5001E9C64 /* backbtn@2x.png */,
 				896ACBCF18B664F5001E9C64 /* bannerclose@2x.png */,
-				896ACBD018B664F5001E9C64 /* bluedot@2x.png */,
 				896ACBD118B664F5001E9C64 /* checkmark@2x.png */,
 				896ACBD218B664F5001E9C64 /* contestcircle@2x.png */,
 				896ACBD518B664F5001E9C64 /* defaultuser@2x.png */,
 				896ACBDA18B664F5001E9C64 /* globalmenu-highlighted@2x.png */,
 				896ACBDB18B664F5001E9C64 /* globalmenu@2x.png */,
-				896ACBDC18B664F5001E9C64 /* greendot@2x.png */,
-				896ACBDD18B664F5001E9C64 /* greydot@2x.png */,
 				896ACBE018B664F5001E9C64 /* leftshuttle@2x.png */,
 				896ACBE118B664F5001E9C64 /* loginbg@2x.png */,
 				896ACBE518B664F5001E9C64 /* rightshuttle@2x.png */,
@@ -982,12 +973,10 @@
 				896ACC9B18B664F5001E9C64 /* leftshuttle@2x.png in Resources */,
 				896ACCA718B664F5001E9C64 /* rosterslotempty@2x.png in Resources */,
 				896ACC7D18B664F5001E9C64 /* checkmark@2x.png in Resources */,
-				896ACC9318B664F5001E9C64 /* greendot@2x.png in Resources */,
 				89F1A08A18DC7C03001369E3 /* passive.png in Resources */,
 				896ACC5318B664F5001E9C64 /* Default.png in Resources */,
 				896ACCA918B664F5001E9C64 /* sectionback@2x.png in Resources */,
 				8972768918D9774A008D995C /* close@2x.png in Resources */,
-				896ACC9518B664F5001E9C64 /* greydot@2x.png in Resources */,
 				89C985BC18E48B8000ABB652 /* accessory_disclosure_dark@2x.png in Resources */,
 				89BED92D18C77348003E9E68 /* Prohibition-Bold.ttf in Resources */,
 				896ACA5218B66377001E9C64 /* UbertestersSDKResources.bundle in Resources */,
@@ -1011,7 +1000,6 @@
 				896ACC5118B664F5001E9C64 /* Default-568h@2x.png in Resources */,
 				896ACC7318B664F5001E9C64 /* button_pressed.png in Resources */,
 				896ACC8518B664F5001E9C64 /* defaultuser@2x.png in Resources */,
-				896ACC7B18B664F5001E9C64 /* bluedot@2x.png in Resources */,
 				89F1A09818DC87CB001369E3 /* loginbg-586h@2x.png in Resources */,
 				896ACC6D18B664F5001E9C64 /* iTunesArtwork.png in Resources */,
 				89BED92E18C77348003E9E68 /* Prohibition-BoldItalic.ttf in Resources */,

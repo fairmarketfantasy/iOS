@@ -8,35 +8,41 @@
 
 #import "SBDataObject.h"
 
-@interface FFRosterPrediction : SBDataObject
+@class FFMarket;
+@class FFContestType;
+
+@interface FFRosterPrediction : SBDataObject // TODO: check, is it same with FFRoster ???
 
 @property(nonatomic) NSString* ownerId;
 @property(nonatomic) NSString* ownerName;
 @property(nonatomic) NSString* state;
-@property(nonatomic) NSString* contestId;
+@property(nonatomic) SBInteger* contestId;
 @property(nonatomic) NSString* buyIn;
 @property(nonatomic) NSString* remainingSalary;
-@property(nonatomic) NSString* score;
-@property(nonatomic) NSString* contestRank;
-@property(nonatomic) NSString* contestRankPayout;
-@property(nonatomic) NSString* amountPaid;
-@property(nonatomic) NSString* paidAt;
+@property(nonatomic) SBInteger* score;
+@property(nonatomic) SBInteger* contestRank;
+@property(nonatomic) SBInteger* contestRankPayout;
+@property(nonatomic) SBInteger* amountPaid;
+@property(nonatomic) SBDate* paidAt;
 @property(nonatomic) NSString* cancelledCause;
-@property(nonatomic) NSString* cancelledAt;
+@property(nonatomic) SBDate* cancelledAt;
 @property(nonatomic) NSString* positions;
-@property(nonatomic) NSString* startedAt;
-@property(nonatomic) NSString* marketId;
-@property(nonatomic) NSString* nextGameTime;
-@property(nonatomic) NSString* live;
-@property(nonatomic) NSString* bonusPoints;
+@property(nonatomic) SBDate* startedAt;
+@property(nonatomic) SBDate* nextGameTime;
+@property(nonatomic) SBInteger* live;
+@property(nonatomic) SBInteger* bonusPoints;
 @property(nonatomic) NSString* perfectScore;
 @property(nonatomic) NSString* removeBenched;
 @property(nonatomic) NSString* viewCode;
 @property(nonatomic) NSString* abridged;
 @property(nonatomic) NSString* league;
-@property(nonatomic) NSString* contest;
-@property(nonatomic) NSString* contestType;
-@property(nonatomic) NSString* players;
-@property(nonatomic) NSString* market;
+@property(nonatomic) NSDictionary* contest;
+@property(nonatomic) NSArray* players;
+#pragma mark - Contest
+@property(nonatomic) FFContestType* contestType;
+@property(nonatomic) NSString* contestTypeId;
+#pragma mark - Market
+@property(nonatomic) FFMarket* market;
+@property(nonatomic) NSString* marketId;
 
 @end

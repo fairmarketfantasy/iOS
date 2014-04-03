@@ -8,6 +8,9 @@
 
 #import "FFRosterPrediction.h"
 #import <SBData/NSDictionary+Convenience.h>
+#import "FFPlayer.h"
+#import "FFContestType.h"
+#import "FFMarket.h"
 
 @implementation FFRosterPrediction
 
@@ -36,9 +39,6 @@
 @dynamic abridged;
 @dynamic league;
 @dynamic contest;
-@dynamic contestType;
-@dynamic players;
-@dynamic market;
 
 + (NSString*)tableName
 {
@@ -83,11 +83,37 @@
               @"viewCode" : @"view_code",
               @"abridged" : @"abridged",
               @"league" : @"league",
-              @"contest" : @"contest",
-              @"contestType" : @"contest_type",
-              @"players" : @"players",
-              @"market" : @"market"
+              @"contest" : @"contest"
               }];
+}
+
+- (void)setValuesForKeysWithNetworkDictionary:(NSDictionary*)keyedValues
+{
+    if (![keyedValues isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
+    [super setValuesForKeysWithNetworkDictionary:keyedValues];
+    self.contestTypeId = [keyedValues valueForKeyPath:@"contest_type.id"];
+    if ([self.contestTypeId isKindOfClass:[NSString class]]) {
+        self.contestType = [FFContestType fromNetworkRepresentation:keyedValues[@"contest_type"]
+                                                            session:self.session
+                                                               save:YES];
+    }
+    self.marketId = [keyedValues valueForKeyPath:@"market.id"];
+    if ([self.marketId isKindOfClass:[NSString class]]) {
+        self.market = [FFMarket fromNetworkRepresentation:keyedValues[@"market"]
+                                                  session:self.session
+                                                     save:YES];
+    }
+
+    NSArray* playerDictionaries = keyedValues[@"players"];
+    NSMutableArray* players = [NSMutableArray arrayWithCapacity:playerDictionaries.count];
+    for (NSDictionary* playerDictionary in playerDictionaries) {
+        [players addObject:[FFPlayer fromNetworkRepresentation:playerDictionary
+                                                       session:self.session
+                                                          save:YES]];
+    }
+    self.players = [players copy];
 }
 
 @end

@@ -200,7 +200,7 @@ failure:
         roster = [self.historicalRosters objectAtIndex:indexPath.row];
     }
 
-    cell.roster = roster;
+//    cell.roster = roster;
 
     return cell;
 }

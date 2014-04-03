@@ -13,5 +13,6 @@
 
 @property(nonatomic, assign) FFMarketSport sport;
 - (void)fetch;
+- (void)fetchWithParameters:(NSDictionary*)parameters;
 
 @end

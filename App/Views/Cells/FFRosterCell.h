@@ -6,10 +6,6 @@
 //  Copyright (c) 2014 FairMarketFantasy. All rights reserved.
 //
 
-@class FFRoster;
-
 @interface FFRosterCell : UITableViewCell
-
-@property(nonatomic) FFRoster* roster;
 
 @end

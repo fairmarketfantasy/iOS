@@ -7,7 +7,6 @@
 //
 
 #import "FFRosterCell.h"
-#import "FFRoster.h"
 
 @interface FFRosterCell ()
 
@@ -17,8 +16,6 @@
 @property(nonatomic) UILabel* rankCaptionLabel;
 @property(nonatomic) UILabel* rankLabel;
 @property(nonatomic) UILabel* scoreLabel;
-
-- (UIImage*)imageForCurrentState;
 
 @end
 
@@ -86,47 +83,6 @@
         [self.contentView addSubview:self.scoreLabel];
     }
     return self;
-}
-
-- (UIImage*)imageForCurrentState
-{
-    return [UIImage imageNamed:
-  @{
-    @"in_progress" : @"greydot.png",
-    @"submitted" : @"greendot.png",
-    @"finished" : @"bluedot.png"
-    }[self.roster.state]];
-}
-
-- (void)setRoster:(FFRoster*)roster
-{
-    if (self.roster == roster) {
-        return;
-    }
-    self->_roster = roster;
-    [self updateContent];
-}
-
-- (void)updateContent
-{
-    FFContestType* contentType = self.roster.contestType;
-
-    self.nameLabel.text = contentType.name;
-
-    self.statusView.image = [self imageForCurrentState];
-    self.statusView.hidden = self.statusView.image != nil;
-
-    self.entryLabel.text = [NSString stringWithFormat:@"%@ %@  %@ %@",
-                                                      NSLocalizedString(@"Entry:", nil),
-                                                      contentType.buyIn,
-                                                      NSLocalizedString(@"Payout:", nil),
-                                                      self.roster.amountPaid ? self.roster.amountPaid : @"0"];
-    self.rankLabel.text = [NSString stringWithFormat:@"%@ %@ %@",
-                                                     self.roster.contestRank ? self.roster.contestRank : @"0",
-                                                     NSLocalizedString(@"of", nil),
-                                                     contentType.maxEntries ? contentType.maxEntries : @"0"];
-    self.scoreLabel.text = [NSString stringWithFormat:@"%@",
-                                                      self.roster.score ? self.roster.score : @"0"];
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "FFPredictHistoryCell.h"
 #import "FFPredictIndividualCell.h"
 #import "FFPredictHeader.h"
+#import <FlatUIKit.h>
 
 @implementation FFPredictHistoryTable
 
@@ -39,10 +40,26 @@
             self.tableHeaderView = nil;
             break;
         case FFPredictionsTypeRoster:
-            self.tableHeaderView = [[FFPredictHeader alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 60.f)];
+        {
+            FFPredictHeader* header = [[FFPredictHeader alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 60.f)];
+            self.tableHeaderView = header;
+            [header.segments addTarget:self
+                                action:@selector(segments:)
+                      forControlEvents:UIControlEventValueChanged];
+
+        }
             break;
         default:
             break;
+    }
+}
+
+#pragma mark - button actions
+
+- (void)segments:(FUISegmentedControl*)segments
+{
+    if (self.historyDelegate) {
+        [self.historyDelegate changeHistory:segments];
     }
 }
 

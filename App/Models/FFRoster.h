@@ -8,10 +8,10 @@
 
 #import <SBData/SBDataObject.h>
 #import <SBData/SBTypes.h>
-#import "FFContestType.h"
-#import "FFMarket.h"
 
 @class FFPlayer;
+@class FFMarket;
+@class FFContestType;
 
 typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
     FFRosterSubmitType100FB,

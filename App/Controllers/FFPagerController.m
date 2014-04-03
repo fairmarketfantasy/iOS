@@ -19,6 +19,7 @@
 // model
 #import "FFControllerProtocol.h"
 #import "FFMarketSet.h"
+#import "FFMarket.h"
 #import "FFSessionViewController.h"
 #import "FFMarketSelector.h"
 #import "FFContestType.h"

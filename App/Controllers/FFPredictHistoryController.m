@@ -8,8 +8,7 @@
 
 #import "FFPredictHistoryController.h"
 #import "FFNavigationBarItemView.h"
-#import <LBActionSheet.h>
-#import "FFLogo.h"
+#import <FlatUIKit.h>
 #import "FFPredictHistoryTable.h"
 #import "FFPredictHistoryCell.h"
 #import "FFPredictIndividualCell.h"
@@ -20,9 +19,10 @@
 #import "FFPredictionSet.h"
 #import "FFIndividualPrediction.h"
 #import "FFRosterPrediction.h"
+#import "FFMarket.h"
 
-@interface FFPredictHistoryController () <LBActionSheetDelegate,
-UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol, SBDataObjectResultSetDelegate>
+@interface FFPredictHistoryController () <UITableViewDataSource, UITableViewDelegate,
+FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 @property(nonatomic, assign) FFPredictionsType predictionType;
 @property(nonatomic) UIButton* typeButton;
@@ -60,6 +60,7 @@ UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol, SBDataObjectR
     self.typeButton.contentMode = UIViewContentModeScaleAspectFit;
     // table view
     self.tableView = [[FFPredictHistoryTable alloc] initWithFrame:self.view.bounds];
+    self.tableView.historyDelegate = self;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
@@ -184,6 +185,19 @@ UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol, SBDataObjectR
         {
             FFPredictHistoryCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictCell"
                                                                          forIndexPath:indexPath];
+            if (self.rosterPredictions.allObjects.count > indexPath.row) {
+                FFRosterPrediction* prediction = self.rosterPredictions.allObjects[indexPath.row];
+#warning CHECK fields!
+                cell.nameLabel.text = prediction.ownerName;
+                cell.teamLabel.text = prediction.market.name;
+                cell.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.startedAt];
+                cell.stateLabel.text = prediction.state;
+                cell.pointsLabel.text = [NSString stringWithFormat:@"%i", prediction.bonusPoints.integerValue];
+                cell.paidLabel.text = prediction.paidAt ? [FFStyle.dayFormatter stringFromDate:prediction.paidAt]
+                : NSLocalizedString(@"N/A", nil);
+                cell.raknLabel.text = [NSString stringWithFormat:@"%i", prediction.contestRank.integerValue];
+                cell.awaidLabel.text = @"-"; // TODO: this
+            }
             return cell;
         }
             break;
@@ -241,6 +255,19 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     [self.tableView reloadData];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+}
+
+#pragma mark - FFPredictHistoryProtocol
+
+- (void)changeHistory:(FUISegmentedControl*)segments
+{
+    BOOL isHistory = segments.selectedSegmentIndex == 1;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    if (isHistory) {
+        [self.rosterPredictions fetchWithParameters:@{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
+    } else {
+        [self.rosterPredictions fetch];
+    }
 }
 
 @end
