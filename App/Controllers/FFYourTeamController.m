@@ -204,11 +204,8 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                        success:
      ^(id successObj) {
          @strongify(self)
-         self.roster = successObj;
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
-         [self shorOrHideSubmitIfNeeded];
          [alert hide];
+         [self createRoster];
      }
                        failure:
      ^(NSError * error) {

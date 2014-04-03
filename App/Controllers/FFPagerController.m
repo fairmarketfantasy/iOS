@@ -81,6 +81,7 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
     [self.pager setPageControlStyle:PageControlStyleThumb];
     [self.pager setThumbImage:[UIImage imageNamed:@"passive"]];
     [self.pager setSelectedThumbImage:[UIImage imageNamed:@"active"]];
+    self.pager.userInteractionEnabled = NO;
     [self.view addSubview:self.pager];
     [self.view bringSubviewToFront:self.pager];
     // left bar item
