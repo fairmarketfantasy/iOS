@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FFPredictionsSelector.h"
 
 @interface FFPredictHistoryTable : UITableView
+
+- (void)setPredictionType:(FFPredictionsType)type;
 
 @end

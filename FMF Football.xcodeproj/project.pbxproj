@@ -26,6 +26,7 @@
 		890504DF18DA0C3A006CD2EA /* FFAutoFillCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 890504DE18DA0C3A006CD2EA /* FFAutoFillCell.m */; };
 		89051CB818BFA4E8001E8C78 /* FFDataObjectResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 89051CB718BFA4E8001E8C78 /* FFDataObjectResultSet.m */; };
 		89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 89051CBA18BFC253001E8C78 /* FFMarketSet.m */; };
+		892E4FB518EDBB1800F57860 /* FFPredictionsSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FB418EDBB1800F57860 /* FFPredictionsSelector.m */; };
 		89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89314A7618C8C2B80048E00F /* FFRosterCell.m */; };
 		893D27AB18E32CB900899094 /* FFCollectionMarketCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 893D27AA18E32CB900899094 /* FFCollectionMarketCell.m */; };
 		893D690918E5C1F9005E305B /* hide.png in Resources */ = {isa = PBXBuildFile; fileRef = 893D690518E5C1F9005E305B /* hide.png */; };
@@ -210,6 +211,8 @@
 		89051CB718BFA4E8001E8C78 /* FFDataObjectResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFDataObjectResultSet.m; sourceTree = "<group>"; };
 		89051CB918BFC253001E8C78 /* FFMarketSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMarketSet.h; sourceTree = "<group>"; };
 		89051CBA18BFC253001E8C78 /* FFMarketSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMarketSet.m; sourceTree = "<group>"; };
+		892E4FB318EDBB1800F57860 /* FFPredictionsSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPredictionsSelector.h; sourceTree = "<group>"; };
+		892E4FB418EDBB1800F57860 /* FFPredictionsSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPredictionsSelector.m; sourceTree = "<group>"; };
 		89314A7518C8C2B80048E00F /* FFRosterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterCell.h; sourceTree = "<group>"; };
 		89314A7618C8C2B80048E00F /* FFRosterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterCell.m; sourceTree = "<group>"; };
 		893D27A818E0A14500899094 /* FFControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFControllerProtocol.h; sourceTree = "<group>"; };
@@ -887,6 +890,8 @@
 				893D691118E5CD49005E305B /* FFPredictHeader.m */,
 				897C869218ED90DF0068D03F /* FFSubmitView.h */,
 				897C869318ED90DF0068D03F /* FFSubmitView.m */,
+				892E4FB318EDBB1800F57860 /* FFPredictionsSelector.h */,
+				892E4FB418EDBB1800F57860 /* FFPredictionsSelector.m */,
 			);
 			path = Partials;
 			sourceTree = "<group>";
@@ -1100,6 +1105,7 @@
 				896ACCD318B664F5001E9C64 /* FFWebViewController.m in Sources */,
 				896ACCD118B664F5001E9C64 /* FFValueEntryController.m in Sources */,
 				896ACCCF18B664F5001E9C64 /* FFTokenPurchaseViewController.m in Sources */,
+				892E4FB518EDBB1800F57860 /* FFPredictionsSelector.m in Sources */,
 				89051CB818BFA4E8001E8C78 /* FFDataObjectResultSet.m in Sources */,
 				896ACCDB18B664F5001E9C64 /* FFWeakReference.m in Sources */,
 				896ACCCB18B664F5001E9C64 /* FFTickerMaximizedDrawerViewController.m in Sources */,

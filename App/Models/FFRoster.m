@@ -268,10 +268,10 @@ failure:
     NSString* contestType = @"";
     switch (type) {
         case FFRosterSubmitType100FB:
-            contentType = @"100/30/30";
+            contestType = @"100/30/30";
             break;
         case FFRosterSubmitTypeHTH27FB:
-            contentType = @"27 H2H";
+            contestType = @"27 H2H";
             break;
         default:
             break;

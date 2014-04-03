@@ -24,9 +24,23 @@
      forCellReuseIdentifier:@"PredictCell"];
 
         // header
-        self.tableHeaderView = [[FFPredictHeader alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 60.f)];
+        [self setPredictionType:FFPredictionsTypeRoster];
     }
     return self;
+}
+
+- (void)setPredictionType:(FFPredictionsType)type
+{
+    switch (type) {
+        case FFPredictionsTypeIndividual:
+            self.tableHeaderView = nil;
+            break;
+        case FFPredictionsTypeRoster:
+            self.tableHeaderView = [[FFPredictHeader alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 60.f)];
+            break;
+        default:
+            break;
+    }
 }
 
 @end

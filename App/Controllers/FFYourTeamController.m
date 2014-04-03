@@ -213,7 +213,6 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                        failure:
      ^(NSError * error) {
          @strongify(self)
-//         self.roster = nil;
          [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                        withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
