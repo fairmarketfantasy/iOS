@@ -260,13 +260,25 @@ failure:
 
 #pragma mark -
 
-- (void)submitSuccess:(SBSuccessBlock)success
+- (void)submitContent:(FFRosterSubmitType)type
+              success:(SBSuccessBlock)success
               failure:(SBErrorBlock)failure
 {
     NSString* path = [[self path] stringByAppendingString:@"/submit"];
+    NSString* contestType = @"";
+    switch (type) {
+        case FFRosterSubmitType100FB:
+            contentType = @"100/30/30";
+            break;
+        case FFRosterSubmitTypeHTH27FB:
+            contentType = @"27 H2H";
+            break;
+        default:
+            break;
+    }
     [self.session authorizedJSONRequestWithMethod:@"POST"
                                              path:path
-                                        paramters:@{}
+                                        paramters:@{ @"contest_type" : contestType }
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
         [self updateWithNetworkRepresentation:JSON

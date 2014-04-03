@@ -641,24 +641,24 @@ failure:
                                                    messsage:nil
                                                loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
-    [_roster submitSuccess:^(id successObj)
-    {
-        [alert hide];
-        _roster = successObj;
-        [self transitionToState:FFContestViewControllerStateContestEntered
-                    withContext:nil];
-    }
-failure:
-    ^(NSError * error)
-    {
-        [alert hide];
-        FFAlertView* eAlert = [[FFAlertView alloc] initWithError:error
-                                                           title:nil
-                                               cancelButtonTitle:nil
-                                                 okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                                        autoHide:YES];
-        [eAlert showInView:self.navigationController.view];
-    }];
+//    [_roster submitSuccess:^(id successObj)
+//    {
+//        [alert hide];
+//        _roster = successObj;
+//        [self transitionToState:FFContestViewControllerStateContestEntered
+//                    withContext:nil];
+//    }
+//failure:
+//    ^(NSError * error)
+//    {
+//        [alert hide];
+//        FFAlertView* eAlert = [[FFAlertView alloc] initWithError:error
+//                                                           title:nil
+//                                               cancelButtonTitle:nil
+//                                                 okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+//                                                        autoHide:YES];
+//        [eAlert showInView:self.navigationController.view];
+//    }];
 }
 
 - (void)showPickPlayer:(id)player

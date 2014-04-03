@@ -13,6 +13,11 @@
 
 @class FFPlayer;
 
+typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
+    FFRosterSubmitType100FB,
+    FFRosterSubmitTypeHTH27FB
+};
+
 @interface FFRoster : SBDataObject
 
 @property(nonatomic) SBInteger* amountPaid;
@@ -63,7 +68,8 @@
 - (void)removePlayer:(FFPlayer*)player
              success:(SBSuccessBlock)success
              failure:(SBErrorBlock)failure;
-- (void)submitSuccess:(SBSuccessBlock)success
+- (void)submitContent:(FFRosterSubmitType)type
+              success:(SBSuccessBlock)success
               failure:(SBErrorBlock)failure;
 - (void)autofillSuccess:(SBSuccessBlock)success
                 failure:(SBErrorBlock)failure;

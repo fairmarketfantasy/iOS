@@ -44,6 +44,9 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     self->_autoRemovedBenched = NO;
     // submit view
     self.submitView = FFSubmitView.new;
+    [self.submitView.segments addTarget:self
+                                 action:@selector(onSubmit:)
+                       forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.submitView];
     // table view
     self.tableView = [[FFTeamTable alloc] initWithFrame:self.view.bounds];
@@ -188,6 +191,40 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 {
     [self.marketsSet fetchType:FFMarketTypeRegularSeason];
     [self.marketsSet fetchType:FFMarketTypeSingleElimination];
+}
+
+- (void)submitRoster:(FFRosterSubmitType)rosterType
+{
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Submitting Roster"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [self.roster submitContent:rosterType
+                       success:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self shorOrHideSubmitIfNeeded];
+         [alert hide];
+     }
+                       failure:
+     ^(NSError * error) {
+         @strongify(self)
+//         self.roster = nil;
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [alert hide];
+         [self shorOrHideSubmitIfNeeded];
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -393,6 +430,13 @@ heightForHeaderInSection:(NSInteger)section
                                     autoHide:YES]
           showInView:self.navigationController.view];
      }];
+}
+
+- (void)onSubmit:(FUISegmentedControl*)segments
+{
+    FFRosterSubmitType rosterType = (FFRosterSubmitType)segments.selectedSegmentIndex;
+    [self submitRoster:rosterType];
+    self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
 }
 
 #pragma mark - FFMarketSelectorDelegate
