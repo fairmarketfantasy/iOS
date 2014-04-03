@@ -17,7 +17,14 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [FFStyle darkGrey];
+        // background
+        self.backgroundColor = [UIColor clearColor];
+        UIImageView* backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loginbg.png"]];
+        backgroundView.frame = self.bounds;
+        backgroundView.clipsToBounds = YES;
+        backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        backgroundView.contentMode = UIViewContentModeTop;
+        [self addSubview:backgroundView];
         // avatar
         _avatar = [FFPathImageView.alloc initWithFrame:CGRectMake(0.f, 0.f, 60.f, 60.f)
                                                  image:[UIImage imageNamed:@"defaultuser"]

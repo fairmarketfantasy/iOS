@@ -13,6 +13,7 @@
 #import "FFMarketsCell.h"
 #import "FFTeamCell.h"
 #import "FFTeamTradeCell.h"
+#import "FFSubmitView.h"
 #import "FFAlertView.h"
 #import "FFRosterTableHeader.h"
 #import "FFAccountHeader.h"
@@ -32,7 +33,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 // models
 @property(nonatomic) FFRoster* roster;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
-
+@property(nonatomic) FFSubmitView* submitView;
 @end
 
 @implementation FFYourTeamController
@@ -41,10 +42,15 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 {
     [super viewDidLoad];
     self->_autoRemovedBenched = NO;
+    // submit view
+    self.submitView = FFSubmitView.new;
+    [self.view addSubview:self.submitView];
+    // table view
     self.tableView = [[FFTeamTable alloc] initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
+    [self.view bringSubviewToFront:self.submitView];
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent
@@ -57,6 +63,34 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     self.tryCreateRosterTimes = 3;
     [self createRoster];
     [self updateHeader];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self shorOrHideSubmitIfNeeded];
+}
+
+#pragma mark - private
+
+- (void)shorOrHideSubmitIfNeeded
+{
+    BOOL anyPlayer = self.roster.players.count > 0;
+    CGFloat submitHeight = 70.f;
+    [UIView animateWithDuration:(NSTimeInterval).3f
+                     animations:
+     ^{
+         self.submitView.frame = CGRectMake(0.f,
+                                            anyPlayer ? self.view.bounds.size.height - submitHeight
+                                            : self.view.bounds.size.height,
+                                            self.view.bounds.size.width,
+                                            submitHeight);
+         self.submitView.alpha = anyPlayer ? 1.f : 0.f;
+         self.submitView.userInteractionEnabled = anyPlayer;
+         UIEdgeInsets tableInsets = self.tableView.contentInset;
+         tableInsets.bottom = anyPlayer ? submitHeight : 0.f;
+         self.tableView.contentInset = tableInsets;
+     }];
 }
 
 #pragma mark - public
@@ -72,6 +106,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
         self.roster = nil;
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                       withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self shorOrHideSubmitIfNeeded];
         return;
     }
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Creating Roster"
@@ -87,6 +122,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
          self.roster = successObj;
          [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                        withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self shorOrHideSubmitIfNeeded];
          [alert hide];
      }
                                failure:
@@ -101,6 +137,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
              [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                            withRowAnimation:UITableViewRowAnimationAutomatic];
              [alert hide];
+             [self shorOrHideSubmitIfNeeded];
              [[[FFAlertView alloc] initWithError:error
                                            title:nil
                                cancelButtonTitle:nil
@@ -269,7 +306,7 @@ viewForHeaderInSection:(NSInteger)section
         FFRosterTableHeader* view = FFRosterTableHeader.new;
         view.titleLabel.text = NSLocalizedString(@"Your Team", nil);
         view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.roster.remainingSalary.floatValue)];
-        view.priceLabel.textColor = self.roster.remainingSalary.floatValue > 0
+        view.priceLabel.textColor = self.roster.remainingSalary.floatValue > 0.f
         ? [FFStyle brightGreen] : [FFStyle brightRed];
         return view;
     }
@@ -305,12 +342,17 @@ heightForHeaderInSection:(NSInteger)section
          self.roster = successObj;
          [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                        withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self shorOrHideSubmitIfNeeded];
          [alert hide];
      }
                          failure:
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
+         self.roster = nil;
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self shorOrHideSubmitIfNeeded];
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil
@@ -336,12 +378,14 @@ heightForHeaderInSection:(NSInteger)section
          self.roster.remainingSalary = [SBFloat.alloc initWithFloat:[price floatValue]];
          [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                        withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self shorOrHideSubmitIfNeeded];
          [alert hide];
      }
                                   failure:
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
+         [self shorOrHideSubmitIfNeeded];
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil

@@ -259,12 +259,14 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                      animations:^{
                          [self.personalInfoButton setImage:[UIImage imageNamed:@"open"]
                                                   forState:UIControlStateNormal];
-                         self.teamController.tableView.contentInset =
-                         UIEdgeInsetsMake(-self.teamController.tableView.tableHeaderView.bounds.size.height, 0.f, 0.f, 0.f);
+                         UIEdgeInsets teamTableInsets = self.teamController.tableView.contentInset;
+                         teamTableInsets.top = -self.teamController.tableView.tableHeaderView.bounds.size.height;
+                         self.teamController.tableView.contentInset = teamTableInsets;
                          self.teamController.tableView.contentOffset =
                          CGPointMake(0.f, self.teamController.tableView.tableHeaderView.bounds.size.height);
-                         self.receiverController.tableView.contentInset =
-                         UIEdgeInsetsMake(-self.receiverController.tableView.tableHeaderView.bounds.size.height, 0.f, 0.f, 0.f);
+                         UIEdgeInsets receiverTableInsets = self.receiverController.tableView.contentInset;
+                         receiverTableInsets.top = -self.receiverController.tableView.tableHeaderView.bounds.size.height;
+                         self.receiverController.tableView.contentInset = receiverTableInsets;
                          self.receiverController.tableView.contentOffset =
                          CGPointMake(0.f, self.receiverController.tableView.tableHeaderView.bounds.size.height);
                          self.isPersonalInfoOpened = NO;
@@ -282,9 +284,13 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                      animations:^{
                          [self.personalInfoButton setImage:[UIImage imageNamed:@"close"]
                                                   forState:UIControlStateNormal];
-                         self.teamController.tableView.contentInset = UIEdgeInsetsZero;
+                         UIEdgeInsets teamTableInsets = self.teamController.tableView.contentInset;
+                         teamTableInsets.top = 0.f;
+                         self.teamController.tableView.contentInset = teamTableInsets;
                          self.teamController.tableView.contentOffset = CGPointZero;
-                         self.receiverController.tableView.contentInset = UIEdgeInsetsZero;
+                         UIEdgeInsets receiverTableInsets = self.receiverController.tableView.contentInset;
+                         receiverTableInsets.top = 0.f;
+                         self.receiverController.tableView.contentInset = receiverTableInsets;
                          self.receiverController.tableView.contentOffset = CGPointZero;
                          self.isPersonalInfoOpened = YES;
                      }];
