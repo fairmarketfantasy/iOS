@@ -26,10 +26,7 @@
         self.priceLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         self.priceLabel.backgroundColor = [UIColor clearColor];
         self.priceLabel.font = [FFStyle blockFont:19.f];
-        self.priceLabel.textColor = [UIColor colorWithRed:54.f / 255.f
-                                                    green:171.f / 255.f
-                                                     blue:74.f / 255.f
-                                                    alpha:1.f];
+        self.priceLabel.textColor = [FFStyle brightGreen];
         self.priceLabel.textAlignment = NSTextAlignmentRight;
         [self addSubview:self.priceLabel];
         // background

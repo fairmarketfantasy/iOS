@@ -210,6 +210,8 @@ viewForHeaderInSection:(NSInteger)section
         view.titleLabel.text = NSLocalizedString(@"Wide Receiver", nil);
         view.priceLabel.text = self.delegate ?
         [[FFStyle priceFormatter] stringFromNumber:@(self.delegate.rosterSalary)] : @"";
+        view.priceLabel.textColor = self.delegate.rosterSalary > 0
+        ? [FFStyle brightGreen] : [FFStyle brightRed];
         return view;
     }
     return nil;
