@@ -212,21 +212,22 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 // UI CONSTRUCTORS -----------------------------------------------------------------------------------------------------
 
-+ (UIButton*)clearButtonWithText:(NSString*)text borderColor:(UIColor*)color
++ (UIButton*)clearButtonWithText:(NSString*)text
+                     borderColor:(UIColor*)color
 {
-    UIButton* b = [UIButton buttonWithType:UIButtonTypeCustom];
-    b.layer.borderColor = color.CGColor;
-    b.layer.borderWidth = 1;
-    b.layer.cornerRadius = 3;
-    b.layer.masksToBounds = YES;
-    [b setBackgroundImage:[UIImage imageNamed:@"button_normal"]
+    UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.layer.borderColor = color.CGColor;
+    button.layer.borderWidth = 1;
+    button.layer.cornerRadius = 3;
+    button.layer.masksToBounds = YES;
+    [button setBackgroundImage:[UIImage imageNamed:@"button_normal"]
                   forState:UIControlStateNormal];
-    [b setBackgroundImage:[UIImage imageNamed:@"button_pressed"]
+    [button setBackgroundImage:[UIImage imageNamed:@"button_pressed"]
                   forState:UIControlStateHighlighted];
-    b.titleLabel.font = [FFStyle blockFont:14];
-    [b setTitle:text
+    button.titleLabel.font = [FFStyle blockFont:14];
+    [button setTitle:text
         forState:UIControlStateNormal];
-    return b;
+    return button;
 }
 
 + (NSArray*)clearNavigationBarButtonWithText:(NSString*)text

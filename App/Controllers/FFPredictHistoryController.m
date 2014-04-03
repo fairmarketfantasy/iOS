@@ -12,6 +12,7 @@
 #import "FFLogo.h"
 #import "FFPredictHistoryTable.h"
 #import "FFPredictHistoryCell.h"
+#import "FFPredictIndividualCell.h"
 #import "FFPredictHeader.h"
 #import "FFRosterTableHeader.h"
 #import "FFPredictionsSelector.h"
@@ -127,9 +128,24 @@ UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol>
 - (UITableViewCell*)tableView:(UITableView*)tableView
         cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    FFPredictHistoryCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictCell"
-                                                                 forIndexPath:indexPath];
-    return cell;
+    switch (self.predictionType) {
+        case FFPredictionsTypeIndividual:
+        {
+            FFPredictIndividualCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictIndividualCell"
+                                                                            forIndexPath:indexPath];
+            return cell;
+        }
+            break;
+        case FFPredictionsTypeRoster:
+        {
+            FFPredictHistoryCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictCell"
+                                                                         forIndexPath:indexPath];
+            return cell;
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - UITableViewDelegate

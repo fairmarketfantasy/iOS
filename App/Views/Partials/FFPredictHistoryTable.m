@@ -8,6 +8,7 @@
 
 #import "FFPredictHistoryTable.h"
 #import "FFPredictHistoryCell.h"
+#import "FFPredictIndividualCell.h"
 #import "FFPredictHeader.h"
 
 @implementation FFPredictHistoryTable
@@ -22,6 +23,8 @@
 
         [self registerClass:[FFPredictHistoryCell class]
      forCellReuseIdentifier:@"PredictCell"];
+        [self registerClass:[FFPredictIndividualCell class]
+     forCellReuseIdentifier:@"PredictIndividualCell"];
 
         // header
         [self setPredictionType:FFPredictionsTypeRoster];

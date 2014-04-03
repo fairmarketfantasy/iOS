@@ -87,6 +87,8 @@
         _awaidLabel = [[UILabel alloc] initWithFrame:
                                                CGRectMake(210.f, 120.f, 90.f, 20.f)];
         self.awaidLabel.backgroundColor = [UIColor clearColor];
+        self.awaidLabel.font = [FFStyle regularFont:12.f];
+        self.awaidLabel.textColor = [FFStyle darkGreyTextColor];
         [self.contentView addSubview:self.awaidLabel];
         // titles
         UILabel* captionDayLabel = [[UILabel alloc] initWithFrame:
