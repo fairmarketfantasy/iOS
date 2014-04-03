@@ -16,14 +16,22 @@
 #import "FFPredictHeader.h"
 #import "FFRosterTableHeader.h"
 #import "FFPredictionsSelector.h"
+// model
+#import "FFPredictionSet.h"
+#import "FFIndividualPrediction.h"
+#import "FFRosterPrediction.h"
 
 @interface FFPredictHistoryController () <LBActionSheetDelegate,
-UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol>
+UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol, SBDataObjectResultSetDelegate>
 
 @property(nonatomic, assign) FFPredictionsType predictionType;
 @property(nonatomic) UIButton* typeButton;
 @property(nonatomic) FFPredictHistoryTable* tableView;
 @property(nonatomic) FFPredictionsSelector* typeSelector;
+// model
+@property(nonatomic) FFPredictionSet* individualPredictions;
+@property(nonatomic) FFPredictionSet* rosterPredictions;
+
 @end
 
 @implementation FFPredictHistoryController
@@ -31,6 +39,7 @@ UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol>
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
     self.predictionType = FFPredictionsTypeRoster;
     self.typeSelector = FFPredictionsSelector.new;
     self.typeSelector.delegate = self;
@@ -62,6 +71,12 @@ UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol>
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.individualPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFIndividualPrediction class]
+                                                                        session:self.session authorized:YES];
+    self.individualPredictions.delegate = self;
+    self.rosterPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFRosterPrediction class]
+                                                                    session:self.session authorized:YES];
+    self.rosterPredictions.delegate = self;
     [self predictionsTypeSelected:FFPredictionsTypeRoster];
 }
 
@@ -74,15 +89,18 @@ UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol>
 
 - (void)predictionsTypeSelected:(FFPredictionsType)type
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     self.predictionType = type;
     [self.tableView setPredictionType:type];
     [self.tableView reloadData];
     switch (type) {
         case FFPredictionsTypeIndividual:
+            [self.individualPredictions fetch];
             [self.typeButton setTitle:NSLocalizedString(@"Individual", nil)
                              forState:UIControlStateNormal];
             break;
         case FFPredictionsTypeRoster:
+            [self.rosterPredictions fetch];
             [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
                              forState:UIControlStateNormal];
             break;
@@ -122,7 +140,14 @@ UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol>
 - (NSInteger)tableView:(UITableView*)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    switch (self.predictionType) {
+        case FFPredictionsTypeIndividual:
+            return self.individualPredictions.allObjects.count;
+        case FFPredictionsTypeRoster:
+            return self.rosterPredictions.allObjects.count;
+        default:
+            return 0;
+    }
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView
@@ -133,6 +158,25 @@ UITableViewDataSource, UITableViewDelegate, FFPredictionsProtocol>
         {
             FFPredictIndividualCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictIndividualCell"
                                                                             forIndexPath:indexPath];
+            if (self.individualPredictions.allObjects.count > indexPath.row) {
+                FFIndividualPrediction* prediction = self.individualPredictions.allObjects[indexPath.row];
+                cell.nameLabel.text = prediction.playerName;
+                cell.teamLabel.text = prediction.marketName;
+                cell.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.gameDay];
+                cell.ptLabel.text = prediction.predictThat;
+                if (prediction.eventPredictions.count > 0) {
+                    NSDictionary* eventPrediction = prediction.eventPredictions.firstObject;
+                    if (eventPrediction) {
+                        cell.predictLabel.text = [NSString stringWithFormat:@"%@: %@ %@",
+                                                  [eventPrediction[@"diff"] isEqualToString:@"less"]
+                                                  ? @"Under": @"Over", // TODO: refactor it and move to model
+                                                  eventPrediction[@"value"],
+                                                  eventPrediction[@"event_type"]];
+                    }
+                }
+                cell.timeLabel.text = [FFStyle.timeFormatter stringFromDate:prediction.gameTime];
+                cell.awaidLabel.text = prediction.award;
+            }
             return cell;
         }
             break;
@@ -189,6 +233,14 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath
                              animated:YES];
+}
+
+#pragma mark - SBDataObjectResultSetDelegate
+
+- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
+{
+    [self.tableView reloadData];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 @end

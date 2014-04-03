@@ -57,6 +57,24 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     return formatter;
 }
 
++ (NSDateFormatter*)dayFormatter
+{
+    NSDateFormatter* formatter = NSDateFormatter.new;
+    formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"E M dd"
+                                                           options:0
+                                                            locale:[NSLocale currentLocale]];
+    return formatter;
+}
+
++ (NSDateFormatter*)timeFormatter
+{
+    NSDateFormatter* formatter = NSDateFormatter.new;
+    formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"h:m a"
+                                                           options:0
+                                                            locale:[NSLocale currentLocale]];
+    return formatter;
+}
+
 // COLORS --------------------------------------------------------------------------------------------------------------
 
 + (UIColor*)darkGrey

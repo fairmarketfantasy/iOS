@@ -28,6 +28,10 @@
 		89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 89051CBA18BFC253001E8C78 /* FFMarketSet.m */; };
 		892E4FB518EDBB1800F57860 /* FFPredictionsSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FB418EDBB1800F57860 /* FFPredictionsSelector.m */; };
 		892E4FBB18EDD30100F57860 /* FFPredictIndividualCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FBA18EDD30100F57860 /* FFPredictIndividualCell.m */; };
+		892E4FBE18EDE86600F57860 /* FFRosterPrediction.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FBD18EDE86600F57860 /* FFRosterPrediction.m */; };
+		892E4FC118EDE87E00F57860 /* FFIndividualPrediction.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FC018EDE87E00F57860 /* FFIndividualPrediction.m */; };
+		892E4FC518EDF7C800F57860 /* FFPredictionSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FC418EDF7C800F57860 /* FFPredictionSet.m */; };
+		892E4FC718EDF83900F57860 /* FFSport.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FC618EDF83900F57860 /* FFSport.m */; };
 		89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89314A7618C8C2B80048E00F /* FFRosterCell.m */; };
 		893D27AB18E32CB900899094 /* FFCollectionMarketCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 893D27AA18E32CB900899094 /* FFCollectionMarketCell.m */; };
 		893D690918E5C1F9005E305B /* hide.png in Resources */ = {isa = PBXBuildFile; fileRef = 893D690518E5C1F9005E305B /* hide.png */; };
@@ -216,6 +220,14 @@
 		892E4FB418EDBB1800F57860 /* FFPredictionsSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPredictionsSelector.m; sourceTree = "<group>"; };
 		892E4FB918EDD30100F57860 /* FFPredictIndividualCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPredictIndividualCell.h; sourceTree = "<group>"; };
 		892E4FBA18EDD30100F57860 /* FFPredictIndividualCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPredictIndividualCell.m; sourceTree = "<group>"; };
+		892E4FBC18EDE86600F57860 /* FFRosterPrediction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterPrediction.h; sourceTree = "<group>"; };
+		892E4FBD18EDE86600F57860 /* FFRosterPrediction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterPrediction.m; sourceTree = "<group>"; };
+		892E4FBF18EDE87E00F57860 /* FFIndividualPrediction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFIndividualPrediction.h; sourceTree = "<group>"; };
+		892E4FC018EDE87E00F57860 /* FFIndividualPrediction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFIndividualPrediction.m; sourceTree = "<group>"; };
+		892E4FC218EDF70700F57860 /* FFSport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFSport.h; sourceTree = "<group>"; };
+		892E4FC318EDF7C800F57860 /* FFPredictionSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPredictionSet.h; sourceTree = "<group>"; };
+		892E4FC418EDF7C800F57860 /* FFPredictionSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPredictionSet.m; sourceTree = "<group>"; };
+		892E4FC618EDF83900F57860 /* FFSport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSport.m; sourceTree = "<group>"; };
 		89314A7518C8C2B80048E00F /* FFRosterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterCell.h; sourceTree = "<group>"; };
 		89314A7618C8C2B80048E00F /* FFRosterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterCell.m; sourceTree = "<group>"; };
 		893D27A818E0A14500899094 /* FFControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFControllerProtocol.h; sourceTree = "<group>"; };
@@ -729,6 +741,8 @@
 		896ACC1518B664F5001E9C64 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				892E4FC218EDF70700F57860 /* FFSport.h */,
+				892E4FC618EDF83900F57860 /* FFSport.m */,
 				896ACC1618B664F5001E9C64 /* FFStyle.h */,
 				896ACC1718B664F5001E9C64 /* FFStyle.m */,
 				896ACC1818B664F5001E9C64 /* FFTickerDataSource.h */,
@@ -763,6 +777,12 @@
 				896ACC2A18B664F5001E9C64 /* FFMarket.m */,
 				89051CB918BFC253001E8C78 /* FFMarketSet.h */,
 				89051CBA18BFC253001E8C78 /* FFMarketSet.m */,
+				892E4FC318EDF7C800F57860 /* FFPredictionSet.h */,
+				892E4FC418EDF7C800F57860 /* FFPredictionSet.m */,
+				892E4FBC18EDE86600F57860 /* FFRosterPrediction.h */,
+				892E4FBD18EDE86600F57860 /* FFRosterPrediction.m */,
+				892E4FBF18EDE87E00F57860 /* FFIndividualPrediction.h */,
+				892E4FC018EDE87E00F57860 /* FFIndividualPrediction.m */,
 				896ACC2B18B664F5001E9C64 /* FFRoster.h */,
 				896ACC2C18B664F5001E9C64 /* FFRoster.m */,
 				89BB9F7F18EB0CDC002D0C78 /* FFPlayer.h */,
@@ -1104,6 +1124,7 @@
 				893D691518E5CDEA005E305B /* FFPredictHistoryCell.m in Sources */,
 				896ACCC118B664F5001E9C64 /* FFNavigationController.m in Sources */,
 				89BB9F8118EB0CDC002D0C78 /* FFPlayer.m in Sources */,
+				892E4FC718EDF83900F57860 /* FFSport.m in Sources */,
 				896ACCF318B664F5001E9C64 /* FFContest2UpTabelViewCell.m in Sources */,
 				89F1A09C18DCC951001369E3 /* FFPTController.m in Sources */,
 				8972768318D9559D008D995C /* FFWideReceiverCell.m in Sources */,
@@ -1111,9 +1132,11 @@
 				896ACCD318B664F5001E9C64 /* FFWebViewController.m in Sources */,
 				896ACCD118B664F5001E9C64 /* FFValueEntryController.m in Sources */,
 				896ACCCF18B664F5001E9C64 /* FFTokenPurchaseViewController.m in Sources */,
+				892E4FBE18EDE86600F57860 /* FFRosterPrediction.m in Sources */,
 				892E4FB518EDBB1800F57860 /* FFPredictionsSelector.m in Sources */,
 				89051CB818BFA4E8001E8C78 /* FFDataObjectResultSet.m in Sources */,
 				896ACCDB18B664F5001E9C64 /* FFWeakReference.m in Sources */,
+				892E4FC518EDF7C800F57860 /* FFPredictionSet.m in Sources */,
 				896ACCCB18B664F5001E9C64 /* FFTickerMaximizedDrawerViewController.m in Sources */,
 				8972767D18D93FBE008D995C /* FFWideReceiverController.m in Sources */,
 				896ACCEB18B664F5001E9C64 /* FFMarket.m in Sources */,
@@ -1146,6 +1169,7 @@
 				896ACCAD18B664F5001E9C64 /* FFBaseViewController.m in Sources */,
 				89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */,
 				896ACCC918B664F5001E9C64 /* FFTickerDrawerViewController.m in Sources */,
+				892E4FC118EDE87E00F57860 /* FFIndividualPrediction.m in Sources */,
 				896ACCBB18B664F5001E9C64 /* FFInviteViewController.m in Sources */,
 				890504D018D9EEC7006CD2EA /* TransitionDelegate.m in Sources */,
 				8951A33318D08A9E0019384D /* FFContestCell.m in Sources */,

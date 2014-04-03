@@ -16,6 +16,7 @@
 #import "FFNavigationBarItemView.h"
 #import <libextobjc/EXTScope.h>
 #import "FFAlertView.h"
+#import "FFSport.h"
 
 @interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate>
 
@@ -217,7 +218,7 @@
         if (treeNodeInfo.treeDepthLevel > 0) {
             if ([self.delegate respondsToSelector:@selector(currentMarketSport)]
                     &&
-                [[FFMarketSet stringFromSport:[self.delegate currentMarketSport]]
+                [[FFSport stringFromSport:[self.delegate currentMarketSport]]
                     isEqualToString:nodeItem.title]) {
                 accessoryName = @"accessory_check";
             } else {

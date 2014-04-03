@@ -13,8 +13,9 @@
 #import "FFTickerDataSource.h"
 #import "FFTickerMaximizedDrawerViewController.h"
 #import "FFTickerMinimizedDrawerViewController.h"
+#import "FFControllerProtocol.h"
 
-@interface FFBaseViewController : UIViewController
+@interface FFBaseViewController : UIViewController <FFControllerProtocol>
 
 @property(nonatomic) FFSession* session;
 

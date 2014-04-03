@@ -189,6 +189,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 
 - (void)updateMarkets
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [self.marketsSet fetchType:FFMarketTypeRegularSeason];
     [self.marketsSet fetchType:FFMarketTypeSingleElimination];
 }
@@ -457,6 +458,7 @@ heightForHeaderInSection:(NSInteger)section
 - (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
 {
     [self marketsUpdated];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 #pragma mark - UICollectionViewDataSource

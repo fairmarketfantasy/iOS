@@ -168,7 +168,6 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
         vc.delegate = self;
     } else if ([segue.identifier isEqualToString:@"GotoPT"]) {
         FFPTController* vc = segue.destinationViewController;
-        vc.session = self.session;
         vc.delegate = self;
         vc.player = (FFPlayer*)sender;
     } else if ([segue.identifier isEqualToString:@"GotoPredictions"]) {

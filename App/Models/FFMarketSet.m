@@ -10,32 +10,15 @@
 
 @implementation FFMarketSet
 
-+ (NSString*)stringFromSport:(FFMarketSport)sport
-{
-    return [self sportKey:sport];
-}
-
-+ (NSString*)sportKey:(FFMarketSport)key
-{
-    switch (key) {
-    case FFMarketSportNBA:
-        return @"NBA";
-    case FFMarketSportNFL:
-        return @"NFL";
-    default:
-        NSAssert(FALSE, @"Wrong FFMarketSport key argument!");
-    }
-}
-
 + (NSString*)typeKey:(FFMarketType)key
 {
     switch (key) {
-    case FFMarketTypeRegularSeason:
-        return @"regular_season";
-    case FFMarketTypeSingleElimination:
-        return @"single_elimination";
-    default:
-        NSAssert(FALSE, @"Wrong FFMarketType key argument!");
+        case FFMarketTypeRegularSeason:
+            return @"regular_season";
+        case FFMarketTypeSingleElimination:
+            return @"single_elimination";
+        default:
+            NSAssert(FALSE, @"Wrong FFMarketType key argument!");
     }
 }
 
@@ -52,16 +35,12 @@
     }
     return self;
 }
-- (void)setSport:(FFMarketSport)sport
-{
-    self->_sport = sport;
-}
 
 - (void)fetchType:(FFMarketType)type
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                    @"sport" : [FFMarketSet sportKey:self.sport],
+                                    @"sport" : [FFSport stringFromSport:self.sport],
                                     @"type" : [FFMarketSet typeKey:type]
                                 }];
 }

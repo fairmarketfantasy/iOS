@@ -7,11 +7,7 @@
 //
 
 #import "FFDataObjectResultSet.h"
-
-typedef NS_ENUM(NSInteger, FFMarketSport) {
-    FFMarketSportNBA,
-    FFMarketSportNFL
-};
+#import "FFSport.h"
 
 typedef NS_ENUM(NSInteger, FFMarketType) {
     FFMarketTypeSingleElimination,
@@ -21,7 +17,6 @@ typedef NS_ENUM(NSInteger, FFMarketType) {
 @interface FFMarketSet : FFDataObjectResultSet
 
 @property(nonatomic, assign) FFMarketSport sport;
-+ (NSString*)stringFromSport:(FFMarketSport)sport;
 - (void)fetchType:(FFMarketType)type;
 
 @end

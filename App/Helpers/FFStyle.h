@@ -24,6 +24,8 @@
 + (NSNumberFormatter*)funbucksFormatter;
 + (NSDateFormatter*)marketDateFormatter;
 + (NSDateFormatter*)dateFormatter;
++ (NSDateFormatter*)dayFormatter;
++ (NSDateFormatter*)timeFormatter;
 
 + (UIColor*)darkGrey;
 + (UIColor*)darkBlue;
