@@ -63,16 +63,16 @@
                                      },
                                      @"Predictions",
                                      @"Rules",
-                                     @"Legal Stuff",
-                                     @"Support",
+                                     @"How it works  |  Support",
+                                     @"Subscription Terms",
                                      @"Settings",
                                      @"Sign Out"
                                  ]];
         _segueByTitle = @{
             @"Predictions" : @"GotoPredictions",
             @"Rules" : @"GotoRules",
-            @"Legal Stuff" : @"GotoTerms",
-            @"Support" : @"GotoSupport",
+            @"How it works  |  Support" : @"GotoSupport",
+            @"Subscription Terms" : @"GotoTerms",
             @"Settings" : @"GotoAccount",
         };
 
@@ -130,7 +130,6 @@
                                                     style:RATreeViewStylePlain];
         [self.view addSubview:self.treeView];
     }
-
     return self;
 }
 
@@ -143,7 +142,7 @@
     self.treeView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.treeView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.treeView.separatorColor = [FFStyle lightGrey];
-    if ([[UIDevice currentDevice].systemVersion floatValue] >= 7) {
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.f) {
         self.treeView.separatorInset = UIEdgeInsetsZero;
     }
     self.treeView.dataSource = self;

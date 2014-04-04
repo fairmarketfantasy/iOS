@@ -20,6 +20,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [FFStyle white];
     // current password
     _currentPassword = UITextField.new;
     self.currentPassword.layer.borderWidth = 1.f;

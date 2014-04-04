@@ -176,10 +176,10 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
             vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/rules"]];
         } else if ([segue.identifier isEqualToString:@"GotoTerms"]) {
             FFWebViewController* vc = [segue.destinationViewController viewControllers].firstObject;
-            vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/terms"]];
+            vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/conditions"]];
         } else if ([segue.identifier isEqualToString:@"GotoSupport"]) {
             FFWebViewController* vc = [segue.destinationViewController viewControllers].firstObject;
-            vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/support"]];
+            vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/terms"]];
         }
     }
 }

@@ -326,7 +326,8 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
                     [self.rosterPredictions fetch];
                     break;
                 case FFRosterPredictionTypeFinished:
-                    [self.rosterPredictions fetchWithParameters:@{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
+                    [self.rosterPredictions fetchWithParameters:
+                     @{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
                     break;
                 default:
                     break;
