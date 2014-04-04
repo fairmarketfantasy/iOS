@@ -9,6 +9,7 @@
 #import "FFTeamCell.h"
 #import "FFStyle.h"
 #import "FFPathImageView.h"
+#import <FlatUIKit.h>
 
 @implementation FFTeamCell
 
@@ -33,8 +34,22 @@
         self.avatar.pathColor = [FFStyle white];
         self.avatar.borderColor = self.avatar.pathColor;
         self.avatar.pathWidth = 2.f;
-        [self addSubview:self.avatar];
+        [self.contentView addSubview:self.avatar];
         [self.avatar draw];
+        // benched label
+        _benched = [FUIButton.alloc initWithFrame:CGRectMake(55.f, 55.f, 20.f, 20.f)];
+        FUIButton* benched = (FUIButton*)self.benched;
+        benched.buttonColor = [FFStyle brightOrange];
+        [benched setTitleColor:[FFStyle white]
+                      forState:UIControlStateNormal];
+        benched.cornerRadius = .5f * benched.bounds.size.height;
+        [benched setTitle:NSLocalizedString(@"B", @"benched label")
+                 forState:UIControlStateNormal];
+        benched.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        benched.titleLabel.font = [FFStyle italicBlockFont:12.f];
+        benched.userInteractionEnabled = NO;
+        self.benched.hidden = YES; // by default
+        [self.contentView addSubview:self.benched];
         // title label
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(82.f, 31.f, 223.f, 16.f)];
         self.titleLabel.backgroundColor = [UIColor clearColor];

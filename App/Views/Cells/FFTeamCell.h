@@ -13,6 +13,7 @@
 @interface FFTeamCell : UITableViewCell
 
 @property(nonatomic, readonly) FFPathImageView* avatar;
+@property(nonatomic, readonly) UIView* benched;
 @property(nonatomic, readonly) UILabel* titleLabel;
 
 @end

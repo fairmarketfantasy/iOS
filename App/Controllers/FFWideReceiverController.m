@@ -140,16 +140,16 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 
         cell.titleLabel.text =  player.team;
         cell.nameLabel.text = player.name;
-        NSUInteger some = player.benched.integerValue;
         cell.costLabel.text = [FFStyle.priceFormatter stringFromNumber:@([player.buyPrice floatValue])];
-        UIColor* avatarColor = player.benched.integerValue == 1
-        ? [FFStyle brightOrange] : [FFStyle brightGreen];
+        BOOL benched = player.benched.integerValue == 1;
+        UIColor* avatarColor = benched ? [FFStyle brightOrange] : [FFStyle brightGreen];
         cell.avatar.borderColor = avatarColor;
         cell.avatar.pathColor = avatarColor;
-        [cell.avatar setImageWithURL:[NSURL URLWithString:player.headshotURL]
-                    placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
+        [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
+                    placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
          usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [cell.avatar draw];
+        cell.benched.hidden = !benched;
         @weakify(self)
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{
