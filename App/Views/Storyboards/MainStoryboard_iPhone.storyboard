@@ -42,7 +42,17 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fEB-cW-UuO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-279" y="-18"/>
+            <point key="canvasLocation" x="-563" y="-142"/>
+        </scene>
+        <!--Predict Roster Pager Controller-->
+        <scene sceneID="a6R-Xz-nGr">
+            <objects>
+                <pageViewController transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="MlE-rP-SSa" customClass="FFPredictRosterPagerController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="PD2-du-6Qc"/>
+                </pageViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1YI-T6-qps" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="673" y="-142"/>
         </scene>
         <!--Session View Controller-->
         <scene sceneID="Sek-pl-AkR">
@@ -209,7 +219,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BX4-hG-r5Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="917" y="286"/>
+            <point key="canvasLocation" x="2061" y="-442"/>
         </scene>
         <!--Create Game View Controller-->
         <scene sceneID="J0I-7M-4nr">
@@ -235,7 +245,43 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2kF-zM-tDn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1355" y="286"/>
+            <point key="canvasLocation" x="2460" y="-442"/>
+        </scene>
+        <!--Predict Roster Team Controller-->
+        <scene sceneID="dvo-WY-7il">
+            <objects>
+                <viewController storyboardIdentifier="PredictRosterTeamController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="zKr-g5-0NA" customClass="FFPredictRosterTeamController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="f98-fM-HI7"/>
+                        <viewControllerLayoutGuide type="bottom" id="RPa-Ng-uzk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="dyP-vy-WDD">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jpq-XL-M4Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="203" y="-867"/>
+        </scene>
+        <!--Predict Roster Score Controller-->
+        <scene sceneID="weO-Xd-i0Z">
+            <objects>
+                <viewController storyboardIdentifier="PredictRosterScoreController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="t3r-zN-PPI" customClass="FFPredictRosterScoreController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bWD-9r-BER"/>
+                        <viewControllerLayoutGuide type="bottom" id="tsJ-b2-WY3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Pyl-hi-YWb">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a4Z-4A-L1I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="673" y="-867"/>
         </scene>
         <!--Option Select Controller-->
         <scene sceneID="MKG-hN-wyb">
@@ -263,7 +309,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TRR-gI-oHC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1387" y="-723"/>
+            <point key="canvasLocation" x="3035" y="-867"/>
         </scene>
         <!--Value Entry Controller-->
         <scene sceneID="VwE-U3-ibh">
@@ -282,7 +328,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="goJ-uE-Ypw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2047" y="-482"/>
+            <point key="canvasLocation" x="3407" y="-548"/>
         </scene>
         <!--Contest View Controller-->
         <scene sceneID="71A-Hu-P0F">
@@ -537,10 +583,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="P3l-p3-87B"/>
+                    <connections>
+                        <segue destination="MlE-rP-SSa" kind="push" identifier="GotoPredictRoster" id="Ix7-wZ-jmF"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uzz-XL-Om7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2287" y="2816"/>
+            <point key="canvasLocation" x="203" y="-142"/>
         </scene>
         <!--Roster View Controller-->
         <scene sceneID="IVF-Wj-l8j">
@@ -565,24 +614,6 @@
             </objects>
             <point key="canvasLocation" x="1454" y="1160"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="Ezs-Y7-jYa">
-            <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="0Df-Wr-YJ4" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="6z1-nI-mzy"/>
-                        <viewControllerLayoutGuide type="bottom" id="q06-5q-eXr"/>
-                    </layoutGuides>
-                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="EP0-DP-D7Q">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <toolbarItems/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aYs-VF-M8h" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-        </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -592,9 +623,9 @@
     <inferredMetricsTieBreakers>
         <segue reference="9Ye-9C-EZa"/>
         <segue reference="Zjb-xv-NwD"/>
-        <segue reference="Xef-hb-5vV"/>
+        <segue reference="wO2-z2-bkb"/>
         <segue reference="eDH-b8-2gb"/>
-        <segue reference="3y5-bZ-Hxu"/>
         <segue reference="u0q-yD-ZaH"/>
+        <segue reference="3y5-bZ-Hxu"/>
     </inferredMetricsTieBreakers>
 </document>

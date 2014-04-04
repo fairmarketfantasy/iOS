@@ -36,7 +36,7 @@
         [self addSubview:self.avatar];
         [self.avatar draw];
         // title label
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(82.f, 31.f, 140.f, 16.f)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(82.f, 31.f, 223.f, 16.f)];
         self.titleLabel.backgroundColor = [UIColor clearColor];
         self.titleLabel.font = [FFStyle regularFont:14.f];
         self.titleLabel.textColor = [FFStyle greyTextColor];

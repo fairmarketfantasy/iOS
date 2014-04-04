@@ -39,7 +39,6 @@
 + (UIColor*)darkGreyTextColor;
 + (UIColor*)black;
 + (UIColor*)brightRed;
-+ (UIColor*)yellowErrorColor;
 + (UIColor*)tableViewSeparatorColor;
 + (UIColor*)brightOrange;
 + (UIColor*)tableViewSectionHeaderColor;

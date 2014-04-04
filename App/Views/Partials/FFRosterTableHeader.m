@@ -16,12 +16,14 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [FFStyle white];
+        // title label
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.f, 0.f, 200.f, 50.f)];
         self.titleLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         self.titleLabel.backgroundColor = [UIColor clearColor];
         self.titleLabel.font = [FFStyle lightFont:26.f];
         self.titleLabel.textColor = [FFStyle greyTextColor];
         [self addSubview:self.titleLabel];
+        // price label
         _priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(215.f, 0.f, 90.f, 50.f)];
         self.priceLabel.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
         self.priceLabel.backgroundColor = [UIColor clearColor];

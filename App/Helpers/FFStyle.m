@@ -128,8 +128,8 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 + (UIColor*)lightGrey
 {
-    return [UIColor colorWithWhite:.8
-                             alpha:1];
+    return [UIColor colorWithWhite:.8f
+                             alpha:1.f];
 }
 
 + (UIColor*)black
@@ -145,15 +145,10 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
                            alpha:1.f];
 }
 
-+ (UIColor*)yellowErrorColor
-{
-    return [UIColor yellowColor]; // ???: another maybe
-}
-
 + (UIColor*)greyTextColor
 {
-    return [UIColor colorWithWhite:.4
-                             alpha:1];
+    return [UIColor colorWithWhite:.4f
+                             alpha:1.f];
 }
 
 + (UIColor*)darkGreyTextColor
@@ -164,8 +159,8 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
 + (UIColor*)tableViewSeparatorColor
 {
-    return [UIColor colorWithWhite:.85
-                             alpha:1];
+    return [UIColor colorWithWhite:.85f
+                             alpha:1.f];
 }
 
 + (UIColor*)tableViewSectionHeaderColor

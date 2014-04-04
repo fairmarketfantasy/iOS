@@ -418,6 +418,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor clearColor];
     self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
     if (self.navigationController && self.navigationController.viewControllers.count
         && self.navigationController.viewControllers[0] != self) {

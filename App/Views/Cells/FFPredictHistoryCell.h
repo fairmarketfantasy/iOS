@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@class FFCustomButton;
+
 @interface FFPredictHistoryCell : UITableViewCell
 
-@property(nonatomic, readonly) UIButton* rosterButton;
+@property(nonatomic, readonly) FFCustomButton* rosterButton;
 @property(nonatomic, readonly) UILabel* nameLabel;
 @property(nonatomic, readonly) UILabel* teamLabel;
 @property(nonatomic, readonly) UILabel* dayLabel;

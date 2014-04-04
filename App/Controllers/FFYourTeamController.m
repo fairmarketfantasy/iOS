@@ -50,7 +50,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                        forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.submitView];
     // table view
-    self.tableView = [[FFTeamTable alloc] initWithFrame:self.view.bounds];
+    self.tableView = [FFTeamTable.alloc initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];

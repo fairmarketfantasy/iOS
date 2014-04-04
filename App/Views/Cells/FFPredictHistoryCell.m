@@ -7,6 +7,7 @@
 //
 
 #import "FFPredictHistoryCell.h"
+#import "FFStyle.h"
 
 @implementation FFPredictHistoryCell
 

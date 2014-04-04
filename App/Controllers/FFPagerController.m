@@ -65,23 +65,24 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    // navigation bar style
     self.navigationController.navigationBar.translucent = NO;
-
-    if ([[UIDevice currentDevice].systemVersion floatValue] >= 7) {
+    // iOS 7 fix
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 7.f) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
         self.automaticallyAdjustsScrollViewInsets = YES;
     }
-    self.pager = [StyledPageControl new];
+    // pager
+    self.pager = StyledPageControl.new;
     self.pager.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
     self.pager.frame = CGRectMake(0.f,
                                   self.view.bounds.size.height - 39.f,
                                   self.view.bounds.size.width,
                                   44.f);
-    [self.pager setGapWidth:2];
-    [self.pager setPageControlStyle:PageControlStyleThumb];
-    [self.pager setThumbImage:[UIImage imageNamed:@"passive"]];
-    [self.pager setSelectedThumbImage:[UIImage imageNamed:@"active"]];
+    self.pager.gapWidth = 2;
+    self.pager.pageControlStyle = PageControlStyleThumb;
+    self.pager.thumbImage = [UIImage imageNamed:@"passive"];
+    self.pager.selectedThumbImage = [UIImage imageNamed:@"active"];
     self.pager.userInteractionEnabled = NO;
     [self.view addSubview:self.pager];
     [self.view bringSubviewToFront:self.pager];
@@ -109,7 +110,7 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
     self.personalInfoButton.contentMode = UIViewContentModeScaleAspectFit;
     self.personalInfoButton.frame = [FFStyle itemRect];
     [rightItem addSubview:self.personalInfoButton];
-
+    // iOS 7 fix
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         UIBarButtonItem* spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
                                                                                    target:nil
@@ -129,11 +130,6 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
     }
     // title
     self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
-}
-
-- (void)willMoveToParentViewController:(UIViewController *)parent
-{
-    [super willMoveToParentViewController:parent];
 }
 
 - (void)viewWillAppear:(BOOL)animated

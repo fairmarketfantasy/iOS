@@ -15,6 +15,8 @@
 #import "FFPredictHeader.h"
 #import "FFRosterTableHeader.h"
 #import "FFPredictionsSelector.h"
+#import "FFStyle.h"
+#import "FFPredictRosterPagerController.h"
 // model
 #import "FFPredictionSet.h"
 #import "FFIndividualPrediction.h"
@@ -86,6 +88,17 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     [super viewWillDisappear:animated];
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue*)segue
+                 sender:(id)sender
+{
+    [super prepareForSegue:segue
+                    sender:sender];
+    if ([segue.identifier isEqualToString:@"GotoPredictRoster"]) {
+        FFPredictRosterPagerController* vc = segue.destinationViewController;
+        vc.roster = (FFRosterPrediction*)sender;
+    }
+}
+
 #pragma mark - FFPredictionsProtocol
 
 - (void)predictionsTypeSelected:(FFPredictionsType)type
@@ -96,14 +109,18 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     [self.tableView reloadData];
     switch (type) {
         case FFPredictionsTypeIndividual:
+        {
             [self.individualPredictions fetch];
             [self.typeButton setTitle:NSLocalizedString(@"Individual", nil)
                              forState:UIControlStateNormal];
+        }
             break;
         case FFPredictionsTypeRoster:
+        {
             [self.rosterPredictions fetch];
             [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
                              forState:UIControlStateNormal];
+        }
             break;
         default:
             break;
@@ -186,7 +203,14 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
             FFPredictHistoryCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictCell"
                                                                          forIndexPath:indexPath];
             if (self.rosterPredictions.allObjects.count > indexPath.row) {
-                FFRosterPrediction* prediction = self.rosterPredictions.allObjects[indexPath.row];
+                __block FFRosterPrediction* prediction = self.rosterPredictions.allObjects[indexPath.row];
+                @weakify(self)
+                [cell.rosterButton setAction:kUIButtonBlockTouchUpInside
+                                   withBlock:^{
+                                       @strongify(self)
+                                       [self performSegueWithIdentifier:@"GotoPredictRoster"
+                                                                 sender:prediction]; // TODO: refactode it (?)
+                                   }];
 #warning CHECK fields!
                 cell.nameLabel.text = prediction.ownerName;
                 cell.teamLabel.text = prediction.market.name;
