@@ -87,9 +87,9 @@ viewForHeaderInSection:(NSInteger)section
 {
     FFRosterTableHeader* header = FFRosterTableHeader.new;
     header.titleLabel.text = NSLocalizedString(@"Your Team", nil);
-//    view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.roster.remainingSalary.floatValue)];
-//    view.priceLabel.textColor = self.roster.remainingSalary.floatValue > 0.f
-//    ? [FFStyle brightGreen] : [FFStyle brightRed];
+    header.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.roster.remainingSalary.floatValue)];
+    header.priceLabel.textColor = self.roster.remainingSalary.floatValue > 0.f
+    ? [FFStyle brightGreen] : [FFStyle brightRed];
     return header;
 }
 

@@ -11,6 +11,7 @@
 #import "FFPredictRosterTeamController.h"
 #import "FFPredictRosterScoreController.h"
 #import "FFControllerProtocol.h"
+#import "FFLogo.h"
 // model
 #import "FFRosterPrediction.h"
 
@@ -61,6 +62,9 @@ FFControllerProtocol>
     self.pager.userInteractionEnabled = NO;
     [self.view addSubview:self.pager];
     [self.view bringSubviewToFront:self.pager];
+    // navigation bar
+    self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
+    self.navigationItem.leftBarButtonItems = [FFStyle backBarItemsForController:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
