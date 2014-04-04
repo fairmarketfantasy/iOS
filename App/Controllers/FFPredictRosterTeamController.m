@@ -66,6 +66,10 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 #warning CHECK PRICE!
         cell.costLabel.text = [FFStyle.priceFormatter
                                stringFromNumber:@([player.sellPrice floatValue])];
+        UIColor* avatarColor = player.benched.integerValue == 1
+        ? [FFStyle brightOrange] : [FFStyle brightGreen];
+        cell.avatar.borderColor = avatarColor;
+        cell.avatar.pathColor = avatarColor;
         [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
                     placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
          usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];

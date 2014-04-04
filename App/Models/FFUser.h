@@ -28,7 +28,7 @@
 @property (nonatomic) SBInteger*    totalWins;
 @property (nonatomic) NSDictionary* inProgressRoster;
 @property (nonatomic) NSString*     userId;
-@property (nonatomic) SBInteger*     prestige;
+@property (nonatomic) SBInteger*    prestige;
 @property (nonatomic) NSString*     fbUid;
 
 - (FFRoster *)getInProgressRoster;

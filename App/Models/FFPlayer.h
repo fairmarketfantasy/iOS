@@ -13,9 +13,8 @@
 @interface FFPlayer : SBDataObject
 
 @property(nonatomic) NSString* swappedPlayerName;
-@property(nonatomic) NSString* benched;
+@property(nonatomic) SBInteger* benched;
 @property(nonatomic) NSString* nextGameAt;
-@property(nonatomic) NSString* benchedGames;
 @property(nonatomic) NSString* isEliminated;
 @property(nonatomic) NSString* headshotURL;
 @property(nonatomic) NSString* locked;

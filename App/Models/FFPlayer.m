@@ -16,7 +16,6 @@
 @dynamic swappedPlayerName;
 @dynamic benched;
 @dynamic nextGameAt;
-@dynamic benchedGames;
 @dynamic isEliminated;
 @dynamic headshotURL;
 @dynamic locked;
@@ -60,7 +59,6 @@
               @"swappedPlayerName" : @"swapped_player_name",
               @"benched" : @"benched",
               @"nextGameAt" : @"next_game_at",
-              @"benchedGames" : @"benched_games",
               @"isEliminated" : @"is_eliminated",
               @"headshotURL" : @"headshot_url",
               @"locked" : @"locked",
