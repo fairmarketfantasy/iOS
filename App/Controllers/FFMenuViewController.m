@@ -17,13 +17,18 @@
 #import <libextobjc/EXTScope.h>
 #import "FFAlertView.h"
 #import "FFSport.h"
+#import "FFAccountHeader.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "FFPathImageView.h"
 
-@interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate>
+@interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate, FFUserProtocol>
 
 @property(nonatomic) RATreeView* treeView;
 @property(nonatomic, readonly) NSArray* nodes;
 @property(nonatomic, readonly) NSDictionary* segueByTitle;
 @property(nonatomic) TransitionDelegate* customTransitioningDelegate;
+@property(nonatomic) UIButton* personalInfoButton;
+@property(nonatomic, assign) BOOL isPersonalInfoOpened;
 
 @end
 
@@ -36,6 +41,7 @@
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 504)];
+        self.isPersonalInfoOpened = YES;
 
         if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
             self.modalPresentationStyle = UIModalPresentationCustom; // transparency fix
@@ -63,7 +69,7 @@
                                      },
                                      @"Predictions",
                                      @"Rules",
-                                     @"How it works  |  Support",
+                                     @"How it works  〉Support",
                                      @"Subscription Terms",
                                      @"Settings",
                                      @"Sign Out"
@@ -71,7 +77,7 @@
         _segueByTitle = @{
             @"Predictions" : @"GotoPredictions",
             @"Rules" : @"GotoRules",
-            @"How it works  |  Support" : @"GotoSupport",
+            @"How it works  〉Support" : @"GotoSupport",
             @"Subscription Terms" : @"GotoTerms",
             @"Settings" : @"GotoAccount",
         };
@@ -89,6 +95,17 @@
         globalMenuButton.contentMode = UIViewContentModeScaleAspectFit;
         globalMenuButton.frame = [FFStyle itemRect];
         [leftItem addSubview:globalMenuButton];
+        // right bar item
+        FFNavigationBarItemView* rightItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle itemRect]];
+        self.personalInfoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.personalInfoButton setImage:[UIImage imageNamed:@"hide"]
+                                 forState:UIControlStateNormal];
+        [self.personalInfoButton addTarget:self
+                                    action:@selector(personalInfoButton:)
+                          forControlEvents:UIControlEventTouchUpInside];
+        self.personalInfoButton.contentMode = UIViewContentModeScaleAspectFit;
+        self.personalInfoButton.frame = [FFStyle itemRect];
+        [rightItem addSubview:self.personalInfoButton];
         // status bar fix for iOS 7
         CGFloat navBarOffset = 0.f;
         if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
@@ -99,14 +116,13 @@
             fixbar.backgroundColor = [UINavigationBar appearance].backgroundColor;
             [self.view addSubview:fixbar];
         }
-
         // navigation bar
         UINavigationItem* buttonCarrier = [[UINavigationItem alloc] initWithTitle:@""];
         UINavigationBar* navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0.f, navBarOffset,
                                                                                            320.f, 44.f)];
         navigationBar.items = @[buttonCarrier];
         [self.view addSubview:navigationBar];
-
+        // iOS 7 fix
         if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
             UIBarButtonItem* spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
                                                                                        target:nil
@@ -116,8 +132,13 @@
                                                  spaceItem,
                                                  [[UIBarButtonItem alloc] initWithCustomView:leftItem]
                                                  ];
+            buttonCarrier.rightBarButtonItems = @[
+                                                  spaceItem,
+                                                  [[UIBarButtonItem alloc] initWithCustomView:rightItem]
+                                                  ];
         } else {
             buttonCarrier.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftItem];
+            buttonCarrier.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightItem];
         }
         // title
         buttonCarrier.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
@@ -149,6 +170,24 @@
     self.treeView.delegate = self;
     [self.treeView registerClass:[FFMenuCell class]
           forCellReuseIdentifier:MENU_CELL_ID];
+    // header
+    self.treeView.treeHeaderView = [FFAccountHeader.alloc initWithFrame:CGRectMake(0.f, 0.f, 320.f, 183.f)];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.session.delegate = self;
+    [self updateHeader];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self hidePersonalInfo];
+    if (self.session.delegate == self) {
+        self.session.delegate = nil;
+    }
 }
 
 #pragma mark - RATreeViewDataSource
@@ -309,7 +348,40 @@
                                                                : @"accessory_uncollapse"];
 }
 
+#pragma mark - FFUserProtocol
+
+- (void)didUpdateUser:(FFUser*)user
+{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [self updateHeader];
+}
+
 #pragma mark - private
+
+- (void)updateHeader
+{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    FFAccountHeader* header = (FFAccountHeader*)self.treeView.treeHeaderView;
+    if (![header isKindOfClass:[FFAccountHeader class]]) {
+        return;
+    }
+    [header.avatar setImageWithURL:[NSURL URLWithString:self.session.user.imageUrl]
+                  placeholderImage:[UIImage imageNamed:@"defaultuser"]
+       usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [header.avatar draw];
+
+    header.nameLabel.text = self.session.user.name;
+    NSDate* join = self.session.user.joinDate;
+    header.dateLabel.text = join ? [NSString stringWithFormat:@"Member Since %@",
+                                    [FFStyle.dateFormatter stringFromDate:join]] : @"";
+    header.pointsLabel.text = [NSString stringWithFormat:@"%i", self.session.user.totalPoints.integerValue];
+    header.winsLabel.text = [NSString stringWithFormat:@"%i (%.2f%%)",
+                             self.session.user.totalWins.integerValue,
+                             self.session.user.winPercentile.floatValue];
+    header.balanceLabel.text = [FFStyle.funbucksFormatter
+                                stringFromNumber:@(self.session.user.balance.floatValue)];
+    header.prestigeLabel.text = [NSString stringWithFormat:@"%i", self.session.user.prestige.integerValue];
+}
 
 - (void)declareOnTouchCellActionsForItem:(FFNodeItem*)item
 {
@@ -373,6 +445,54 @@
 {
     [self dismissViewControllerAnimated:YES
                              completion:nil];
+}
+
+- (void)personalInfoButton:(UIButton*)button
+{
+    if (self.isPersonalInfoOpened) {
+        [self hidePersonalInfoAnimated:YES];
+    } else {
+        [self showPersonalInfoAnimated:YES];
+    }
+}
+
+- (void)hidePersonalInfo
+{
+    [self hidePersonalInfoAnimated:NO];
+}
+
+- (void)hidePersonalInfoAnimated:(BOOL)animated
+{
+    [UIView animateWithDuration:(NSTimeInterval)(animated ? .3f : 0.f)
+                     animations:^{
+                         [self.personalInfoButton setImage:[UIImage imageNamed:@"show"]
+                                                  forState:UIControlStateNormal];
+                         UIEdgeInsets insets = self.treeView.contentInset;
+                         insets.top = -self.treeView.treeHeaderView.bounds.size.height;
+                         self.treeView.contentInset = insets;
+                         self.treeView.contentOffset = CGPointMake(0.f,
+                                                                   self.treeView.treeHeaderView.bounds.size.height);
+                         self.isPersonalInfoOpened = NO;
+                     }];
+}
+
+- (void)showPersonalInfo
+{
+    [self showPersonalInfoAnimated:NO];
+}
+
+- (void)showPersonalInfoAnimated:(BOOL)animated
+{
+    [UIView animateWithDuration:(NSTimeInterval)(animated ? .3f : 0.f)
+                     animations:^{
+                         [self.personalInfoButton setImage:[UIImage imageNamed:@"hide"]
+                                                  forState:UIControlStateNormal];
+                         UIEdgeInsets insets = self.treeView.contentInset;
+                         insets.top = 0.f;
+                         self.treeView.contentInset = insets;
+                         self.treeView.contentOffset = CGPointZero;
+                         self.isPersonalInfoOpened = YES;
+                     }];
 }
 
 @end

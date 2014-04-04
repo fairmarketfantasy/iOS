@@ -8,6 +8,7 @@
 
 #import "FFSession.h"
 #import "FFMarketSet.h"
+#import "FFBaseViewController.h"
 
 @protocol FFMenuViewControllerDelegate <NSObject>
 
@@ -19,9 +20,8 @@
 
 @end
 
-@interface FFMenuViewController : UIViewController
+@interface FFMenuViewController : FFBaseViewController
 
 @property(nonatomic, weak) id<FFMenuViewControllerDelegate> delegate;
-@property(nonatomic) FFSession* session;
 
 @end

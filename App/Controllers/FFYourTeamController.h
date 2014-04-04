@@ -9,6 +9,7 @@
 #import "FFBaseViewController.h"
 
 @class FFMarket;
+@class FFMarketSet;
 
 @interface FFYourTeamController : FFBaseViewController
 
@@ -19,7 +20,6 @@
 @property(nonatomic) UITableView* tableView;
 - (NSArray*)positions;
 - (void)createRoster;
-- (void)updateHeader;
 - (void)updateMarkets;
 
 @end

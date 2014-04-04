@@ -26,49 +26,111 @@
         backgroundView.contentMode = UIViewContentModeTop;
         [self addSubview:backgroundView];
         // avatar
-        _avatar = [FFPathImageView.alloc initWithFrame:CGRectMake(0.f, 0.f, 60.f, 60.f)
+        _avatar = [FFPathImageView.alloc initWithFrame:CGRectMake(15.f, 15.f, 60.f, 60.f)
                                                  image:[UIImage imageNamed:@"defaultuser"]
                                               pathType:FFPathImageViewTypeCircle
                                              pathColor:[UIColor clearColor]
                                            borderColor:[UIColor clearColor]
                                              pathWidth:0.f];
-        self.avatar.center = CGPointMake(275.f, 0.5f * self.bounds.size.height);
         self.avatar.contentMode = UIViewContentModeScaleAspectFit;
         self.avatar.pathType = FFPathImageViewTypeCircle;
         self.avatar.pathColor = [FFStyle white];
         self.avatar.borderColor = self.avatar.pathColor;
-        self.avatar.pathWidth = 2.f;
+        self.avatar.pathWidth = -2.5f;
         [self addSubview:self.avatar];
         [self.avatar draw];
         // name label
-        _nameLabel = [UILabel.alloc  initWithFrame:CGRectMake(15.f, 5.f, 100.f, 30.f)];
+        _nameLabel = [UILabel.alloc  initWithFrame:CGRectMake(90.f, 20.f, 100.f, 30.f)];
         self.nameLabel.backgroundColor = [UIColor clearColor];
         self.nameLabel.font = [FFStyle regularFont:19.f];
         self.nameLabel.textColor = [FFStyle white];
         [self addSubview:self.nameLabel];
-        UIImageView* walletPic = [UIImageView.alloc initWithImage:[UIImage imageNamed:@"wallet"]];
-        walletPic.frame = CGRectMake(0.f, 0.f, walletPic.image.size.width, walletPic.image.size.height);
-        walletPic.center = CGPointMake(130.f, self.nameLabel.center.y);
-        [self addSubview:walletPic];
-        _walletLabel = [UILabel.alloc  initWithFrame:CGRectMake(140.f, self.nameLabel.frame.origin.y, 100.f, 30.f)];
-        self.walletLabel.backgroundColor = [UIColor clearColor];
-        self.walletLabel.textColor = [FFStyle darkBlue];
-        [self addSubview:self.walletLabel];
-        _dateLabel = [UILabel.alloc  initWithFrame:CGRectMake(15.f, 35.f, 200.f, 15.f)];
+        // date
+        _dateLabel = [UILabel.alloc  initWithFrame:CGRectMake(90.f, 50.f, 200.f, 15.f)];
         self.dateLabel.backgroundColor = [UIColor clearColor];
         self.dateLabel.font = [FFStyle regularFont:12.f];
         self.dateLabel.textColor = [FFStyle lightGrey];
         [self addSubview:self.dateLabel];
-        _pointsLabel = [UILabel.alloc  initWithFrame:CGRectMake(15.f, 55.f, 80.f, 30.f)];
+
+        // points
+
+        UIView* points = [UIView.alloc initWithFrame:CGRectMake(15.f, 90.f, 143.f, 40.f)];
+        points.backgroundColor = [FFStyle brightGreen];
+        [self addSubview:points];
+        
+        UILabel* pointsCaptionLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 0.f, 50.f, 40.f)];
+        pointsCaptionLabel.backgroundColor = [UIColor clearColor];
+        pointsCaptionLabel.font = [FFStyle regularFont:14.f];
+        pointsCaptionLabel.textColor = [FFStyle black];
+        pointsCaptionLabel.text = NSLocalizedString(@"Points", nil);
+        [points addSubview:pointsCaptionLabel];
+
+        _pointsLabel = [UILabel.alloc  initWithFrame:CGRectMake(60.f, 0.f, 73.f, 40.f)];
         self.pointsLabel.backgroundColor = [UIColor clearColor];
         self.pointsLabel.font = [FFStyle regularFont:14.f];
-        self.pointsLabel.textColor = [FFStyle darkBlue];
-        [self addSubview:self.pointsLabel];
-        _winsLabel = [UILabel.alloc  initWithFrame:CGRectMake(100.f, self.pointsLabel.frame.origin.y, 140.f, 30.f)];
+        self.pointsLabel.textColor = [FFStyle white];
+        self.pointsLabel.textAlignment = NSTextAlignmentRight;
+        [points addSubview:self.pointsLabel];
+
+        // wins
+
+        UIView* wins = [UIView.alloc initWithFrame:CGRectMake(15.f, 134.f, 143.f, 40.f)];
+        wins.backgroundColor = [FFStyle brightGreen];
+        [self addSubview:wins];
+        
+        UILabel* winsCaptionLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 0.f, 40.f, 40.f)];
+        winsCaptionLabel.backgroundColor = [UIColor clearColor];
+        winsCaptionLabel.font = [FFStyle regularFont:14.f];
+        winsCaptionLabel.textColor = [FFStyle black];
+        winsCaptionLabel.text = NSLocalizedString(@"Wins", nil);
+        [wins addSubview:winsCaptionLabel];
+
+        _winsLabel = [UILabel.alloc  initWithFrame:CGRectMake(50.f, 0.f, 83.f, 40.f)];
         self.winsLabel.backgroundColor = [UIColor clearColor];
         self.winsLabel.font = [FFStyle regularFont:14.f];
-        self.winsLabel.textColor = [FFStyle darkBlue];
-        [self addSubview:self.winsLabel];
+        self.winsLabel.textColor = [FFStyle white];
+        self.winsLabel.textAlignment = NSTextAlignmentRight;
+        [wins addSubview:self.winsLabel];
+
+        // balance
+
+        UIView* balance = [UIView.alloc initWithFrame:CGRectMake(162.f, 90.f, 143.f, 40.f)];
+        balance.backgroundColor = [FFStyle brightGreen];
+        [self addSubview:balance];
+
+        UILabel* balanceCaptionLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 0.f, 60.f, 40.f)];
+        balanceCaptionLabel.backgroundColor = [UIColor clearColor];
+        balanceCaptionLabel.font = [FFStyle regularFont:14.f];
+        balanceCaptionLabel.textColor = [FFStyle black];
+        balanceCaptionLabel.text = NSLocalizedString(@"Balance", nil);
+        [balance addSubview:balanceCaptionLabel];
+
+        _balanceLabel = [UILabel.alloc  initWithFrame:CGRectMake(70.f, 0.f, 63.f, 40.f)];
+        self.balanceLabel.backgroundColor = [UIColor clearColor];
+        self.balanceLabel.font = [FFStyle regularFont:14.f];
+        self.balanceLabel.textColor = [FFStyle white];
+        self.balanceLabel.textAlignment = NSTextAlignmentRight;
+        [balance addSubview:self.balanceLabel];
+
+        // prestige
+
+        UIView* prestige = [UIView.alloc initWithFrame:CGRectMake(162.f, 134.f, 143.f, 40.f)];
+        prestige.backgroundColor = [FFStyle brightGreen];
+        [self addSubview:prestige];
+
+        UILabel* prestigeCaptionLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 0.f, 60.f, 40.f)];
+        prestigeCaptionLabel.backgroundColor = [UIColor clearColor];
+        prestigeCaptionLabel.font = [FFStyle regularFont:14.f];
+        prestigeCaptionLabel.textColor = [FFStyle black];
+        prestigeCaptionLabel.text = NSLocalizedString(@"Prestige", nil);
+        [prestige addSubview:prestigeCaptionLabel];
+
+        _prestigeLabel = [UILabel.alloc  initWithFrame:CGRectMake(70.f, 0.f, 63.f, 40.f)];
+        self.prestigeLabel.backgroundColor = [UIColor clearColor];
+        self.prestigeLabel.font = [FFStyle regularFont:14.f];
+        self.prestigeLabel.textColor = [FFStyle white];
+        self.prestigeLabel.textAlignment = NSTextAlignmentRight;
+        [prestige addSubview:self.prestigeLabel];
     }
     return self;
 }

@@ -16,6 +16,7 @@
 #import "FFLogo.h"
 #import "FFWebViewController.h"
 #import "FFAlertView.h"
+#import "FFMenuViewController.h"
 // model
 #import "FFControllerProtocol.h"
 #import "FFMarketSet.h"
@@ -34,8 +35,6 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
 @property(nonatomic) FFYourTeamController* teamController;
 @property(nonatomic) FFWideReceiverController* receiverController;
 @property(nonatomic) UIButton* globalMenuButton;
-@property(nonatomic) UIButton* personalInfoButton;
-@property(nonatomic, assign) BOOL isPersonalInfoOpened;
 
 @end
 
@@ -47,7 +46,6 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.isPersonalInfoOpened = NO;
         self.view.backgroundColor = [FFStyle darkGreen];
         self.dataSource = self;
         self.delegate = self;
@@ -99,17 +97,6 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
     self.globalMenuButton.contentMode = UIViewContentModeScaleAspectFit;
     self.globalMenuButton.frame = [FFStyle itemRect];
     [leftItem addSubview:self.globalMenuButton];
-    // right bar item
-    FFNavigationBarItemView* rightItem = [[FFNavigationBarItemView alloc] initWithFrame:[FFStyle itemRect]];
-    self.personalInfoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.personalInfoButton setImage:[UIImage imageNamed:@"open"]
-                             forState:UIControlStateNormal];
-    [self.personalInfoButton addTarget:self
-                                action:@selector(personalInfoButton:)
-                      forControlEvents:UIControlEventTouchUpInside];
-    self.personalInfoButton.contentMode = UIViewContentModeScaleAspectFit;
-    self.personalInfoButton.frame = [FFStyle itemRect];
-    [rightItem addSubview:self.personalInfoButton];
     // iOS 7 fix
     if (SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")) {
         UIBarButtonItem* spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
@@ -120,13 +107,8 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
                                                    spaceItem,
                                                    [[UIBarButtonItem alloc] initWithCustomView:leftItem]
                                                    ];
-        self.navigationItem.rightBarButtonItems = @[
-                                                    spaceItem,
-                                                    [[UIBarButtonItem alloc] initWithCustomView:rightItem]
-                                                    ];
     } else {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftItem];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightItem];
     }
     // title
     self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
@@ -137,7 +119,6 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
     [super viewWillAppear:animated];
     self.pager.numberOfPages = (int)[self getViewControllers].count;
     // session
-    self.session.delegate = self;
     self.teamController.session = self.session;
     self.receiverController.session = self.session;
     [self setViewControllers:@[[self getViewControllers].firstObject]
@@ -145,7 +126,6 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
                     animated:NO
                   completion:nil];
     [self.view bringSubviewToFront:self.pager];
-    [self hidePersonalInfo];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue
@@ -221,7 +201,7 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
    previousViewControllers:(NSArray *)previousViewControllers
        transitionCompleted:(BOOL)completed
 {
-    [self hidePersonalInfo];
+    // TODO: on appear
     if (!completed) {
         return;
     }
@@ -232,7 +212,7 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
 - (void)pageViewController:(UIPageViewController*)pageViewController
 willTransitionToViewControllers:(NSArray*)pendingViewControllers
 {
-    [self hidePersonalInfo];
+    // TODO: on desappear
 }
 
 #pragma mark - private
@@ -245,77 +225,12 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              ];
 }
 
-- (void)hidePersonalInfo
-{
-    [self hidePersonalInfoAnimated:NO];
-}
-
-- (void)hidePersonalInfoAnimated:(BOOL)animated
-{
-    [UIView animateWithDuration:(NSTimeInterval)(animated ? .3f : 0.f)
-                     animations:^{
-                         [self.personalInfoButton setImage:[UIImage imageNamed:@"open"]
-                                                  forState:UIControlStateNormal];
-                         UIEdgeInsets teamTableInsets = self.teamController.tableView.contentInset;
-                         teamTableInsets.top = -self.teamController.tableView.tableHeaderView.bounds.size.height;
-                         self.teamController.tableView.contentInset = teamTableInsets;
-                         self.teamController.tableView.contentOffset =
-                         CGPointMake(0.f, self.teamController.tableView.tableHeaderView.bounds.size.height);
-                         UIEdgeInsets receiverTableInsets = self.receiverController.tableView.contentInset;
-                         receiverTableInsets.top = -self.receiverController.tableView.tableHeaderView.bounds.size.height;
-                         self.receiverController.tableView.contentInset = receiverTableInsets;
-                         self.receiverController.tableView.contentOffset =
-                         CGPointMake(0.f, self.receiverController.tableView.tableHeaderView.bounds.size.height);
-                         self.isPersonalInfoOpened = NO;
-                     }];
-}
-
-- (void)showPersonalInfo
-{
-    [self showPersonalInfoAnimated:NO];
-}
-
-- (void)showPersonalInfoAnimated:(BOOL)animated
-{
-    [UIView animateWithDuration:(NSTimeInterval)(animated ? .3f : 0.f)
-                     animations:^{
-                         [self.personalInfoButton setImage:[UIImage imageNamed:@"close"]
-                                                  forState:UIControlStateNormal];
-                         UIEdgeInsets teamTableInsets = self.teamController.tableView.contentInset;
-                         teamTableInsets.top = 0.f;
-                         self.teamController.tableView.contentInset = teamTableInsets;
-                         self.teamController.tableView.contentOffset = CGPointZero;
-                         UIEdgeInsets receiverTableInsets = self.receiverController.tableView.contentInset;
-                         receiverTableInsets.top = 0.f;
-                         self.receiverController.tableView.contentInset = receiverTableInsets;
-                         self.receiverController.tableView.contentOffset = CGPointZero;
-                         self.isPersonalInfoOpened = YES;
-                     }];
-}
-
-#pragma mark - FFUserProtocol
-
-- (void)didUpdateUser:(FFUser*)user
-{
-    [self.teamController updateHeader];
-    [self.receiverController updateHeader];
-}
-
 #pragma mark - button actions
 
 - (void)globalMenuButton:(UIButton*)button
 {
     [self performSegueWithIdentifier:@"GotoMenu"
                               sender:nil];
-}
-
-- (void)personalInfoButton:(UIButton*)button
-{
-    if (self.isPersonalInfoOpened) {
-        [self hidePersonalInfoAnimated:YES];
-    } else {
-        [self showPersonalInfoAnimated:YES];
-    }
 }
 
 #pragma mark - FFMenuViewControllerDelegate

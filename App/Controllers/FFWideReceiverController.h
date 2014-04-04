@@ -26,6 +26,5 @@
 @property(nonatomic) NSArray* players; // should contain FFPlayer*
 @property(nonatomic, weak) id<FFPlayersProtocol> delegate;
 @property(nonatomic) UITableView* tableView;
-- (void)updateHeader;
 
 @end

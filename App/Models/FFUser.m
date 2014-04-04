@@ -24,7 +24,7 @@
 @dynamic totalPoints;
 @dynamic totalWins;
 @dynamic inProgressRoster;
-
+@dynamic prestige;
 @dynamic fbUid;
 
 + (NSString *)tableName { return @"ffuser"; }
@@ -41,17 +41,18 @@
 + (NSDictionary *)propertyToNetworkKeyMapping
 {
     return [[super propertyToNetworkKeyMapping] dictionaryByMergingWithDictionary:@{
-                @"userId":          @"id",
-                @"name":            @"name",
-                @"imageUrl":        @"image_url",
-                @"balance":         @"balance",
-                @"tokenBalance":    @"token_balance",
-                @"totalPoints":     @"total_points",
-                @"totalWins":       @"total_wins",
-                @"winPercentile":   @"win_percentile",
-                @"email":           @"email",
-                @"joinDate":        @"joined_at",
-                @"inProgressRoster": @"in_progress_roster"
+                @"userId":           @"id",
+                @"name":             @"name",
+                @"imageUrl":         @"image_url",
+                @"balance":          @"balance",
+                @"tokenBalance":     @"token_balance",
+                @"totalPoints":      @"total_points",
+                @"totalWins":        @"total_wins",
+                @"winPercentile":    @"win_percentile",
+                @"email":            @"email",
+                @"joinDate":         @"joined_at",
+                @"inProgressRoster": @"in_progress_roster",
+                @"prestige":         @"prestige"
             }];
 }
 

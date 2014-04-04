@@ -11,6 +11,7 @@
 #import "FFSessionViewController.h"
 #import "FFLogo.h"
 #import "FFControllerProtocol.h"
+#import "FFMenuViewController.h"
 
 // TODO: move DRAWER into completely separate class
 

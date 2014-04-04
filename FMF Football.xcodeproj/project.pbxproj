@@ -173,10 +173,8 @@
 		89F1A08918DC7C03001369E3 /* defaultuser.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08418DC7C03001369E3 /* defaultuser.png */; };
 		89F1A08A18DC7C03001369E3 /* passive.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08518DC7C03001369E3 /* passive.png */; };
 		89F1A08B18DC7C03001369E3 /* rosterslotempty.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08618DC7C03001369E3 /* rosterslotempty.png */; };
-		89F1A08C18DC7C03001369E3 /* wallet.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08718DC7C03001369E3 /* wallet.png */; };
 		89F1A08F18DC7CAB001369E3 /* active@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08D18DC7CAB001369E3 /* active@2x.png */; };
 		89F1A09018DC7CAB001369E3 /* passive@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08E18DC7CAB001369E3 /* passive@2x.png */; };
-		89F1A09218DC7D57001369E3 /* wallet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09118DC7D57001369E3 /* wallet@2x.png */; };
 		89F1A09518DC81C4001369E3 /* FFPathImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A09418DC81C4001369E3 /* FFPathImageView.m */; };
 		89F1A09818DC87CB001369E3 /* loginbg-586h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09618DC87CB001369E3 /* loginbg-586h@2x.png */; };
 		89F1A09918DC87CB001369E3 /* loginbg.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A09718DC87CB001369E3 /* loginbg.png */; };
@@ -454,10 +452,8 @@
 		89F1A08418DC7C03001369E3 /* defaultuser.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultuser.png; sourceTree = "<group>"; };
 		89F1A08518DC7C03001369E3 /* passive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = passive.png; sourceTree = "<group>"; };
 		89F1A08618DC7C03001369E3 /* rosterslotempty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rosterslotempty.png; sourceTree = "<group>"; };
-		89F1A08718DC7C03001369E3 /* wallet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wallet.png; sourceTree = "<group>"; };
 		89F1A08D18DC7CAB001369E3 /* active@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active@2x.png"; sourceTree = "<group>"; };
 		89F1A08E18DC7CAB001369E3 /* passive@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "passive@2x.png"; sourceTree = "<group>"; };
-		89F1A09118DC7D57001369E3 /* wallet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wallet@2x.png"; sourceTree = "<group>"; };
 		89F1A09318DC81C4001369E3 /* FFPathImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPathImageView.h; sourceTree = "<group>"; };
 		89F1A09418DC81C4001369E3 /* FFPathImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPathImageView.m; sourceTree = "<group>"; };
 		89F1A09618DC87CB001369E3 /* loginbg-586h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginbg-586h@2x.png"; sourceTree = "<group>"; };
@@ -665,10 +661,8 @@
 				89F1A08418DC7C03001369E3 /* defaultuser.png */,
 				89F1A08518DC7C03001369E3 /* passive.png */,
 				89F1A08618DC7C03001369E3 /* rosterslotempty.png */,
-				89F1A08718DC7C03001369E3 /* wallet.png */,
 				89F1A08D18DC7CAB001369E3 /* active@2x.png */,
 				89F1A08E18DC7CAB001369E3 /* passive@2x.png */,
-				89F1A09118DC7D57001369E3 /* wallet@2x.png */,
 				89F1A09618DC87CB001369E3 /* loginbg-586h@2x.png */,
 				89F1A09718DC87CB001369E3 /* loginbg.png */,
 				89C985AF18E48B3300ABB652 /* accessory_check.png */,
@@ -711,6 +705,8 @@
 				89923EFE18EE3C7300F74FEB /* FFPredictRosterTeamController.m */,
 				89923F0018EE3D0D00F74FEB /* FFPredictRosterScoreController.h */,
 				89923F0118EE3D0D00F74FEB /* FFPredictRosterScoreController.m */,
+				896ACBFB18B664F5001E9C64 /* FFMenuViewController.h */,
+				896ACBFC18B664F5001E9C64 /* FFMenuViewController.m */,
 				896ACBF718B664F5001E9C64 /* FFHomeViewController.h */,
 				896ACBF818B664F5001E9C64 /* FFHomeViewController.m */,
 				896ACBED18B664F5001E9C64 /* FFContestEntrantsViewController.h */,
@@ -725,8 +721,6 @@
 				896ACBF618B664F5001E9C64 /* FFFindGameViewController.m */,
 				896ACBF918B664F5001E9C64 /* FFInviteViewController.h */,
 				896ACBFA18B664F5001E9C64 /* FFInviteViewController.m */,
-				896ACBFB18B664F5001E9C64 /* FFMenuViewController.h */,
-				896ACBFC18B664F5001E9C64 /* FFMenuViewController.m */,
 				896ACBFD18B664F5001E9C64 /* FFMyAccountViewController.h */,
 				896ACBFE18B664F5001E9C64 /* FFMyAccountViewController.m */,
 				896ACBFF18B664F5001E9C64 /* FFNavigationController.h */,
@@ -1014,7 +1008,6 @@
 				896ACC6318B664F5001E9C64 /* FMF-Small-50@2x.png in Resources */,
 				896ACC5F18B664F5001E9C64 /* FMF-80.png in Resources */,
 				89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */,
-				89F1A08C18DC7C03001369E3 /* wallet.png in Resources */,
 				89C985B618E48B3300ABB652 /* accessory_disclosure.png in Resources */,
 				89C985B818E48B3300ABB652 /* accessory_uncollapse.png in Resources */,
 				89F2E70218BE249A00B23A99 /* accessory_check@2x.png in Resources */,
@@ -1059,7 +1052,6 @@
 				89F2E70418BE249A00B23A99 /* accessory_disclosure@2x.png in Resources */,
 				896ACC5D18B664F5001E9C64 /* FMF-72@2x.png in Resources */,
 				89F1A09018DC7CAB001369E3 /* passive@2x.png in Resources */,
-				89F1A09218DC7D57001369E3 /* wallet@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

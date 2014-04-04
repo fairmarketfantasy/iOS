@@ -43,11 +43,6 @@
     [self.view addSubview:self.tableView];
 }
 
-- (void)didMoveToParentViewController:(UIViewController*)parent
-{
-    [self updateHeader];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -96,32 +91,6 @@
                                     autoHide:YES]
           showInView:self.navigationController.view];
      }];
-}
-
-#pragma mark - public
-
-- (void)updateHeader
-{
-    FFAccountHeader* header = (FFAccountHeader*)self.tableView.tableHeaderView;
-    if (![header isKindOfClass:[FFAccountHeader class]]) {
-        return;
-    }
-    [header.avatar setImageWithURL: [NSURL URLWithString:self.session.user.imageUrl]
-                  placeholderImage: [UIImage imageNamed:@"defaultuser"]
-       usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [header.avatar draw];
-    header.avatar.contentMode = UIViewContentModeScaleAspectFit;
-
-    header.nameLabel.text = self.session.user.name;
-    header.walletLabel.text = [FFStyle.funbucksFormatter
-                               stringFromNumber:@(self.session.user.balance.floatValue)];
-    NSDate* join = self.session.user.joinDate;
-    header.dateLabel.text = join ? [NSString stringWithFormat:@"Member Since %@",
-                                    [FFStyle.dateFormatter stringFromDate:join]] : @"";
-    header.pointsLabel.text = [NSString stringWithFormat:@"%i points", self.session.user.totalPoints.integerValue];
-    header.winsLabel.text = [NSString stringWithFormat:@"%i wins (%.2f win %%)",
-                             self.session.user.totalWins.integerValue,
-                             self.session.user.winPercentile.floatValue];
 }
 
 #pragma mark - UITableViewDataSource

@@ -14,9 +14,10 @@
 
 @property(nonatomic) FFPathImageView* avatar;
 @property(nonatomic, readonly) UILabel* nameLabel;
-@property(nonatomic, readonly) UILabel* walletLabel;
 @property(nonatomic, readonly) UILabel* dateLabel;
 @property(nonatomic, readonly) UILabel* pointsLabel;
 @property(nonatomic, readonly) UILabel* winsLabel;
+@property(nonatomic, readonly) UILabel* balanceLabel;
+@property(nonatomic, readonly) UILabel* prestigeLabel;
 
 @end
