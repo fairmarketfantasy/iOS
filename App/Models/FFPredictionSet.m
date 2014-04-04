@@ -34,8 +34,7 @@
     NSAssert(self.query, @"Query shouldn't be nil!");
     NSMutableDictionary* param = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [param addEntriesFromDictionary:@{
-                                     @"sport" : [FFSport stringFromSport:self.sport],
-                                     @"all" : @"true"
+                                     @"sport" : [FFSport stringFromSport:self.sport]
                                      }];
     [self refreshWithParameters:[param copy]];
 }

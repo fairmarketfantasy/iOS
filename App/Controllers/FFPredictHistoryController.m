@@ -27,6 +27,7 @@
 FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 @property(nonatomic, assign) FFPredictionsType predictionType;
+@property(nonatomic, assign) FFRosterPredictionType rosterPredictionType;
 @property(nonatomic) UIButton* typeButton;
 @property(nonatomic) FFPredictHistoryTable* tableView;
 @property(nonatomic) FFPredictionsSelector* typeSelector;
@@ -43,6 +44,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     [super viewDidLoad];
 
     self.predictionType = FFPredictionsTypeRoster;
+    self.rosterPredictionType = FFRosterPredictionTypeSubmitted;
     self.typeSelector = FFPredictionsSelector.new;
     self.typeSelector.delegate = self;
     [self.view addSubview:self.typeSelector];
@@ -57,7 +59,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     self.typeButton.imageEdgeInsets = UIEdgeInsetsMake(0.f, self.typeButton.frame.size.width - 37.f, 0.f, 0.f);
     self.typeButton.titleEdgeInsets = UIEdgeInsetsMake(0.f, 0.f, 0.f, 37.f);
     [self.typeButton addTarget:self
-                        action:@selector(shorOrHideTypeSelectorIfNeeded)
+                        action:@selector(showOrHideTypeSelectorIfNeeded)
               forControlEvents:UIControlEventTouchUpInside];
     self.typeButton.contentMode = UIViewContentModeScaleAspectFit;
     // table view
@@ -71,21 +73,27 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     self.navigationItem.titleView = self.typeButton;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)willMoveToParentViewController:(UIViewController *)parent
 {
-    [super viewWillAppear:animated];
     self.individualPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFIndividualPrediction class]
                                                                         session:self.session authorized:YES];
     self.individualPredictions.delegate = self;
     self.rosterPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFRosterPrediction class]
                                                                     session:self.session authorized:YES];
     self.rosterPredictions.delegate = self;
-    [self predictionsTypeSelected:FFPredictionsTypeRoster];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self hideTypeSelector];
+    [self refresh];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    [self hideTypeSelector];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue
@@ -103,49 +111,20 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (void)predictionsTypeSelected:(FFPredictionsType)type
 {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     self.predictionType = type;
-    [self.tableView setPredictionType:type];
-    [self.tableView reloadData];
-    switch (type) {
-        case FFPredictionsTypeIndividual:
-        {
-            [self.individualPredictions fetch];
-            [self.typeButton setTitle:NSLocalizedString(@"Individual", nil)
-                             forState:UIControlStateNormal];
-        }
-            break;
-        case FFPredictionsTypeRoster:
-        {
-            [self.rosterPredictions fetch];
-            [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
-                             forState:UIControlStateNormal];
-        }
-            break;
-        default:
-            break;
-    }
-    [self shorOrHideTypeSelectorIfNeeded];
+    [self refresh];
+    [self showOrHideTypeSelectorIfNeeded];
 }
 
 #pragma mark - button actions
 
-- (void)shorOrHideTypeSelectorIfNeeded
+- (void)showOrHideTypeSelectorIfNeeded
 {
-    BOOL shouldShow = !self.typeSelector.userInteractionEnabled;
-    CGFloat typeSelectorHeight = 100.f;
-    [UIView animateWithDuration:(NSTimeInterval).3f
-                     animations:
-     ^{
-         self.typeSelector.frame = CGRectMake(0.f,
-                                              shouldShow ? 0.f : -typeSelectorHeight,
-                                              self.view.bounds.size.width,
-                                              typeSelectorHeight);
-         self.typeSelector.alpha = shouldShow ? 1.f : 0.f;
-         self.typeSelector.userInteractionEnabled = shouldShow;
-         [self.typeButton setImage:[UIImage imageNamed: shouldShow ? @"show" : @"hide"]
-                          forState:UIControlStateNormal];
-     }];
+    if (!self.typeSelector.userInteractionEnabled) {
+        [self showTypeSelector];
+    } else {
+        [self hideTypeSelector];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -286,11 +265,79 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 - (void)changeHistory:(FUISegmentedControl*)segments
 {
     BOOL isHistory = segments.selectedSegmentIndex == 1;
+    self.rosterPredictionType = isHistory ? FFRosterPredictionTypeFinished : FFRosterPredictionTypeSubmitted;
+    [self refresh];
+}
+
+#pragma mark - private
+
+- (void)hideTypeSelector
+{
+    CGFloat typeSelectorHeight = 100.f;
+    [UIView animateWithDuration:(NSTimeInterval).3f
+                     animations:
+     ^{
+         self.typeSelector.frame = CGRectMake(0.f,
+                                              -typeSelectorHeight,
+                                              self.view.bounds.size.width,
+                                              typeSelectorHeight);
+         self.typeSelector.alpha = 0.f;
+         self.typeSelector.userInteractionEnabled = NO;
+         [self.typeButton setImage:[UIImage imageNamed:@"hide"]
+                          forState:UIControlStateNormal];
+     }];
+}
+
+- (void)showTypeSelector
+{
+    CGFloat typeSelectorHeight = 100.f;
+    [UIView animateWithDuration:(NSTimeInterval).3f
+                     animations:
+     ^{
+         self.typeSelector.frame = CGRectMake(0.f,
+                                              0.f,
+                                              self.view.bounds.size.width,
+                                              typeSelectorHeight);
+         self.typeSelector.alpha = 1.f;
+         self.typeSelector.userInteractionEnabled = YES;
+         [self.typeButton setImage:[UIImage imageNamed:@"show"]
+                          forState:UIControlStateNormal];
+     }];
+}
+
+- (void)refresh
+{
+    [self.tableView setPredictionType:self.predictionType
+                 rosterPredictionType:self.rosterPredictionType];
+    [self.tableView reloadData];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    if (isHistory) {
-        [self.rosterPredictions fetchWithParameters:@{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
-    } else {
-        [self.rosterPredictions fetch];
+    switch (self.predictionType) {
+        case FFPredictionsTypeIndividual:
+        {
+            [self.individualPredictions fetch];
+            [self.typeButton setTitle:NSLocalizedString(@"Individual", nil)
+                             forState:UIControlStateNormal];
+        }
+            break;
+        case FFPredictionsTypeRoster:
+        {
+            switch (self.rosterPredictionType) {
+                case FFRosterPredictionTypeSubmitted:
+                    [self.rosterPredictions fetch];
+                    break;
+                case FFRosterPredictionTypeFinished:
+                    [self.rosterPredictions fetchWithParameters:@{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
+                    break;
+                default:
+                    break;
+            }
+            [self.rosterPredictions fetch];
+            [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
+                             forState:UIControlStateNormal];
+        }
+            break;
+        default:
+            break;
     }
 }
 

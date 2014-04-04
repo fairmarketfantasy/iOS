@@ -9,6 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "FFPredictionsSelector.h"
 
+typedef NS_ENUM(NSUInteger, FFRosterPredictionType) {
+    FFRosterPredictionTypeSubmitted,
+    FFRosterPredictionTypeFinished
+};
+
 @class FUISegmentedControl;
 
 @protocol FFPredictHistoryProtocol <NSObject>
@@ -20,6 +25,7 @@
 @interface FFPredictHistoryTable : UITableView
 
 @property(nonatomic, weak) id<FFPredictHistoryProtocol> historyDelegate;
-- (void)setPredictionType:(FFPredictionsType)type;
+- (void)setPredictionType:(FFPredictionsType)type
+     rosterPredictionType:(FFRosterPredictionType)rosterType;
 
 @end

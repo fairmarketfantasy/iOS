@@ -28,12 +28,13 @@
      forCellReuseIdentifier:@"PredictIndividualCell"];
 
         // header
-        [self setPredictionType:FFPredictionsTypeRoster];
+        [self setPredictionType:FFPredictionsTypeRoster
+           rosterPredictionType:FFRosterPredictionTypeSubmitted];
     }
     return self;
 }
-
 - (void)setPredictionType:(FFPredictionsType)type
+     rosterPredictionType:(FFRosterPredictionType)rosterType
 {
     switch (type) {
         case FFPredictionsTypeIndividual:
@@ -42,6 +43,16 @@
         case FFPredictionsTypeRoster:
         {
             FFPredictHeader* header = [[FFPredictHeader alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 60.f)];
+            switch (rosterType) {
+                case FFRosterPredictionTypeSubmitted:
+                    header.segments.selectedSegmentIndex = 0;
+                    break;
+                case FFRosterPredictionTypeFinished:
+                    header.segments.selectedSegmentIndex = 1;
+                    break;
+                default:
+                    break;
+            }
             self.tableHeaderView = header;
             [header.segments addTarget:self
                                 action:@selector(segments:)
