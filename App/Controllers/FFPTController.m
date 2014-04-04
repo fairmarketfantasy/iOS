@@ -13,6 +13,8 @@
 #import "FFAlertView.h"
 #import <FlatUIKit.h>
 #import "FFAlertView.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "FFPathImageView.h"
 // model
 #import "FFEvent.h"
 #import "FFPlayer.h"
@@ -35,6 +37,12 @@
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
     self.navigationController.navigationBar.translucent = NO;
+    UILabel* title = [UILabel.alloc initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
+    title.font = [FFStyle blockFont:19.f];
+    title.textColor = [FFStyle white];
+    title.text = NSLocalizedString(@"PT25", nil);
+    title.textAlignment = NSTextAlignmentLeft;
+    self.navigationItem.titleView = title;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -102,6 +110,11 @@ viewForHeaderInSection:(NSInteger)section
 {
     FFPTHeader* header = FFPTHeader.new;
     header.title = self.player.name ? self.player.name : @"";
+    header.team = self.player.team ? self.player.team : @"";
+    [header.avatar setImageWithURL:[NSURL URLWithString:self.player.headshotURL]
+                  placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
+       usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [header.avatar draw];
     return header;
 }
 
@@ -127,7 +140,7 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
     cell.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
     if (self.events.count > indexPath.row) {
         FFEvent* event = self.events[indexPath.row];
-        cell.titleLabel.text = [NSString stringWithFormat:@"%@ : %@", event.name, event.value];
+        cell.titleLabel.text = [NSString stringWithFormat:@"%@: %@", [event.name capitalizedString], event.value];
         cell.segments.userInteractionEnabled = YES;
         [cell.segments addTarget:self
                           action:@selector(onLessMore:)

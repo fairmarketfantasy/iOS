@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class FFPathImageView;
+
 @interface FFPTHeader : UIView
 
+@property(nonatomic, readonly) FFPathImageView* avatar;
 @property(nonatomic, copy) NSString* title;
+@property(nonatomic, copy) NSString* team;
 
 @end

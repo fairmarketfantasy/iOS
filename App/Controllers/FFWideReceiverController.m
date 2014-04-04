@@ -172,8 +172,8 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
         cell.titleLabel.text =  player.team;
         cell.nameLabel.text = player.name;
         cell.costLabel.text = [FFStyle.priceFormatter stringFromNumber:@([player.buyPrice floatValue])];
-        [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
-                    placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
+        [cell.avatar setImageWithURL:[NSURL URLWithString:player.headshotURL]
+                    placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
          usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [cell.avatar draw];
         @weakify(self)
