@@ -150,6 +150,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
          usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [cell.avatar draw];
         cell.benched.hidden = !benched;
+        cell.PTButton.hidden = benched;
         @weakify(self)
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{
