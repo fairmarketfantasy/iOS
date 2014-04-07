@@ -40,7 +40,7 @@
         [self addSubview:self.avatar];
         [self.avatar draw];
         // name label
-        _nameLabel = [UILabel.alloc  initWithFrame:CGRectMake(90.f, 20.f, 100.f, 30.f)];
+        _nameLabel = [UILabel.alloc  initWithFrame:CGRectMake(90.f, 20.f, 200.f, 30.f)];
         self.nameLabel.backgroundColor = [UIColor clearColor];
         self.nameLabel.font = [FFStyle regularFont:19.f];
         self.nameLabel.textColor = [FFStyle white];
