@@ -184,6 +184,12 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
      ^(id successObj) {
          @strongify(self)
          [alert hide];
+         [[[FFAlertView alloc] initWithTitle:nil
+                                     message:NSLocalizedString(@"Roster submitted successfully!", nil)
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
          [self createRoster];
      }
                        failure:
