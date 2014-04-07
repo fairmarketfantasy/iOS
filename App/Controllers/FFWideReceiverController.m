@@ -50,6 +50,22 @@
     [self.tableView reloadData];
 }
 
+#pragma mark - public
+
+- (void)showPosition:(NSString*)position
+{
+    if (self.delegate.positions.count == 0) {
+        return;
+    }
+    for (NSString* positionName in self.delegate.positions) {
+        if ([positionName isEqualToString:position]) {
+            self.position = [self.delegate.positions indexOfObject:positionName];
+            [self.tableView reloadData];
+            break;
+        }
+    }
+}
+
 #pragma mark - private
 
 - (void)fetchPlayers

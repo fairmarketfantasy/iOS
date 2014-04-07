@@ -28,8 +28,8 @@
 #import "FFPlayer.h"
 #import <SBData/SBTypes.h>
 
-@interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
-FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtocol>
+@interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
+FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtocol, FFYourTeamProtocol>
 
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFYourTeamController* teamController;
@@ -55,6 +55,7 @@ FFControllerProtocol, FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersPro
         self.receiverController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
                                                              bundle:[NSBundle mainBundle]]
                                    instantiateViewControllerWithIdentifier:@"ReceiverController"];
+        self.teamController.delegate = self;
         self.receiverController.delegate = self;
     }
     return self;
@@ -314,12 +315,26 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      }];
 }
 
-
 #pragma mark - FFEventsProtocol
 
 - (NSString*)marketId
 {
     return self.teamController.selectedMarket.objId;
+}
+
+#pragma mark - FFYourTeamProtocol
+
+- (void)showPosition:(NSString*)position
+{
+    @weakify(self)
+    [self setViewControllers:@[self.receiverController]
+                   direction:UIPageViewControllerNavigationDirectionForward
+                    animated:YES
+                  completion:
+     ^(BOOL finished) {
+         @strongify(self)
+         [self.receiverController showPosition:position];
+     }];
 }
 
 @end

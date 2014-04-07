@@ -404,6 +404,7 @@ heightForHeaderInSection:(NSInteger)section
                        withRowAnimation:UITableViewRowAnimationAutomatic];
          [self shorOrHideSubmitIfNeeded];
          [alert hide];
+         [self.delegate showPosition:player.position];
      }
                                   failure:
      ^(NSError *error) {
