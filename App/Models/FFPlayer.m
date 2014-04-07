@@ -94,7 +94,7 @@
     // TODO: use FFDataObjectResultSet
     NSDictionary* params = @{
                              @"position" : position,
-                             @"dir" : @"desc", // sorting direction
+                             @"dir" : @"asc", // sorting direction
                              @"sort" : @"buy_price", // sorting by
                              @"roster_id" : rosterId,
                              @"removeLow" : removedBenched ? @"true" : @"false" // TODO: convert via JSON lib
