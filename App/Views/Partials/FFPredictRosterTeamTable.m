@@ -8,6 +8,7 @@
 
 #import "FFPredictRosterTeamTable.h"
 #import "FFPredictRosterTeamCell.h"
+#import "FFTeamTradeCell.h"
 
 @implementation FFPredictRosterTeamTable
 
@@ -18,7 +19,9 @@
         self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         self.backgroundColor = [FFStyle darkGrey];
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
-
+        // cells
+        [self registerClass:[FFTeamTradeCell class]
+     forCellReuseIdentifier:@"TeamTradeCell"];
         [self registerClass:[FFPredictRosterTeamCell class]
      forCellReuseIdentifier:@"PredictRosterTeamCell"];
     }

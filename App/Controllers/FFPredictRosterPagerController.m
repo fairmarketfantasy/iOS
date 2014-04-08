@@ -12,12 +12,14 @@
 #import "FFPredictRosterScoreController.h"
 #import "FFControllerProtocol.h"
 #import "FFLogo.h"
+#import "FFAlertView.h"
 // model
 #import "FFRosterPrediction.h"
 
 @interface FFPredictRosterPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
-FFControllerProtocol>
+FFControllerProtocol, FFPredictionPlayersProtocol>
 
+@property(nonatomic) FFRosterPrediction* roster;
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFPredictRosterTeamController* teamController;
 @property(nonatomic) FFPredictRosterScoreController* scoreController;
@@ -38,6 +40,7 @@ FFControllerProtocol>
         self.teamController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
                                                          bundle:[NSBundle mainBundle]]
                                instantiateViewControllerWithIdentifier:@"PredictRosterTeamController"];
+        self.teamController.delegate = self;
         self.scoreController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
                                                           bundle:[NSBundle mainBundle]]
                                 instantiateViewControllerWithIdentifier:@"PredictRosterScoreController"];
@@ -72,7 +75,6 @@ FFControllerProtocol>
     [super viewWillAppear:animated];
     self.pager.numberOfPages = (int)[self getViewControllers].count;
     self.teamController.session = self.session;
-    self.teamController.roster = self.roster;
     self.scoreController.session = self.session;
     self.scoreController.roster = self.roster;
     [self setViewControllers:@[[self getViewControllers].firstObject]
@@ -80,6 +82,7 @@ FFControllerProtocol>
                     animated:NO
                   completion:nil];
     [self.view bringSubviewToFront:self.pager];
+    [self fetchRoster];
 }
 
 #pragma mark - UIPageViewControllerDataSource
@@ -135,12 +138,93 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 #pragma mark - private
 
+- (void)fetchRoster
+{
+    if (!self.prediction) {
+        self.roster = nil;
+        [self.teamController.tableView reloadData];
+        return;
+    }
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Loading Roster"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [self.prediction loadRosterSuccess:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+         [self.teamController.tableView reloadData];
+         [alert hide];
+     }
+                               failure:
+     ^(NSError * error) {
+         @strongify(self)
+         self.roster = nil;
+         [self.teamController.tableView reloadData];
+         [alert hide];
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
+}
+
 - (NSArray*)getViewControllers
 {
     return @[
              self.teamController,
              self.scoreController
              ];
+}
+
+#pragma  mark - FFPredictionPlayersProtocol
+
+- (NSArray*)players
+{
+    return self.roster.players;
+}
+
+- (CGFloat)rosterSalary
+{
+    return self.roster.remainingSalary.floatValue;
+}
+
+- (void)removePlayer:(FFPlayer*)player
+{
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Removing Player", nil)
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [self.roster  removePlayer:player
+                       success:
+     ^(id successObj) {
+         @strongify(self)
+         NSDictionary* priceDictionary = (NSDictionary*)successObj;
+         NSString* price = priceDictionary[@"price"]; // TODO: use the Model, Luke...
+         self.roster.remainingSalary = [SBFloat.alloc initWithFloat:[price floatValue]];
+         [self.teamController.tableView reloadData];
+         [alert hide];
+     }
+                       failure:
+     ^(NSError *error) {
+         @strongify(self)
+         [alert hide];
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
+}
+
+- (NSString*)rosterState
+{
+    return self.roster.state;
 }
 
 @end

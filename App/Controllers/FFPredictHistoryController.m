@@ -103,7 +103,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                     sender:sender];
     if ([segue.identifier isEqualToString:@"GotoPredictRoster"]) {
         FFPredictRosterPagerController* vc = segue.destinationViewController;
-        vc.roster = (FFRosterPrediction*)sender;
+        vc.prediction = (FFRosterPrediction*)sender;
     }
 }
 
@@ -332,7 +332,6 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
                 default:
                     break;
             }
-            [self.rosterPredictions fetch];
             [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
                              forState:UIControlStateNormal];
         }

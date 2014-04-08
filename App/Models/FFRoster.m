@@ -17,6 +17,8 @@
 
 @implementation FFRoster
 
+@dynamic bonusPoints;
+@dynamic startedAt;
 @dynamic amountPaid;
 @dynamic buyIn;
 @dynamic canceledAt;
@@ -54,25 +56,28 @@
 
 + (NSDictionary*)propertyToNetworkKeyMapping
 {
-    return [[super propertyToNetworkKeyMapping] dictionaryByMergingWithDictionary:@{
-            @"amountPaid":          @"amount_paid",
-            @"buyIn":               @"buy_in",
-            @"canceledAt":          @"canceled_at",
-            @"canceledCause":       @"canceled_cause",
-            @"contest":             @"contest",
-            @"contestId":           @"contest_id",
-            @"contestRank":         @"contest_rank",
-            @"contestRankPayout":   @"contest_rank_payout",
-            @"live":                @"live",
-            @"nextGameTime":        @"next_game_time",
-            @"ownerId":             @"owner_id",
-            @"ownerName":           @"owner_name",
-            @"paidAt":              @"paid_at",
-            @"positions":           @"positions",
-            @"remainingSalary":     @"remaining_salary",
-            @"score":               @"score",
-            @"state":               @"state"
-            }];
+    return [[super propertyToNetworkKeyMapping] dictionaryByMergingWithDictionary:
+  @{
+    @"bonusPoints":         @"bonus_points",
+    @"startedAt":           @"started_at",
+    @"amountPaid":          @"amount_paid",
+    @"buyIn":               @"buy_in",
+    @"canceledAt":          @"canceled_at",
+    @"canceledCause":       @"canceled_cause",
+    @"contest":             @"contest",
+    @"contestId":           @"contest_id",
+    @"contestRank":         @"contest_rank",
+    @"contestRankPayout":   @"contest_rank_payout",
+    @"live":                @"live",
+    @"nextGameTime":        @"next_game_time",
+    @"ownerId":             @"owner_id",
+    @"ownerName":           @"owner_name",
+    @"paidAt":              @"paid_at",
+    @"positions":           @"positions",
+    @"remainingSalary":     @"remaining_salary",
+    @"score":               @"score",
+    @"state":               @"state"
+    }];
 }
 
 + (NSArray*)indexes

@@ -20,6 +20,8 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 
 @interface FFRoster : SBDataObject
 
+@property(nonatomic) SBInteger* bonusPoints;
+@property(nonatomic) SBDate* startedAt;
 @property(nonatomic) SBInteger* amountPaid;
 @property(nonatomic) SBInteger* buyIn;
 @property(nonatomic) SBDate* canceledAt;
@@ -37,7 +39,7 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 @property(nonatomic) NSString* positions;
 @property(nonatomic) SBFloat* remainingSalary;
 @property(nonatomic) SBInteger* score;
-@property(nonatomic) NSString* state;
+@property(nonatomic) NSString* state; // submitted | finished
 #pragma mark - Contest
 @property(nonatomic) FFContestType* contestType;
 @property(nonatomic) NSString* contestTypeId;

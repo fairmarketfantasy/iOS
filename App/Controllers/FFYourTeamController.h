@@ -19,7 +19,7 @@
 
 @interface FFYourTeamController : FFBaseViewController
 
-@property(nonatomic, assign) id<FFYourTeamProtocol> delegate;
+@property(nonatomic, weak) id<FFYourTeamProtocol> delegate;
 @property(nonatomic, readonly) BOOL autoRemovedBenched;
 @property(nonatomic, readonly) FFRoster* roster;
 @property(nonatomic) FFMarket* selectedMarket;

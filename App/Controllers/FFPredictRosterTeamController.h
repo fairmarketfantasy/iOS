@@ -8,11 +8,23 @@
 
 #import "FFBaseViewController.h"
 
+
+@class FFPlayer;
+
+@protocol FFPredictionPlayersProtocol <NSObject>
+
+@property(nonatomic) NSArray* players; // should contain FFPlayer*
+@property(nonatomic, readonly) CGFloat rosterSalary;
+- (void)removePlayer:(FFPlayer*)player;
+@property(nonatomic, readonly) NSString* rosterState;
+
+@end
+
 @class FFRosterPrediction;
 
 @interface FFPredictRosterTeamController : FFBaseViewController
 
-@property(nonatomic) FFRosterPrediction* roster;
+@property(nonatomic, weak) id<FFPredictionPlayersProtocol> delegate;
 @property(nonatomic) UITableView* tableView;
 
 @end

@@ -9,10 +9,12 @@
 #import "FFPredictRosterTeamController.h"
 #import "FFPredictRosterTeamTable.h"
 #import "FFPredictRosterTeamCell.h"
+#import "FFTeamTradeCell.h"
 #import "FFRosterTableHeader.h"
 #import "FFStyle.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
+#import "FFAlertView.h"
 // model
 #import "FFRosterPrediction.h"
 #import "FFPlayer.h"
@@ -43,7 +45,7 @@
 - (NSInteger)tableView:(UITableView*)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return self.roster.players.count;
+    return self.delegate.players.count;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
@@ -55,10 +57,31 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 - (UITableViewCell*)tableView:(UITableView*)tableView
         cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    FFPredictRosterTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictRosterTeamCell"
-                                                                    forIndexPath:indexPath];
-    if (self.roster.players.count > indexPath.row) {
-        FFPlayer* player = self.roster.players[indexPath.row];
+    if (self.delegate.players.count > indexPath.row) {
+        FFPlayer* player = self.delegate.players[indexPath.row];
+        BOOL benched = player.benched.integerValue == 1;
+        if ([self.delegate.rosterState isEqualToString:@"finished"]) {
+            FFPredictRosterTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictRosterTeamCell"
+                                                                            forIndexPath:indexPath];
+            cell.titleLabel.text = player.team;
+            cell.nameLabel.text = player.name;
+            //                cell.costLabel.text = [FFStyle.priceFormatter
+            //                                       stringFromNumber:@([player.purchasePrice floatValue])];
+#warning CHECK PRICE!
+            cell.costLabel.text = [FFStyle.priceFormatter
+                                   stringFromNumber:@([player.sellPrice floatValue])];
+            UIColor* avatarColor = benched ? [FFStyle brightOrange] : [FFStyle brightGreen];
+            cell.avatar.borderColor = avatarColor;
+            cell.avatar.pathColor = avatarColor;
+            [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
+                        placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
+             usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+            [cell.avatar draw];
+            cell.benched.hidden = !benched;
+            return cell;
+        }
+        FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamTradeCell"
+                                                                forIndexPath:indexPath];
         cell.titleLabel.text = player.team;
         cell.nameLabel.text = player.name;
         //                cell.costLabel.text = [FFStyle.priceFormatter
@@ -66,7 +89,6 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 #warning CHECK PRICE!
         cell.costLabel.text = [FFStyle.priceFormatter
                                stringFromNumber:@([player.sellPrice floatValue])];
-        BOOL benched = player.benched.integerValue == 1;
         UIColor* avatarColor = benched ? [FFStyle brightOrange] : [FFStyle brightGreen];
         cell.avatar.borderColor = avatarColor;
         cell.avatar.pathColor = avatarColor;
@@ -75,8 +97,9 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
          usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [cell.avatar draw];
         cell.benched.hidden = !benched;
+        return cell;
     }
-    return cell;
+    return nil;
 }
 
 #pragma mark - UITableViewDelegate
@@ -92,8 +115,8 @@ viewForHeaderInSection:(NSInteger)section
 {
     FFRosterTableHeader* header = FFRosterTableHeader.new;
     header.titleLabel.text = NSLocalizedString(@"Your Team", nil);
-    header.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.roster.remainingSalary.floatValue)];
-    header.priceLabel.textColor = self.roster.remainingSalary.floatValue > 0.f
+    header.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.delegate.rosterSalary)];
+    header.priceLabel.textColor = self.delegate.rosterSalary > 0.f
     ? [FFStyle brightGreen] : [FFStyle brightRed];
     return header;
 }

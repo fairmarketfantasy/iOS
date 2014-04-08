@@ -21,6 +21,6 @@ typedef NS_ENUM(NSUInteger, FFPredictionsType) {
 
 @interface FFPredictionsSelector : UIView
 
-@property(nonatomic, assign) id<FFPredictionsProtocol> delegate;
+@property(nonatomic, weak) id<FFPredictionsProtocol> delegate;
 
 @end

@@ -12,6 +12,6 @@
 
 @interface FFPredictRosterPagerController : UIPageViewController
 
-@property(nonatomic) FFRosterPrediction* roster;
+@property(nonatomic) FFRosterPrediction* prediction;
 
 @end

@@ -8,7 +8,6 @@
 
 #import "FFBaseViewController.h"
 
-@class FFRoster;
 @class FFPlayer;
 
 @protocol FFPlayersProtocol <NSObject>
