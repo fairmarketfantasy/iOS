@@ -374,11 +374,10 @@
     NSDate* join = self.session.user.joinDate;
     header.dateLabel.text = join ? [NSString stringWithFormat:@"Member Since %@",
                                     [FFStyle.dateFormatter stringFromDate:join]] : @"";
-    header.pointsLabel.text = [NSString stringWithFormat:@"%i", self.session.user.totalPoints.integerValue];
-    header.winsLabel.text = [NSString stringWithFormat:@"%i (%.2f%%)",
-                             self.session.user.totalWins.integerValue,
-                             self.session.user.winPercentile.floatValue];
-    header.balanceLabel.text = [FFStyle.funbucksFormatter
+    header.pointsLabel.text = [FFStyle.funbucksFormatter stringFromNumber:
+                               @([self.session.user.customerObject[@"net_monthly_winnings"] floatValue])];
+    header.winsLabel.text = [NSString stringWithFormat:@"%i", self.session.user.totalWins.integerValue];
+    header.balanceLabel.text = [FFStyle.priceFormatter
                                 stringFromNumber:@(self.session.user.balance.floatValue)];
     header.prestigeLabel.text = [NSString stringWithFormat:@"%i", self.session.user.prestige.integerValue];
 }

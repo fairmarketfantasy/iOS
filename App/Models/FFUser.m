@@ -26,6 +26,7 @@
 @dynamic inProgressRoster;
 @dynamic prestige;
 @dynamic fbUid;
+@dynamic customerObject;
 
 + (NSString *)tableName { return @"ffuser"; }
 
@@ -52,7 +53,8 @@
                 @"email":            @"email",
                 @"joinDate":         @"joined_at",
                 @"inProgressRoster": @"in_progress_roster",
-                @"prestige":         @"prestige"
+                @"prestige":         @"prestige",
+                @"customerObject": @"customer_object"
             }];
 }
 
@@ -78,8 +80,8 @@
 {
     NSString *rosterId = self.inProgressRoster[@"id"];
     if (rosterId) {
-        //return [[FFRoster meta] findOne:@{@"objId": rosterId}];
-        return [[[[[self.session queryBuilderForClass:[FFRoster class]] property:@"objId" isEqualTo:rosterId]
+        return [[[[[self.session queryBuilderForClass:[FFRoster class]] property:@"objId"
+                                                                       isEqualTo:rosterId]
                   query] results] first];
     }
     return nil;

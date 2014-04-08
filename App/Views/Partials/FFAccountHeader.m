@@ -58,14 +58,14 @@
         points.backgroundColor = [FFStyle brightGreen];
         [self addSubview:points];
         
-        UILabel* pointsCaptionLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 0.f, 50.f, 40.f)];
+        UILabel* pointsCaptionLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 0.f, 70.f, 40.f)];
         pointsCaptionLabel.backgroundColor = [UIColor clearColor];
         pointsCaptionLabel.font = [FFStyle regularFont:14.f];
         pointsCaptionLabel.textColor = [FFStyle black];
-        pointsCaptionLabel.text = NSLocalizedString(@"Points", nil);
+        pointsCaptionLabel.text = NSLocalizedString(@"FanBucks", nil);
         [points addSubview:pointsCaptionLabel];
 
-        _pointsLabel = [UILabel.alloc  initWithFrame:CGRectMake(60.f, 0.f, 73.f, 40.f)];
+        _pointsLabel = [UILabel.alloc  initWithFrame:CGRectMake(70.f, 0.f, 63.f, 40.f)];
         self.pointsLabel.backgroundColor = [UIColor clearColor];
         self.pointsLabel.font = [FFStyle regularFont:14.f];
         self.pointsLabel.textColor = [FFStyle white];
@@ -98,14 +98,14 @@
         balance.backgroundColor = [FFStyle brightGreen];
         [self addSubview:balance];
 
-        UILabel* balanceCaptionLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 0.f, 60.f, 40.f)];
+        UILabel* balanceCaptionLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 0.f, 40.f, 40.f)];
         balanceCaptionLabel.backgroundColor = [UIColor clearColor];
         balanceCaptionLabel.font = [FFStyle regularFont:14.f];
         balanceCaptionLabel.textColor = [FFStyle black];
-        balanceCaptionLabel.text = NSLocalizedString(@"Balance", nil);
+        balanceCaptionLabel.text = NSLocalizedString(@"Cash", nil);
         [balance addSubview:balanceCaptionLabel];
 
-        _balanceLabel = [UILabel.alloc  initWithFrame:CGRectMake(70.f, 0.f, 63.f, 40.f)];
+        _balanceLabel = [UILabel.alloc  initWithFrame:CGRectMake(50.f, 0.f, 83.f, 40.f)];
         self.balanceLabel.backgroundColor = [UIColor clearColor];
         self.balanceLabel.font = [FFStyle regularFont:14.f];
         self.balanceLabel.textColor = [FFStyle white];
@@ -122,7 +122,7 @@
         prestigeCaptionLabel.backgroundColor = [UIColor clearColor];
         prestigeCaptionLabel.font = [FFStyle regularFont:14.f];
         prestigeCaptionLabel.textColor = [FFStyle black];
-        prestigeCaptionLabel.text = NSLocalizedString(@"Prestige", nil);
+        prestigeCaptionLabel.text = NSLocalizedString(@"PresTige", nil);
         [prestige addSubview:prestigeCaptionLabel];
 
         _prestigeLabel = [UILabel.alloc  initWithFrame:CGRectMake(70.f, 0.f, 63.f, 40.f)];

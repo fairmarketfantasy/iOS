@@ -30,6 +30,7 @@
 @property (nonatomic) NSString*     userId;
 @property (nonatomic) SBInteger*    prestige;
 @property (nonatomic) NSString*     fbUid;
+@property (nonatomic) NSDictionary* customerObject;
 
 - (FFRoster *)getInProgressRoster;
 
