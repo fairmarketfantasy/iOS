@@ -10,6 +10,7 @@
 #import "StyledPageControl.h"
 #import "FFPredictRosterTeamController.h"
 #import "FFPredictRosterScoreController.h"
+#import "FFPTController.h"
 #import "FFControllerProtocol.h"
 #import "FFLogo.h"
 #import "FFAlertView.h"
@@ -17,7 +18,7 @@
 #import "FFRosterPrediction.h"
 
 @interface FFPredictRosterPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
-FFControllerProtocol, FFPredictionPlayersProtocol>
+FFControllerProtocol, FFPredictionPlayersProtocol, FFEventsProtocol>
 
 @property(nonatomic) FFRosterPrediction* roster;
 @property(nonatomic) StyledPageControl* pager;
@@ -68,6 +69,26 @@ FFControllerProtocol, FFPredictionPlayersProtocol>
     // navigation bar
     self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
     self.navigationItem.leftBarButtonItems = [FFStyle backBarItemsForController:self];
+}
+
+
+- (void)prepareForSegue:(UIStoryboardSegue*)segue
+                 sender:(id)sender
+{
+    id <FFControllerProtocol> vc = segue.destinationViewController;
+    if ([vc conformsToProtocol:@protocol(FFControllerProtocol)]) {
+        vc.session = self.session;
+    } else if ([vc isKindOfClass:[UINavigationController class]]) {
+        vc = [(UINavigationController*)vc viewControllers].firstObject;
+        if ([vc conformsToProtocol:@protocol(FFControllerProtocol)]) {
+            vc.session = self.session;
+        }
+    } // TODO: maybe move session handling to Base controller too?
+    if ([segue.identifier isEqualToString:@"GotoPredictionsPT"]) {
+        FFPTController* vc = segue.destinationViewController;
+        vc.delegate = self;
+        vc.player = (FFPlayer*)sender;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -192,6 +213,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     return self.roster.remainingSalary.floatValue;
 }
 
+- (NSString*)rosterState
+{
+    return self.roster.state;
+}
+
 - (void)removePlayer:(FFPlayer*)player
 {
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Removing Player", nil)
@@ -222,9 +248,16 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      }];
 }
 
-- (NSString*)rosterState
+#pragma mark - FFEventsProtocol
+
+- (NSString*)rosterId
 {
-    return self.roster.state;
+    return self.roster.objId;
+}
+
+- (NSString*)marketId
+{
+    return self.roster.marketId;
 }
 
 @end

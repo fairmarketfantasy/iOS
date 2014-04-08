@@ -49,6 +49,9 @@
             <objects>
                 <pageViewController transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="MlE-rP-SSa" customClass="FFPredictRosterPagerController" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="PD2-du-6Qc"/>
+                    <connections>
+                        <segue destination="PAh-XD-0Ot" kind="push" identifier="GotoPredictionsPT" id="0Z8-bH-mFv"/>
+                    </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1YI-T6-qps" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -621,11 +624,12 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="9Ye-9C-EZa"/>
+        <segue reference="u0q-yD-ZaH"/>
         <segue reference="Zjb-xv-NwD"/>
         <segue reference="wO2-z2-bkb"/>
         <segue reference="eDH-b8-2gb"/>
-        <segue reference="u0q-yD-ZaH"/>
+        <segue reference="9Ye-9C-EZa"/>
+        <segue reference="0Z8-bH-mFv"/>
         <segue reference="3y5-bZ-Hxu"/>
     </inferredMetricsTieBreakers>
 </document>

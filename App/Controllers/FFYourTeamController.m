@@ -267,7 +267,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     }
     case 1: {
         NSString* position = [self positions][indexPath.row];
-        for (FFPlayer* player in self.roster.players) {
+        for (__block FFPlayer* player in self.roster.players) {
             if ([player.position isEqualToString:position]) {
                 FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamTradeCell"
                                                                         forIndexPath:indexPath];

@@ -58,7 +58,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
         cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (self.delegate.players.count > indexPath.row) {
-        FFPlayer* player = self.delegate.players[indexPath.row];
+        __block FFPlayer* player = self.delegate.players[indexPath.row];
         BOOL benched = player.benched.integerValue == 1;
         if ([self.delegate.rosterState isEqualToString:@"finished"]) {
             FFPredictRosterTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictRosterTeamCell"
@@ -97,6 +97,20 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
          usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [cell.avatar draw];
         cell.benched.hidden = !benched;
+        @weakify(self)
+        [cell.PTButton setAction:kUIButtonBlockTouchUpInside
+                       withBlock:^{
+                           @strongify(self)
+                           [self.parentViewController performSegueWithIdentifier:@"GotoPredictionsPT"
+                                                                          sender:player]; // TODO: refactode it (?)
+                       }];
+        [cell.tradeButton setAction:kUIButtonBlockTouchUpInside
+                          withBlock:^{
+                              @strongify(self)
+                              if (self.delegate) {
+                                  [self.delegate removePlayer:player];
+                              }
+                          }];
         return cell;
     }
     return nil;

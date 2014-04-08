@@ -15,8 +15,8 @@
 
 @property(nonatomic) NSArray* players; // should contain FFPlayer*
 @property(nonatomic, readonly) CGFloat rosterSalary;
-- (void)removePlayer:(FFPlayer*)player;
 @property(nonatomic, readonly) NSString* rosterState;
+- (void)removePlayer:(FFPlayer*)player;
 
 @end
 
