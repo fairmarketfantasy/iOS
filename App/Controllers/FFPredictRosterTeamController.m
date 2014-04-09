@@ -60,17 +60,16 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
     if (self.delegate.players.count > indexPath.row) {
         __block FFPlayer* player = self.delegate.players[indexPath.row];
         BOOL benched = player.benched.integerValue == 1;
+        BOOL swapped = player.swappedPlayerName && player.swappedPlayerName.length > 0;
         if ([self.delegate.rosterState isEqualToString:@"finished"]) {
             FFPredictRosterTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictRosterTeamCell"
                                                                             forIndexPath:indexPath];
             cell.titleLabel.text = player.team;
             cell.nameLabel.text = player.name;
-            //                cell.costLabel.text = [FFStyle.priceFormatter
-            //                                       stringFromNumber:@([player.purchasePrice floatValue])];
-#warning CHECK PRICE!
             cell.costLabel.text = [FFStyle.priceFormatter
                                    stringFromNumber:@([player.sellPrice floatValue])];
-            UIColor* avatarColor = benched ? [FFStyle brightOrange] : [FFStyle brightGreen];
+            UIColor* avatarColor = swapped ? [FFStyle brightBlue] :
+            ( benched ? [FFStyle brightOrange] : [FFStyle brightGreen] );
             cell.avatar.borderColor = avatarColor;
             cell.avatar.pathColor = avatarColor;
             [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
@@ -78,6 +77,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
              usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
             [cell.avatar draw];
             cell.benched.hidden = !benched;
+            cell.swapped.hidden = !swapped;
             return cell;
         }
         FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamTradeCell"
@@ -86,7 +86,8 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
         cell.nameLabel.text = player.name;
         cell.costLabel.text = [FFStyle.priceFormatter
                                stringFromNumber:@([player.purchasePrice floatValue])];
-        UIColor* avatarColor = benched ? [FFStyle brightOrange] : [FFStyle brightGreen];
+        UIColor* avatarColor = swapped ? [FFStyle brightBlue] :
+        ( benched ? [FFStyle brightOrange] : [FFStyle brightGreen] );
         cell.avatar.borderColor = avatarColor;
         cell.avatar.pathColor = avatarColor;
         [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
@@ -94,6 +95,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
          usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [cell.avatar draw];
         cell.benched.hidden = !benched;
+        cell.swapped.hidden = !swapped;
         @weakify(self)
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{

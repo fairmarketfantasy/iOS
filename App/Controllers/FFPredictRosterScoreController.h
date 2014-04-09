@@ -10,8 +10,14 @@
 
 @class FFRosterPrediction;
 
+@protocol FFPredictRosterScoreProtocol <NSObject>
+
+@property(nonatomic, readonly) FFRosterPrediction* roster;
+
+@end
+
 @interface FFPredictRosterScoreController : FFBaseViewController
 
-@property(nonatomic) FFRosterPrediction* roster;
+@property(nonatomic, weak) id<FFPredictRosterScoreProtocol> delegate;
 
 @end

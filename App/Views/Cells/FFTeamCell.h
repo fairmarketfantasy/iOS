@@ -14,6 +14,7 @@
 
 @property(nonatomic, readonly) FFPathImageView* avatar;
 @property(nonatomic, readonly) UIView* benched;
+@property(nonatomic, readonly) UIView* swapped;
 @property(nonatomic, readonly) UILabel* titleLabel;
 
 @end

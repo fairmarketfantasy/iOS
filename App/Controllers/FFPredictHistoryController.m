@@ -218,7 +218,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                                                  sender:prediction]; // TODO: refactode it (?)
                                    }];
                 BOOL isFinished = [prediction.state isEqualToString:@"finished"];
-#warning CHECK fields!
                 cell.nameLabel.text = prediction.market.name;
                 cell.teamLabel.text = prediction.contestType.name;
                 cell.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.startedAt];

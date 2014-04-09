@@ -74,19 +74,20 @@
         self.pointsLabel.textColor = [FFStyle darkGreyTextColor];
         [self.contentView addSubview:self.pointsLabel];
         _gameTimeLabel = [[UILabel alloc] initWithFrame:
-                          CGRectMake(210.f, 60.f, 90.f, 20.f)];
+                          CGRectMake(230.f, 60.f, 70.f, 20.f)];
         self.gameTimeLabel.backgroundColor = [UIColor clearColor];
         self.gameTimeLabel.font = [FFStyle regularFont:12.f];
         self.gameTimeLabel.textColor = [FFStyle darkGreyTextColor];
         [self.contentView addSubview:self.gameTimeLabel];
         _rankLabel = [[UILabel alloc] initWithFrame:
-                      CGRectMake(210.f, 90.f, 90.f, 20.f)];
+                      CGRectMake(230.f, 90.f, 70.f, 20.f)];
+        self.rankLabel.adjustsFontSizeToFitWidth = YES;
         self.rankLabel.backgroundColor = [UIColor clearColor];
         self.rankLabel.font = [FFStyle regularFont:12.f];
         self.rankLabel.textColor = [FFStyle darkGreyTextColor];
         [self.contentView addSubview:self.rankLabel];
         _awardLabel = [[UILabel alloc] initWithFrame:
-                       CGRectMake(210.f, 120.f, 90.f, 20.f)];
+                       CGRectMake(230.f, 120.f, 70.f, 20.f)];
         self.awardLabel.backgroundColor = [UIColor clearColor];
         self.awardLabel.font = [FFStyle regularFont:12.f];
         self.awardLabel.textColor = [FFStyle darkGreyTextColor];
@@ -114,21 +115,21 @@
         captionPointsLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionPointsLabel];
         UILabel* captionGameTimeLabel = [[UILabel alloc] initWithFrame:
-                                         CGRectMake(150.f, 60.f, 60.f, 20.f)];
+                                         CGRectMake(150.f, 60.f, 80.f, 20.f)];
         captionGameTimeLabel.backgroundColor = [UIColor clearColor];
         captionGameTimeLabel.text = NSLocalizedString(@"○ Game Time", nil);
         captionGameTimeLabel.font = [FFStyle regularFont:12.f];
         captionGameTimeLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionGameTimeLabel];
         UILabel* captionRankLabel = [[UILabel alloc] initWithFrame:
-                                     CGRectMake(150.f, 90.f, 60.f, 20.f)];
+                                     CGRectMake(150.f, 90.f, 80.f, 20.f)];
         captionRankLabel.backgroundColor = [UIColor clearColor];
         captionRankLabel.text = NSLocalizedString(@"○ Rank", nil);
         captionRankLabel.font = [FFStyle regularFont:12.f];
         captionRankLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionRankLabel];
         UILabel* captionAwardLabel = [[UILabel alloc] initWithFrame:
-                                      CGRectMake(150.f, 120.f, 60.f, 20.f)];
+                                      CGRectMake(150.f, 120.f, 80.f, 20.f)];
         captionAwardLabel.backgroundColor = [UIColor clearColor];
         captionAwardLabel.text = NSLocalizedString(@"○ Award", nil);
         captionAwardLabel.font = [FFStyle regularFont:12.f];

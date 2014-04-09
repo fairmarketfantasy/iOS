@@ -18,7 +18,7 @@
 #import "FFRosterPrediction.h"
 
 @interface FFPredictRosterPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate,
-FFControllerProtocol, FFPredictionPlayersProtocol, FFEventsProtocol>
+FFControllerProtocol, FFPredictionPlayersProtocol, FFEventsProtocol, FFPredictRosterScoreProtocol>
 
 @property(nonatomic) FFRosterPrediction* roster;
 @property(nonatomic) StyledPageControl* pager;
@@ -45,6 +45,7 @@ FFControllerProtocol, FFPredictionPlayersProtocol, FFEventsProtocol>
         self.scoreController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
                                                           bundle:[NSBundle mainBundle]]
                                 instantiateViewControllerWithIdentifier:@"PredictRosterScoreController"];
+        self.scoreController.delegate = self;
     }
     return self;
 }
@@ -97,7 +98,6 @@ FFControllerProtocol, FFPredictionPlayersProtocol, FFEventsProtocol>
     self.pager.numberOfPages = (int)[self getViewControllers].count;
     self.teamController.session = self.session;
     self.scoreController.session = self.session;
-    self.scoreController.roster = self.roster;
     [self setViewControllers:@[[self getViewControllers].firstObject]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:NO

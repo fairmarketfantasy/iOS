@@ -50,6 +50,20 @@
         benched.userInteractionEnabled = NO;
         self.benched.hidden = YES; // by default
         [self.contentView addSubview:self.benched];
+        // swapped label
+        _swapped = [FUIButton.alloc initWithFrame:CGRectMake(55.f, 55.f, 20.f, 20.f)];
+        FUIButton* swapped = (FUIButton*)self.swapped;
+        swapped.buttonColor = [FFStyle brightBlue];
+        [benched setTitleColor:[FFStyle white]
+                      forState:UIControlStateNormal];
+        swapped.cornerRadius = .5f * swapped.bounds.size.height;
+        [swapped setTitle:NSLocalizedString(@"S", @"swapped label")
+                 forState:UIControlStateNormal];
+        swapped.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        swapped.titleLabel.font = [FFStyle italicBlockFont:12.f];
+        swapped.userInteractionEnabled = NO;
+        self.swapped.hidden = YES; // by default
+        [self.contentView addSubview:self.swapped];
         // title label
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(82.f, 31.f, 223.f, 16.f)];
         self.titleLabel.backgroundColor = [UIColor clearColor];
