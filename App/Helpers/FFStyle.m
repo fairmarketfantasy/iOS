@@ -45,8 +45,7 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 
     NSDateFormatter* formatter = NSDateFormatter.new;
     [formatter setDateFormat:@"E d @ h:mm a"];
-    formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    formatter.timeZone = [NSTimeZone systemTimeZone];
+    formatter.timeZone = [NSTimeZone localTimeZone];
    return formatter;
 }
 
@@ -56,8 +55,7 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMM d, y"
                                                            options:0
                                                             locale:[NSLocale currentLocale]];
-    formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-    formatter.timeZone = [NSTimeZone systemTimeZone];
+    formatter.timeZone = [NSTimeZone localTimeZone];
     return formatter;
 }
 
@@ -67,8 +65,6 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"E M dd"
                                                            options:0
                                                             locale:[NSLocale currentLocale]];
-//    formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-//    formatter.timeZone = [NSTimeZone systemTimeZone];
     formatter.timeZone = [NSTimeZone localTimeZone];
     return formatter;
 }
@@ -79,8 +75,6 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"h:m a"
                                                            options:0
                                                             locale:[NSLocale currentLocale]];
-//    formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-//    formatter.timeZone = [NSTimeZone systemTimeZone];
     formatter.timeZone = [NSTimeZone localTimeZone];
     return formatter;
 }

@@ -15,7 +15,6 @@
     NSDateFormatter* formatter = NSDateFormatter.new;
     formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSSZZZ";
     formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
-//    formatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
     return formatter;
 }
 
@@ -30,9 +29,6 @@
 
 + (instancetype)fromDatabase:(NSString*)string
 {
-//    if ([string isEqualToString:@"2014-03-26T23:00:00.000Z"]) {
-//        return nil;
-//    }
     NSError* error = nil;
     NSDate* date = nil;
     NSDateFormatter* formatter = [self dateFormatter];
