@@ -22,6 +22,7 @@
 #import "FFIndividualPrediction.h"
 #import "FFRosterPrediction.h"
 #import "FFMarket.h"
+#import "FFGame.h"
 #import "FFContestType.h"
 
 @interface FFPredictHistoryController () <UITableViewDataSource, UITableViewDelegate,
@@ -224,13 +225,15 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 cell.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
                                                       prediction.score.integerValue]
                 :  NSLocalizedString(@"N/A", nil);
-                cell.gameTimeLabel.text = @"TODO"; // prediction.game market. games.firstObject.gameTime; // [FFStyle.timeFormatter stringFromDate:prediction.market.gameTime];
+                FFGame* firstGame = prediction.market.games.firstObject;
+                cell.gameTimeLabel.text = firstGame ? [FFStyle.timeFormatter stringFromDate:firstGame.gameTime]
+                : NSLocalizedString(@"N/A", nil);
                 cell.rankLabel.text = isFinished ? [NSString stringWithFormat:@"%i of %i",
                                                     prediction.contestRank.integerValue,
                                                     prediction.contestType.maxEntries.integerValue]
                 : NSLocalizedString(@"Not started yet", nil);
                 cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
-                                                     prediction.contestRankPayout.integerValue]
+                                                     prediction.contestRankPayout.integerValue / 100]
                 : NSLocalizedString(@"N/A", nil);
             }
             return cell;

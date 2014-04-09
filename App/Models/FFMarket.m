@@ -10,6 +10,7 @@
 #import <SBData/NSDictionary+Convenience.h>
 #import "NSDate+ISO8601.h"
 #import "FFMarketSet.h"
+#import "FFGame.h"
 
 @implementation FFMarket
 
@@ -61,6 +62,22 @@
     return [[FFMarketSet alloc] initWithDataObjectClass:self
                                                 session:session
                                              authorized:isAuthorizedRequest];
+}
+
+- (void)setValuesForKeysWithNetworkDictionary:(NSDictionary*)keyedValues
+{
+    if (![keyedValues isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
+    [super setValuesForKeysWithNetworkDictionary:keyedValues];
+    NSArray* gamesDictionaries = keyedValues[@"games"];
+    NSMutableArray* games = [NSMutableArray arrayWithCapacity:gamesDictionaries.count];
+    for (NSDictionary* gameDictionary in gamesDictionaries) {
+        [games addObject:[FFGame fromNetworkRepresentation:gameDictionary
+                                                   session:self.session
+                                                      save:YES]];
+    }
+    self.games = [games copy];
 }
 
 @end

@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 @property(nonatomic) NSString* ownerId;
 @property(nonatomic) NSString* ownerName;
 @property(nonatomic) SBDate* paidAt;
-@property(nonatomic) NSArray* players;
+@property(nonatomic) NSArray* players; // FFPlayer*
 @property(nonatomic) NSString* positions;
 @property(nonatomic) SBFloat* remainingSalary;
 @property(nonatomic) SBInteger* score;
