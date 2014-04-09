@@ -22,6 +22,7 @@
 #import "FFIndividualPrediction.h"
 #import "FFRosterPrediction.h"
 #import "FFMarket.h"
+#import "FFContestType.h"
 
 @interface FFPredictHistoryController () <UITableViewDataSource, UITableViewDelegate,
 FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
@@ -33,7 +34,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 @property(nonatomic) FFPredictionsSelector* typeSelector;
 // model
 @property(nonatomic) FFPredictionSet* individualPredictions;
-@property(nonatomic) FFPredictionSet* rosterPredictions;
+@property(nonatomic) FFPredictionSet* rosterActivePredictions;
+@property(nonatomic) FFPredictionSet* rosterHistoryPredictions;
 
 @end
 
@@ -78,9 +80,12 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     self.individualPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFIndividualPrediction class]
                                                                         session:self.session authorized:YES];
     self.individualPredictions.delegate = self;
-    self.rosterPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFRosterPrediction class]
+    self.rosterActivePredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFRosterPrediction class]
                                                                     session:self.session authorized:YES];
-    self.rosterPredictions.delegate = self;
+    self.rosterActivePredictions.delegate = self;
+    self.rosterHistoryPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFRosterPrediction class]
+                                                                    session:self.session authorized:YES];
+    self.rosterHistoryPredictions.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -141,7 +146,16 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         case FFPredictionsTypeIndividual:
             return self.individualPredictions.allObjects.count;
         case FFPredictionsTypeRoster:
-            return self.rosterPredictions.allObjects.count;
+        {
+            switch (self.rosterPredictionType) {
+                case FFRosterPredictionTypeSubmitted:
+                    return self.rosterActivePredictions.allObjects.count;
+                case FFRosterPredictionTypeFinished:
+                    return self.rosterHistoryPredictions.allObjects.count;
+                default:
+                    return 0;
+            }
+        }
         default:
             return 0;
     }
@@ -181,8 +195,19 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         {
             FFPredictHistoryCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictCell"
                                                                          forIndexPath:indexPath];
-            if (self.rosterPredictions.allObjects.count > indexPath.row) {
-                __block FFRosterPrediction* prediction = self.rosterPredictions.allObjects[indexPath.row];
+            NSArray* predictions = @[];
+            switch (self.rosterPredictionType) {
+                case FFRosterPredictionTypeSubmitted:
+                    predictions = self.rosterActivePredictions.allObjects;
+                    break;
+                case FFRosterPredictionTypeFinished:
+                    predictions = self.rosterHistoryPredictions.allObjects;
+                    break;
+                default:
+                    break;
+            }
+            if (predictions.count > indexPath.row) {
+                __block FFRosterPrediction* prediction = predictions[indexPath.row];
                 @weakify(self)
                 [cell.rosterButton setAction:kUIButtonBlockTouchUpInside
                                    withBlock:^{
@@ -190,16 +215,23 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                        [self performSegueWithIdentifier:@"GotoPredictRoster"
                                                                  sender:prediction]; // TODO: refactode it (?)
                                    }];
+                BOOL isFinished = [prediction.state isEqualToString:@"finished"];
 #warning CHECK fields!
-                cell.nameLabel.text = prediction.ownerName;
-                cell.teamLabel.text = prediction.market.name;
+                cell.nameLabel.text = prediction.market.name;
+                cell.teamLabel.text = prediction.contestType.name;
                 cell.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.startedAt];
                 cell.stateLabel.text = prediction.state;
-                cell.pointsLabel.text = [NSString stringWithFormat:@"%i", prediction.bonusPoints.integerValue];
-                cell.paidLabel.text = prediction.paidAt ? [FFStyle.dayFormatter stringFromDate:prediction.paidAt]
+                cell.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
+                                                      prediction.score.integerValue]
+                :  NSLocalizedString(@"N/A", nil);
+                cell.gameTimeLabel.text = @"TODO"; // prediction.game market. games.firstObject.gameTime; // [FFStyle.timeFormatter stringFromDate:prediction.market.gameTime];
+                cell.rankLabel.text = isFinished ? [NSString stringWithFormat:@"%i of %i",
+                                                    prediction.contestRank.integerValue,
+                                                    prediction.contestType.maxEntries.integerValue]
+                : NSLocalizedString(@"Not started yet", nil);
+                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
+                                                     prediction.contestRankPayout.integerValue]
                 : NSLocalizedString(@"N/A", nil);
-                cell.raknLabel.text = [NSString stringWithFormat:@"%i", prediction.contestRank.integerValue];
-                cell.awaidLabel.text = @"-"; // TODO: this
             }
             return cell;
         }
@@ -323,10 +355,10 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
         {
             switch (self.rosterPredictionType) {
                 case FFRosterPredictionTypeSubmitted:
-                    [self.rosterPredictions fetch];
+                    [self.rosterActivePredictions fetch];
                     break;
                 case FFRosterPredictionTypeFinished:
-                    [self.rosterPredictions fetchWithParameters:
+                    [self.rosterHistoryPredictions fetchWithParameters:
                      @{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
                     break;
                 default:

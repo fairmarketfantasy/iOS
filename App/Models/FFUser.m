@@ -66,7 +66,8 @@
 - (void)setValuesForKeysWithNetworkDictionary:(NSDictionary*)keyedValues
 {
     [super setValuesForKeysWithNetworkDictionary:keyedValues];
-    
+    // TODO: get in_progress_roster ???
+    /*
     if ([keyedValues[@"in_progress_roster"] isKindOfClass:[NSDictionary class]]) {
         [FFRoster createWithNetworkRepresentation:keyedValues[@"in_progress_roster"]
                                           session:self.session
@@ -74,6 +75,7 @@
                                           } failure:^(NSError *error) {
                                           }];
     }
+     */
 }
 
 - (FFRoster *)getInProgressRoster

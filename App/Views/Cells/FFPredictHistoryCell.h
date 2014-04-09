@@ -18,8 +18,8 @@
 @property(nonatomic, readonly) UILabel* dayLabel;
 @property(nonatomic, readonly) UILabel* stateLabel;
 @property(nonatomic, readonly) UILabel* pointsLabel;
-@property(nonatomic, readonly) UILabel* paidLabel;
-@property(nonatomic, readonly) UILabel* raknLabel;
-@property(nonatomic, readonly) UILabel* awaidLabel;
+@property(nonatomic, readonly) UILabel* gameTimeLabel;
+@property(nonatomic, readonly) UILabel* rankLabel;
+@property(nonatomic, readonly) UILabel* awardLabel;
 
 @end

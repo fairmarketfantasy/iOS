@@ -49,4 +49,12 @@
      }];
 }
 
+#pragma mark - private
+
+
+- (void)setValuesForKeysWithNetworkDictionary:(NSDictionary*)keyedValues
+{
+    [super setValuesForKeysWithNetworkDictionary:keyedValues];
+}
+
 @end

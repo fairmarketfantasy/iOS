@@ -15,7 +15,8 @@
 @property (nonatomic) NSString  *contestDescription;
 @property (nonatomic) NSString  *iconUrl;
 @property (nonatomic) NSString  *marketId;
-@property (nonatomic) SBInteger *maxEntries; @property (nonatomic) NSString  *name;
+@property (nonatomic) SBInteger *maxEntries;
+@property (nonatomic) NSString  *name;
 @property (nonatomic) NSString  *payoutDescription;
 @property (nonatomic) NSString  *payoutStructure;
 @property (nonatomic) SBInteger *isPrivate;

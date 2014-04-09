@@ -84,11 +84,8 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
                                                                 forIndexPath:indexPath];
         cell.titleLabel.text = player.team;
         cell.nameLabel.text = player.name;
-        //                cell.costLabel.text = [FFStyle.priceFormatter
-        //                                       stringFromNumber:@([player.purchasePrice floatValue])];
-#warning CHECK PRICE!
         cell.costLabel.text = [FFStyle.priceFormatter
-                               stringFromNumber:@([player.sellPrice floatValue])];
+                               stringFromNumber:@([player.purchasePrice floatValue])];
         UIColor* avatarColor = benched ? [FFStyle brightOrange] : [FFStyle brightGreen];
         cell.avatar.borderColor = avatarColor;
         cell.avatar.pathColor = avatarColor;

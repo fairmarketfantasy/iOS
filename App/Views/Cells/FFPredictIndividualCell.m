@@ -108,15 +108,6 @@
         captionAwaidLabel.font = [FFStyle regularFont:12.f];
         captionAwaidLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionAwaidLabel];
-#warning for TESTING only! >>>>>
-        self.nameLabel.text = @"Cavaliers@Bobcars";
-        self.teamLabel.text = @"Isaiah Canaan";
-        self.dayLabel.text = @"Sat Mar 08";
-        self.ptLabel.text = @"22.0";
-        self.predictLabel.text = @"UNder: 0.40 turnovers";
-        self.timeLabel.text = @"2:0 AM";
-        self.awaidLabel.text = @"22.0";
-#warning for TESTING only! <<<<<
     }
     return self;
 }

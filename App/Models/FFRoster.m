@@ -180,6 +180,21 @@ failure:
     }];
 }
 
++ (instancetype)fromNetworkRepresentation:(NSDictionary *)dict
+                                  session:(SBSession *)session
+                                     save:(BOOL)persist
+{
+    SBDataObject *ret = [self findWithNetworkRepresentation:dict session:session];
+    if (!ret) {
+        ret = [[self alloc] initWithSession:session];
+    }
+    [ret setValuesForKeysWithNetworkDictionary:dict];
+    if (persist) {
+        [[self unsafeMeta] save:ret];
+    }
+    return (id)ret;
+}
+
 #pragma mark -
 
 - (void)addPlayer:(FFPlayer*)player
@@ -305,19 +320,20 @@ failure:
         return;
     }
     [super setValuesForKeysWithNetworkDictionary:keyedValues];
-    self.contestTypeId = [keyedValues valueForKeyPath:@"contest_type.id"];
-    if ([self.contestTypeId isKindOfClass:[NSString class]]) {
-        self.contestType = [FFContestType fromNetworkRepresentation:keyedValues[@"contest_type"]
+    NSDictionary* contest = keyedValues[@"contest_type"];
+    if ([contest isKindOfClass:[NSDictionary class]]) {
+        self.contestTypeId = contest[@"id"];
+        self.contestType = [FFContestType fromNetworkRepresentation:contest
                                                             session:self.session
                                                                save:YES];
     }
-    self.marketId = [keyedValues valueForKeyPath:@"market.id"];
-    if ([self.marketId isKindOfClass:[NSString class]]) {
-        self.market = [FFMarket fromNetworkRepresentation:keyedValues[@"market"]
+    NSDictionary* market = keyedValues[@"market"];
+    if ([market isKindOfClass:[NSDictionary class]]) {
+        self.marketId = market[@"id"];
+        self.market = [FFMarket fromNetworkRepresentation:market
                                                   session:self.session
                                                      save:YES];
     }
-
     NSArray* playerDictionaries = keyedValues[@"players"];
     NSMutableArray* players = [NSMutableArray arrayWithCapacity:playerDictionaries.count];
     for (NSDictionary* playerDictionary in playerDictionaries) {

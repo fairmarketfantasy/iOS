@@ -24,11 +24,36 @@
 
 @implementation FFDataObjectResultSet
 
-- (void)initWithParameters:(NSDictionary*)parameters
-{
-    
-}
-
+//- (void)initWithParameters:(NSDictionary*)parameters
+//{
+//    
+//}
+//
+//- (NSArray *)_processPage:(id)page
+//{
+//    __block NSMutableArray *all;
+//    [[_dataObjectClass meta] inTransaction:^(SBModelMeta *meta, BOOL *rollback) {
+//        NSArray *stuff;
+//        // make this accept either an array or a dictionary containing an array
+//        if ([page isKindOfClass:[NSDictionary dictionary]]) {
+//            stuff = [page objectForKey:@"data"]; // TODO make this parameter configurable
+//            all = [NSMutableArray arrayWithCapacity:[page[@"data"] count]];
+//        } else if ([page isKindOfClass:[NSArray class]]) {
+//            stuff = page;
+//            all = [NSMutableArray arrayWithCapacity:[page count]];
+//        } else {
+//            NSLog(@"SBDataObjectResultSet was unable to process a page %@", page);
+//            return;
+//        }
+//        for (NSDictionary *rep in stuff) {
+//            SBDataObject *undecoratedObj = [_dataObjectClass fromNetworkRepresentation:rep session:self.session save:NO];
+//            SBDataObject *obj = [self _decorateObject:undecoratedObj]; //[[_dataObjectClass alloc] initWithSession:self.session];
+//            [meta save:obj];
+//            [all addObject:obj];
+//        }
+//    }];
+//    return all;
+//}
 
 - (void)refreshWithParameters:(NSDictionary*)parameters
 {
