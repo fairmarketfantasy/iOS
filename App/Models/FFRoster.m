@@ -8,6 +8,7 @@
 
 #import "FFRoster.h"
 #import <SBData/NSDictionary+Convenience.h>
+#import "FFDate.h"
 #import "FFContestType.h"
 #import <objc/runtime.h>
 #import <dispatch/dispatch.h>

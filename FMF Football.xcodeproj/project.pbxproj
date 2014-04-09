@@ -135,6 +135,7 @@
 		8972768A18D9774A008D995C /* open@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8972768818D9774A008D995C /* open@2x.png */; };
 		897C869118EC1FC40068D03F /* FFEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 897C869018EC1FC40068D03F /* FFEvent.m */; };
 		897C869418ED90DF0068D03F /* FFSubmitView.m in Sources */ = {isa = PBXBuildFile; fileRef = 897C869318ED90DF0068D03F /* FFSubmitView.m */; };
+		8985933F18F5A97D0006405A /* FFDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 8985933E18F5A97D0006405A /* FFDataObject.m */; };
 		89923EFC18EE338800F74FEB /* FFPredictRosterPagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89923EFB18EE338800F74FEB /* FFPredictRosterPagerController.m */; };
 		89923EFF18EE3C7300F74FEB /* FFPredictRosterTeamController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89923EFE18EE3C7300F74FEB /* FFPredictRosterTeamController.m */; };
 		89923F0218EE3D0D00F74FEB /* FFPredictRosterScoreController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89923F0118EE3D0D00F74FEB /* FFPredictRosterScoreController.m */; };
@@ -186,6 +187,7 @@
 		89F2E70418BE249A00B23A99 /* accessory_disclosure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E6FF18BE249A00B23A99 /* accessory_disclosure@2x.png */; };
 		89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E70018BE249A00B23A99 /* accessory_uncheck@2x.png */; };
 		89F2E70618BE249A00B23A99 /* accessory_uncollapse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E70118BE249A00B23A99 /* accessory_uncollapse@2x.png */; };
+		89F6D15C18F56A4C001DE023 /* FFDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F6D15B18F56A4C001DE023 /* FFDate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -398,6 +400,8 @@
 		897C869018EC1FC40068D03F /* FFEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFEvent.m; sourceTree = "<group>"; };
 		897C869218ED90DF0068D03F /* FFSubmitView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFSubmitView.h; sourceTree = "<group>"; };
 		897C869318ED90DF0068D03F /* FFSubmitView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSubmitView.m; sourceTree = "<group>"; };
+		8985933D18F5A97D0006405A /* FFDataObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFDataObject.h; sourceTree = "<group>"; };
+		8985933E18F5A97D0006405A /* FFDataObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFDataObject.m; sourceTree = "<group>"; };
 		89923EFA18EE338800F74FEB /* FFPredictRosterPagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPredictRosterPagerController.h; sourceTree = "<group>"; };
 		89923EFB18EE338800F74FEB /* FFPredictRosterPagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPredictRosterPagerController.m; sourceTree = "<group>"; };
 		89923EFD18EE3C7300F74FEB /* FFPredictRosterTeamController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPredictRosterTeamController.h; sourceTree = "<group>"; };
@@ -469,6 +473,8 @@
 		89F2E6FF18BE249A00B23A99 /* accessory_disclosure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_disclosure@2x.png"; sourceTree = "<group>"; };
 		89F2E70018BE249A00B23A99 /* accessory_uncheck@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_uncheck@2x.png"; sourceTree = "<group>"; };
 		89F2E70118BE249A00B23A99 /* accessory_uncollapse@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accessory_uncollapse@2x.png"; sourceTree = "<group>"; };
+		89F6D15A18F56A4C001DE023 /* FFDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFDate.h; sourceTree = "<group>"; };
+		89F6D15B18F56A4C001DE023 /* FFDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFDate.m; sourceTree = "<group>"; };
 		C7A0D11613844A1D9BF1BC9E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -802,6 +808,10 @@
 				896ACC2E18B664F5001E9C64 /* FFSession.m */,
 				896ACC2F18B664F5001E9C64 /* FFUser.h */,
 				896ACC3018B664F5001E9C64 /* FFUser.m */,
+				89F6D15A18F56A4C001DE023 /* FFDate.h */,
+				89F6D15B18F56A4C001DE023 /* FFDate.m */,
+				8985933D18F5A97D0006405A /* FFDataObject.h */,
+				8985933E18F5A97D0006405A /* FFDataObject.m */,
 				89BABFC418BBB98F001AD755 /* FFNodeItem.h */,
 				89BABFC518BBB98F001AD755 /* FFNodeItem.m */,
 			);
@@ -1102,6 +1112,7 @@
 				896ACCE118B664F5001E9C64 /* UIView+FindFirstResponder.m in Sources */,
 				896ACD0318B664F5001E9C64 /* FFMarketSelector.m in Sources */,
 				896ACCAB18B664F5001E9C64 /* FFAppDelegate.m in Sources */,
+				89F6D15C18F56A4C001DE023 /* FFDate.m in Sources */,
 				89C985BF18E5AB9400ABB652 /* FFPredictHistoryController.m in Sources */,
 				8961095818D1CD4F006BCFA4 /* FFPagerController.m in Sources */,
 				896ACCFD18B664F5001E9C64 /* FFBubblePicker.m in Sources */,
@@ -1115,6 +1126,7 @@
 				896ACCBD18B664F5001E9C64 /* FFMenuViewController.m in Sources */,
 				89F1A0A218DCCAE5001369E3 /* FFPTTable.m in Sources */,
 				890126B918E04F7100C27299 /* FFPTHeader.m in Sources */,
+				8985933F18F5A97D0006405A /* FFDataObject.m in Sources */,
 				893D690F18E5CB22005E305B /* FFPredictHistoryTable.m in Sources */,
 				896ACCEF18B664F5001E9C64 /* FFSession.m in Sources */,
 				896ACCE518B664F5001E9C64 /* main.m in Sources */,

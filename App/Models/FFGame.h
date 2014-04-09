@@ -6,20 +6,22 @@
 //  Copyright (c) 2013 FairMarketFantasy. All rights reserved.
 //
 
-#import <SBData/SBDataObject.h>
+#import "FFDataObject.h"
 #import <SBData/SBTypes.h>
 
-@interface FFGame : SBDataObject
+@class FFDate;
 
-@property (nonatomic) NSString  *awayTeam;
-@property (nonatomic) NSString  *gameDay;
-@property (nonatomic) SBDate    *gameTime;
-@property (nonatomic) NSString  *homeTeam;
-@property (nonatomic) NSString  *network;
-@property (nonatomic) NSString  *seasonType;
-@property (nonatomic) SBInteger *seasonWeek;
-@property (nonatomic) SBInteger *seasonYear;
-@property (nonatomic) NSString  *statsId;
-@property (nonatomic) NSString  *scheduled;
+@interface FFGame : FFDataObject
+
+@property (nonatomic) NSString*  awayTeam;
+@property (nonatomic) NSString*  gameDay;
+@property (nonatomic) FFDate*    gameTime;
+@property (nonatomic) NSString*  homeTeam;
+@property (nonatomic) NSString*  network;
+@property (nonatomic) NSString*  seasonType;
+@property (nonatomic) SBInteger* seasonWeek;
+@property (nonatomic) SBInteger* seasonYear;
+@property (nonatomic) NSString*  statsId;
+@property (nonatomic) NSString*  scheduled;
 
 @end

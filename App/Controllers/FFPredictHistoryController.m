@@ -24,6 +24,7 @@
 #import "FFMarket.h"
 #import "FFGame.h"
 #import "FFContestType.h"
+#import "FFDate.h"
 
 @interface FFPredictHistoryController () <UITableViewDataSource, UITableViewDelegate,
 FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
@@ -226,7 +227,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                                       prediction.score.integerValue]
                 :  NSLocalizedString(@"N/A", nil);
                 FFGame* firstGame = prediction.market.games.firstObject;
-                cell.gameTimeLabel.text = firstGame ? [FFStyle.timeFormatter stringFromDate:firstGame.gameTime]
+                NSDateFormatter* formatter = FFStyle.timeFormatter;
+                cell.gameTimeLabel.text = firstGame ? [formatter stringFromDate:firstGame.gameTime]
                 : NSLocalizedString(@"N/A", nil);
                 cell.rankLabel.text = isFinished ? [NSString stringWithFormat:@"%i of %i",
                                                     prediction.contestRank.integerValue,

@@ -6,22 +6,23 @@
 //  Copyright (c) 2013 FairMarketFantasy. All rights reserved.
 //
 
-#import "SBDataObject.h"
+#import "FFDataObject.h"
 #import <SBData/SBTypes.h>
 
 @class FFMarketSet;
 @class FFGame;
+@class FFDate;
 
-@interface FFMarket : SBDataObject
+@interface FFMarket : FFDataObject
 
-@property(nonatomic) SBDate* closedAt;
+@property(nonatomic) FFDate* closedAt;
 @property(nonatomic) NSString* marketDuration;
 @property(nonatomic) NSString* name;
-@property(nonatomic) SBDate* openedAt;
+@property(nonatomic) FFDate* openedAt;
 @property(nonatomic) SBFloat* shadowBetRate;
 @property(nonatomic) SBFloat* shadowBets;
 @property(nonatomic) SBInteger* sportId;
-@property(nonatomic) SBDate* startedAt;
+@property(nonatomic) FFDate* startedAt;
 @property(nonatomic) NSString* state;
 @property(nonatomic) SBFloat* totalBets;
 @property(nonatomic) NSArray* games; // FFGame*

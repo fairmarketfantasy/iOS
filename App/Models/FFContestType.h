@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 FairMarketFantasy. All rights reserved.
 //
 
-#import <SBData/SBDataObject.h>
+#import "FFDataObject.h"
 #import <SBData/SBTypes.h>
 
-@interface FFContestType : SBDataObject
+@interface FFContestType : FFDataObject
 
 @property (nonatomic) SBInteger *buyIn;
 @property (nonatomic) NSString  *contestDescription;

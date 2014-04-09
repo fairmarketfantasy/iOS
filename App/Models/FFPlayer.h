@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 FairMarketFantasy. All rights reserved.
 //
 
-#import "SBDataObject.h"
+#import "FFDataObject.h"
 
 @class FFDataObjectResultSet;
 
-@interface FFPlayer : SBDataObject
+@interface FFPlayer : FFDataObject
 
 @property(nonatomic) NSString* swappedPlayerName;
 @property(nonatomic) SBInteger* benched;

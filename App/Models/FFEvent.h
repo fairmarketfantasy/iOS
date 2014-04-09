@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 FairMarketFantasy. All rights reserved.
 //
 
-#import "SBDataObject.h"
+#import "FFDataObject.h"
 
-@interface FFEvent : SBDataObject
+@interface FFEvent : FFDataObject
 
 @property(nonatomic) BOOL bidMore;
 @property(nonatomic) BOOL bidLess;

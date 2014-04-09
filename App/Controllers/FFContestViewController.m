@@ -23,6 +23,7 @@
 #import "FFEnterCell.h"
 #import "FFEntrantsCell.h"
 #import <libextobjc/EXTScope.h>
+#import "FFDate.h"
 
 @interface FFContestViewController () <UITableViewDataSource,
                                        UITableViewDelegate,

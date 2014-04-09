@@ -9,11 +9,17 @@
 #import "FFDataObjectResultSet.h"
 
 @interface SBDataObjectResultSet () {
+    Class _dataObjectClass;
     dispatch_queue_t _processingQueue;
 }
 @end
 
 @implementation SBDataObjectResultSet (ProcessingQueue)
+
+- (Class)dataObjectClass
+{
+    return self->_dataObjectClass;
+}
 
 - (dispatch_queue_t)processingQueue
 {
@@ -55,6 +61,7 @@
 //    return all;
 //}
 
+// add parameters
 - (void)refreshWithParameters:(NSDictionary*)parameters
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(resultSetWillReload:)]) {
@@ -103,6 +110,33 @@ failure:
                      didFailToReload:error];
         }
     }];
+}
+
+// fix NSDictionary class
+- (NSArray*)_processPage:(id)page
+{
+    __block NSMutableArray *all;
+    [[[self dataObjectClass] meta] inTransaction:^(SBModelMeta *meta, BOOL *rollback) {
+        NSArray *stuff;
+        // make this accept either an array or a dictionary containing an array
+        if ([page isKindOfClass:[NSDictionary class]]) {
+            stuff = [page objectForKey:@"data"]; // TODO make this parameter configurable
+            all = [NSMutableArray arrayWithCapacity:[page[@"data"] count]];
+        } else if ([page isKindOfClass:[NSArray class]]) {
+            stuff = page;
+            all = [NSMutableArray arrayWithCapacity:[page count]];
+        } else {
+            NSLog(@"SBDataObjectResultSet was unable to process a page %@", page);
+            return;
+        }
+        for (NSDictionary *rep in stuff) {
+            SBDataObject *undecoratedObj = [[self dataObjectClass] fromNetworkRepresentation:rep session:self.session save:NO];
+            SBDataObject *obj = [self _decorateObject:undecoratedObj]; //[[_dataObjectClass alloc] initWithSession:self.session];
+            [meta save:obj];
+            [all addObject:obj];
+        }
+    }];
+    return all;
 }
 
 @end

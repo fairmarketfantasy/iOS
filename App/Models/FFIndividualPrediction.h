@@ -6,9 +6,11 @@
 //  Copyright (c) 2014 FairMarketFantasy. All rights reserved.
 //
 
-#import "SBDataObject.h"
+#import "FFDataObject.h"
 
-@interface FFIndividualPrediction : SBDataObject
+@class FFDate;
+
+@interface FFIndividualPrediction : FFDataObject
 
 @property(nonatomic) NSString* playerId;
 @property(nonatomic) NSString* playerStatId;
@@ -18,8 +20,8 @@
 @property(nonatomic) NSString* predictThat;
 @property(nonatomic) NSString* award;
 @property(nonatomic) NSString* state;
-@property(nonatomic) SBDate* gameTime;
-@property(nonatomic) SBDate* gameDay;
+@property(nonatomic) FFDate* gameTime;
+@property(nonatomic) FFDate* gameDay;
 @property(nonatomic) NSString* gameResult;
 
 @end

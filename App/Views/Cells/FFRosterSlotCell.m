@@ -8,6 +8,7 @@
 
 #import "FFRosterSlotCell.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
+#import "FFDate.h"
 
 @interface FFRosterSlotCell ()
 

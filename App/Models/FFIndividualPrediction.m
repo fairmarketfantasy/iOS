@@ -8,6 +8,7 @@
 
 #import "FFIndividualPrediction.h"
 #import <SBData/NSDictionary+Convenience.h>
+#import "FFDate.h"
 
 @implementation FFIndividualPrediction
 

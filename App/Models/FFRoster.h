@@ -6,35 +6,36 @@
 //  Copyright (c) 2013 FairMarketFantasy. All rights reserved.
 //
 
-#import <SBData/SBDataObject.h>
+#import "FFDataObject.h"
 #import <SBData/SBTypes.h>
 
 @class FFPlayer;
 @class FFMarket;
 @class FFContestType;
+@class FFDate;
 
 typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
     FFRosterSubmitType100FB,
     FFRosterSubmitTypeHTH27FB
 };
 
-@interface FFRoster : SBDataObject
+@interface FFRoster : FFDataObject
 
 @property(nonatomic) SBInteger* bonusPoints;
-@property(nonatomic) SBDate* startedAt;
+@property(nonatomic) FFDate* startedAt;
 @property(nonatomic) SBInteger* amountPaid;
 @property(nonatomic) SBInteger* buyIn;
-@property(nonatomic) SBDate* canceledAt;
+@property(nonatomic) FFDate* canceledAt;
 @property(nonatomic) NSString* canceledCause;
 @property(nonatomic) NSDictionary* contest;
 @property(nonatomic) SBInteger* contestId;
 @property(nonatomic) SBInteger* contestRank;
 @property(nonatomic) SBInteger* contestRankPayout;
 @property(nonatomic) SBInteger* live;
-@property(nonatomic) SBDate* nextGameTime;
+@property(nonatomic) FFDate* nextGameTime;
 @property(nonatomic) NSString* ownerId;
 @property(nonatomic) NSString* ownerName;
-@property(nonatomic) SBDate* paidAt;
+@property(nonatomic) FFDate* paidAt;
 @property(nonatomic) NSArray* players; // FFPlayer*
 @property(nonatomic) NSString* positions;
 @property(nonatomic) SBFloat* remainingSalary;

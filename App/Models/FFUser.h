@@ -13,13 +13,13 @@
 
 
 @class FFRoster;
-
+@class FFDate;
 
 @interface FFUser : SBUser
 
 @property (nonatomic) SBFloat*      balance;
 @property (nonatomic) SBFloat*      winPercentile;
-@property (nonatomic) SBDate*       joinDate;
+@property (nonatomic) FFDate*       joinDate;
 @property (nonatomic) NSString*     name;
 @property (nonatomic) NSString*     imageUrl;
 @property (nonatomic) SBInteger*    tokenBalance;
