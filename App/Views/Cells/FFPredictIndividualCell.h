@@ -10,12 +10,13 @@
 
 @interface FFPredictIndividualCell : UITableViewCell
 
-@property(nonatomic, readonly) UILabel* nameLabel;
-@property(nonatomic, readonly) UILabel* teamLabel;
+@property(nonatomic, readonly) UILabel* choiceLabel;
+@property(nonatomic, readonly) UILabel* eventLabel;
 @property(nonatomic, readonly) UILabel* dayLabel;
 @property(nonatomic, readonly) UILabel* ptLabel;
 @property(nonatomic, readonly) UILabel* predictLabel;
 @property(nonatomic, readonly) UILabel* timeLabel;
 @property(nonatomic, readonly) UILabel* awaidLabel;
+@property(nonatomic, readonly) UILabel* resultLabel;
 
 @end

@@ -30,18 +30,18 @@
                                                        alpha:.5f];
         [self.contentView addSubview:separator2];
         // labels
-        _nameLabel = [[UILabel alloc] initWithFrame:
+        _choiceLabel = [[UILabel alloc] initWithFrame:
                       CGRectMake(10.f, 10.f, 190.f, 25.f)];
-        self.nameLabel.backgroundColor = [UIColor clearColor];
-        self.nameLabel.font = [FFStyle regularFont:19.f];
-        self.nameLabel.textColor = [FFStyle darkGreyTextColor];
-        [self.contentView addSubview:self.nameLabel];
-        _teamLabel = [[UILabel alloc] initWithFrame:
+        self.choiceLabel.backgroundColor = [UIColor clearColor];
+        self.choiceLabel.font = [FFStyle regularFont:19.f];
+        self.choiceLabel.textColor = [FFStyle darkGreyTextColor];
+        [self.contentView addSubview:self.choiceLabel];
+        _eventLabel = [[UILabel alloc] initWithFrame:
                       CGRectMake(10.f, 30.f, 190.f, 25.f)];
-        self.teamLabel.backgroundColor = [UIColor clearColor];
-        self.teamLabel.font = [FFStyle regularFont:19.f];
-        self.teamLabel.textColor = [FFStyle darkGreyTextColor];
-        [self.contentView addSubview:self.teamLabel];
+        self.eventLabel.backgroundColor = [UIColor clearColor];
+        self.eventLabel.font = [FFStyle regularFont:19.f];
+        self.eventLabel.textColor = [FFStyle darkGreyTextColor];
+        [self.contentView addSubview:self.eventLabel];
         _dayLabel = [[UILabel alloc] initWithFrame:
                      CGRectMake(90.f, 60.f, 80.f, 20.f)];
         self.dayLabel.backgroundColor = [UIColor clearColor];
@@ -55,7 +55,11 @@
         self.ptLabel.textColor = [FFStyle darkGreyTextColor];
         [self.contentView addSubview:self.ptLabel];
         _predictLabel = [[UILabel alloc] initWithFrame:
-                         CGRectMake(90.f, 120.f, 230.f, 20.f)];
+                         CGRectMake(90.f, 120.f, 80.f, 30.f)];
+        self.predictLabel.adjustsFontSizeToFitWidth = YES;
+        self.predictLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.predictLabel.minimumScaleFactor = .8f;
+        self.predictLabel.numberOfLines = 2;
         self.predictLabel.backgroundColor = [UIColor clearColor];
         self.predictLabel.font = [FFStyle regularFont:12.f];
         self.predictLabel.textColor = [FFStyle darkGreyTextColor];
@@ -72,6 +76,12 @@
         self.awaidLabel.font = [FFStyle regularFont:12.f];
         self.awaidLabel.textColor = [FFStyle darkGreyTextColor];
         [self.contentView addSubview:self.awaidLabel];
+        _resultLabel = [[UILabel alloc] initWithFrame:
+                       CGRectMake(260.f, 120.f, 60.f, 20.f)];
+        self.resultLabel.backgroundColor = [UIColor clearColor];
+        self.resultLabel.font = [FFStyle regularFont:12.f];
+        self.resultLabel.textColor = [FFStyle darkGreyTextColor];
+        [self.contentView addSubview:self.resultLabel];
         // titles
         UILabel* captionDayLabel = [[UILabel alloc] initWithFrame:
                                     CGRectMake(10.f, 60.f, 70.f, 20.f)];
@@ -108,6 +118,13 @@
         captionAwaidLabel.font = [FFStyle regularFont:12.f];
         captionAwaidLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionAwaidLabel];
+        UILabel* captionResultLabel = [[UILabel alloc] initWithFrame:
+                                      CGRectMake(180.f, 120.f, 80.f, 20.f)];
+        captionResultLabel.backgroundColor = [UIColor clearColor];
+        captionResultLabel.text = NSLocalizedString(@"○ Result", nil);
+        captionResultLabel.font = [FFStyle regularFont:12.f];
+        captionResultLabel.textColor = [FFStyle greyTextColor];
+        [self.contentView addSubview:captionResultLabel];
     }
     return self;
 }

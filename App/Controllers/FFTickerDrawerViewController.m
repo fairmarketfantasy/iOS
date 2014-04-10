@@ -43,7 +43,8 @@
         _errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 38)];
         _errorLabel.numberOfLines = 0;
         _errorLabel.textColor = [FFStyle white];
-        _errorLabel.font = [FFStyle boldFont:17.f];
+        _errorLabel.font = [FFStyle boldFont:14.f];
+        _errorLabel.textAlignment = NSTextAlignmentCenter;
         _errorLabel.text = NSLocalizedString(@"Error", nil);
         _errorLabel.backgroundColor = [UIColor clearColor];
         _errorLabel.hidden = YES;

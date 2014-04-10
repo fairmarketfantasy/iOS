@@ -173,8 +173,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                                                             forIndexPath:indexPath];
             if (self.individualPredictions.allObjects.count > indexPath.row) {
                 FFIndividualPrediction* prediction = self.individualPredictions.allObjects[indexPath.row];
-                cell.nameLabel.text = prediction.playerName;
-                cell.teamLabel.text = prediction.marketName;
+                cell.choiceLabel.text = prediction.playerName;
+                cell.eventLabel.text = prediction.marketName;
                 cell.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.gameDay];
                 cell.ptLabel.text = prediction.predictThat;
                 if (prediction.eventPredictions.count > 0) {
@@ -189,6 +189,9 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 }
                 cell.timeLabel.text = [FFStyle.timeFormatter stringFromDate:prediction.gameTime];
                 cell.awaidLabel.text = prediction.award;
+                cell.resultLabel.text = [prediction.state isEqualToString:@"cancelled"]
+                ? NSLocalizedString(@"Didn't play", nil)
+                : (prediction.gameResult ? prediction.gameResult : NSLocalizedString(@"N/A", nil));
             }
             return cell;
         }
