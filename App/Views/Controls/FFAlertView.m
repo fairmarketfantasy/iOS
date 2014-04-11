@@ -33,7 +33,9 @@
 
 @implementation FFAlertView
 
-- (UIView*)initWithTitle:(NSString*)title message:(NSString*)message
+- (UIView*)initWithTitle:(NSString*)title
+                 message:(NSString*)message
+              customView:(UIView*)customView
 {
     self = [super init];
     if (self) {
@@ -46,33 +48,35 @@
         self.autoRemoveFromSuperview = YES;
 
         // this is the view that contains the content and controls
-        UIView* innerView = self.contentView = [[UIView alloc] init];
-        innerView.translatesAutoresizingMaskIntoConstraints = NO;
-        innerView.backgroundColor = [FFStyle lightGrey];
+        self.contentView = UIView.new;
+        self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
+        self.contentView.backgroundColor = [UIColor colorWithWhite:.8f
+                                                             alpha:.8f];
 
         // button box first, since it is easy...
         UIView* buttonBox = self.buttonBox = [[UIView alloc] init];
         buttonBox.translatesAutoresizingMaskIntoConstraints = NO;
 
-        [innerView addSubview:buttonBox];
-        [innerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[buttonBox]-10-|"
-                                                                          options:0
-                                                                          metrics:nil
-                                                                            views:NSDictionaryOfVariableBindings(buttonBox)]];
+        [self.contentView addSubview:buttonBox];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[buttonBox]-10-|"
+                                                                                 options:0
+                                                                                 metrics:nil
+                                                                                   views:NSDictionaryOfVariableBindings(buttonBox)]];
 
-        [self addSubview:innerView];
+        [self addSubview:self.contentView];
+        UIView* innerView = self.contentView;
         [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[innerView]-10-|"
                                                                      options:0
                                                                      metrics:nil
                                                                        views:NSDictionaryOfVariableBindings(innerView)]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:innerView
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView
                                                          attribute:NSLayoutAttributeCenterX
                                                          relatedBy:NSLayoutRelationEqual
                                                             toItem:self
                                                          attribute:NSLayoutAttributeCenterX
                                                         multiplier:1.0
                                                           constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:innerView
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView
                                                          attribute:NSLayoutAttributeCenterY
                                                          relatedBy:NSLayoutRelationEqual
                                                             toItem:self
@@ -93,11 +97,11 @@
             titleLabel.textColor = [FFStyle black];
             titleLabel.numberOfLines = 4;
             titleLabel.preferredMaxLayoutWidth = 200;
-            [innerView addSubview:titleLabel];
-            [innerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[titleLabel]-|"
-                                                                              options:0
-                                                                              metrics:nil
-                                                                                views:NSDictionaryOfVariableBindings(titleLabel)]];
+            [self.contentView addSubview:titleLabel];
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[titleLabel]-|"
+                                                                                     options:0
+                                                                                     metrics:nil
+                                                                                       views:NSDictionaryOfVariableBindings(titleLabel)]];
         }
         if (message != nil) {
             bodyLabel = self.bodyLabel = [[UILabel alloc] init];
@@ -109,33 +113,60 @@
             bodyLabel.textColor = [FFStyle black];
             bodyLabel.numberOfLines = 8;
             bodyLabel.preferredMaxLayoutWidth = 240;
-            [innerView addSubview:bodyLabel];
-            [innerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[bodyLabel]-|"
-                                                                              options:0
-                                                                              metrics:nil
-                                                                                views:NSDictionaryOfVariableBindings(bodyLabel)]];
+            [self.contentView addSubview:bodyLabel];
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[bodyLabel]-|"
+                                                                                     options:0
+                                                                                     metrics:nil
+                                                                                       views:NSDictionaryOfVariableBindings(bodyLabel)]];
+        }
+
+        // add custom view if needed
+        BOOL withCustomView = [customView isKindOfClass:[UIView class]];
+        if (withCustomView) {
+            customView.translatesAutoresizingMaskIntoConstraints = NO;
+            [self.contentView addSubview:customView];
+            [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-[customView]-|"
+                                                                                     options:0
+                                                                                     metrics:nil
+                                                                                       views:NSDictionaryOfVariableBindings(customView)]];
         }
 
         // set overall vertical layout
         NSDictionary* vertPlaces = nil;
         NSString* vertLayoutString = nil;
-        if (title != nil && message != nil) {
-            vertLayoutString = @"V:|-10-[titleLabel]-10-[bodyLabel]-10-[buttonBox]-10-|";
-            vertPlaces = NSDictionaryOfVariableBindings(titleLabel, bodyLabel, buttonBox);
-        } else if (title != nil && message == nil) {
-            vertLayoutString = @"V:|-10-[titleLabel]-10-[buttonBox]-10-|";
-            vertPlaces = NSDictionaryOfVariableBindings(titleLabel, buttonBox);
-        } else if (title == nil && message != nil) {
-            vertLayoutString = @"V:|-10-[bodyLabel]-10-[buttonBox]-10-|";
-            vertPlaces = NSDictionaryOfVariableBindings(bodyLabel, buttonBox);
-        } else if (title == nil && message == nil) {
-            vertLayoutString = @"V:|-10-[buttonBox]-10-|";
-            vertPlaces = NSDictionaryOfVariableBindings(buttonBox);
+        if (withCustomView) {
+            if (title != nil && message != nil) {
+                vertLayoutString = @"V:|-10-[titleLabel]-10-[bodyLabel]-10-[customView]-10-[buttonBox]-10-|";
+                vertPlaces = NSDictionaryOfVariableBindings(titleLabel, bodyLabel, customView, buttonBox);
+            } else if (title != nil && message == nil) {
+                vertLayoutString = @"V:|-10-[titleLabel]-10-[customView]-10-[buttonBox]-10-|";
+                vertPlaces = NSDictionaryOfVariableBindings(titleLabel, customView, buttonBox);
+            } else if (title == nil && message != nil) {
+                vertLayoutString = @"V:|-10-[bodyLabel]-10-[customView]-10-[buttonBox]-10-|";
+                vertPlaces = NSDictionaryOfVariableBindings(bodyLabel, customView, buttonBox);
+            } else if (title == nil && message == nil) {
+                vertLayoutString = @"V:|-10-[customView]-10-[buttonBox]-10-|";
+                vertPlaces = NSDictionaryOfVariableBindings(customView, buttonBox);
+            }
+        } else {
+            if (title != nil && message != nil) {
+                vertLayoutString = @"V:|-10-[titleLabel]-10-[bodyLabel]-10-[buttonBox]-10-|";
+                vertPlaces = NSDictionaryOfVariableBindings(titleLabel, bodyLabel, buttonBox);
+            } else if (title != nil && message == nil) {
+                vertLayoutString = @"V:|-10-[titleLabel]-10-[buttonBox]-10-|";
+                vertPlaces = NSDictionaryOfVariableBindings(titleLabel, buttonBox);
+            } else if (title == nil && message != nil) {
+                vertLayoutString = @"V:|-10-[bodyLabel]-10-[buttonBox]-10-|";
+                vertPlaces = NSDictionaryOfVariableBindings(bodyLabel, buttonBox);
+            } else if (title == nil && message == nil) {
+                vertLayoutString = @"V:|-10-[buttonBox]-10-|";
+                vertPlaces = NSDictionaryOfVariableBindings(buttonBox);
+            }
         }
-        [innerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:vertLayoutString
-                                                                          options:0
-                                                                          metrics:nil
-                                                                            views:vertPlaces]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:vertLayoutString
+                                                                                 options:0
+                                                                                 metrics:nil
+                                                                                   views:vertPlaces]];
 
         [self _sleep];
     }
@@ -143,24 +174,26 @@
 }
 
 - (id)initWithTitle:(NSString*)title
-              message:(NSString*)message
-    cancelButtonTitle:(NSString*)cancelTitle
-      okayButtonTitle:(NSString*)okayTitle
-             autoHide:(BOOL)shouldAutoHide
+            message:(NSString*)message
+         customView:(UIView*)customView
+  cancelButtonTitle:(NSString*)cancelTitle
+    okayButtonTitle:(NSString*)okayTitle
+           autoHide:(BOOL)shouldAutoHide
 {
     if (cancelTitle == nil && okayTitle == nil) {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                        reason:@"Either okay title or cancel title must be filled in."
                                      userInfo:nil];
     }
-    if (title == nil && message == nil) {
+    if (title == nil && message == nil && customView == nil) {
         @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                       reason:@"Either title or message must be filled in."
+                                       reason:@"Either title or message or additional view must be filled in."
                                      userInfo:nil];
     }
 
     self = [self initWithTitle:title
-                       message:message];
+                       message:message
+                    customView:customView];
 
     if (self) {
         self.autoHide = shouldAutoHide;
@@ -172,11 +205,42 @@
     return self;
 }
 
+#pragma mark -
+
+- (UIView*)initWithTitle:(NSString*)title
+                 message:(NSString*)message
+{
+    if (title == nil && message == nil) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:@"Either title or message must be filled in."
+                                     userInfo:nil];
+    }
+    self = [self initWithTitle:title
+                       message:message
+                    customView:nil];
+    return self;
+}
+
+- (id)initWithTitle:(NSString*)title
+            message:(NSString*)message
+  cancelButtonTitle:(NSString*)cancelTitle
+    okayButtonTitle:(NSString*)okayTitle
+           autoHide:(BOOL)shouldAutoHide
+{
+    self = [self initWithTitle:title
+                       message:message
+                    customView:nil
+             cancelButtonTitle:cancelTitle
+               okayButtonTitle:okayTitle
+                      autoHide:shouldAutoHide];
+    return self;
+}
+
 - (id)initWithError:(NSError*)error
-                title:(NSString*)title
-    cancelButtonTitle:(NSString*)cancelTitle
-      okayButtonTitle:(NSString*)okayTitle
-             autoHide:(BOOL)shouldAutohide
+              title:(NSString*)title
+  cancelButtonTitle:(NSString*)cancelTitle
+    okayButtonTitle:(NSString*)okayTitle
+           autoHide:(BOOL)shouldAutohide
 {
     NSString* caption = @"";
     NSString* message = nil;
@@ -236,7 +300,7 @@
     if (self) {
         if (loadingStyle == FFAlertViewLoadingStylePlain) {
             UIActivityIndicatorView* spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
-                                                                                    UIActivityIndicatorViewStyleWhiteLarge];
+                                                UIActivityIndicatorViewStyleWhiteLarge];
             spinner.color = [FFStyle black];
             spinner.translatesAutoresizingMaskIntoConstraints = NO;
             [self.buttonBox addSubview:spinner];
@@ -389,8 +453,8 @@
     }
     [UIView animateWithDuration:0.25
                      animations:^{
-        self.alpha = 1;
-        [self _awake];
+                         self.alpha = 1;
+                         [self _awake];
                      }];
     [view addSubview:self];
     [view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[self]|"
@@ -410,11 +474,11 @@
     [UIView animateWithDuration:0.25 animations:^{
         self.alpha = 0;
     } completion:^(BOOL finished)
-    {
-        if (finished && self.autoRemoveFromSuperview) {
-            [self removeFromSuperview];
-        }
-    }];
+     {
+         if (finished && self.autoRemoveFromSuperview) {
+             [self removeFromSuperview];
+         }
+     }];
 }
 
 - (void)cancelButtonTouched:(id)sender

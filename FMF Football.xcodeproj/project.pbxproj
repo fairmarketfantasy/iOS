@@ -148,6 +148,7 @@
 		89BED93118C77D19003E9E68 /* FFRosterTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BED93018C77D19003E9E68 /* FFRosterTable.m */; };
 		89BED93418C7855C003E9E68 /* FFLogo.m in Sources */ = {isa = PBXBuildFile; fileRef = 89BED93318C7855C003E9E68 /* FFLogo.m */; };
 		89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 896ACBC218B664F5001E9C64 /* FMF-Small-50.png */; };
+		89C7AA3618F83E1C00BAFFA2 /* FFAccountBalance.m in Sources */ = {isa = PBXBuildFile; fileRef = 89C7AA3518F83E1C00BAFFA2 /* FFAccountBalance.m */; };
 		89C985B418E48B3300ABB652 /* accessory_check.png in Resources */ = {isa = PBXBuildFile; fileRef = 89C985AF18E48B3300ABB652 /* accessory_check.png */; };
 		89C985B518E48B3300ABB652 /* accessory_collapse.png in Resources */ = {isa = PBXBuildFile; fileRef = 89C985B018E48B3300ABB652 /* accessory_collapse.png */; };
 		89C985B618E48B3300ABB652 /* accessory_disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = 89C985B118E48B3300ABB652 /* accessory_disclosure.png */; };
@@ -421,6 +422,8 @@
 		89BED93018C77D19003E9E68 /* FFRosterTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterTable.m; sourceTree = "<group>"; };
 		89BED93218C7855C003E9E68 /* FFLogo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFLogo.h; sourceTree = "<group>"; };
 		89BED93318C7855C003E9E68 /* FFLogo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFLogo.m; sourceTree = "<group>"; };
+		89C7AA3418F83E1C00BAFFA2 /* FFAccountBalance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFAccountBalance.h; sourceTree = "<group>"; };
+		89C7AA3518F83E1C00BAFFA2 /* FFAccountBalance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFAccountBalance.m; sourceTree = "<group>"; };
 		89C985AF18E48B3300ABB652 /* accessory_check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = accessory_check.png; sourceTree = "<group>"; };
 		89C985B018E48B3300ABB652 /* accessory_collapse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = accessory_collapse.png; sourceTree = "<group>"; };
 		89C985B118E48B3300ABB652 /* accessory_disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = accessory_disclosure.png; sourceTree = "<group>"; };
@@ -942,6 +945,8 @@
 				897C869318ED90DF0068D03F /* FFSubmitView.m */,
 				892E4FB318EDBB1800F57860 /* FFPredictionsSelector.h */,
 				892E4FB418EDBB1800F57860 /* FFPredictionsSelector.m */,
+				89C7AA3418F83E1C00BAFFA2 /* FFAccountBalance.h */,
+				89C7AA3518F83E1C00BAFFA2 /* FFAccountBalance.m */,
 			);
 			path = Partials;
 			sourceTree = "<group>";
@@ -1141,6 +1146,7 @@
 				896ACCB718B664F5001E9C64 /* FFFindGameViewController.m in Sources */,
 				896ACCCD18B664F5001E9C64 /* FFTickerMinimizedDrawerViewController.m in Sources */,
 				89DE99F318D2D44D006A66C4 /* FFTeamCell.m in Sources */,
+				89C7AA3618F83E1C00BAFFA2 /* FFAccountBalance.m in Sources */,
 				896ACCB918B664F5001E9C64 /* FFHomeViewController.m in Sources */,
 				89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */,
 				893D691518E5CDEA005E305B /* FFPredictHistoryCell.m in Sources */,

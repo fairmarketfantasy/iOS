@@ -10,6 +10,7 @@
 #import <FlatUIKit.h>
 #import "FFPathImageView.h"
 #import "FFStyle.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation FFAccountHeader
 
@@ -54,22 +55,26 @@
 
         // fan bucks
 
-        UIView* fanBucks = [UIView.alloc initWithFrame:CGRectMake(15.f, 90.f, 94.f, 50.f)];
-        fanBucks.backgroundColor = [FFStyle brightGreen];
-        [self addSubview:fanBucks];
-        
+        _fanBucksButton = [FFStyle coloredButtonWithText:@""
+                                                   color:[FFStyle brightGreen]
+                                             borderColor:[UIColor clearColor]];
+        self.fanBucksButton.frame = CGRectMake(15.f, 90.f, 94.f, 50.f);
+        self.fanBucksButton.layer.borderWidth = 0.f;
+        self.fanBucksButton.layer.cornerRadius = 0.f;
+        [self addSubview:self.fanBucksButton];
+
         UILabel* fanBucksCaptionLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 5.f, 84.f, 20.f)];
         fanBucksCaptionLabel.backgroundColor = [UIColor clearColor];
         fanBucksCaptionLabel.font = [FFStyle regularFont:14.f];
         fanBucksCaptionLabel.textColor = [FFStyle black];
-        fanBucksCaptionLabel.text = NSLocalizedString(@"FanBucks", nil);
-        [fanBucks addSubview:fanBucksCaptionLabel];
+        fanBucksCaptionLabel.text = NSLocalizedString(@"FanBucks  〉", nil);
+        [self.fanBucksButton addSubview:fanBucksCaptionLabel];
 
         _fanBucksLabel = [UILabel.alloc  initWithFrame:CGRectMake(10.f, 25.f, 84.f, 20.f)];
         self.fanBucksLabel.backgroundColor = [UIColor clearColor];
         self.fanBucksLabel.font = [FFStyle regularFont:14.f];
         self.fanBucksLabel.textColor = [FFStyle white];
-        [fanBucks addSubview:self.fanBucksLabel];
+        [self.fanBucksButton addSubview:self.fanBucksLabel];
 
         // prestige
 

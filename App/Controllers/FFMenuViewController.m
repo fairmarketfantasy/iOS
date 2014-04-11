@@ -16,6 +16,8 @@
 #import "FFNavigationBarItemView.h"
 #import <libextobjc/EXTScope.h>
 #import "FFAlertView.h"
+#import "FFAccountBalance.h"
+#import "FFStyle.h"
 #import "FFSport.h"
 #import "FFAccountHeader.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
@@ -379,6 +381,26 @@
                                     [FFStyle.dateFormatter stringFromDate:join]] : @"";
     header.fanBucksLabel.text = [FFStyle.funbucksFormatter stringFromNumber:
                                  @([self.session.user.customerObject[@"net_monthly_winnings"] floatValue])];
+    [header.fanBucksButton setAction:kUIButtonBlockTouchUpInside
+                           withBlock:
+     ^{
+         FFAccountBalance* accountBalance = FFAccountBalance.new;
+         accountBalance.balanceLabel.text = [[FFStyle priceFormatter] stringFromNumber:
+                                             @(self.session.user.balance.floatValue)];
+         accountBalance.balanceLabel.textColor = self.session.user.balance.floatValue > 0.f
+         ? [FFStyle brightGreen] : [FFStyle brightRed];
+         accountBalance.fanBucksLabel.text = @""; // self.session.user.
+         accountBalance.awardsLabel.text = @""; // self.session.user.
+         accountBalance.predictionsLabel.text = @""; // self.session.user.
+         accountBalance.winningsMultiplierLabel.text = @""; // self.session.user.
+         [[FFAlertView.alloc initWithTitle:nil
+                                   message:nil
+                                customView:accountBalance
+                         cancelButtonTitle:nil
+                           okayButtonTitle:NSLocalizedString(@"Close", nil)
+                                  autoHide:YES]
+          showInView:self.view];
+     }];
     header.winsLabel.text = [NSString stringWithFormat:@"%i", self.session.user.totalWins.integerValue];
     header.prestigeLabel.text = [NSString stringWithFormat:@"%i", self.session.user.prestige.integerValue];
 }

@@ -27,25 +27,38 @@ typedef NS_ENUM(NSUInteger, FFAlertViewLoadingStyle) {
 @property(nonatomic, weak) id previousFirstResponder;
 @property(nonatomic) BOOL autoRemoveFromSuperview;
 
-// create an alert view that must be manually dismissed in code
+/** create an alert view that must be manually dismissed in code with additional custom view */
+- (UIView*)initWithTitle:(NSString*)title
+                 message:(NSString*)message
+              customView:(UIView*)customView;
+
+/** createa an alert view with up to two side-by-side buttons with additional custom view */
+- (id)initWithTitle:(NSString*)title
+            message:(NSString*)message
+         customView:(UIView*)customView
+  cancelButtonTitle:(NSString*)cancelTitle
+    okayButtonTitle:(NSString*)okayTitle
+           autoHide:(BOOL)shouldAutoHide;
+
+/** create an alert view that must be manually dismissed in code */
 - (id)initWithTitle:(NSString*)title
             message:(NSString*)message;
 
-// createa an alert view with up to two side-by-side buttons
+// createa an alert view with up to two side-by-side buttons */
 - (id)initWithTitle:(NSString*)title
               message:(NSString*)message
     cancelButtonTitle:(NSString*)cancelTitle
       okayButtonTitle:(NSString*)okayTitle
              autoHide:(BOOL)shouldAutoHide;
 
-// does thes same as above but populates the title and message with the provided error
+/** does thes same as above but populates the title and message with the provided error */
 - (id)initWithError:(NSError*)error
                 title:(NSString*)title
     cancelButtonTitle:(NSString*)cancelTitle
       okayButtonTitle:(NSString*)okayTitle
              autoHide:(BOOL)shouldAutohide;
 
-// creates an alert view with a series of vertical buttons
+/** creates an alert view with a series of vertical buttons */
 - (id)initWithTitle:(NSString*)title
             message:(NSString*)message
             buttons:(NSArray*)buttons;
