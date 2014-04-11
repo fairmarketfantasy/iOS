@@ -142,6 +142,10 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
         FFEvent* event = self.events[indexPath.row];
         cell.titleLabel.text = [NSString stringWithFormat:@"%@: %@", [event.name capitalizedString], event.value];
         cell.segments.userInteractionEnabled = YES;
+        [cell.segments setEnabled:event.bidLess.integerValue == 0
+                forSegmentAtIndex:0];
+        [cell.segments setEnabled:event.bidMore.integerValue == 0
+                forSegmentAtIndex:1];
         [cell.segments addTarget:self
                           action:@selector(onLessMore:)
                 forControlEvents:UIControlEventValueChanged];
@@ -197,6 +201,8 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
                                  okayButtonTitle:NSLocalizedString(@"Ok", nil)
                                         autoHide:YES]
               showInView:self.navigationController.view];
+             [self fetchEvents];
+             [self.tableView reloadData];
          }
                                       failure:
          ^(NSError *error) {

@@ -10,8 +10,8 @@
 
 @interface FFEvent : FFDataObject
 
-@property(nonatomic) BOOL bidMore;
-@property(nonatomic) BOOL bidLess;
+@property(nonatomic) SBInteger* bidMore;
+@property(nonatomic) SBInteger* bidLess;
 @property(nonatomic) NSString* value;
 @property(nonatomic) NSString* name;
 
