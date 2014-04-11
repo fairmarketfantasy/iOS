@@ -355,15 +355,16 @@
 
 - (void)didUpdateUser:(FFUser*)user
 {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    [self updateHeader];
+// TODO: push to refresh, or refresh button
+//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+//    [self updateHeader];
 }
 
 #pragma mark - private
 
 - (void)updateHeader
 {
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     FFAccountHeader* header = (FFAccountHeader*)self.treeView.treeHeaderView;
     if (![header isKindOfClass:[FFAccountHeader class]]) {
         return;
