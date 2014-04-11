@@ -210,11 +210,6 @@
 - (UIView*)initWithTitle:(NSString*)title
                  message:(NSString*)message
 {
-    if (title == nil && message == nil) {
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException
-                                       reason:@"Either title or message must be filled in."
-                                     userInfo:nil];
-    }
     self = [self initWithTitle:title
                        message:message
                     customView:nil];
@@ -227,6 +222,11 @@
     okayButtonTitle:(NSString*)okayTitle
            autoHide:(BOOL)shouldAutoHide
 {
+    if (title == nil && message == nil) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:@"Either title or message must be filled in."
+                                     userInfo:nil];
+    }
     self = [self initWithTitle:title
                        message:message
                     customView:nil

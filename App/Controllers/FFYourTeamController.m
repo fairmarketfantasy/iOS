@@ -282,15 +282,12 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
     }
     case 1: {
         NSString* position = [self positions][indexPath.row];
-        for (__block FFPlayer* player in self.roster.players) {
+        for (FFPlayer* player in self.roster.players) {
             if ([player.position isEqualToString:position]) {
                 FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamTradeCell"
                                                                         forIndexPath:indexPath];
                 cell.titleLabel.text = player.team;
                 cell.nameLabel.text = player.name;
-//                cell.costLabel.text = [FFStyle.priceFormatter
-//                                       stringFromNumber:@([player.purchasePrice floatValue])];
-#warning CHECK PRICE!
                 cell.costLabel.text = [FFStyle.priceFormatter
                                        stringFromNumber:@([player.sellPrice floatValue])];
                 cell.centLabel.text = @"";
@@ -304,17 +301,18 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                 [cell.avatar draw];
                 cell.benched.hidden = !benched;
                 cell.PTButton.hidden = benched;
+                __block FFPlayer* blockPlayer = player;
                 @weakify(self)
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
                                    @strongify(self)
                                    [self.parentViewController performSegueWithIdentifier:@"GotoPT"
-                                                                                  sender:player]; // TODO: refactode it (?)
+                                                                                  sender:blockPlayer]; // TODO: refactode it (?)
                                }];
                 [cell.tradeButton setAction:kUIButtonBlockTouchUpInside
                                   withBlock:^{
                                       @strongify(self)
-                                      [self removePlayer:player];
+                                      [self removePlayer:blockPlayer];
                                   }];
                 return cell;
             }

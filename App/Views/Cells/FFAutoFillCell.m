@@ -42,17 +42,11 @@
                                                                           62.f, 30.f)];
         self.autoRemovedBenched.center = CGPointMake(271.f, self.autoFillButton.center.y);
         self.autoRemovedBenched.on = NO;
-        self.autoRemovedBenched.onColor = [UIColor colorWithRed:43.5f
-                                                          green:65.1f
-                                                           blue:28.2f
-                                                          alpha:1.f];
-        self.autoRemovedBenched.offColor = [UIColor colorWithRed:53.7f
-                                                           green:53.7f
-                                                            blue:53.7f
-                                                           alpha:1.f];
-        self.autoRemovedBenched.onBackgroundColor = [UIColor midnightBlueColor];
-        self.autoRemovedBenched.highlightedColor = [UIColor darkGrayColor];
-        self.autoRemovedBenched.offBackgroundColor = [UIColor silverColor];
+        self.autoRemovedBenched.onColor = [FFStyle white];
+        self.autoRemovedBenched.offColor = [FFStyle white];
+        self.autoRemovedBenched.onBackgroundColor = [FFStyle brightBlue];
+        self.autoRemovedBenched.highlightedColor = [FFStyle darkGrey];
+        self.autoRemovedBenched.offBackgroundColor = [FFStyle lightGrey];
         self.autoRemovedBenched.offLabel.font = [FFStyle blockFont:17.f];
         self.autoRemovedBenched.onLabel.font = [FFStyle blockFont:17.f];
         [self.contentView addSubview:self.autoRemovedBenched];
