@@ -18,6 +18,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.contentView.backgroundColor = [FFStyle white];
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
         _autoFillButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"Auto Fill", nil)
                                                    color:[FFStyle brightBlue]
                                              borderColor:[UIColor clearColor]];
