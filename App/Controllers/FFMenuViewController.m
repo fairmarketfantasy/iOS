@@ -20,6 +20,8 @@
 #import "FFAccountHeader.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
+// model
+#import "FFDate.h"
 
 @interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate, FFUserProtocol>
 
@@ -171,7 +173,7 @@
     [self.treeView registerClass:[FFMenuCell class]
           forCellReuseIdentifier:MENU_CELL_ID];
     // header
-    self.treeView.treeHeaderView = [FFAccountHeader.alloc initWithFrame:CGRectMake(0.f, 0.f, 320.f, 183.f)];
+    self.treeView.treeHeaderView = [FFAccountHeader.alloc initWithFrame:CGRectMake(0.f, 0.f, 320.f, 158.f)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -374,11 +376,9 @@
     NSDate* join = self.session.user.joinDate;
     header.dateLabel.text = join ? [NSString stringWithFormat:@"Member Since %@",
                                     [FFStyle.dateFormatter stringFromDate:join]] : @"";
-    header.pointsLabel.text = [FFStyle.funbucksFormatter stringFromNumber:
-                               @([self.session.user.customerObject[@"net_monthly_winnings"] floatValue])];
+    header.fanBucksLabel.text = [FFStyle.funbucksFormatter stringFromNumber:
+                                 @([self.session.user.customerObject[@"net_monthly_winnings"] floatValue])];
     header.winsLabel.text = [NSString stringWithFormat:@"%i", self.session.user.totalWins.integerValue];
-    header.balanceLabel.text = [FFStyle.priceFormatter
-                                stringFromNumber:@(self.session.user.balance.floatValue)];
     header.prestigeLabel.text = [NSString stringWithFormat:@"%i", self.session.user.prestige.integerValue];
 }
 
