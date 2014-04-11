@@ -25,7 +25,7 @@
 @property(nonatomic) FFMarket* selectedMarket;
 @property(nonatomic) FFMarketSet* marketsSet;
 @property(nonatomic) UITableView* tableView;
-- (NSArray*)positions;
+- (NSArray*)uniquePositions;
 - (void)createRoster;
 - (void)updateMarkets;
 

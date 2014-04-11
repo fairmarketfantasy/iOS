@@ -96,12 +96,27 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
          self.tableView.contentInset = tableInsets;
      }];
 }
-
-#pragma mark - public
-
 - (NSArray*)positions
 {
     return [self.roster.positions componentsSeparatedByString:@","];
+}
+
+#pragma mark - public
+
+- (NSArray*)uniquePositions
+{
+    NSArray* positions = [self positions];
+    // make unique
+    NSMutableArray* unique = [NSMutableArray arrayWithCapacity:positions.count];
+    NSMutableSet* processed = [NSMutableSet set];
+    for (NSString* position in positions) {
+        if ([processed containsObject:position]) {
+            continue;
+        }
+        [unique addObject:position];
+        [processed addObject:position];
+    }
+    return [unique copy];
 }
 
 - (void)createRoster

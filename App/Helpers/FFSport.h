@@ -8,7 +8,8 @@
 
 typedef NS_ENUM(NSInteger, FFMarketSport) {
     FFMarketSportNBA,
-    FFMarketSportNFL
+    FFMarketSportNFL,
+    FFMarketSportMLB
 };
 
 @interface FFSport : NSObject

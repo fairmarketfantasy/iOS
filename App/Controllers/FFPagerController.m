@@ -274,7 +274,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (NSArray*)positions
 {
-    return [self.teamController positions];
+    return [self.teamController uniquePositions];
 }
 
 - (BOOL)autoRemovedBenched

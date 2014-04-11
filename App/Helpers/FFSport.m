@@ -17,6 +17,8 @@
             return @"NBA";
         case FFMarketSportNFL:
             return @"NFL";
+        case FFMarketSportMLB:
+            return @"MLB";
         default:
             NSAssert(FALSE, @"Wrong FFMarketSport key argument!");
     }

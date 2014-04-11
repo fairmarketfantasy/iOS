@@ -58,7 +58,8 @@
                                      @{
                                          @"Sports" : @[
                                              @"NFL",
-                                             @"NBA"
+                                             @"NBA",
+                                             @"MLB"
                                          ]
                                      },
                                      @{
@@ -413,6 +414,14 @@
             @strongify(self)
             if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
                 [self.delegate didUpdateToNewSport:FFMarketSportNFL];
+            }
+            [self dismissViewControllerAnimated:YES completion:nil];
+        };
+    } else if ([item.title isEqualToString:@"MLB"]) {
+        item.action = ^{
+            @strongify(self)
+            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
+                [self.delegate didUpdateToNewSport:FFMarketSportMLB];
             }
             [self dismissViewControllerAnimated:YES completion:nil];
         };
