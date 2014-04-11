@@ -22,7 +22,7 @@
 
 @property(nonatomic) NSString* value;
 @property(nonatomic) NSString* name;
-@property(nonatomic, weak) UINavigationController<FFValueEntryControllerDelegate>* delegate;
+@property(nonatomic, weak) UIViewController<FFValueEntryControllerDelegate>* delegate;
 @property(nonatomic) UIKeyboardType keyboardType;
 @property(nonatomic) UITextAutocapitalizationType autocapitalizationType;
 @property(nonatomic) NSString* sectionTitle;

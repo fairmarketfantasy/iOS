@@ -14,6 +14,10 @@
 #import "FFControllerProtocol.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import <MobileCoreServices/UTCoreTypes.h>
+#import <NSData+Base64.h>
+#import <UIImage+Resize.h>
+
+#define AVATAR_SIZE ( 128.f )
 
 @interface FFMyAccountViewController ()
     <UITableViewDataSource, UITableViewDelegate, FFValueEntryControllerDelegate, FFPasswordControllerDelegate,
@@ -301,10 +305,42 @@ heightForHeaderInSection:(NSInteger)section
 - (void)imagePickerController:(UIImagePickerController*)picker
 didFinishPickingMediaWithInfo:(NSDictionary*)info
 {
-    //    UIImage *img = info[UIImagePickerControllerOriginalImage];
-
+    @weakify(self)
     [self dismissViewControllerAnimated:YES
-                             completion:nil];
+                             completion:
+     ^{
+         @strongify(self)
+         __block FFAlertView* alert = [self showAlert];
+         [self->_photoAlert hide];
+         self->_photoAlert = nil;
+
+         UIImage* image = info[UIImagePickerControllerOriginalImage];
+         CGFloat aspectImage = image.size.width / image.size.height;
+         BOOL horizontal = image.size.width > image.size.height;
+         CGFloat scaledWidth = horizontal ? AVATAR_SIZE : aspectImage * AVATAR_SIZE;
+         CGFloat scaledHeight = horizontal ? AVATAR_SIZE / aspectImage : AVATAR_SIZE;
+         UIImage* scaledImage = [image resizedImageToSize:CGSizeMake(scaledWidth, scaledHeight)];
+         NSURL* imagePath = info[UIImagePickerControllerReferenceURL];
+
+         NSString* name = imagePath.lastPathComponent;
+         NSData* imageData = UIImagePNGRepresentation(scaledImage);
+         NSString* imageString = [imageData base64EncodedString];
+
+         [self.session.user updateAvatar:imageString
+                                    name:name ? name : @"avatar.png"
+                               withBlock:
+          ^(id successObj) {
+              @strongify(self)
+              [alert hide];
+              [self.tableView reloadData];
+          }
+                                 failure:
+          ^(NSError * error) {
+              @strongify(self)
+              [alert hide];
+              [self showError:error];
+          }];
+     }];
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController*)picker
@@ -318,28 +354,34 @@ didFinishPickingMediaWithInfo:(NSDictionary*)info
 - (void)valueEntryController:(FFValueEntryController*)controller
                didEnterValue:(NSString*)value
 {
-    FFAlertView* alert = [self showAlert];
+    __block FFAlertView* alert = [self showAlert];
     if ([controller.name isEqualToString:@"GotoName"]) {
+        @weakify(self)
         [self.session.user updateName:value
                             withBlock:
          ^(id successObj) {
+             @strongify(self)
              [alert hide];
              [self.tableView reloadData];
          }
                               failure:
          ^(NSError * error) {
+             @strongify(self)
              [alert hide];
              [self showError:error];
          }];
     } else if ([controller.name isEqualToString:@"GotoEmail"]) {
+        @weakify(self)
         [self.session.user updateEmail:value
                              withBlock:
          ^(id successObj) {
+             @strongify(self)
              [alert hide];
              [self.tableView reloadData];
          }
                                failure:
          ^(NSError * error) {
+             @strongify(self)
              [alert hide];
              [self showError:error];
          }];
@@ -351,7 +393,8 @@ didFinishPickingMediaWithInfo:(NSDictionary*)info
 - (void)updatePassword:(NSString*)password
                current:(NSString*)current
 {
-    FFAlertView* alert = [self showAlert];
+    __block FFAlertView* alert = [self showAlert];
+    @weakify(self)
     [self.session.user updatePassword:password
                               current:current
                             withBlock:
@@ -360,6 +403,7 @@ didFinishPickingMediaWithInfo:(NSDictionary*)info
      }
                               failure:
      ^(NSError * error) {
+         @strongify(self)
          [alert hide];
          [self showError:error];
      }];

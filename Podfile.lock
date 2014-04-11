@@ -20,7 +20,7 @@ PODS:
   - BlocksKit/UIKit (2.2.2):
     - BlocksKit/Core
     - BlocksKit/DynamicDelegate
-  - Facebook-iOS-SDK (3.13.0)
+  - Facebook-iOS-SDK (3.13.1)
   - FlatUIKit (1.2)
   - FMDB (2.2):
     - FMDB/standard
@@ -97,12 +97,13 @@ PODS:
     - SDWebImage/Core
   - SDWebImage/Core (3.6)
   - SecureUDID (1.1)
-  - sqlite3 (3.8.4.2):
+  - sqlite3 (3.8.4.3):
     - sqlite3/common
-  - sqlite3/common (3.8.4.2)
+  - sqlite3/common (3.8.4.3)
   - StyledPageControl (1.0)
-  - UIActivityIndicator-for-SDWebImage (1.0.3):
+  - UIActivityIndicator-for-SDWebImage (1.0.4):
     - SDWebImage (~> 3.2)
+  - UIImage-Resize (1.0.1)
 
 DEPENDENCIES:
   - A2StoryboardSegueContext (~> 1.0.1)
@@ -121,6 +122,7 @@ DEPENDENCIES:
   - SDWebImage (~> 3.6)
   - StyledPageControl (~> 1.0)
   - UIActivityIndicator-for-SDWebImage (~> 1.0.3)
+  - UIImage-Resize (~> 1.0.1)
 
 EXTERNAL SOURCES:
   FlatUIKit:
@@ -128,28 +130,29 @@ EXTERNAL SOURCES:
     :git: https://github.com/Grouper/FlatUIKit.git
 
 SPEC CHECKSUMS:
-  A2StoryboardSegueContext: c5ee4ebdfcc29ac4e544cbe832f6489cade23213
+  A2StoryboardSegueContext: fb8cb8ee3fbf4ce3a113dfef74fd6aabfaa3ec4a
   AFHTTPRequestOperationLogger: c6ad1f4bfd64fc9a8dbe94c8489420d195f15cb0
   AFNetworking: 61fdd49e2ffe6380378df37b3b6e70630bb9dd66
   AFOAuth2Client: 579d6f298b0047dfd5a6eec6ab5b28c01f6b4547
   BlocksKit: 125e4e69a62e3b85bacc5175737dae000b00b9fb
-  Facebook-iOS-SDK: 5788541337dc88265bc940cb5ffb05915f9b64e3
+  Facebook-iOS-SDK: 0d121e16437981fabff9379e07bf646bd5ab245c
   FlatUIKit: 43b2acaa6f4ef57539b51b00e4ce62d506e33e11
-  FMDB: 97472cfacf0d9e445e915704fb43b4b142799c36
+  FMDB: e0dd09464b4e1a1cd7fa51ea835ae821b5656865
   FormatterKit: 43c6567e367a872196747fda0c26395c37bd7dd6
-  GCJSONKit: af54b753897015ab02c0f76a01e121f0053426af
+  GCJSONKit: 127785be50e1577b1d7cbd7a357c942d1f4d4375
   IAPManager: 457e0007440e6ce81e7a6b16031c860bffac8d82
   ISO8601DateFormatter: 00944e437ea647f4244454ce8809d313861d08de
   libextobjc: 2c9fc8226f0f38e562587f65172f93f0c9b4a47a
-  NSData+Base64: 4819562faee4544e3cf5703f2139820b09732b28
+  NSData+Base64: bd5dacbc799c0339bd6a961a9ea80dd6eba11b33
   RATreeView: fe5d5a7d6bdff3bdd63921b3f94503cda8788f1a
   Reachability: 500bd76bf6cd8ff2c6fb715fc5f44ef6e4c024f2
-  RHAddressBook: c4f11ae22ba3b2a3152e0dd619e015862bf02d7c
+  RHAddressBook: e777e45ad04b204381a57cc7f2b57623de7bc5a9
   SBData: 1e24e03d4aaea50c1387939c037ededa2797a768
   SDWebImage: 7eb273e54ca8a2e506ad9bd5e80c35b2a4d7c95e
-  SecureUDID: f29e17c7fc56968b6c42ce328b901a9fec87bb44
-  sqlite3: e22d4be08a913cc3b4b3737c7e2a4290c25b3803
+  SecureUDID: fa5e0f8561ead11b2fcf2c93a9bf0d4c6551681a
+  sqlite3: 04f92b2dcd748b522bf96cc9b16ccb2b0acd9cc8
   StyledPageControl: c63d0d5eed3151241ac2ee10f3dc01305c3ae421
-  UIActivityIndicator-for-SDWebImage: e712b97826395022ce7b4a4b56eb7194090c19d5
+  UIActivityIndicator-for-SDWebImage: 0f729f1fa55409381c078c76428482ea15a1ac8c
+  UIImage-Resize: b71ddbd27e5a29c2776df5c55b766928050437b2
 
 COCOAPODS: 0.29.0

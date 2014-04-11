@@ -21,6 +21,6 @@
 @property(nonatomic, readonly) UITextField* currentPassword;
 @property(nonatomic, readonly) UITextField* theNewPassword;
 @property(nonatomic, readonly) UITextField* confirmPassword;
-@property(nonatomic, weak) UINavigationController<FFPasswordControllerDelegate>* delegate;
+@property(nonatomic, weak) UIViewController<FFPasswordControllerDelegate>* delegate;
 
 @end

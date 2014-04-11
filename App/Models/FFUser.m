@@ -103,12 +103,24 @@
                          failure:onFailure];
 }
 
-- (void)updateAvatar:(NSString*)avatarURLPath
+- (void)updateAvatar:(NSString*)imageBase64
+                name:(NSString*)imageName
            withBlock:(SBSuccessBlock)onSuccess
              failure:(SBErrorBlock)onFailure
 {
+    if (!imageBase64) {
+        if (onFailure) {
+            onFailure(nil);
+        }
+        return;
+    }
+    NSParameterAssert(imageName);
     [self updateInBackgroundBody:@{
-                                   [[self class] propertyToNetworkKeyMapping][@"imageUrl"] : avatarURLPath
+                                   @"avatar" : @{
+                                           @"file" : imageBase64,
+                                           @"filename" : imageName,
+                                           @"original_filename" : imageName
+                                           }
                                    }
                        withBlock:onSuccess
                          failure:onFailure];

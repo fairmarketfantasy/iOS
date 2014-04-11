@@ -39,7 +39,8 @@
 - (void)updateName:(NSString*)name
          withBlock:(SBSuccessBlock)onSuccess
            failure:(SBErrorBlock)onFailure;
-- (void)updateAvatar:(NSString*)avatarURLPath
+- (void)updateAvatar:(NSString*)imageBase64
+                name:(NSString*)imageName
            withBlock:(SBSuccessBlock)onSuccess
              failure:(SBErrorBlock)onFailure;
 - (void)updateEmail:(NSString*)eMail
