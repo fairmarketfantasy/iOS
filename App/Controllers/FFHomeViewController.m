@@ -222,9 +222,6 @@
     } else if ([segue.identifier isEqualToString:@"GotoRules"]) {
         FFWebViewController* vc = [segue.destinationViewController viewControllers][0];
         vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/rules"]];
-    } else if ([segue.identifier isEqualToString:@"GotoTerms"]) {
-        FFWebViewController* vc = [segue.destinationViewController viewControllers][0];
-        vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/terms"]];
     } else if ([segue.identifier isEqualToString:@"GotoSupport"]) {
         FFWebViewController* vc = [segue.destinationViewController viewControllers][0];
         vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/support"]];

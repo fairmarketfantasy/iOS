@@ -75,7 +75,6 @@
                                      @"Predictions",
                                      @"Rules",
                                      @"How it works  〉Support",
-                                     @"Subscription Terms",
                                      @"Settings",
                                      @"Sign Out"
                                  ]];
@@ -83,7 +82,6 @@
             @"Predictions" : @"GotoPredictions",
             @"Rules" : @"GotoRules",
             @"How it works  〉Support" : @"GotoSupport",
-            @"Subscription Terms" : @"GotoTerms",
             @"Settings" : @"GotoAccount",
         };
 
