@@ -57,14 +57,14 @@
 
         // fan bucks
 
-        _fanBucksLabel = [UILabel.alloc initWithFrame:CGRectMake(80.f, 85.f, 30.f, 20.f)];
+        _fanBucksLabel = [UILabel.alloc initWithFrame:CGRectMake(75.f, 85.f, 35.f, 20.f)];
         self.fanBucksLabel.backgroundColor = [UIColor clearColor];
         self.fanBucksLabel.textColor = [FFStyle darkGreyTextColor];
         self.fanBucksLabel.font = [FFStyle regularFont:12.f];
-        self.fanBucksLabel.textAlignment = NSTextAlignmentRight;
+        self.fanBucksLabel.adjustsFontSizeToFitWidth = YES;
         [self addSubview:self.fanBucksLabel];
 
-        UILabel* captionFanBucksLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 85.f, 70.f, 20.f)];
+        UILabel* captionFanBucksLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 85.f, 65.f, 20.f)];
         captionFanBucksLabel.backgroundColor = [UIColor clearColor];
         captionFanBucksLabel.textColor = [FFStyle greyTextColor];
         captionFanBucksLabel.font = [FFStyle regularFont:12.f];
@@ -73,14 +73,14 @@
 
         // awards
 
-        _awardsLabel = [UILabel.alloc initWithFrame:CGRectMake(80.f, 110.f, 30.f, 20.f)];
+        _awardsLabel = [UILabel.alloc initWithFrame:CGRectMake(75.f, 110.f, 35.f, 20.f)];
         self.awardsLabel.backgroundColor = [UIColor clearColor];
         self.awardsLabel.textColor = [FFStyle darkGreyTextColor];
         self.awardsLabel.font = [FFStyle regularFont:12.f];
-        self.awardsLabel.textAlignment = NSTextAlignmentRight;
+        self.awardsLabel.adjustsFontSizeToFitWidth = YES;
         [self addSubview:self.awardsLabel];
 
-        UILabel* captionAwardsLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 110.f, 60.f, 20.f)];
+        UILabel* captionAwardsLabel = [UILabel.alloc initWithFrame:CGRectMake(10.f, 110.f, 65.f, 20.f)];
         captionAwardsLabel.backgroundColor = [UIColor clearColor];
         captionAwardsLabel.textColor = [FFStyle greyTextColor];
         captionAwardsLabel.font = [FFStyle regularFont:12.f];
@@ -89,14 +89,14 @@
 
         // predictions
 
-        _predictionsLabel = [UILabel.alloc initWithFrame:CGRectMake(225.f, 85.f, 30.f, 20.f)];
+        _predictionsLabel = [UILabel.alloc initWithFrame:CGRectMake(230.f, 85.f, 25.f, 20.f)];
         self.predictionsLabel.backgroundColor = [UIColor clearColor];
         self.predictionsLabel.textColor = [FFStyle darkGreyTextColor];
         self.predictionsLabel.font = [FFStyle regularFont:12.f];
-        self.predictionsLabel.textAlignment = NSTextAlignmentRight;
+        self.predictionsLabel.adjustsFontSizeToFitWidth = YES;
         [self addSubview:self.predictionsLabel];
 
-        UILabel* captionPredictionsLabel = [UILabel.alloc initWithFrame:CGRectMake(110.f, 85.f, 75.f, 20.f)];
+        UILabel* captionPredictionsLabel = [UILabel.alloc initWithFrame:CGRectMake(115.f, 85.f, 75.f, 20.f)];
         captionPredictionsLabel.backgroundColor = [UIColor clearColor];
         captionPredictionsLabel.textColor = [FFStyle greyTextColor];
         captionPredictionsLabel.font = [FFStyle regularFont:12.f];
@@ -105,14 +105,14 @@
 
         // winnings multiplier
 
-        _winningsMultiplierLabel = [UILabel.alloc initWithFrame:CGRectMake(225.f, 110.f, 30.f, 20.f)];
+        _winningsMultiplierLabel = [UILabel.alloc initWithFrame:CGRectMake(230.f, 110.f, 25.f, 20.f)];
         self.winningsMultiplierLabel.backgroundColor = [UIColor clearColor];
         self.winningsMultiplierLabel.textColor = [FFStyle darkGreyTextColor];
         self.winningsMultiplierLabel.font = [FFStyle regularFont:12.f];
-        self.winningsMultiplierLabel.textAlignment = NSTextAlignmentRight;
+        self.winningsMultiplierLabel.adjustsFontSizeToFitWidth = YES;
         [self addSubview:self.winningsMultiplierLabel];
 
-        UILabel* captionWinningsMultiplierLabel = [UILabel.alloc initWithFrame:CGRectMake(110.f, 110.f, 115.f, 20.f)];
+        UILabel* captionWinningsMultiplierLabel = [UILabel.alloc initWithFrame:CGRectMake(115.f, 110.f, 115.f, 20.f)];
         captionWinningsMultiplierLabel.backgroundColor = [UIColor clearColor];
         captionWinningsMultiplierLabel.textColor = [FFStyle greyTextColor];
         captionWinningsMultiplierLabel.font = [FFStyle regularFont:12.f];

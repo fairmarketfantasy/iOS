@@ -389,10 +389,19 @@
                                              @(self.session.user.balance.floatValue)];
          accountBalance.balanceLabel.textColor = self.session.user.balance.floatValue > 0.f
          ? [FFStyle brightGreen] : [FFStyle brightRed];
-         accountBalance.fanBucksLabel.text = @""; // self.session.user.
-         accountBalance.awardsLabel.text = @""; // self.session.user.
-         accountBalance.predictionsLabel.text = @""; // self.session.user.
-         accountBalance.winningsMultiplierLabel.text = @""; // self.session.user.
+         // TODO: move customer object to separate model!..
+         accountBalance.fanBucksLabel.text = [NSString stringWithFormat:@"%.2f",
+                                              [(NSNumber*)self.session.user.customerObject[@"net_monthly_winnings"]
+                                               floatValue] / 100.f];
+         accountBalance.awardsLabel.text = [NSString stringWithFormat:@"%.2f",
+                                            [(NSNumber*)self.session.user.customerObject[@"monthly_award"]
+                                             floatValue]];
+         accountBalance.predictionsLabel.text = [NSString stringWithFormat:@"%i",
+                                                 [(NSNumber*)self.session.user.customerObject[@"monthly_contest_entries"]
+                                                  integerValue]];
+         accountBalance.winningsMultiplierLabel.text = [NSString stringWithFormat:@"%.2f",
+                                                        [(NSNumber*)self.session.user.customerObject[@"contest_winnings_multiplier"]
+                                                         floatValue]];
          [[FFAlertView.alloc initWithTitle:nil
                                    message:nil
                                 customView:accountBalance
