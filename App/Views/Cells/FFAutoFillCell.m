@@ -59,7 +59,7 @@
         switchLabel.numberOfLines = 2;
         switchLabel.font = [FFStyle regularFont:12.f];
         switchLabel.textColor = [FFStyle lightGrey];
-        switchLabel.text = NSLocalizedString(@"Auto-removed benched players", nil);
+        switchLabel.text = NSLocalizedString(@"Auto-remove benched players", nil);
         [self addSubview:switchLabel];
     }
     return self;

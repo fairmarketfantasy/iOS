@@ -39,6 +39,7 @@
 @dynamic state;
 @dynamic contestTypeId;
 @dynamic marketId;
+@dynamic removeBenched;
 
 + (NSString*)tableName
 {
@@ -77,7 +78,8 @@
     @"positions":           @"positions",
     @"remainingSalary":     @"remaining_salary",
     @"score":               @"score",
-    @"state":               @"state"
+    @"state":               @"state",
+    @"removeBenched":       @"remove_benched"
     }];
 }
 
@@ -254,6 +256,31 @@ failure:
             failure(error);
         }
     }];
+}
+
+- (void)toggleRemoveBenchedSuccess:(SBSuccessBlock)success
+                           failure:(SBErrorBlock)failure
+{
+    NSString* path = [[FFRoster bulkPath] stringByAppendingFormat:@"/%@/toggle_remove_bench", self.objId];
+    [self.session authorizedJSONRequestWithMethod:@"POST"
+                                             path:path
+                                        paramters:[self toNetworkRepresentation]
+                                          success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
+     {
+         [FFRoster createWithNetworkRepresentation:JSON
+                                           session:self.session
+                                           success:^(id successObj) {
+                                               success(successObj);
+                                           }
+                                           failure:^(NSError *error) {
+                                               failure(error);
+                                           }];
+     }
+                                          failure:
+     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
+     {
+         failure(error);
+     }];
 }
 
 - (void)autofillSuccess:(SBSuccessBlock)success

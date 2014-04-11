@@ -276,7 +276,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (BOOL)autoRemovedBenched
 {
-    return self.teamController.autoRemovedBenched;
+    return self.teamController.roster.removeBenched.integerValue == 1;
 }
 
 - (void)addPlayer:(FFPlayer*)player

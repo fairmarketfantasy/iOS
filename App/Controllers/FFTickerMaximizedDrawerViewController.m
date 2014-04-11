@@ -41,7 +41,8 @@
     return self;
 }
 
-- (UICollectionViewCell*)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath*)indexPath
+- (UICollectionViewCell*)collectionView:(UICollectionView*)collectionView
+                 cellForItemAtIndexPath:(NSIndexPath*)indexPath
 {
     UICollectionViewCell* cell = [super collectionView:collectionView
                                 cellForItemAtIndexPath:indexPath];

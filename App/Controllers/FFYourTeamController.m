@@ -29,6 +29,7 @@
 #import "FFMarketSet.h"
 #import "FFUser.h"
 #import "FFPlayer.h"
+#import "FFDate.h"
 
 @interface FFYourTeamController () <UITableViewDataSource, UITableViewDelegate,
 FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
@@ -43,7 +44,6 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self->_autoRemovedBenched = NO;
     // submit view
     self.submitView = FFSubmitView.new;
     [self.submitView.segments addTarget:self
@@ -271,10 +271,10 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
         }
         FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
                                                                forIndexPath:indexPath];
+        cell.autoRemovedBenched.on = self.roster.removeBenched.integerValue == 1;
         [cell.autoRemovedBenched addTarget:self
                                     action:@selector(autoRemovedBenched:)
                           forControlEvents:UIControlEventValueChanged];
-        cell.autoRemovedBenched.on = self.autoRemovedBenched;
         [cell.autoFillButton addTarget:self
                                 action:@selector(autoFill:)
                       forControlEvents:UIControlEventTouchUpInside];
@@ -363,7 +363,40 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)autoRemovedBenched:(FUISwitch*)sender
 {
-    self->_autoRemovedBenched = sender.on;
+    [self toggleRemoveBench:sender];
+}
+
+- (void)toggleRemoveBench:(FUISwitch*)sender
+{
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Toggle Auto-Remove Benched Players"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [self.roster toggleRemoveBenchedSuccess:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self shorOrHideSubmitIfNeeded];
+         [alert hide];
+     }
+                         failure:
+     ^(NSError *error) {
+         @strongify(self)
+         [alert hide];
+         self.roster = nil;
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self shorOrHideSubmitIfNeeded];
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
 }
 
 - (void)autoFill:(UIButton*)button

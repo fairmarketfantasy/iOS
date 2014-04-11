@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 @property(nonatomic) SBFloat* remainingSalary;
 @property(nonatomic) SBInteger* score;
 @property(nonatomic) NSString* state; // submitted | finished
+@property(nonatomic) SBInteger* removeBenched;
 #pragma mark - Contest
 @property(nonatomic) FFContestType* contestType;
 @property(nonatomic) NSString* contestTypeId;
@@ -74,6 +75,8 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 - (void)submitContent:(FFRosterSubmitType)type
               success:(SBSuccessBlock)success
               failure:(SBErrorBlock)failure;
+- (void)toggleRemoveBenchedSuccess:(SBSuccessBlock)success
+                           failure:(SBErrorBlock)failure;
 - (void)autofillSuccess:(SBSuccessBlock)success
                 failure:(SBErrorBlock)failure;
 
