@@ -123,8 +123,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 {
     if (!self.selectedMarket) {
         self.roster = nil;
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadData];
         [self shorOrHideSubmitIfNeeded];
         return;
     }
@@ -139,8 +138,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
      ^(id successObj) {
          @strongify(self)
          self.roster = successObj;
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
          [alert hide];
      }
@@ -153,8 +151,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
              [self createRoster];
          } else {
              self.roster = nil;
-             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                           withRowAnimation:UITableViewRowAnimationAutomatic];
+             [self.tableView reloadData];
              [alert hide];
              [self shorOrHideSubmitIfNeeded];
              [[[FFAlertView alloc] initWithError:error
@@ -169,6 +166,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 
 - (void)marketsUpdated
 {
+    [self.tableView reloadData];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
                                                                 inSection:0]]
                           withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -210,8 +208,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                        failure:
      ^(NSError * error) {
          @strongify(self)
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self.tableView reloadData];
          [alert hide];
          [self shorOrHideSubmitIfNeeded];
          [[[FFAlertView alloc] initWithError:error
@@ -377,8 +374,7 @@ heightForHeaderInSection:(NSInteger)section
      ^(id successObj) {
          @strongify(self)
          self.roster = successObj;
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
          [alert hide];
      }
@@ -387,8 +383,7 @@ heightForHeaderInSection:(NSInteger)section
          @strongify(self)
          [alert hide];
          self.roster = nil;
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
@@ -410,8 +405,7 @@ heightForHeaderInSection:(NSInteger)section
      ^(id successObj) {
          @strongify(self)
          self.roster = successObj;
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
          [alert hide];
      }
@@ -420,8 +414,7 @@ heightForHeaderInSection:(NSInteger)section
          @strongify(self)
          [alert hide];
          self.roster = nil;
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
@@ -446,8 +439,7 @@ heightForHeaderInSection:(NSInteger)section
          NSDictionary* priceDictionary = (NSDictionary*)successObj;
          NSString* price = priceDictionary[@"price"]; // TODO: use the Model, Luke...
          self.roster.remainingSalary = [SBFloat.alloc initWithFloat:[price floatValue]];
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
          [alert hide];
          [self.delegate showPosition:player.position];

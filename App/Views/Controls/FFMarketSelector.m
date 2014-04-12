@@ -51,7 +51,8 @@
                                            0.f,
                                            35.f,
                                            frame.size.height);
-        self.leftButton.autoresizingMask = UIViewAutoresizingNone;
+        self.leftButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin;
+        self.leftButton.alpha = 0.f;
         [self.leftButton addTarget:self
                             action:@selector(onLeft:)
                   forControlEvents:UIControlEventTouchUpInside];
@@ -65,6 +66,7 @@
                                             35.f,
                                             frame.size.height);
         self.rightButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        self.rightButton.alpha = 0.f;
         [self.rightButton addTarget:self
                              action:@selector(onRight:)
                    forControlEvents:UIControlEventTouchUpInside];
@@ -116,9 +118,7 @@
     }
 
     _selectedMarket = selectedMarket;
-
-    self.leftButton.hidden = self.delegate.markets.count == 0 || selectedMarket == 0;
-    self.rightButton.hidden = self.delegate.markets.count == 0 || selectedMarket >= self.delegate.markets.count - 1;
+    [self updateButtons];
 
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.selectedMarket
                                                                      inSection:0]
@@ -140,6 +140,9 @@
 
 - (void)reloadData
 {
+    self.leftButton.alpha = 0.f;
+    self.rightButton.alpha = 0.f;
+    [self updateButtons];
     [self.collectionView reloadData];
 }
 
@@ -160,6 +163,21 @@
         NSIndexPath* path = visible.firstObject;
         self.selectedMarket = path.item;
     }
+}
+
+#pragma mark - private
+
+- (void)updateButtons
+{
+    BOOL hideLeft = self.delegate.markets.count == 0 || _selectedMarket == 0;
+    BOOL hideRight =  self.delegate.markets.count == 0 || _selectedMarket >= self.delegate.markets.count - 1;
+
+    [UIView animateWithDuration:(NSTimeInterval).3f
+                     animations:
+     ^{
+         self.leftButton.alpha = hideLeft ? 0.f : 1.f;
+         self.rightButton.alpha = hideRight ? 0.f : 1.f;
+     }];
 }
 
 @end
