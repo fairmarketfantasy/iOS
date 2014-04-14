@@ -436,9 +436,6 @@ heightForHeaderInSection:(NSInteger)section
                        success:
      ^(id successObj) {
          @strongify(self)
-         NSDictionary* priceDictionary = (NSDictionary*)successObj;
-         NSString* price = priceDictionary[@"price"]; // TODO: use the Model, Luke...
-         self.roster.remainingSalary = [SBFloat.alloc initWithFloat:[price floatValue]];
          [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
          [alert hide];

@@ -229,9 +229,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                        success:
      ^(id successObj) {
          @strongify(self)
-         NSDictionary* priceDictionary = (NSDictionary*)successObj;
-         NSString* price = priceDictionary[@"price"]; // TODO: use the Model, Luke...
-         self.roster.remainingSalary = [SBFloat.alloc initWithFloat:[price floatValue]];
          [self.teamController.tableView reloadData];
          [alert hide];
      }

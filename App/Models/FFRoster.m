@@ -210,8 +210,11 @@ failure:
                                         paramters:@{}
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
+        self.players = [self.players arrayByAddingObject:player];
+        NSString* priceString = player.buyPrice;
+        CGFloat price = priceString ? [priceString floatValue] : 0.f;
+        self.remainingSalary = [SBFloat.alloc initWithFloat:self.remainingSalary.floatValue - price];
         if (success) {
-            self.players = [self.players arrayByAddingObject:player];
             success(JSON);
         }
     }
@@ -234,18 +237,21 @@ failure:
                                         paramters:@{}
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
+        FFPlayer* traded = nil;
+        for (FFPlayer* ownPlayer in self.players) {
+            if ([(NSNumber*)ownPlayer.objId isEqualToNumber:(NSNumber*)player.objId]) { // ???: why not NSString?
+                traded = ownPlayer;
+            }
+        }
+        if (traded) {
+            NSMutableArray* newPlayers = [NSMutableArray arrayWithArray:self.players];
+            [newPlayers removeObject:traded];
+            self.players = [newPlayers copy];
+            NSString* priceString = traded.sellPrice;
+            CGFloat price = priceString ? [priceString floatValue] : 0.f;
+            self.remainingSalary = [SBFloat.alloc initWithFloat:self.remainingSalary.floatValue + price];
+        }
         if (success) {
-            FFPlayer* traded = nil;
-            for (FFPlayer* ownPlayer in self.players) {
-                if ([(NSNumber*)ownPlayer.objId isEqualToNumber:(NSNumber*)player.objId]) { // ???: why not NSString?
-                    traded = ownPlayer;
-                }
-            }
-            if (traded) {
-                NSMutableArray* newPlayers = [NSMutableArray arrayWithArray:self.players];
-                [newPlayers removeObject:traded];
-                self.players = [newPlayers copy];
-            }
             success(JSON);
         }
     }
