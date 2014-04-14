@@ -59,14 +59,20 @@
     }
     for (NSString* positionName in self.delegate.positions) {
         if ([positionName isEqualToString:position]) {
-            self.position = [self.delegate.positions indexOfObject:positionName];
-            [self.tableView reloadData];
+            [self selectPosition:[self.delegate.positions indexOfObject:positionName]];
             break;
         }
     }
 }
 
 #pragma mark - private
+
+- (void)selectPosition:(NSUInteger)position
+{
+    self.position = position;
+    [self fetchPlayers];
+    [self.tableView reloadData];
+}
 
 - (void)fetchPlayers
 {
@@ -221,8 +227,7 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)segments:(FUISegmentedControl*)segments
 {
-    self.position = segments.selectedSegmentIndex;
-    [self fetchPlayers];
+    [self selectPosition:segments.selectedSegmentIndex];
 }
 
 @end
