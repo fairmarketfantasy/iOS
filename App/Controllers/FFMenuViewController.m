@@ -385,7 +385,7 @@
      ^{
          FFAccountBalance* accountBalance = FFAccountBalance.new;
          accountBalance.balanceLabel.text = [[FFStyle priceFormatter] stringFromNumber:
-                                             @(self.session.user.balance.floatValue)];
+                                             @(self.session.user.balance.floatValue / 100.f)];
          accountBalance.balanceLabel.textColor = self.session.user.balance.floatValue > 0.f
          ? [FFStyle brightGreen] : [FFStyle brightRed];
          // TODO: move customer object to separate model!..
