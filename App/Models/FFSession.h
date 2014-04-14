@@ -19,7 +19,7 @@
 @interface FFSession : SBSession
 
 @property(nonatomic, readonly) FFUser* user;
-@property(nonatomic) SBSessionData* sessionData;
+@property(nonatomic, readonly) SBSessionData* sessionData;
 @property(nonatomic, weak) id <FFUserProtocol> delegate;
 
 - (void)registerAndLoginUsingFBAccessToken:(NSString*)accessToken

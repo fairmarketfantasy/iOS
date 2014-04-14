@@ -42,28 +42,10 @@
 
 @implementation FFSessionViewController
 
-- (id)initWithNibName:(NSString*)nibNameOrNil
-               bundle:(NSBundle*)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil
-                           bundle:nibBundleOrNil];
-    if (self) {
-        self.session = [FFSession lastUsedSessionWithUserClass:[FFUser class]];
-    }
-    return self;
-}
-
-- (id)initWithCoder:(NSCoder*)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
-    if (self) {
-        self.session = [FFSession lastUsedSessionWithUserClass:[FFUser class]];
-    }
-    return self;
-}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.session = [FFSession lastUsedSessionWithUserClass:[FFUser class]];
     self.signInView = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, self.view.frame.size.height)];
     [self setupSignInView];
 

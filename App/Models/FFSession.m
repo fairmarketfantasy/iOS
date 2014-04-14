@@ -13,10 +13,14 @@
 #import "FFContestType.h"
 #import "FFRoster.h"
 
+@interface SBSession (private)
+
+@property (nonatomic) SBUser *user;
+@property (nonatomic) SBSessionData *sessionData;
+
+@end
+
 @interface FFSession ()
-{
-    FFUser* _user;
-}
 
 @end
 
@@ -79,7 +83,7 @@
         NSLog(@"got fb login response response %@", responseObject);
         [user setValuesForKeysWithNetworkDictionary:responseObject];
         [user save];
-        _user = user;
+        self.user = user;
         [self.sessionData save];
         [self getOAuth:user fbAccessToken:accessToken success:^(id successObj)
         {
@@ -225,6 +229,18 @@ failure:
      {
          NSLog(@"failed to get user");
      }];
+}
+
+#pragma mark - public
+
+- (FFUser *)user
+{
+    return (FFUser*)[super user];
+}
+
+- (SBSessionData *)sessionData
+{
+    return [super sessionData];
 }
 
 @end
