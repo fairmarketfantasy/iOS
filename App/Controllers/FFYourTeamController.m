@@ -127,7 +127,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
         [self shorOrHideSubmitIfNeeded];
         return;
     }
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Creating Roster"
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
