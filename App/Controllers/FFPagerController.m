@@ -154,7 +154,8 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
         NSString* baseUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:SBApiBaseURLKey];
         if ([segue.identifier isEqualToString:@"GotoRules"]) {
             FFWebViewController* vc = [segue.destinationViewController viewControllers].firstObject;
-            vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/rules"]];
+            NSString* sport = [FFSport stringFromSport:self.teamController.marketsSet.sport];
+            vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingFormat:@"/pages/mobile/rules?sport=%@", sport]];
         } else if ([segue.identifier isEqualToString:@"GotoSupport"]) {
             FFWebViewController* vc = [segue.destinationViewController viewControllers].firstObject;
             vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/terms"]];
