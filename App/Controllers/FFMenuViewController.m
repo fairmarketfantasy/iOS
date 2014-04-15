@@ -378,8 +378,9 @@
     NSDate* join = self.session.user.joinDate;
     header.dateLabel.text = join ? [NSString stringWithFormat:@"Member Since %@",
                                     [FFStyle.dateFormatter stringFromDate:join]] : @"";
-    header.fanBucksLabel.text = [FFStyle.funbucksFormatter stringFromNumber:
-                                 @([self.session.user.customerObject[@"net_monthly_winnings"] floatValue])];
+    header.fanBucksLabel.text = [NSString stringWithFormat:@"%.2f",
+                                 [(NSNumber*)self.session.user.customerObject[@"net_monthly_winnings"]
+                                  floatValue] / 100.f];
     [header.fanBucksButton setAction:kUIButtonBlockTouchUpInside
                            withBlock:
      ^{
