@@ -86,8 +86,9 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
         cell.nameLabel.text = player.name;
         cell.costLabel.text = [FFStyle.priceFormatter
                                stringFromNumber:@([player.purchasePrice floatValue])];
-        cell.centLabel.text = [NSString stringWithFormat:@"%.0f%%",
-                               (player.sellPrice.floatValue / player.purchasePrice.floatValue - 1.f) * 100.f];
+        CGFloat priceOdds = player.sellPrice.floatValue / player.purchasePrice.floatValue - 1.f;
+        cell.centLabel.text = [NSString stringWithFormat:@"%.0f%%", priceOdds * 100.f];
+        cell.centLabel.textColor = priceOdds > 0.f ? [FFStyle brightGreen] : [FFStyle brightRed];
         UIColor* avatarColor = swapped ? [FFStyle brightBlue] :
         ( benched ? [FFStyle brightOrange] : [FFStyle brightGreen] );
         cell.avatar.borderColor = avatarColor;
