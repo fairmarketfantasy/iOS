@@ -212,8 +212,10 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 - (void)updateMarkets
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    self.marketsSet.clearsCollectionBeforeSaving = YES;
     [self.marketsSet fetchType:FFMarketTypeRegularSeason];
     [self.marketsSet fetchType:FFMarketTypeSingleElimination];
+    self.marketsSet.clearsCollectionBeforeSaving = NO;
 }
 
 - (void)submitRoster:(FFRosterSubmitType)rosterType
