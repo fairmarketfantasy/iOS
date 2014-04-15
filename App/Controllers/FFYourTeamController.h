@@ -26,6 +26,7 @@
 @property(nonatomic) UITableView* tableView;
 - (NSArray*)uniquePositions;
 - (void)createRoster;
+- (void)refreshRoster;
 - (void)updateMarkets;
 
 @end

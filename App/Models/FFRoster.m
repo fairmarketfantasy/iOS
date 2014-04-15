@@ -211,9 +211,9 @@ failure:
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
         self.players = [self.players arrayByAddingObject:player];
-        NSString* priceString = player.buyPrice;
-        CGFloat price = priceString ? [priceString floatValue] : 0.f;
-        self.remainingSalary = [SBFloat.alloc initWithFloat:self.remainingSalary.floatValue - price];
+//        NSString* priceString = player.buyPrice;
+//        CGFloat price = priceString ? [priceString floatValue] : 0.f;
+//        self.remainingSalary = [SBFloat.alloc initWithFloat:self.remainingSalary.floatValue - price];
         if (success) {
             success(JSON);
         }
@@ -247,9 +247,9 @@ failure:
             NSMutableArray* newPlayers = [NSMutableArray arrayWithArray:self.players];
             [newPlayers removeObject:traded];
             self.players = [newPlayers copy];
-            NSString* priceString = traded.sellPrice;
-            CGFloat price = priceString ? [priceString floatValue] : 0.f;
-            self.remainingSalary = [SBFloat.alloc initWithFloat:self.remainingSalary.floatValue + price];
+//            NSString* priceString = traded.sellPrice;
+//            CGFloat price = priceString ? [priceString floatValue] : 0.f;
+//            self.remainingSalary = [SBFloat.alloc initWithFloat:self.remainingSalary.floatValue + price];
         }
         if (success) {
             success(JSON);

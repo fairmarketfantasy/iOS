@@ -164,6 +164,37 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
      }];
 }
 
+- (void)refreshRoster
+{
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [self.roster refreshInBackgroundWithBlock:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+         [self.tableView reloadData];
+         [self shorOrHideSubmitIfNeeded];
+         [alert hide];
+     }
+                                      failure:
+     ^(NSError *error) {
+         @strongify(self)
+         [alert hide];
+         self.roster = nil;
+         [self.tableView reloadData];
+         [self shorOrHideSubmitIfNeeded];
+         [[[FFAlertView alloc] initWithError:error
+                                       title:nil
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
+}
+
 - (void)marketsUpdated
 {
     [self.tableView reloadData];
@@ -286,7 +317,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                 cell.titleLabel.text = player.team;
                 cell.nameLabel.text = player.name;
                 cell.costLabel.text = [FFStyle.priceFormatter
-                                       stringFromNumber:@([player.sellPrice floatValue])];
+                                       stringFromNumber:@([player.purchasePrice floatValue])];
                 cell.centLabel.text = @"";
                 BOOL benched = player.benched.integerValue == 1;
                 UIColor* avatarColor = benched ? [FFStyle brightOrange] : [FFStyle brightGreen];
@@ -439,6 +470,7 @@ heightForHeaderInSection:(NSInteger)section
          [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
          [alert hide];
+         [self refreshRoster];
          [self.delegate showPosition:player.position];
      }
                                   failure:
