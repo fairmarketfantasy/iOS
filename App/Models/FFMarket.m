@@ -12,6 +12,7 @@
 #import "NSDate+ISO8601.h"
 #import "FFMarketSet.h"
 #import "FFGame.h"
+#import "FFSession.h"
 
 @implementation FFMarket
 
@@ -76,7 +77,7 @@
     for (NSDictionary* gameDictionary in gamesDictionaries) {
         [games addObject:[FFGame fromNetworkRepresentation:gameDictionary
                                                    session:self.session
-                                                      save:YES]];
+                                                      save:NO]]; // should we save markets to DB? NO! =)
     }
     self.games = [games copy];
 }

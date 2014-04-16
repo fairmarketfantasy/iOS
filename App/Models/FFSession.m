@@ -17,6 +17,8 @@
 
 @property (nonatomic) SBUser *user;
 @property (nonatomic) SBSessionData *sessionData;
+- (id)initWithIdentifier:(NSString*)identifier
+               userClass:(Class)userClass;
 
 @end
 
@@ -25,6 +27,18 @@
 @end
 
 @implementation FFSession
+
+// custom init
+- (id)initWithIdentifier:(NSString*)identifier
+               userClass:(Class)userClass
+{
+    self = [super initWithIdentifier:identifier
+                           userClass:userClass];
+    if (self) {
+        self.sport = FFMarketSportNBA;
+    }
+    return self;
+}
 
 - (void)clearCredentials
 {
@@ -183,6 +197,41 @@ failure:
     [[NSUserDefaults standardUserDefaults] synchronize];
     [super logout];
 }
+
+#pragma mark - inheritance
+
+// do not save models any more
+- (void)syncUserSuccess:(SBSuccessBlock)success failure:(SBErrorBlock)failure
+{
+    [self authorizedJSONRequestWithMethod:@"GET" path:@"/users.json" paramters:@{} success:
+     ^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+         [self.user setValuesForKeysWithNetworkDictionary:JSON];
+         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+             [self.user save];
+             success(self.user);
+             NSLog(@"successfully got and saved user");
+             //             [self syncPushToken];
+         });
+     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+         NSLog(@"failed to get current user error=%@ json=%@", error, JSON);
+         failure(error);
+     }];
+}
+
+// loading object for current sport only
+
+- (SBModelQueryBuilder *)queryBuilderForClass:(Class)modelCls
+{
+    return [[super queryBuilderForClass:modelCls] property:@"sportKey"
+                                                 isEqualTo:[FFSport stringFromSport:self.sport]];
+}
+
+- (SBModelQueryBuilder *)unsafeQueryBuilderForClass:(Class)modelCls
+{
+    return [[super unsafeQueryBuilderForClass:modelCls] property:@"sportKey"
+                                                       isEqualTo:[FFSport stringFromSport:self.sport]];
+}
+
 
 #pragma mark - user retrieving
 

@@ -32,7 +32,7 @@
 #import "FFDate.h"
 
 @interface FFYourTeamController () <UITableViewDataSource, UITableViewDelegate,
-FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
+FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDelegate>
 // models
 @property(nonatomic) FFRoster* roster;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
@@ -60,8 +60,8 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 
 - (void)didMoveToParentViewController:(UIViewController *)parent
 {
-    self.marketsSet = [FFMarket getBulkWithSession:self.session
-                                        authorized:YES];
+    self.marketsSet = [FFMarketSet.alloc initWithDataObjectClass:[FFMarket class]
+                                                         session:self.session authorized:YES];
     self.marketsSet.delegate = self;
     [self updateMarkets];
     // roster
@@ -198,9 +198,6 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
 - (void)marketsUpdated
 {
     [self.tableView reloadData];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
-                                                                inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
     if (self.markets.count > 0) {
         [self marketSelected:self.markets.firstObject];
     } else {
@@ -289,7 +286,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
         if (indexPath.row == 0) {
             FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:@"MarketsCell"
                                                                   forIndexPath:indexPath];
-            cell.marketSelector.delegate = self;
+            cell.marketSelector.dataSource = self;
             [cell.marketSelector reloadData];
             if (self.selectedMarket && self.markets) {
                 NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
@@ -297,6 +294,7 @@ FFMarketSelectorDelegate, SBDataObjectResultSetDelegate>
                     cell.marketSelector.selectedMarket = selectedMarket;
                 }
             }
+//            cell.marketSelector.delegate = self;
             return cell;
         }
         FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
@@ -496,29 +494,11 @@ heightForHeaderInSection:(NSInteger)section
     self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
 }
 
-#pragma mark - FFMarketSelectorDelegate
+#pragma mark - FFMarketSelectorDataSource
 
 - (NSArray*)markets
 {
     return self.marketsSet.allObjects;
-}
-
-- (void)marketSelected:(FFMarket*)selectedMarket
-{
-    self.selectedMarket = selectedMarket;
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
-                                                                inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
-    self.tryCreateRosterTimes = 3;
-    [self createRoster];
-}
-
-#pragma mark - SBDataObjectResultSetDelegate
-
-- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
-{
-    [self marketsUpdated];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -545,6 +525,26 @@ heightForHeaderInSection:(NSInteger)section
         cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
     }
     return cell;
+}
+
+#pragma mark - FFMarketSelectorDelegate
+
+- (void)marketSelected:(FFMarket*)selectedMarket
+{
+    self.selectedMarket = selectedMarket;
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                inSection:0]]
+                          withRowAnimation:UITableViewRowAnimationAutomatic];
+    self.tryCreateRosterTimes = 3;
+    [self createRoster];
+}
+
+#pragma mark - SBDataObjectResultSetDelegate
+
+- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
+{
+    [self marketsUpdated];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 @end

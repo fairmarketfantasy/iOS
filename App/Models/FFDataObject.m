@@ -10,13 +10,60 @@
 #import <objc/runtime.h>
 #import <SBDataObjectTypes.h>
 #import <SBModel_SBModelPrivate.h>
-
+#import "FFSession.h"
 #import "FFDate.h"
+#import "FFSport.h"
 
 @interface FFSBISO8601DateConverter : NSObject <SBNetworkFieldConverting>
 @end
 
 @implementation FFDataObject
+
+// fix loading current sport onli
+@dynamic sportKey;
+
++ (NSArray *)indexes { return [[super indexes] arrayByAddingObjectsFromArray:@[ @[ @"sportKey" ] ]]; }
+
+- (void)willSave
+{
+    [super willSave];
+    if (!self.sportKey) {
+        self.sportKey = [FFSport stringFromSport:self.session.sport];
+    }
+}
+
+// do not save loaded from network models
++ (void)createWithNetworkRepresentation:(NSDictionary *)representation
+                                session:(SBSession *)session
+                                success:(SBSuccessBlock)success
+                                failure:(SBErrorBlock)failure
+{
+    [self createWithNetworkRepresentation:representation
+                                  session:session
+                                  success:success
+                                  failure:failure
+                                     save:NO];
+}
+
++ (void)createWithNetworkRepresentation:(NSDictionary *)representation
+                                session:(SBSession *)session
+                                success:(SBSuccessBlock)success
+                                failure:(SBErrorBlock)failure
+                                   save:(BOOL)save
+{
+    dispatch_queue_t q = (dispatch_queue_t)objc_getAssociatedObject([self class],
+                                                                    "processingQueue");
+    dispatch_async(q, ^{
+        [[self meta] inTransaction:^(SBModelMeta *meta, BOOL *rollback) {
+            SBDataObject *roster = [[self class] fromNetworkRepresentation:representation
+                                                                   session:session
+                                                                      save:save];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                success(roster);
+            });
+        }];
+    });
+}
 
 // fix date format
 + (id<SBNetworkFieldConverting>)networkFieldConverterForField:(NSString *)fieldName
@@ -52,6 +99,13 @@
                                  defaultConverters, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return [defaultConverters objectForKey:fieldName];
+}
+
+#pragma mark - public
+
+- (FFSession*)session
+{
+    return (FFSession*)[super session];
 }
 
 @end

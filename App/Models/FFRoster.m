@@ -15,6 +15,7 @@
 #import "FFPlayer.h"
 #import "FFContestType.h"
 #import "FFMarket.h"
+#import "FFSession.h"
 
 @implementation FFRoster
 
@@ -107,7 +108,7 @@
                 ], // for sorting
                 @[
                     @"objId"
-                ] // also for sorting
+                ], // also for sorting
             ]];
 }
 
@@ -366,7 +367,7 @@ failure:
         self.marketId = market[@"id"];
         self.market = [FFMarket fromNetworkRepresentation:market
                                                   session:self.session
-                                                     save:YES];
+                                                     save:NO]; // we don't need save roster's market
     }
     NSArray* playerDictionaries = keyedValues[@"players"];
     NSMutableArray* players = [NSMutableArray arrayWithCapacity:playerDictionaries.count];

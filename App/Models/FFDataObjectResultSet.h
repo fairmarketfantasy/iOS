@@ -7,9 +7,11 @@
 //
 
 #import "SBDataObject.h"
+#import "FFSession.h"
 
 @interface FFDataObjectResultSet : SBDataObjectResultSet
 
+@property (nonatomic, readonly) FFSession* session;
 - (void)refreshWithParameters:(NSDictionary*)parameters;
 
 @end

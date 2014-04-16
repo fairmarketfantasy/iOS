@@ -7,6 +7,7 @@
 //
 
 #import "FFPredictionSet.h"
+#import "FFSession.h"
 
 @implementation FFPredictionSet
 
@@ -19,7 +20,6 @@
                                authorized:makeAuthroizedRequests];
     if (self) {
         self.clearsCollectionBeforeSaving = YES;
-        self.sport = FFMarketSportNBA;
     }
     return self;
 }
@@ -34,7 +34,7 @@
     NSAssert(self.query, @"Query shouldn't be nil!");
     NSMutableDictionary* param = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [param addEntriesFromDictionary:@{
-                                     @"sport" : [FFSport stringFromSport:self.sport]
+                                     @"sport" : [FFSport stringFromSport:self.session.sport]
                                      }];
     [self refreshWithParameters:[param copy]];
 }

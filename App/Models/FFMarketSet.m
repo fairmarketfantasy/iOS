@@ -7,6 +7,7 @@
 //
 
 #import "FFMarketSet.h"
+#import "FFSession.h"
 
 @implementation FFMarketSet
 
@@ -31,7 +32,6 @@
                                authorized:makeAuthroizedRequests];
     if (self) {
         self.clearsCollectionBeforeSaving = YES;
-        self.sport = FFMarketSportNBA;
     }
     return self;
 }
@@ -40,7 +40,7 @@
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                    @"sport" : [FFSport stringFromSport:self.sport],
+                                    @"sport" : [FFSport stringFromSport:self.session.sport],
                                     @"type" : [FFMarketSet typeKey:type]
                                 }];
 }

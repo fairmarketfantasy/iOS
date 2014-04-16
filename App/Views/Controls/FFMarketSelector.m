@@ -96,7 +96,7 @@
     NSArray* selected = [self.collectionView indexPathsForVisibleItems];
     if (selected && selected.count > 0) {
         NSIndexPath* path = selected.lastObject;
-        if (path.item >= (self.delegate.markets.count - 1)) {
+        if (path.item >= (self.dataSource.markets.count - 1)) {
             return;
         }
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:path.item + 1
@@ -112,8 +112,8 @@
     if (self.selectedMarket == selectedMarket) {
         return;
     }
-    if (self.delegate &&
-        self.delegate.markets.count <= selectedMarket) {
+    if (self.dataSource &&
+        self.dataSource.markets.count <= selectedMarket) {
         return;
     }
 
@@ -125,17 +125,17 @@
                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
                                         animated:YES];
     if ([self.delegate respondsToSelector:@selector(marketSelected:)]) {
-        [self.delegate marketSelected:self.delegate.markets[self.selectedMarket]];
+        [self.delegate marketSelected:self.dataSource.markets[self.selectedMarket]];
     }
 }
 
-- (void)setDelegate:(id<FFMarketSelectorDelegate>)delegate
+- (void)setDataSource:(id<FFMarketSelectorDataSource>)dataSource
 {
-    if (self.delegate == delegate) {
+    if (self.dataSource == dataSource) {
         return;
     }
-    _delegate = delegate;
-    self.collectionView.dataSource = delegate;
+    _dataSource = dataSource;
+    self.collectionView.dataSource = dataSource;
 }
 
 - (void)reloadData
@@ -158,19 +158,24 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView*)scrollView
 {
-    NSArray* visible = [self.collectionView indexPathsForVisibleItems];
-    if (visible.count > 0) {
-        NSIndexPath* path = visible.firstObject;
-        self.selectedMarket = path.item;
-    }
+    CGFloat pageWidth = scrollView.frame.size.width;
+    float fractionalPage = scrollView.contentOffset.x / pageWidth;
+    NSInteger page = lround(fractionalPage);
+    self.selectedMarket = page;
+//
+//    NSArray* visible = [self.collectionView indexPathsForVisibleItems];
+//    if (visible.count > 0) {
+//        NSIndexPath* path = visible.firstObject;
+//        self.selectedMarket = path.item;
+//    }
 }
 
 #pragma mark - private
 
 - (void)updateButtons
 {
-    BOOL hideLeft = self.delegate.markets.count == 0 || _selectedMarket == 0;
-    BOOL hideRight =  self.delegate.markets.count == 0 || _selectedMarket >= self.delegate.markets.count - 1;
+    BOOL hideLeft = self.dataSource.markets.count == 0 || _selectedMarket == 0;
+    BOOL hideRight =  self.dataSource.markets.count == 0 || _selectedMarket >= self.dataSource.markets.count - 1;
 
     [UIView animateWithDuration:(NSTimeInterval).3f
                      animations:

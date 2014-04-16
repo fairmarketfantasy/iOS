@@ -10,9 +10,13 @@
 
 @class FFMarket;
 
-@protocol FFMarketSelectorDelegate <UICollectionViewDataSource>
+@protocol FFMarketSelectorDataSource <UICollectionViewDataSource>
 
 @property(nonatomic, readonly) NSArray* markets;
+
+@end
+
+@protocol FFMarketSelectorDelegate <NSObject>
 
 @optional
 - (void)marketSelected:(FFMarket*)selectedMarket;
@@ -22,6 +26,7 @@
 @interface FFMarketSelector : UIView
 
 @property(nonatomic) NSUInteger selectedMarket;
+@property(nonatomic, weak) id<FFMarketSelectorDataSource> dataSource;
 @property(nonatomic, weak) id<FFMarketSelectorDelegate> delegate;
 @property(nonatomic, readonly) UIButton* rightButton;
 @property(nonatomic, readonly) UIButton* leftButton;

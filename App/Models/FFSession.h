@@ -8,6 +8,7 @@
 
 #import <SBSession.h>
 #import "FFUser.h"
+#import "FFSport.h"
 
 @protocol FFUserProtocol <NSObject>
 
@@ -19,6 +20,7 @@
 @interface FFSession : SBSession
 
 @property(nonatomic, readonly) FFUser* user;
+@property(nonatomic, assign) FFMarketSport sport;
 @property(nonatomic, readonly) SBSessionData* sessionData;
 @property(nonatomic, weak) id <FFUserProtocol> delegate;
 

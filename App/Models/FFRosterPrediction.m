@@ -13,6 +13,7 @@
 #import "FFPlayer.h"
 #import "FFContestType.h"
 #import "FFMarket.h"
+#import "FFSession.h"
 
 @implementation FFRosterPrediction
 
@@ -50,7 +51,6 @@
 }
 
 #pragma mark - private
-
 
 - (void)setValuesForKeysWithNetworkDictionary:(NSDictionary*)keyedValues
 {

@@ -8,6 +8,7 @@
 
 #import "FFEvent.h"
 #import <SBData/NSDictionary+Convenience.h>
+#import "FFSession.h"
 
 @implementation FFEvent
 

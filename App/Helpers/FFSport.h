@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 FairMarketFantasy. All rights reserved.
 //
 
-typedef NS_ENUM(NSInteger, FFMarketSport) {
+typedef NS_ENUM(NSUInteger, FFMarketSport) {
     FFMarketSportNBA,
     FFMarketSportNFL,
     FFMarketSportMLB

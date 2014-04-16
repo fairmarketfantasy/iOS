@@ -132,11 +132,20 @@ failure:
         for (NSDictionary *rep in stuff) {
             SBDataObject *undecoratedObj = [[self dataObjectClass] fromNetworkRepresentation:rep session:self.session save:NO];
             SBDataObject *obj = [self _decorateObject:undecoratedObj]; //[[_dataObjectClass alloc] initWithSession:self.session];
-            [meta save:obj];
+            // SIMPLE FIX: do not save result set's because of market's current sport reloading bug NBA-526
+            // TODO: investigate there!
+            // [meta save:obj]; //  <------ save models into local DB
             [all addObject:obj];
         }
     }];
     return all;
+}
+
+#pragma mark - public
+
+- (FFSession*)session
+{
+    return (FFSession*)[super session];
 }
 
 @end

@@ -104,7 +104,7 @@
     // market selector
     _marketSelector = [[FFMarketSelector alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
     _marketSelector.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _marketSelector.delegate = self;
+    _marketSelector.dataSource = self;
 
     _gameButtonView = [[FFGameButtonView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
     _gameButtonView.delegate = self;
@@ -300,16 +300,16 @@
 
 - (void)gameButtonViewCreateGame
 {
-    if (self.markets.count > 0) {
-        [self performSegueWithIdentifier:@"GotoCreateGame"
-                                  sender:self];
-        return;
-    }
-    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sorry", nil)
-                                message:NSLocalizedString(@"There no games available now", nil)
-                               delegate:nil
-                      cancelButtonTitle:NSLocalizedString(@"Ok", nil)
-                      otherButtonTitles:nil] show];
+//    if (self.markets.count > 0) {
+//        [self performSegueWithIdentifier:@"GotoCreateGame"
+//                                  sender:self];
+//        return;
+//    }
+//    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Sorry", nil)
+//                                message:NSLocalizedString(@"There no games available now", nil)
+//                               delegate:nil
+//                      cancelButtonTitle:NSLocalizedString(@"Ok", nil)
+//                      otherButtonTitles:nil] show];
 }
 
 - (void)gameButtonViewJoinGame
