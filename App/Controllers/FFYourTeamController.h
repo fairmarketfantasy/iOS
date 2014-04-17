@@ -22,7 +22,6 @@
 @property(nonatomic, weak) id<FFYourTeamProtocol> delegate;
 @property(nonatomic, readonly) FFRoster* roster;
 @property(nonatomic) FFMarket* selectedMarket;
-@property(nonatomic) FFMarketSet* marketsSet;
 @property(nonatomic) UITableView* tableView;
 - (NSArray*)uniquePositions;
 - (void)createRoster;

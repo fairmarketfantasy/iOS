@@ -31,6 +31,13 @@
 @property(nonatomic, readonly) UIButton* rightButton;
 @property(nonatomic, readonly) UIButton* leftButton;
 
+/**
+ * set selected market without calling delegate
+ * @param animated Specify YES to animate the scrolling.
+ * @return YES if market updated.
+ */
+- (BOOL)updateSelectedMarket:(NSUInteger)selectedMarket
+                    animated:(BOOL)animated;
 - (void)reloadData;
 
 @end

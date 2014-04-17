@@ -107,14 +107,15 @@
     }
 }
 
-- (void)setSelectedMarket:(NSUInteger)selectedMarket
+- (BOOL)updateSelectedMarket:(NSUInteger)selectedMarket
+                    animated:(BOOL)animated
 {
     if (self.selectedMarket == selectedMarket) {
-        return;
+        return NO;
     }
     if (self.dataSource &&
         self.dataSource.markets.count <= selectedMarket) {
-        return;
+        return NO;
     }
 
     _selectedMarket = selectedMarket;
@@ -123,7 +124,16 @@
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.selectedMarket
                                                                      inSection:0]
                                 atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally
-                                        animated:YES];
+                                        animated:animated];
+    return YES;
+}
+
+- (void)setSelectedMarket:(NSUInteger)selectedMarket
+{
+    if (![self updateSelectedMarket:selectedMarket
+                           animated:YES]) {
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(marketSelected:)]) {
         [self.delegate marketSelected:self.dataSource.markets[self.selectedMarket]];
     }
@@ -162,12 +172,6 @@
     float fractionalPage = scrollView.contentOffset.x / pageWidth;
     NSInteger page = lround(fractionalPage);
     self.selectedMarket = page;
-//
-//    NSArray* visible = [self.collectionView indexPathsForVisibleItems];
-//    if (visible.count > 0) {
-//        NSIndexPath* path = visible.firstObject;
-//        self.selectedMarket = path.item;
-//    }
 }
 
 #pragma mark - private
@@ -177,12 +181,8 @@
     BOOL hideLeft = self.dataSource.markets.count == 0 || _selectedMarket == 0;
     BOOL hideRight =  self.dataSource.markets.count == 0 || _selectedMarket >= self.dataSource.markets.count - 1;
 
-    [UIView animateWithDuration:(NSTimeInterval).3f
-                     animations:
-     ^{
-         self.leftButton.alpha = hideLeft ? 0.f : 1.f;
-         self.rightButton.alpha = hideRight ? 0.f : 1.f;
-     }];
+    self.leftButton.alpha = hideLeft ? 0.f : 1.f;
+    self.rightButton.alpha = hideRight ? 0.f : 1.f;
 }
 
 @end

@@ -2,7 +2,7 @@ PODS:
   - A2StoryboardSegueContext (1.0.1)
   - AFHTTPRequestOperationLogger (1.0.0):
     - AFNetworking (~> 1.0)
-  - AFNetworking (1.3.3)
+  - AFNetworking (1.3.4)
   - AFOAuth2Client (0.1.2):
     - AFNetworking (~> 1.3)
   - BlocksKit (2.2.2):
@@ -132,7 +132,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   A2StoryboardSegueContext: fb8cb8ee3fbf4ce3a113dfef74fd6aabfaa3ec4a
   AFHTTPRequestOperationLogger: c6ad1f4bfd64fc9a8dbe94c8489420d195f15cb0
-  AFNetworking: 61fdd49e2ffe6380378df37b3b6e70630bb9dd66
+  AFNetworking: e403d4333a4e1956cb3fe42364c3c879f820c9a0
   AFOAuth2Client: 579d6f298b0047dfd5a6eec6ab5b28c01f6b4547
   BlocksKit: 125e4e69a62e3b85bacc5175737dae000b00b9fb
   Facebook-iOS-SDK: 0d121e16437981fabff9379e07bf646bd5ab245c

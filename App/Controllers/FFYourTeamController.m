@@ -37,6 +37,9 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 @property(nonatomic) FFRoster* roster;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 @property(nonatomic) FFSubmitView* submitView;
+@property(nonatomic) FFMarketSet* marketsSetRegular;
+@property(nonatomic) FFMarketSet* marketsSetSingle;
+
 @end
 
 @implementation FFYourTeamController
@@ -60,9 +63,12 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 
 - (void)didMoveToParentViewController:(UIViewController *)parent
 {
-    self.marketsSet = [FFMarketSet.alloc initWithDataObjectClass:[FFMarket class]
-                                                         session:self.session authorized:YES];
-    self.marketsSet.delegate = self;
+    self.marketsSetRegular = [FFMarketSet.alloc initWithDataObjectClass:[FFMarket class]
+                                                                session:self.session authorized:YES];
+    self.marketsSetSingle = [FFMarketSet.alloc initWithDataObjectClass:[FFMarket class]
+                                                               session:self.session authorized:YES];
+    self.marketsSetRegular.delegate = self;
+    self.marketsSetSingle.delegate = self;
     [self updateMarkets];
     // roster
     self.tryCreateRosterTimes = 3;
@@ -209,10 +215,8 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 - (void)updateMarkets
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    self.marketsSet.clearsCollectionBeforeSaving = YES;
-    [self.marketsSet fetchType:FFMarketTypeRegularSeason];
-    [self.marketsSet fetchType:FFMarketTypeSingleElimination];
-    self.marketsSet.clearsCollectionBeforeSaving = NO;
+    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason];
+    [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination];
 }
 
 - (void)submitRoster:(FFRosterSubmitType)rosterType
@@ -287,14 +291,15 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
             FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:@"MarketsCell"
                                                                   forIndexPath:indexPath];
             cell.marketSelector.dataSource = self;
+            cell.marketSelector.delegate = self;
             [cell.marketSelector reloadData];
             if (self.selectedMarket && self.markets) {
                 NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
                 if (selectedMarket != NSNotFound) {
-                    cell.marketSelector.selectedMarket = selectedMarket;
+                    [cell.marketSelector updateSelectedMarket:selectedMarket
+                                                     animated:NO] ;
                 }
             }
-//            cell.marketSelector.delegate = self;
             return cell;
         }
         FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
@@ -498,7 +503,11 @@ heightForHeaderInSection:(NSInteger)section
 
 - (NSArray*)markets
 {
-    return self.marketsSet.allObjects;
+    NSMutableArray* markets = [NSMutableArray arrayWithCapacity:self.marketsSetRegular.allObjects.count +
+                               self.marketsSetSingle.allObjects.count];
+    [markets addObjectsFromArray:self.marketsSetRegular.allObjects];
+    [markets addObjectsFromArray:self.marketsSetSingle.allObjects];
+    return [markets copy];
 }
 
 #pragma mark - UICollectionViewDataSource
