@@ -40,7 +40,7 @@
     UILabel* title = [UILabel.alloc initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
     title.font = [FFStyle blockFont:19.f];
     title.textColor = [FFStyle white];
-    title.text = NSLocalizedString(@"PT25", nil);
+    title.text = NSLocalizedString(@"PT", nil);
     title.textAlignment = NSTextAlignmentLeft;
     self.navigationItem.titleView = title;
 }
