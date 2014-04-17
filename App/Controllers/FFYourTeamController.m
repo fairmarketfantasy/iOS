@@ -366,7 +366,8 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 - (void)tableView:(UITableView*)tableView
     didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    // TODO: implement
+    NSString* position = [self positions][indexPath.row];
+    [self.delegate showPosition:position];
 }
 
 - (UIView *)tableView:(UITableView*)tableView
