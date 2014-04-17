@@ -35,6 +35,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 @property(nonatomic) FFYourTeamController* teamController;
 @property(nonatomic) FFWideReceiverController* receiverController;
 @property(nonatomic) UIButton* globalMenuButton;
+@property (nonatomic) NSDictionary* positionsNames;
 
 @end
 
@@ -46,6 +47,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        self.positionsNames = @{};
         self.view.backgroundColor = [FFStyle darkGreen];
         self.dataSource = self;
         self.delegate = self;
@@ -122,6 +124,8 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
     // session
     self.teamController.session = self.session;
     self.receiverController.session = self.session;
+    // get player position names
+    [self fetchPositionsNames];
     [self setViewControllers:@[[self getViewControllers].firstObject]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:NO
@@ -222,6 +226,23 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              self.teamController,
              self.receiverController
              ];
+}
+
+- (void)fetchPositionsNames
+{
+    @weakify(self)
+    [FFRoster fetchPositionsForSession:self.session
+                               success:
+     ^(id successObj) {
+         @strongify(self)
+         self.positionsNames = successObj;
+     }
+                               failure:
+     ^(NSError *error) {
+         @strongify(self)
+         self.positionsNames = @{};
+         // ???: should we show any Error Alert here?
+     }];
 }
 
 #pragma mark - button actions

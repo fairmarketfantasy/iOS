@@ -204,7 +204,15 @@ viewForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
         FFRosterTableHeader* view = [FFRosterTableHeader new];
-        view.titleLabel.text = NSLocalizedString(@"Wide Receiver", nil);
+        NSString* positionName = @"";
+        if (self.delegate) {
+            positionName = self.delegate.positions[self.position];
+            NSString* positionFullName = self.delegate.positionsNames[positionName];
+            if (positionFullName) {
+                positionName = positionFullName;
+            }
+        }
+        view.titleLabel.text = NSLocalizedString(positionName, nil);
         view.priceLabel.text = self.delegate ?
         [[FFStyle priceFormatter] stringFromNumber:@(self.delegate.rosterSalary)] : @"";
         view.priceLabel.textColor = self.delegate.rosterSalary > 0.f

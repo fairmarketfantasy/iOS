@@ -7,6 +7,7 @@
 //
 
 #import "FFRoster.h"
+#import <BlocksKit.h>
 #import <SBData/NSDictionary+Convenience.h>
 #import "FFDate.h"
 #import "FFContestType.h"
@@ -113,7 +114,7 @@
 }
 
 + (void)createNewRosterForMarket:(NSString*)marketId
-                         session:(SBSession*)sesh
+                         session:(FFSession*)sesh
                          success:(SBSuccessBlock)success
                          failure:(SBErrorBlock)failure
 {
@@ -138,24 +139,24 @@
 }
 
 + (void)createRosterWithContestTypeId:(NSInteger)cTyp
-                              session:(SBSession*)sesh
+                              session:(FFSession*)session
                               success:(SBSuccessBlock)success
                               failure:(SBErrorBlock)failure
 {
     NSDictionary* params = @{
         @"contest_type_id" : [NSNumber numberWithInteger:cTyp]
     };
-    [sesh authorizedJSONRequestWithMethod:@"POST"
-                                     path:[self bulkPath]
-                                paramters:params
-                                  success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
+    [session authorizedJSONRequestWithMethod:@"POST"
+                                        path:[self bulkPath]
+                                   paramters:params
+                                     success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
         [self createWithNetworkRepresentation:JSON
-                                      session:sesh
+                                      session:session
                                       success:success
                                       failure:failure];
     }
-failure:
+                                     failure:
     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
     {
         failure(error);
@@ -163,29 +164,29 @@ failure:
 }
 
 + (void)createWithContestDef:(NSDictionary*)dict
-                     session:(SBSession*)sesh
+                     session:(FFSession*)session
                      success:(SBSuccessBlock)success
                      failure:(SBErrorBlock)failure
 {
-    [sesh authorizedJSONRequestWithMethod:@"POST"
-                                     path:@"/contests"
-                                paramters:dict
-                                  success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
+    [session authorizedJSONRequestWithMethod:@"POST"
+                                        path:@"/contests"
+                                   paramters:dict
+                                     success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
         [self createWithNetworkRepresentation:JSON
-                                      session:sesh
+                                      session:session
                                       success:success
                                       failure:failure];
     }
-failure:
+                                     failure:
     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
     {
         failure(error);
     }];
 }
 
-+ (instancetype)fromNetworkRepresentation:(NSDictionary *)dict
-                                  session:(SBSession *)session
++ (instancetype)fromNetworkRepresentation:(NSDictionary*)dict
+                                  session:(SBSession*)session
                                      save:(BOOL)persist
 {
     SBDataObject *ret = [self findWithNetworkRepresentation:dict session:session];
@@ -197,6 +198,29 @@ failure:
         [[self unsafeMeta] save:ret];
     }
     return (id)ret;
+}
+
++ (void)fetchPositionsForSession:(FFSession*)session
+                         success:(SBSuccessBlock)success
+                         failure:(SBErrorBlock)failure
+{
+    NSString* path = [[FFRoster bulkPath] stringByAppendingString:@"/new"];
+    [session authorizedJSONRequestWithMethod:@"GET"
+                                        path:path
+                                   paramters:@{ @"sport" : [FFSport stringFromSport:session.sport] }
+                                     success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
+     {
+         if (success) {
+             success([self positionsFromJSON:JSON]);
+         }
+     }
+                                     failure:
+     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
+     {
+         if (failure) {
+             failure(error);
+         }
+     }];
 }
 
 #pragma mark -
@@ -397,6 +421,21 @@ failure:
                          isEqualTo:self.contestTypeId] query] results] first];
     }
     return _market;
+}
+
+#pragma mark - private
+
++ (NSDictionary*)positionsFromJSON:(NSDictionary*)JSON
+{
+    if (![JSON isKindOfClass:[NSDictionary class]]) {
+        return @{};
+    }
+    NSArray* positions = JSON[@"positions"];
+    if (![positions isKindOfClass:[NSArray class]] || positions.count == 0) {
+        return @{};
+    }
+    return [NSDictionary dictionaryWithObjects:[positions valueForKey:@"name"]
+                                       forKeys:[positions valueForKey:@"acronym"]];
 }
 
 @end

@@ -50,7 +50,7 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 @property(nonatomic) NSString* marketId;
 #pragma mark -
 + (void)createNewRosterForMarket:(NSString*)marketId
-                         session:(SBSession*)sesh
+                         session:(FFSession*)sesh
                          success:(SBSuccessBlock)success
                          failure:(SBErrorBlock)failure;
 /**
@@ -59,13 +59,21 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
  *  to /rosters which then returns a roster
  */
 + (void)createRosterWithContestTypeId:(NSInteger)cTyp
-                              session:(SBSession*)sesh
+                              session:(FFSession*)session
                               success:(SBSuccessBlock)success
                               failure:(SBErrorBlock)failure;
 + (void)createWithContestDef:(NSDictionary*)dict
-                     session:(SBSession*)sesh
+                     session:(FFSession*)session
                      success:(SBSuccessBlock)success
                      failure:(SBErrorBlock)failure;
+/**
+ * fetch full names for player's positions
+ *
+ * @param success retrieve dictionary with acronyms as keys.
+ */
++ (void)fetchPositionsForSession:(FFSession*)session
+                         success:(SBSuccessBlock)success
+                         failure:(SBErrorBlock)failure;
 - (void)addPlayer:(FFPlayer*)player
           success:(SBSuccessBlock)success
           failure:(SBErrorBlock)failure;
