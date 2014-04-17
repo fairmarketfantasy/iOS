@@ -35,7 +35,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 @property(nonatomic) FFYourTeamController* teamController;
 @property(nonatomic) FFWideReceiverController* receiverController;
 @property(nonatomic) UIButton* globalMenuButton;
-@property (nonatomic) NSDictionary* positionsNames;
+@property(nonatomic) NSDictionary* positionsNames;
 
 @end
 

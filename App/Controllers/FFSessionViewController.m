@@ -17,6 +17,7 @@
 #import "FFWebViewController.h"
 #import "FFNavigationBarItemView.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "FFAlertView.h"
 
 @interface FFSessionViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
@@ -295,20 +296,13 @@ failure:
 
 - (void)forgotPassword:(id)sender
 {
-    [self performSegueWithIdentifier:@"GotoForgotPassword"
-                              sender:nil];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue*)segue
-                 sender:(id)sender
-{
-    [super prepareForSegue:segue
-                    sender:sender];
-    if ([segue.identifier isEqualToString:@"GotoForgotPassword"]) {
-        NSString* baseUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:SBApiBaseURLKey];
-        FFWebViewController* vc = [segue.destinationViewController viewControllers][0];
-        vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/forgot_password"]];
-    }
+    [[FFAlertView.alloc initWithTitle:nil
+                              message:nil
+                           customView:UIView.new
+                    cancelButtonTitle:nil
+                      okayButtonTitle:NSLocalizedString(@"Close", nil)
+                             autoHide:YES]
+     showInView:self.view];
 }
 
 #pragma mark - Facebook stuff

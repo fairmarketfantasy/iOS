@@ -58,7 +58,7 @@
         _nodes = [FFNodeItem nodesFromStrings:
                                  @[
                                      @{
-                                         @"Sports" : @[
+                                         @"Fantasy Sports" : @[
                                              @"NFL",
                                              @"NBA",
                                              @"MLB"
