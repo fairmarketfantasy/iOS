@@ -18,6 +18,7 @@
 #import "FFNavigationBarItemView.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "FFAlertView.h"
+#import "FFForgotPassword.h"
 
 @interface FFSessionViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
@@ -32,6 +33,7 @@
 @property(nonatomic) BOOL keyboardIsShowing;
 @property(nonatomic) FFTickerMaximizedDrawerViewController* signInTicker;
 @property(nonatomic) UIView* container;
+@property(nonatomic) UITextField* forgotPasswordField;
 
 - (void)setupSignInView;
 - (void)signIn:(id)sender;
@@ -296,13 +298,63 @@ failure:
 
 - (void)forgotPassword:(id)sender
 {
-    [[FFAlertView.alloc initWithTitle:nil
-                              message:nil
-                           customView:UIView.new
-                    cancelButtonTitle:nil
-                      okayButtonTitle:NSLocalizedString(@"Close", nil)
-                             autoHide:YES]
-     showInView:self.view];
+    FFForgotPassword* view = FFForgotPassword.new;
+    self.forgotPasswordField = view.mailField;
+    view.mailField.delegate = self;
+    FFAlertView* forgotAlert = [FFAlertView.alloc initWithTitle:nil
+                                                        message:nil
+                                                     customView:view
+                                              cancelButtonTitle:NSLocalizedString(@"Close", nil)
+                                                okayButtonTitle:NSLocalizedString(@"Send Instructions", nil)
+                                                       autoHide:YES];
+    @weakify(self)
+    @weakify(forgotAlert)
+    forgotAlert.onOkay = ^(id obj) {
+        @strongify(forgotAlert)
+        @strongify(self)
+        [self sendForgotPassword:self.forgotPasswordField];
+        [forgotAlert hide]; // TODO: should hide on return also. move to sendForgotPassword:
+    };
+    forgotAlert.onCancel = ^(id obj) {
+        @strongify(forgotAlert)
+        @strongify(self)
+        [forgotAlert hide];
+        self.forgotPasswordField = nil;
+    };
+    [forgotAlert showInView:self.view];
+}
+
+- (void)sendForgotPassword:(id)sender
+{
+    FFSession* tempSession = [FFSession anonymousSession];
+    @weakify(self)
+    [tempSession anonymousJSONRequestWithMethod: @"POST"
+                                           path: @"/users/reset_password" // TODO: should me moved to FFUser
+                                     parameters: @{ @"email" : self.forgotPasswordField.text }
+                                        success: ^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON)
+     {
+         @strongify(self)
+         [[[FFAlertView alloc] initWithTitle:nil
+                                     message:[NSString stringWithFormat:
+                                              NSLocalizedString(@"Password reset instructions send to %@", nil),
+                                              self.forgotPasswordField.text]
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }
+                                        failure:
+     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
+     {
+         @strongify(self)
+         [[[FFAlertView alloc] initWithError:error
+                                       title:error ? nil : @"Unexpected Error"
+                           cancelButtonTitle:nil
+                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                    autoHide:YES]
+          showInView:self.navigationController.view];
+     }];
+    self.forgotPasswordField = nil;
 }
 
 #pragma mark - Facebook stuff
@@ -444,7 +496,10 @@ failure:
         return NO;
     }
     if (textField == self.passwordSigninField) {
-        [self signIn:nil];
+        [self signIn:textField];
+    }
+    if (textField == self.forgotPasswordField) {
+        [self sendForgotPassword:textField];
     }
     [textField endEditing:YES];
     return YES;

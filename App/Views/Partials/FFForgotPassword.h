@@ -10,4 +10,6 @@
 
 @interface FFForgotPassword : UIView
 
+@property(nonatomic, readonly) UITextField* mailField;
+
 @end
