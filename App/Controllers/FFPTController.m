@@ -18,6 +18,7 @@
 // model
 #import "FFEvent.h"
 #import "FFPlayer.h"
+#import "FFStyle.h"
 
 @interface FFPTController () <UITableViewDelegate, UITableViewDataSource>
 
