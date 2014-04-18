@@ -170,6 +170,7 @@
 		89DFD29418B37F2B0079F427 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD29318B37F2B0079F427 /* CoreLocation.framework */; };
 		89DFD29618B37F3A0079F427 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD29518B37F3A0079F427 /* AudioToolbox.framework */; };
 		89DFD29818B37F420079F427 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89DFD29718B37F420079F427 /* OpenGLES.framework */; };
+		89F1058F1901787700B8B00E /* FFForgotPassword.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1058E1901787700B8B00E /* FFForgotPassword.m */; };
 		89F1A08218DC59DC001369E3 /* FFAccountHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F1A08118DC59DC001369E3 /* FFAccountHeader.m */; };
 		89F1A08818DC7C03001369E3 /* active.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08318DC7C03001369E3 /* active.png */; };
 		89F1A08918DC7C03001369E3 /* defaultuser.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F1A08418DC7C03001369E3 /* defaultuser.png */; };
@@ -453,6 +454,8 @@
 		89DFD29318B37F2B0079F427 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		89DFD29518B37F3A0079F427 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		89DFD29718B37F420079F427 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		89F1058D1901787700B8B00E /* FFForgotPassword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFForgotPassword.h; sourceTree = "<group>"; };
+		89F1058E1901787700B8B00E /* FFForgotPassword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFForgotPassword.m; sourceTree = "<group>"; };
 		89F1A08018DC59DC001369E3 /* FFAccountHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFAccountHeader.h; sourceTree = "<group>"; };
 		89F1A08118DC59DC001369E3 /* FFAccountHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFAccountHeader.m; sourceTree = "<group>"; };
 		89F1A08318DC7C03001369E3 /* active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = active.png; sourceTree = "<group>"; };
@@ -947,6 +950,8 @@
 				892E4FB418EDBB1800F57860 /* FFPredictionsSelector.m */,
 				89C7AA3418F83E1C00BAFFA2 /* FFAccountBalance.h */,
 				89C7AA3518F83E1C00BAFFA2 /* FFAccountBalance.m */,
+				89F1058D1901787700B8B00E /* FFForgotPassword.h */,
+				89F1058E1901787700B8B00E /* FFForgotPassword.m */,
 			);
 			path = Partials;
 			sourceTree = "<group>";
@@ -1200,6 +1205,7 @@
 				8951A33218D08A9E0019384D /* FFBannerCell.m in Sources */,
 				896ACCB318B664F5001E9C64 /* FFCreateGameViewController.m in Sources */,
 				896ACCAD18B664F5001E9C64 /* FFBaseViewController.m in Sources */,
+				89F1058F1901787700B8B00E /* FFForgotPassword.m in Sources */,
 				89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */,
 				896ACCC918B664F5001E9C64 /* FFTickerDrawerViewController.m in Sources */,
 				892E4FC118EDE87E00F57860 /* FFIndividualPrediction.m in Sources */,

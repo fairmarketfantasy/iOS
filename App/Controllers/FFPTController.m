@@ -61,7 +61,7 @@
         [self.tableView reloadData];
         return;
     }
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Loading Events"
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
