@@ -196,6 +196,7 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
                                       success:
          ^(id successObj) {
              [alert hide];
+             /* NBA-657
              [[[FFAlertView alloc] initWithTitle:nil
                                          message:successObj ? (NSString*)successObj
                                                 : NSLocalizedString(@"Individual prediction submitted successfully!", nil)
@@ -203,6 +204,7 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
                                  okayButtonTitle:NSLocalizedString(@"Ok", nil)
                                         autoHide:YES]
               showInView:self.navigationController.view];
+              */
              [self fetchEvents];
              [self.tableView reloadData];
          }
