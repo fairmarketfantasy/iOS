@@ -7,12 +7,11 @@
 //
 
 #import <SBDataObject.h>
-
-@class FFSession;
+#import "FFSession.h"
 
 @interface FFDataObject : SBDataObject
 
-@property (nonatomic, readonly) FFSession* session;
-@property (nonatomic) NSString *sportKey; /** all objects are tied to some sport */
+@property(nonatomic) FFSession* session;
+@property(nonatomic) NSString* sportKey; /** all objects are tied to some sport */
 
 @end

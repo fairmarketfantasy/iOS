@@ -200,7 +200,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         {
             FFPredictHistoryCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictCell"
                                                                          forIndexPath:indexPath];
-            NSArray* predictions = @[];
+            NSArray* predictions = nil;
             switch (self.rosterPredictionType) {
                 case FFRosterPredictionTypeSubmitted:
                     predictions = self.rosterActivePredictions.allObjects;
@@ -209,6 +209,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                     predictions = self.rosterHistoryPredictions.allObjects;
                     break;
                 default:
+                    predictions = @[];
                     break;
             }
             if (predictions.count > indexPath.row) {

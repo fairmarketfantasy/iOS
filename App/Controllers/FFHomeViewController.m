@@ -104,7 +104,7 @@
     // market selector
     _marketSelector = [[FFMarketSelector alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
     _marketSelector.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _marketSelector.dataSource = self;
+//    _marketSelector.dataSource = self;
 
     _gameButtonView = [[FFGameButtonView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
     _gameButtonView.delegate = self;
@@ -250,12 +250,14 @@
             ^(NSError * error)
             {
                 [alert hide];
+                /* !!!: disable error alerts NBA-659
                 FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
                                                                    title:nil
                                                        cancelButtonTitle:nil
                                                          okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                                                 autoHide:YES];
                 [ealert showInView:self.navigationController.view];
+                 */
             }];
         } else {
             [super performSegueWithIdentifier:identifier
@@ -381,7 +383,7 @@
 
 - (FFMarketSport)currentMarketSport
 {
-    return nil;
+    return FFMarketSportNBA;
 //    return _markets.sport;
 }
 

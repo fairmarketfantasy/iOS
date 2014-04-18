@@ -160,12 +160,14 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
              [self.tableView reloadData];
              [alert hide];
              [self shorOrHideSubmitIfNeeded];
+             /* !!!: disable error alerts NBA-659
              [[[FFAlertView alloc] initWithError:error
                                            title:nil
                                cancelButtonTitle:nil
                                  okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                         autoHide:YES]
               showInView:self.navigationController.view];
+              */
          }
      }];
 }
@@ -192,12 +194,14 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
          self.roster = nil;
          [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
+         /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                     autoHide:YES]
           showInView:self.navigationController.view];
+          */
      }];
 }
 
@@ -245,12 +249,14 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
          [self.tableView reloadData];
          [alert hide];
          [self shorOrHideSubmitIfNeeded];
+         /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                     autoHide:YES]
           showInView:self.navigationController.view];
+          */
      }];
 }
 
@@ -422,12 +428,14 @@ heightForHeaderInSection:(NSInteger)section
          self.roster = nil;
          [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
+         /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                     autoHide:YES]
           showInView:self.navigationController.view];
+          */
      }];
 }
 
@@ -453,12 +461,14 @@ heightForHeaderInSection:(NSInteger)section
          self.roster = nil;
          [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
+         /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                     autoHide:YES]
           showInView:self.navigationController.view];
+          */
      }];
 }
 
@@ -484,12 +494,14 @@ heightForHeaderInSection:(NSInteger)section
          @strongify(self)
          [alert hide];
          [self shorOrHideSubmitIfNeeded];
+         /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                     autoHide:YES]
           showInView:self.navigationController.view];
+          */
      }];
 }
 

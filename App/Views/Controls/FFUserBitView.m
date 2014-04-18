@@ -8,6 +8,7 @@
 
 #import "FFUserBitView.h"
 #import <AFNetworking/UIImageView+AFNetworking.h>
+#import "FFDate.h"
 
 @interface FFUserBitView ()
 

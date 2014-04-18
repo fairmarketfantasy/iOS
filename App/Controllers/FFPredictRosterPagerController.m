@@ -184,12 +184,14 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          self.roster = nil;
          [self.teamController.tableView reloadData];
          [alert hide];
+         /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                     autoHide:YES]
           showInView:self.navigationController.view];
+          */
      }];
 }
 
@@ -234,14 +236,16 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      }
                        failure:
      ^(NSError *error) {
-         @strongify(self)
+//         @strongify(self)
          [alert hide];
+         /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                     autoHide:YES]
           showInView:self.navigationController.view];
+          */
      }];
 }
 

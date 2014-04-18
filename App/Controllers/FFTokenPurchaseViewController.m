@@ -110,12 +110,14 @@ failure:
     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
     {
         [_alert hide];
+        /* !!!: disable error alerts NBA-659
         FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
                                                            title:nil
                                                cancelButtonTitle:nil
                                                  okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                                         autoHide:YES];
         [ealert showInView:self.view];
+         */
     }];
 }
 
@@ -305,12 +307,14 @@ failure:
         _alert = nil;
     }
 
+    /* !!!: disable error alerts NBA-659
     FFAlertView* ealert = [[FFAlertView alloc] initWithError:err
                                                        title:nil
                                            cancelButtonTitle:nil
                                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                                     autoHide:YES];
     [ealert showInView:self.view];
+     */
     [self.session updateUserNow];
 }
 

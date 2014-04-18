@@ -106,12 +106,14 @@
          [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                        withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
+         /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                     autoHide:YES]
           showInView:self.navigationController.view];
+          */
      }];
 }
 

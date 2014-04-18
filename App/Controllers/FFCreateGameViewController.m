@@ -13,6 +13,9 @@
 #import "FFValueEntryController.h"
 #import "FFRoster.h"
 #import "FFAlertView.h"
+#import "FFDate.h"
+#import "FFDataObjectResultSet.h"
+#import "FFMarketSet.h"
 
 #define SALARYCAP @"salarycap"
 #define ENTRYFEE @"entryfee"

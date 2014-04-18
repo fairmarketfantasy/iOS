@@ -247,8 +247,6 @@
     // add disclosure indicator
     NSString* accessoryName = @"";
     if (nodeItem.type == FFNodeItemTypeParent) {
-        accessoryName = treeNodeInfo.expanded ? @"accessory_uncollapse"
-                                              : @"accessory_collapse";
         if (treeNodeInfo.expanded) {
             accessoryName = @"accessory_uncollapse";
         } else {

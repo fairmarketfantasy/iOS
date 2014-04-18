@@ -188,66 +188,66 @@
 
 - (void)layoutBubbleViews:(BOOL)animated
 {
-    NSUInteger row = 0;
-    NSUInteger i = 0;
-    CGFloat rowWidth = 0;
-    CGFloat buttonWidth = 0.0f;
-    CGRect* changes = (CGRect*)malloc(sizeof(CGRect) * _buttons.count);
-
-    for (UIButton* b in _buttons) {
-        buttonWidth = [self widthForButton:b];
-        CGFloat newRowWidth = rowWidth + buttonWidth + kButtonLeftPadding + kButtonRightPadding;
-        if (newRowWidth > CGRectGetMaxX(self.bounds)) {
-            row += 1;
-            rowWidth = 0;
-            newRowWidth = kButtonLeftPadding + kButtonRightPadding + buttonWidth;
-        } else {
-            newRowWidth -= kButtonRightPadding;
-        }
-        changes[i] = CGRectMake(rowWidth + kButtonLeftPadding, // x
-                                (row * (kButtonHeight + kButtonTopPadding)) + kButtonContainerPaddingTop, // y
-                                buttonWidth, // width
-                                kButtonHeight); // height
-        rowWidth = newRowWidth;
-        i++;
-    }
-
-    CGRect textViewFrame = [self _textViewFrameForRow:row
-                                             rowWidth:rowWidth];
-    textViewFrame.size.height -= 4;
-    // use the bottom of the bottom-most button if there is no text, otherwise just use the bottom of the text view
-    if (_buttons.count || _textField.isFirstResponder) {
-        _intrinsicHeight = (CGRectGetMaxY(_textField.text.length || _textField.isFirstResponder
-                                              ? textViewFrame
-                                              : changes[i - 1]) + kButtonContainerPaddingBottom);
-    } else {
-        _intrinsicHeight = 25;
-    }
-
-    if (self.delegate && [self.delegate respondsToSelector:@selector(bubblePicker:
-                                                                 willUpdateHeight:)]) {
-        [self.delegate bubblePicker:self
-                   willUpdateHeight:_intrinsicHeight];
-    }
-
-    if (animated) {
-        [UIView beginAnimations:nil
-                        context:nil];
-        [UIView setAnimationDuration:.2f];
-        [self invalidateIntrinsicContentSize];
-        for (int j = 0; j < _buttons.count; j++) {
-            [_buttons[j] setFrame:changes[j]];
-        }
-        _textField.frame = textViewFrame;
-        [UIView commitAnimations];
-    } else {
-        [self invalidateIntrinsicContentSize];
-        for (int j = 0; j < _buttons.count; j++) {
-            [_buttons[j] setFrame:changes[j]];
-        }
-        _textField.frame = textViewFrame;
-    }
-    free(changes);
+//    NSUInteger row = 0;
+//    NSUInteger i = 0;
+//    CGFloat rowWidth = 0;
+//    CGFloat buttonWidth = 0.0f;
+//    CGRect* changes = (CGRect*)malloc(sizeof(CGRect) * _buttons.count);
+//
+//    for (UIButton* b in _buttons) {
+//        buttonWidth = [self widthForButton:b];
+//        CGFloat newRowWidth = rowWidth + buttonWidth + kButtonLeftPadding + kButtonRightPadding;
+//        if (newRowWidth > CGRectGetMaxX(self.bounds)) {
+//            row += 1;
+//            rowWidth = 0;
+//            newRowWidth = kButtonLeftPadding + kButtonRightPadding + buttonWidth;
+//        } else {
+//            newRowWidth -= kButtonRightPadding;
+//        }
+//        changes[i] = CGRectMake(rowWidth + kButtonLeftPadding, // x
+//                                (row * (kButtonHeight + kButtonTopPadding)) + kButtonContainerPaddingTop, // y
+//                                buttonWidth, // width
+//                                kButtonHeight); // height
+//        rowWidth = newRowWidth;
+//        i++;
+//    }
+//
+//    CGRect textViewFrame = [self _textViewFrameForRow:row
+//                                             rowWidth:rowWidth];
+//    textViewFrame.size.height -= 4;
+//    // use the bottom of the bottom-most button if there is no text, otherwise just use the bottom of the text view
+//    if (_buttons.count || _textField.isFirstResponder) {
+//        _intrinsicHeight = (CGRectGetMaxY(_textField.text.length || _textField.isFirstResponder
+//                                              ? textViewFrame
+//                                              : changes[i - 1]) + kButtonContainerPaddingBottom);
+//    } else {
+//        _intrinsicHeight = 25;
+//    }
+//
+//    if (self.delegate && [self.delegate respondsToSelector:@selector(bubblePicker:
+//                                                                 willUpdateHeight:)]) {
+//        [self.delegate bubblePicker:self
+//                   willUpdateHeight:_intrinsicHeight];
+//    }
+//
+//    if (animated) {
+//        [UIView beginAnimations:nil
+//                        context:nil];
+//        [UIView setAnimationDuration:.2f];
+//        [self invalidateIntrinsicContentSize];
+//        for (int j = 0; j < _buttons.count; j++) {
+//            [_buttons[j] setFrame:changes[j]];
+//        }
+//        _textField.frame = textViewFrame;
+//        [UIView commitAnimations];
+//    } else {
+//        [self invalidateIntrinsicContentSize];
+//        for (int j = 0; j < _buttons.count; j++) {
+//            [_buttons[j] setFrame:changes[j]];
+//        }
+//        _textField.frame = textViewFrame;
+//    }
+//    free(changes);
 }
 
 - (void)resetTextView

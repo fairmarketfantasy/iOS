@@ -160,12 +160,14 @@ failure:
     ^(NSError * error)
     {
         [alert hide];
+        /* !!!: disable error alerts NBA-659
         [[[FFAlertView alloc] initWithError:error
                                       title:nil
                           cancelButtonTitle:nil
                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                    autoHide:YES]
             showInView:self.navigationController.view];
+         */
     }];
 }
 
@@ -193,12 +195,12 @@ failure:
     FFRosterCell* cell = [tableView dequeueReusableCellWithIdentifier:@"RosterCell"
                                                          forIndexPath:indexPath];
 
-    FFRoster* roster = nil;
-    if (indexPath.section == 0) {
-        roster = [self.rosters objectAtIndex:indexPath.row];
-    } else if (indexPath.section == 1) {
-        roster = [self.historicalRosters objectAtIndex:indexPath.row];
-    }
+//    FFRoster* roster = nil;
+//    if (indexPath.section == 0) {
+//        roster = [self.rosters objectAtIndex:indexPath.row];
+//    } else if (indexPath.section == 1) {
+//        roster = [self.historicalRosters objectAtIndex:indexPath.row];
+//    }
 
 //    cell.roster = roster;
 

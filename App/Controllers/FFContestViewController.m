@@ -841,75 +841,75 @@ failure:
 - (void)showPlayersForPosition:(NSString*)pos
                           poll:(BOOL)shouldContinuePolling
 {
-    if (_state != FFContestViewControllerStatePickPlayer) {
-        NSLog(@"attempting to show players but in the wrong state");
-        return;
-    }
-    NSDictionary* params = @{
-        @"position" : pos, @"roster_id" : _roster.objId
-    };
-    [self.session authorizedJSONRequestWithMethod:@"GET" path:@"/players/" paramters:params success:
-     ^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON)
-    {
-        if (_state != FFContestViewControllerStatePickPlayer) {
-            return;
-        }
-
-        NSMutableArray* sorted = [JSON mutableCopy];
-         [sorted sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
-         {
-             NSString* str1 = [obj1 objectForKey:@"buy_price"];
-             NSString* str2 = [obj2 objectForKey:@"buy_price"];
-             return [str2 compare:str1
-                          options:NSNumericSearch];
-         }];
-
-         if (_filterBenchPlayers && sorted.count > 3) {
-             [sorted filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings)
-             {
-                 if (evaluatedObject[@"benched_games"] && [evaluatedObject[@"benched_games"] integerValue] > 2) {
-                     return NO;
-                 }
-                 return YES;
-             }]];
-         }
-
-         _availablePlayers = sorted;
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationNone];
-
-         if (!shouldContinuePolling) { // we're done if there is no more polling to do
-             return;
-         }
-
-         __strong FFContestViewController* strongSelf = self;
-
-         double delayInSeconds = 10.0;
-         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-         dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-             NSString *lastPos = ((strongSelf->_currentPickPlayer
-                                   && [strongSelf->_currentPickPlayer isKindOfClass:[NSDictionary class]])
-                                  ? strongSelf->_currentPickPlayer[@"position"]
-                                  : strongSelf->_currentPickPlayer);
-             // only poll again if we are still picking a player and picking the correct one
-             if (strongSelf->_state == FFContestViewControllerStatePickPlayer && [pos isEqualToString:lastPos]) {
-                 [strongSelf showPlayersForPosition:lastPos poll:YES];
-             }
-         });
-    }
-failure:
-    ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
-    {
-        if (_state != FFContestViewControllerStatePickPlayer) {
-            return;
-        }
-        FFAlertView* alert = [[FFAlertView alloc] initWithError:error
-                                                          title:nil
-                                              cancelButtonTitle:nil
-                                                okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                                       autoHide:YES];
-        [alert showInView:self.navigationController.view];
-    }];
+//    if (_state != FFContestViewControllerStatePickPlayer) {
+//        NSLog(@"attempting to show players but in the wrong state");
+//        return;
+//    }
+//    NSDictionary* params = @{
+//        @"position" : pos, @"roster_id" : _roster.objId
+//    };
+//    [self.session authorizedJSONRequestWithMethod:@"GET" path:@"/players/" paramters:params success:
+//     ^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON)
+//    {
+//        if (_state != FFContestViewControllerStatePickPlayer) {
+//            return;
+//        }
+//
+//        NSMutableArray* sorted = [JSON mutableCopy];
+//         [sorted sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+//         {
+//             NSString* str1 = [obj1 objectForKey:@"buy_price"];
+//             NSString* str2 = [obj2 objectForKey:@"buy_price"];
+//             return [str2 compare:str1
+//                          options:NSNumericSearch];
+//         }];
+//
+//         if (_filterBenchPlayers && sorted.count > 3) {
+//             [sorted filterUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings)
+//             {
+//                 if (evaluatedObject[@"benched_games"] && [evaluatedObject[@"benched_games"] integerValue] > 2) {
+//                     return NO;
+//                 }
+//                 return YES;
+//             }]];
+//         }
+//
+//         _availablePlayers = sorted;
+//         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+//                       withRowAnimation:UITableViewRowAnimationNone];
+//
+//         if (!shouldContinuePolling) { // we're done if there is no more polling to do
+//             return;
+//         }
+//
+//         __strong FFContestViewController* strongSelf = self;
+//
+//         double delayInSeconds = 10.0;
+//         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+//         dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
+//             NSString *lastPos = ((strongSelf->_currentPickPlayer
+//                                   && [strongSelf->_currentPickPlayer isKindOfClass:[NSDictionary class]])
+//                                  ? strongSelf->_currentPickPlayer[@"position"]
+//                                  : strongSelf->_currentPickPlayer);
+//             // only poll again if we are still picking a player and picking the correct one
+//             if (strongSelf->_state == FFContestViewControllerStatePickPlayer && [pos isEqualToString:lastPos]) {
+//                 [strongSelf showPlayersForPosition:lastPos poll:YES];
+//             }
+//         });
+//    }
+//failure:
+//    ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
+//    {
+//        if (_state != FFContestViewControllerStatePickPlayer) {
+//            return;
+//        }
+//        FFAlertView* alert = [[FFAlertView alloc] initWithError:error
+//                                                          title:nil
+//                                              cancelButtonTitle:nil
+//                                                okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+//                                                       autoHide:YES];
+//        [alert showInView:self.navigationController.view];
+//    }];
 }
 
 - (void)showPlayerFilterBanner

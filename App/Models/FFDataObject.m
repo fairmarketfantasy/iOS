@@ -10,7 +10,6 @@
 #import <objc/runtime.h>
 #import <SBDataObjectTypes.h>
 #import <SBModel_SBModelPrivate.h>
-#import "FFSession.h"
 #import "FFDate.h"
 #import "FFSport.h"
 
@@ -106,6 +105,11 @@
 - (FFSession*)session
 {
     return (FFSession*)[super session];
+}
+
+- (void)setSession:(FFSession *)session
+{
+    [super setSession:session];
 }
 
 @end
