@@ -313,14 +313,18 @@
         WTFLog;
         return;
     }
+    
     FFNodeItem* nodeItem = [item isKindOfClass:[FFNodeItem class]] ? (FFNodeItem*)item : nil;
+    
     if (!nodeItem) {
         WTFLog;
         NSAssert(FALSE, @"Wrong type of item for cell!");
     }
+    
     if (nodeItem.action) {
         nodeItem.action();
     }
+    
     [treeView deselectRowForItem:item
                         animated:YES];
 }
@@ -449,10 +453,16 @@
     } else if ([item.title isEqualToString:@"MLB"]) {
         item.action = ^{
             @strongify(self)
-            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-                [self.delegate didUpdateToNewSport:FFMarketSportMLB];
-            }
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [[[FFAlertView alloc] initWithTitle:nil
+                                        message:NSLocalizedString(@"Coming soon!", nil)
+                              cancelButtonTitle:nil
+                                okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                                       autoHide:YES] showInView:self.view];
+        
+//            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
+//                [self.delegate didUpdateToNewSport:FFMarketSportMLB];
+//            }
+//            [self dismissViewControllerAnimated:YES completion:nil];
         };
     } else if ([item.title isEqualToString:@"Sign Out"]) {
         item.action = ^{
