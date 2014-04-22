@@ -59,7 +59,7 @@
                                  @[
                                      @{
                                          @"Fantasy Sports" : @[
-                                             @"NFL",
+                                             /*@"NFL",*/
                                              @"NBA",
                                              @"MLB"
                                          ]
