@@ -36,6 +36,7 @@
         // show loading, haven't gotten anything yet
         [self notifyDelegatesLoading];
     }
+    
     // not logged in yet, so use an anonymous session
     if (!self.session) {
         FFSession* tempSession = [FFSession anonymousSession];
@@ -60,6 +61,7 @@
         }];
         return;
     }
+    
     // try to get mine
     [self.session authorizedJSONRequestWithMethod:@"GET" path:@"/players/mine" paramters:@{} success:
      ^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON)

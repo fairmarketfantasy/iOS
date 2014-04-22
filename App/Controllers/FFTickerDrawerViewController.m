@@ -23,66 +23,63 @@
 
 @implementation FFTickerDrawerViewController
 
-- (id)init
+- (void)viewDidLoad
 {
-    self = [super init];
-    if (self) {
-        self.tickerData = @[
-        ];
-        _flowLayout = [UICollectionViewFlowLayout new];
-        _flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-
-        self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 48)];
-        self.view.backgroundColor = [FFStyle darkGreen];
-        self.view.userInteractionEnabled = YES;
-
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 320, 48)
-                                             collectionViewLayout:_flowLayout];
-        [self.view addSubview:_collectionView];
-
-        _errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 38)];
-        _errorLabel.numberOfLines = 0;
-        _errorLabel.textColor = [FFStyle white];
-        _errorLabel.font = [FFStyle boldFont:14.f];
-        _errorLabel.textAlignment = NSTextAlignmentCenter;
-        _errorLabel.text = NSLocalizedString(@"Error", nil);
-        _errorLabel.backgroundColor = [UIColor clearColor];
-        _errorLabel.hidden = YES;
-        _errorLabel.userInteractionEnabled = NO;
-        [self.view insertSubview:_errorLabel
-                    belowSubview:_collectionView];
-
-        _loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(42, 0, 300, 48)];
-        _loadingLabel.textColor = [FFStyle white];
-        _loadingLabel.font = [FFStyle regularFont:17.f];
-        _loadingLabel.text = NSLocalizedString(@"Loading...", nil);
-        _loadingLabel.backgroundColor = [UIColor clearColor];
-        _loadingLabel.hidden = YES;
-        _loadingLabel.userInteractionEnabled = NO;
-        [self.view insertSubview:_loadingLabel
-                    belowSubview:_collectionView];
-
-        _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
-                                                                  UIActivityIndicatorViewStyleWhite];
-        _activityIndicator.frame = CGRectMake(18, 19, 10, 10);
-        _activityIndicator.hidesWhenStopped = YES;
-        _activityIndicator.userInteractionEnabled = NO;
-        [self.view insertSubview:_activityIndicator
-                    belowSubview:_collectionView];
-        [_activityIndicator stopAnimating];
-
-        _collectionView.backgroundColor = [UIColor clearColor];
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.alwaysBounceHorizontal = YES;
-        _collectionView.showsHorizontalScrollIndicator = NO;
-
-        _currentTickItem = 0;
-
-        [self.collectionView registerClass:[UICollectionViewCell class]
-                forCellWithReuseIdentifier:[self cellReuseIdentifier]];
-    }
-    return self;
+    [super viewDidLoad];
+    
+    self.tickerData = @[];
+    _flowLayout = [UICollectionViewFlowLayout new];
+    _flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    
+    self.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 48)];
+    self.view.backgroundColor = [FFStyle darkGreen];
+    self.view.userInteractionEnabled = YES;
+    
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, 320, 48)
+                                         collectionViewLayout:_flowLayout];
+    [self.view addSubview:_collectionView];
+    
+    _errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 300, 38)];
+    _errorLabel.numberOfLines = 0;
+    _errorLabel.textColor = [FFStyle white];
+    _errorLabel.font = [FFStyle boldFont:14.f];
+    _errorLabel.textAlignment = NSTextAlignmentCenter;
+    _errorLabel.text = NSLocalizedString(@"Error", nil);
+    _errorLabel.backgroundColor = [UIColor clearColor];
+    _errorLabel.hidden = YES;
+    _errorLabel.userInteractionEnabled = NO;
+    [self.view insertSubview:_errorLabel
+                belowSubview:_collectionView];
+    
+    _loadingLabel = [[UILabel alloc] initWithFrame:CGRectMake(42, 0, 300, 48)];
+    _loadingLabel.textColor = [FFStyle white];
+    _loadingLabel.font = [FFStyle regularFont:17.f];
+    _loadingLabel.text = NSLocalizedString(@"Loading...", nil);
+    _loadingLabel.backgroundColor = [UIColor clearColor];
+    _loadingLabel.hidden = YES;
+    _loadingLabel.userInteractionEnabled = NO;
+    [self.view insertSubview:_loadingLabel
+                belowSubview:_collectionView];
+    
+    _activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+                          UIActivityIndicatorViewStyleWhite];
+    _activityIndicator.frame = CGRectMake(18, 19, 10, 10);
+    _activityIndicator.hidesWhenStopped = YES;
+    _activityIndicator.userInteractionEnabled = NO;
+    [self.view insertSubview:_activityIndicator
+                belowSubview:_collectionView];
+    [_activityIndicator stopAnimating];
+    
+    _collectionView.backgroundColor = [UIColor clearColor];
+    _collectionView.delegate = self;
+    _collectionView.dataSource = self;
+    _collectionView.alwaysBounceHorizontal = YES;
+    _collectionView.showsHorizontalScrollIndicator = NO;
+    
+    _currentTickItem = 0;
+    
+    [self.collectionView registerClass:[UICollectionViewCell class]
+            forCellWithReuseIdentifier:[self cellReuseIdentifier]];
 }
 
 - (void)viewWillAppear:(BOOL)animated

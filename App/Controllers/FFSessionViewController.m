@@ -20,6 +20,8 @@
 #import "FFAlertView.h"
 #import "FFForgotPassword.h"
 
+#define FORGOT_PASS_ALERT_TAG 0xC005
+
 @interface FFSessionViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
 @property(nonatomic) UIView* signInView;
@@ -116,7 +118,7 @@
 {
     // background
     UIImageView* backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loginbg.png"]];
-    backgroundView.contentMode = UIViewContentModeTop;
+//    backgroundView.contentMode = UIViewContentModeTop;
     backgroundView.frame = self.signInView.bounds;
     [self.signInView addSubview:backgroundView];
 
@@ -214,7 +216,7 @@
     _signInTicker = [self ticker];
     _signInTicker.view.frame = CGRectMake(0.f, CGRectGetMaxY(self.signInView.frame) - 95.f, 320.f, 95.f);
     [_signInTicker viewWillAppear:NO];
-    [self.signInView addSubview:_signInTicker.view];
+//    [self.signInView addSubview:_signInTicker.view];
 }
 
 #pragma mark -
@@ -306,14 +308,16 @@ failure:
                                                      customView:view
                                               cancelButtonTitle:NSLocalizedString(@"Close", nil)
                                                 okayButtonTitle:NSLocalizedString(@"Send Instructions", nil)
-                                                       autoHide:YES];
+                                                       autoHide:NO];
     @weakify(self)
     @weakify(forgotAlert)
     forgotAlert.onOkay = ^(id obj) {
         @strongify(forgotAlert)
         @strongify(self)
-        [self sendForgotPassword:self.forgotPasswordField];
-        [forgotAlert hide]; // TODO: should hide on return also. move to sendForgotPassword:
+        [self sendForgotPasswordWithCompletion:^(BOOL shouldHide) {
+            if (shouldHide)
+                [forgotAlert hide];
+        }];
     };
     forgotAlert.onCancel = ^(id obj) {
         @strongify(forgotAlert)
@@ -321,28 +325,59 @@ failure:
         [forgotAlert hide];
         self.forgotPasswordField = nil;
     };
+    
+    forgotAlert.tag = FORGOT_PASS_ALERT_TAG;
     [forgotAlert showInView:self.view];
 }
 
-- (void)sendForgotPassword:(id)sender
+- (void)sendForgotPasswordWithCompletion:(void(^)(BOOL shouldHide))block
 {
+    __strong static NSRegularExpression* regex = nil;
+    if (regex == nil) {
+        NSError* error = nil;
+        NSString* emailRe = FF_EMAIL_REGEX;
+        regex = [NSRegularExpression regularExpressionWithPattern:emailRe
+                                                          options:NSRegularExpressionCaseInsensitive
+                                                            error:&error];
+        if (error) {
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                           reason:@"Could not compile regex"
+                                         userInfo:NSDictionaryOfVariableBindings(emailRe)];
+        }
+    }
+    
+    NSString* errorTitle = nil;
+    
+    __block NSString *email = self.forgotPasswordField.text;
+    NSTextCheckingResult* result = [regex firstMatchInString:email
+                                                     options:0
+                                                       range:NSMakeRange(0, email.length)];
+    if (!result.range.length) {
+        errorTitle = NSLocalizedString(@"Please provide a valid email address", nil);
+        
+        [[[FFAlertView alloc] initWithTitle:nil
+                                    message:errorTitle
+                          cancelButtonTitle:nil
+                            okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                                   autoHide:YES] showInView:self.navigationController.view];
+        if (block) {
+            block(NO);
+        }
+        
+        return;
+    }
+    
+    if (block) {
+        block(YES);
+    }
+    
     FFSession* tempSession = [FFSession anonymousSession];
     @weakify(self)
     [tempSession anonymousJSONRequestWithMethod: @"POST"
                                            path: @"/users/reset_password" // TODO: should me moved to FFUser
-                                     parameters: @{ @"email" : self.forgotPasswordField.text }
+                                     parameters: @{ @"email" : email }
                                         success: ^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON)
-     {
-         @strongify(self)
-         [[[FFAlertView alloc] initWithTitle:nil
-                                     message:[NSString stringWithFormat:
-                                              NSLocalizedString(@"Password reset instructions send to %@", nil),
-                                              self.forgotPasswordField.text]
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Ok", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-     }
+     {}
                                         failure:
      ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
      {
@@ -482,7 +517,7 @@ failure:
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField*)textField
-{
+{    
     return YES;
 }
 
@@ -501,8 +536,14 @@ failure:
         [self signIn:textField];
     }
     if (textField == self.forgotPasswordField) {
-        [self sendForgotPassword:textField];
+        [self sendForgotPasswordWithCompletion:^(BOOL shouldHide) {
+            if (shouldHide) {
+                FFAlertView *forgotAlert = (FFAlertView *)[self.view viewWithTag:FORGOT_PASS_ALERT_TAG];
+                [forgotAlert hide];
+            }
+        }];
     }
+    
     [textField endEditing:YES];
     return YES;
 }
