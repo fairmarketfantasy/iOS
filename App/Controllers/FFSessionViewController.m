@@ -298,10 +298,10 @@ failure:
 
 - (void)forgotPassword:(id)sender
 {
-    FFForgotPassword* view = FFForgotPassword.new;
+    FFForgotPassword* view = [FFForgotPassword new];
     self.forgotPasswordField = view.mailField;
     view.mailField.delegate = self;
-    FFAlertView* forgotAlert = [FFAlertView.alloc initWithTitle:nil
+    FFAlertView* forgotAlert = [[FFAlertView alloc] initWithTitle:nil
                                                         message:nil
                                                      customView:view
                                               cancelButtonTitle:NSLocalizedString(@"Close", nil)
@@ -361,7 +361,7 @@ failure:
 
 - (void)signInFacebook:(id)sender
 {
-    [FBSession openActiveSessionWithReadPermissions:@[@"basic_info"]
+    [FBSession openActiveSessionWithReadPermissions:@[@"basic_info", @"email"]
                                        allowLoginUI:YES
                                   completionHandler:
      ^(FBSession *session, FBSessionState status, NSError *error)
@@ -422,6 +422,7 @@ failure:
             [ealert showInView:self.view];
             return;
         }
+        
         if (!result[@"email"] || [result[@"email"] isEqual:[NSNull null]]) {
             [alert hide];
             [[Ubertesters shared] UTLog:@"FBNoEmailError: There was no email for a provided account"
@@ -434,6 +435,7 @@ failure:
             [ealert showInView:self.view];
             return;
         }
+        
         FFSession* sesh = [FFSession sessionWithEmailAddress:result[@"email"]
                                                    userClass:[FFUser class]];
         [sesh registerAndLoginUsingFBAccessToken:accessToken fbUid:[result[@"id"] description] success:^(id successObj)
