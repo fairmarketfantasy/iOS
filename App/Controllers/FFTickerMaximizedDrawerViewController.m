@@ -48,11 +48,13 @@
                                 cellForItemAtIndexPath:indexPath];
 
     NSDictionary* player = [self.tickerData objectAtIndex:indexPath.row];
+    
+    CGFloat xCoord = [self itemHeight];
 
     NSString* ppgValue = [NSString stringWithFormat:@"%@ PPG", (![player[@"ppg"] isEqual:[NSNull null]]
                                                                         ? [NSString stringWithFormat:@"%.2f", [player[@"ppg"] floatValue]]
                                                                         : @"0")];
-    UILabel* ppg = [[UILabel alloc] initWithFrame:CGRectMake(56, 23, 60, 15)];
+    UILabel* ppg = [[UILabel alloc] initWithFrame:CGRectMake(xCoord, 33, 80, 15)];
     ppg.textColor = [FFStyle white];
     ppg.backgroundColor = [FFStyle darkGreen];
     ppg.font = [FFStyle regularFont:14];
@@ -66,7 +68,7 @@
         [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
     }
     NSString* costValue = [formatter stringFromNumber:[NSNumber numberWithDouble:currency]];
-    UILabel* cost = [[UILabel alloc] initWithFrame:CGRectMake(56, 38, 100, 15)];
+    UILabel* cost = [[UILabel alloc] initWithFrame:CGRectMake(xCoord, 48, 80, 15)];
     cost.textColor = [FFStyle white];
     cost.backgroundColor = [FFStyle darkGreen];
     cost.font = [FFStyle regularFont:14];
