@@ -18,10 +18,10 @@
         self.backgroundColor = [UIColor colorWithWhite:.94f
                                                  alpha:1.f];
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[self(==145)]"
-                                                                     options:0
-                                                                     metrics:nil
-                                                                       views:NSDictionaryOfVariableBindings(self)]];
+//        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[self(==145)]"
+//                                                                     options:0
+//                                                                     metrics:nil
+//                                                                       views:NSDictionaryOfVariableBindings(self)]];
 
         // title
 

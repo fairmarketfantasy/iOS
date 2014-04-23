@@ -40,23 +40,31 @@ typedef NS_ENUM(NSUInteger, FFAlertViewLoadingStyle) {
     okayButtonTitle:(NSString*)okayTitle
            autoHide:(BOOL)shouldAutoHide;
 
+- (id)initWithTitle:(NSString*)title
+            message:(NSString*)message
+         customView:(UIView*)customView
+  cancelButtonTitle:(NSString*)cancelTitle
+    okayButtonTitle:(NSString*)okayTitle
+           autoHide:(BOOL)shouldAutoHide
+   usingAutolayouts:(BOOL)usingAutolayouts;
+
 /** create an alert view that must be manually dismissed in code */
 - (id)initWithTitle:(NSString*)title
             message:(NSString*)message;
 
 // createa an alert view with up to two side-by-side buttons */
 - (id)initWithTitle:(NSString*)title
-              message:(NSString*)message
-    cancelButtonTitle:(NSString*)cancelTitle
-      okayButtonTitle:(NSString*)okayTitle
-             autoHide:(BOOL)shouldAutoHide;
+            message:(NSString*)message
+  cancelButtonTitle:(NSString*)cancelTitle
+    okayButtonTitle:(NSString*)okayTitle
+           autoHide:(BOOL)shouldAutoHide;
 
 /** does thes same as above but populates the title and message with the provided error */
 - (id)initWithError:(NSError*)error
-                title:(NSString*)title
-    cancelButtonTitle:(NSString*)cancelTitle
-      okayButtonTitle:(NSString*)okayTitle
-             autoHide:(BOOL)shouldAutohide;
+              title:(NSString*)title
+  cancelButtonTitle:(NSString*)cancelTitle
+    okayButtonTitle:(NSString*)okayTitle
+           autoHide:(BOOL)shouldAutohide;
 
 /** creates an alert view with a series of vertical buttons */
 - (id)initWithTitle:(NSString*)title
@@ -69,6 +77,7 @@ typedef NS_ENUM(NSUInteger, FFAlertViewLoadingStyle) {
 
 - (void)showInView:(UIView*)view;
 - (void)hide;
+- (void)setYInset:(CGFloat)inset animated:(BOOL)animated;
 
 + (FFCustomButton*)redButtonTitled:(NSString*)str;
 + (FFCustomButton*)blueButtonTitled:(NSString*)str;

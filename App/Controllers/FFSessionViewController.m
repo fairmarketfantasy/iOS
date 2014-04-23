@@ -76,6 +76,10 @@
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardDidHide:)
+                                                 name:UIKeyboardDidHideNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(gotLogout:)
                                                  name:SBLogoutNotification
                                                object:nil];
@@ -302,23 +306,31 @@ failure:
 
 - (void)forgotPassword:(id)sender
 {
-    FFForgotPassword* view = [FFForgotPassword new];
+    FFForgotPassword *view = [[FFForgotPassword alloc] initWithFrame:CGRectMake(0.f, 0.f, 260.f, 145.f)];
     self.forgotPasswordField = view.mailField;
     view.mailField.delegate = self;
+    
+    //TODO: TEMPORARY solution, need better way
     FFAlertView* forgotAlert = [[FFAlertView alloc] initWithTitle:nil
-                                                        message:nil
-                                                     customView:view
-                                              cancelButtonTitle:NSLocalizedString(@"Close", nil)
-                                                okayButtonTitle:NSLocalizedString(@"Send Instructions", nil)
-                                                       autoHide:NO];
+                                                          message:nil
+                                                       customView:view
+                                                cancelButtonTitle:NSLocalizedString(@"Close", nil)
+                                                  okayButtonTitle:NSLocalizedString(@"Send Instructions", nil)
+                                                         autoHide:NO
+                                                 usingAutolayouts:NO];
+    
     @weakify(self)
     @weakify(forgotAlert)
     forgotAlert.onOkay = ^(id obj) {
         @strongify(forgotAlert)
         @strongify(self)
-        [self sendForgotPasswordWithCompletion:^(BOOL shouldHide) {
-            if (shouldHide)
+        [self sendForgotPasswordWithCompletion:^(BOOL shouldHideAlert) {
+            if (shouldHideAlert) {
                 [forgotAlert hide];
+            } else if (_keyboardIsShowing == YES && shouldHideAlert == NO) {
+                FFAlertView *forgotAlert = (FFAlertView *)[self.view viewWithTag:FORGOT_PASS_ALERT_TAG];
+                [forgotAlert setYInset:50.f animated:YES];
+            }
         }];
     };
     forgotAlert.onCancel = ^(id obj) {
@@ -332,7 +344,7 @@ failure:
     [forgotAlert showInView:self.view];
 }
 
-- (void)sendForgotPasswordWithCompletion:(void(^)(BOOL shouldHide))block
+- (void)sendForgotPasswordWithCompletion:(void(^)(BOOL shouldHideAlert))block
 {
     __strong static NSRegularExpression* regex = nil;
     if (regex == nil) {
@@ -514,12 +526,19 @@ failure:
 - (void)dismissKeyboard:(id)sender
 {
     [[self.view findFirstResponder] resignFirstResponder];
+    FFAlertView *forgotAlert = (FFAlertView *)[self.view viewWithTag:FORGOT_PASS_ALERT_TAG];
+    [forgotAlert setYInset:50.f animated:YES];
 }
 
 #pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField*)textField
-{    
+{
+    if (textField == self.forgotPasswordField) {
+        FFAlertView *forgotAlert = (FFAlertView *)[self.view viewWithTag:FORGOT_PASS_ALERT_TAG];
+        [forgotAlert setYInset:-50.f animated:YES];
+    }
+    
     return YES;
 }
 
@@ -585,7 +604,6 @@ failure:
     if (!_keyboardIsShowing) {
         return;
     }
-    _keyboardIsShowing = NO;
 
     CGRect viewFrame = CGRectOffset(self.container.frame, 0.f, IS_SMALL_DEVICE ? 50.f : 80.f);
 
@@ -594,6 +612,11 @@ failure:
                          self.navigationController.navigationBarHidden = NO;
                          self.container.frame = viewFrame;
                      }];
+}
+
+- (void)keyboardDidHide:(NSNotification *)note
+{
+    _keyboardIsShowing = NO;
 }
 
 @end

@@ -173,6 +173,75 @@
     return self;
 }
 
+- (UIView*)initWithFrame:(CGRect)frame
+                   title:(NSString*)title
+                 message:(NSString*)message
+              customView:(UIView*)customView
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = [UIColor colorWithWhite:0
+                                                 alpha:.75];
+        
+        self.autoHide = NO;
+        self.autoHideKeyboard = YES;
+        self.autoRemoveFromSuperview = YES;
+        
+        // this is the view that contains the content and controls
+        CGFloat height = 213.f;
+        CGFloat yCoord = [[UIScreen mainScreen] bounds].size.height/2 - height/2;
+        
+        self.contentView = [[UIView alloc] initWithFrame:CGRectMake(10.f, yCoord, 300.f, height)];
+        self.contentView.backgroundColor = [UIColor colorWithWhite:.8f
+                                                             alpha:.8f];
+        
+        // button box first, since it is easy...
+        UIView* buttonBox = self.buttonBox = [[UIView alloc] initWithFrame:CGRectMake(0.f, 160.f, 280.f, 100.f)];
+        
+        [self.contentView addSubview:buttonBox];
+        
+        [self addSubview:self.contentView];
+        
+        // now do the title and body
+        UILabel* titleLabel = nil;
+        UILabel* bodyLabel = nil;
+        if (title != nil) {
+            titleLabel = self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 30)];
+            titleLabel.text = title;
+            titleLabel.textAlignment = NSTextAlignmentCenter;
+            titleLabel.backgroundColor = [UIColor clearColor];
+            titleLabel.font = [FFStyle regularFont:24];
+            titleLabel.textColor = [FFStyle black];
+            titleLabel.numberOfLines = 4;
+            [self.contentView addSubview:titleLabel];
+        }
+        
+        if (message != nil) {
+            bodyLabel = self.bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 240, 100)];
+            bodyLabel.text = message;
+            bodyLabel.textAlignment = NSTextAlignmentCenter;
+            bodyLabel.backgroundColor = [UIColor clearColor];
+            bodyLabel.font = [FFStyle regularFont:17.f];
+            bodyLabel.textColor = [FFStyle black];
+            bodyLabel.numberOfLines = 8;
+            [self.contentView addSubview:bodyLabel];
+        }
+        
+        // add custom view if needed
+        BOOL withCustomView = [customView isKindOfClass:[UIView class]];
+        if (withCustomView) {
+            CGRect frame = customView.frame;
+            frame.origin.x = 20.f;
+            frame.origin.y = 10.f;
+            UIView *containerView = [[UIView alloc] initWithFrame:frame];
+            [self.contentView addSubview:containerView];
+            [containerView addSubview:customView];
+        }
+    }
+    
+    return self;
+}
+
 - (id)initWithTitle:(NSString*)title
             message:(NSString*)message
          customView:(UIView*)customView
@@ -202,6 +271,77 @@
                                            okayTitle:okayTitle];
         }
     }
+    return self;
+}
+
+- (id)initWithTitle:(NSString*)title
+            message:(NSString*)message
+         customView:(UIView*)customView
+  cancelButtonTitle:(NSString*)cancelTitle
+    okayButtonTitle:(NSString*)okayTitle
+           autoHide:(BOOL)shouldAutoHide
+   usingAutolayouts:(BOOL)usingAutolayouts
+{
+    if (cancelTitle == nil && okayTitle == nil) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:@"Either okay title or cancel title must be filled in."
+                                     userInfo:nil];
+    }
+    if (title == nil && message == nil && customView == nil) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:@"Either title or message or additional view must be filled in."
+                                     userInfo:nil];
+    }
+
+    if (usingAutolayouts) {
+        self = [self initWithTitle:title
+                           message:message
+                        customView:customView];
+        
+        if (self) {
+            self.autoHide = shouldAutoHide;
+            if (cancelTitle || okayTitle) {
+                [self _setupHorizontalButtonsCancelTitle:cancelTitle
+                                               okayTitle:okayTitle];
+            }
+        }
+    } else {
+        self = [self initWithFrame:CGRectMake(0.f, 0.f, 320.f, [[UIScreen mainScreen] bounds].size.height)
+                             title:title
+                           message:message
+                        customView:customView];
+        
+        self.autoHide = shouldAutoHide;
+        
+        UIButton* cancelButton = nil;
+        UIButton* okayButton = nil;
+        
+        if (cancelTitle) {
+            cancelButton = self.cancelbutton = [FFStyle coloredButtonWithText:cancelTitle
+                                                                        color:[FFStyle brightRed]
+                                                                  borderColor:[FFStyle white]];
+            
+            [cancelButton addTarget:self
+                             action:@selector(cancelButtonTouched:)
+                   forControlEvents:UIControlEventTouchUpInside];
+            
+            cancelButton.frame = CGRectMake(10.f, 5.f, 135.f, 38.f);
+            [self.buttonBox addSubview:cancelButton];
+        }
+        
+        if (okayTitle != nil) {
+            okayButton = self.okayButton = [FFStyle coloredButtonWithText:okayTitle
+                                                                    color:[FFStyle brightBlue]
+                                                              borderColor:[FFStyle white]];
+            [okayButton addTarget:self
+                           action:@selector(okayButtonTouched:)
+                 forControlEvents:UIControlEventTouchUpInside];
+            
+            okayButton.frame = CGRectMake(155.f, 5.f, 135.f, 38.f);
+            [self.buttonBox addSubview:okayButton];
+        }
+    }
+    
     return self;
 }
 
@@ -479,6 +619,20 @@
              [self removeFromSuperview];
          }
      }];
+}
+
+- (void)setYInset:(CGFloat)inset animated:(BOOL)animated
+{
+    CGRect frame = self.contentView.frame;
+    frame.origin.y += inset;
+    
+    if (animated) {
+        [UIView animateWithDuration:0.2 animations:^{
+            [self.contentView setFrame:frame];
+        }];
+    } else {
+        [self.contentView setFrame:frame];
+    }
 }
 
 - (void)cancelButtonTouched:(id)sender
