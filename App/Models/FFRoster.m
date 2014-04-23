@@ -362,6 +362,8 @@ failure:
                                         paramters:@{ @"contest_type" : contestType }
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
     {
+        NSString *message = [[httpResponse allHeaderFields] objectForKey:@"X-CLIENT-FLASH"];
+        _messageAfterSubmit = (message != nil && message.length > 0) ? message : NSLocalizedString(@"Roster submitted successfully!", nil);
         [self updateWithNetworkRepresentation:JSON
                                       success:success
                                       failure:failure];

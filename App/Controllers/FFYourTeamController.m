@@ -236,7 +236,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
          @strongify(self)
          [alert hide];
          [[[FFAlertView alloc] initWithTitle:nil
-                                     message:NSLocalizedString(@"Roster submitted successfully!", nil)
+                                     message:self.roster.messageAfterSubmit
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Ok", nil)
                                     autoHide:YES]

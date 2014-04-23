@@ -48,6 +48,9 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 #pragma mark - Market
 @property(nonatomic) FFMarket* market;
 @property(nonatomic) NSString* marketId;
+
+@property(nonatomic, readonly) NSString *messageAfterSubmit;//message for alert after succesful submit
+
 #pragma mark -
 + (void)createNewRosterForMarket:(NSString*)marketId
                          session:(FFSession*)sesh
