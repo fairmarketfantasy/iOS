@@ -545,7 +545,10 @@ heightForHeaderInSection:(NSInteger)section
         FFMarket* market = self.markets[indexPath.item];
         cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
         cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
+    } else if (self.markets.count == 0) {
+        [cell showNoGamesMessage];
     }
+    
     return cell;
 }
 

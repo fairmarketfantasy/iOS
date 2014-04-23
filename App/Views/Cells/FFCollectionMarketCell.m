@@ -8,6 +8,12 @@
 
 #import "FFCollectionMarketCell.h"
 
+@interface FFCollectionMarketCell()
+
+@property(nonatomic) UILabel *noGamesLabel;
+
+@end
+
 @implementation FFCollectionMarketCell
 
 - (id)initWithFrame:(CGRect)frame
@@ -36,8 +42,25 @@
         self.timeLabel.text = @"";
         [self.contentView addSubview:self.timeLabel];
         [self.contentView addSubview:self.marketLabel];
+        
+        self.marketLabel.hidden = YES;//TODO: where this label is used?
+        
+        self.noGamesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, self.contentView.frame.size.width, 30.f)];
+        self.noGamesLabel.center = self.contentView.center;
+        self.noGamesLabel.font = [FFStyle blockFont:20.f];
+        self.noGamesLabel.textColor = [FFStyle lightGrey];
+        self.noGamesLabel.backgroundColor = [UIColor clearColor];
+        self.noGamesLabel.textAlignment = NSTextAlignmentCenter;
+        self.noGamesLabel.text = NSLocalizedString(@"NO GAMES SCHEDULED", nil);
+        [self.contentView addSubview:self.noGamesLabel];
+        self.noGamesLabel.hidden = YES;
     }
     return self;
+}
+
+- (void)showNoGamesMessage
+{
+    self.noGamesLabel.hidden = NO;
 }
 
 @end
