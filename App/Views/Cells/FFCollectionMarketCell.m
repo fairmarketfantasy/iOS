@@ -43,8 +43,6 @@
         [self.contentView addSubview:self.timeLabel];
         [self.contentView addSubview:self.marketLabel];
         
-        self.marketLabel.hidden = YES;//TODO: where this label is used?
-        
         self.noGamesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, self.contentView.frame.size.width, 30.f)];
         self.noGamesLabel.center = self.contentView.center;
         self.noGamesLabel.font = [FFStyle blockFont:20.f];
@@ -61,6 +59,8 @@
 - (void)showNoGamesMessage
 {
     self.noGamesLabel.hidden = NO;
+    self.marketLabel.hidden = YES;
+    self.timeLabel.hidden = YES;
 }
 
 @end
