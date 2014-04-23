@@ -117,7 +117,9 @@
 - (void)setupSignInView
 {
     // background
-    UIImageView* backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loginbg.png"]];
+    NSString *imageName = IS_SMALL_DEVICE ? @"loginbg.png" : @"loginbg-586h.png";
+    UIImageView* backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
+    
 //    backgroundView.contentMode = UIViewContentModeTop;
     backgroundView.frame = self.signInView.bounds;
     [self.signInView addSubview:backgroundView];
