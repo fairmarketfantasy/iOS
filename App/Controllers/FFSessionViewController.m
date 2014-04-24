@@ -525,9 +525,11 @@ failure:
 
 - (void)dismissKeyboard:(id)sender
 {
-    [[self.view findFirstResponder] resignFirstResponder];
-    FFAlertView *forgotAlert = (FFAlertView *)[self.view viewWithTag:FORGOT_PASS_ALERT_TAG];
-    [forgotAlert setYInset:50.f animated:YES];
+    if (_keyboardIsShowing) {
+        [[self.view findFirstResponder] resignFirstResponder];
+        FFAlertView *forgotAlert = (FFAlertView *)[self.view viewWithTag:FORGOT_PASS_ALERT_TAG];
+        [forgotAlert setYInset:50.f animated:YES];
+    }
 }
 
 #pragma mark - UITextFieldDelegate
