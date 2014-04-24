@@ -340,7 +340,8 @@ failure:
                 [forgotAlert hide];
             } else if (_keyboardIsShowing == YES && shouldHideAlert == NO) {
                 FFAlertView *forgotAlert = (FFAlertView *)[self.view viewWithTag:FORGOT_PASS_ALERT_TAG];
-                [forgotAlert setYInset:50.f animated:YES];
+                CGFloat inset = IS_SMALL_DEVICE ? 90.f : 50.f;
+                [forgotAlert setYInset:inset animated:YES];
             }
         }];
     };
@@ -540,7 +541,8 @@ failure:
     if (_keyboardIsShowing) {
         [[self.view findFirstResponder] resignFirstResponder];
         FFAlertView *forgotAlert = (FFAlertView *)[self.view viewWithTag:FORGOT_PASS_ALERT_TAG];
-        [forgotAlert setYInset:50.f animated:YES];
+        CGFloat inset = IS_SMALL_DEVICE ? 90.f : 50.f;
+        [forgotAlert setYInset:inset animated:YES];
     }
 }
 
@@ -550,7 +552,8 @@ failure:
 {
     if (textField == self.forgotPasswordField) {
         FFAlertView *forgotAlert = (FFAlertView *)[self.view viewWithTag:FORGOT_PASS_ALERT_TAG];
-        [forgotAlert setYInset:-50.f animated:YES];
+        CGFloat inset = IS_SMALL_DEVICE ? -90.f : -50.f;
+        [forgotAlert setYInset:inset animated:YES];
     }
     
     return YES;
