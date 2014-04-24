@@ -97,6 +97,17 @@
                               sender:nil];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SBLogoutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:SBLoginDidBecomeInvalidNotification object:nil];
+    
+    [super viewDidDisappear:animated];
+}
+
 - (id)ticker
 {
     FFTickerMaximizedDrawerViewController* maximizedTicker = [FFTickerMaximizedDrawerViewController new];
@@ -426,18 +437,19 @@ failure:
                         error:(NSError*)error
 {
     switch (state) {
-    case FBSessionStateOpen:
-        // pass the token back to the server
-        [self loginFbToken:session.accessTokenData.accessToken];
-        break;
-    case FBSessionStateClosed:
-    case FBSessionStateClosedLoginFailed:
-        [FBSession.activeSession closeAndClearTokenInformation];
-        break;
-    default:
+        case FBSessionStateOpen:
+            // pass the token back to the server
+            [self loginFbToken:session.accessTokenData.accessToken];
+            break;
+        case FBSessionStateClosed:
+            break;
+        case FBSessionStateClosedLoginFailed:
+            [FBSession.activeSession closeAndClearTokenInformation];
+            break;
+        default:
         break;
     }
-    if (!error) {
+    if (!error || error.code == 2) {
         return;
     }
     [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"FBSessionError: %@", error]
@@ -546,6 +558,7 @@ failure:
 
 - (BOOL)textFieldShouldEndEditing:(UITextField*)textField
 {
+    [textField resignFirstResponder];
     return YES;
 }
 
