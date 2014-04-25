@@ -78,27 +78,11 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     
     if (self.networkStatus == NotReachable) {
         self.tableView.userInteractionEnabled = NO;
+        [self.tableView reloadData];
     }
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
-}
-
-- (void)checkNetworkStatus:(NSNotification *)notification
-{
-    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
-    
-    if (internetStatus != self.networkStatus) {
-        self.networkStatus = internetStatus;
-        [self updateMarkets];
-        
-        if (internetStatus == NotReachable) {
-            [self refreshRoster];
-            self.tableView.userInteractionEnabled = NO;
-        } else {
-            self.tableView.userInteractionEnabled = YES;
-        }
-    }
 }
 
 - (void)didMoveToParentViewController:(UIViewController *)parent
@@ -125,6 +109,25 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self name:kReachabilityChangedNotification object:nil];
     [super viewDidDisappear:animated];
+}
+
+#pragma mark -
+
+- (void)checkNetworkStatus:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    
+    if (internetStatus != self.networkStatus) {
+        self.networkStatus = internetStatus;
+        [self updateMarkets];
+        
+        if (internetStatus == NotReachable) {
+            [self refreshRoster];
+            self.tableView.userInteractionEnabled = NO;
+        } else {
+            self.tableView.userInteractionEnabled = YES;
+        }
+    }
 }
 
 #pragma mark - private
