@@ -300,23 +300,32 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
             cell.marketSelector.delegate = self;
             [cell.marketSelector reloadData];
             if (self.selectedMarket && self.markets) {
+                _noGamesAvailable = NO;
                 NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
                 if (selectedMarket != NSNotFound) {
                     [cell.marketSelector updateSelectedMarket:selectedMarket
                                                      animated:NO] ;
                 }
+            } else if (self.markets.count == 0) {
+                _noGamesAvailable = YES;
+                [cell showNoGamesMessage];
             }
             return cell;
         }
         FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
                                                                forIndexPath:indexPath];
         cell.autoRemovedBenched.on = self.roster.removeBenched.integerValue == 1;
-        [cell.autoRemovedBenched addTarget:self
-                                    action:@selector(autoRemovedBenched:)
-                          forControlEvents:UIControlEventValueChanged];
-        [cell.autoFillButton addTarget:self
-                                action:@selector(autoFill:)
-                      forControlEvents:UIControlEventTouchUpInside];
+        if (_noGamesAvailable == NO) {
+            [cell.autoRemovedBenched addTarget:self
+                                        action:@selector(autoRemovedBenched:)
+                              forControlEvents:UIControlEventValueChanged];
+            [cell.autoFillButton addTarget:self
+                                    action:@selector(autoFill:)
+                          forControlEvents:UIControlEventTouchUpInside];
+        } else {
+            cell.autoRemovedBenched.enabled = NO;
+        }
+        
         return cell;
     }
     case 1: {
@@ -372,6 +381,9 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 - (void)tableView:(UITableView*)tableView
     didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
+    if (_noGamesAvailable)
+        return;
+        
     NSString* position = [self positions][indexPath.row];
     [self.delegate showPosition:position];
 }
@@ -441,6 +453,9 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)autoFill:(UIButton*)button
 {
+    if (_noGamesAvailable)
+        return;
+    
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Auto Fill Roster"
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];

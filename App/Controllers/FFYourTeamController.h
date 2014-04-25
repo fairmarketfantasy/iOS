@@ -23,6 +23,7 @@
 @property(nonatomic, readonly) FFRoster* roster;
 @property(nonatomic) FFMarket* selectedMarket;
 @property(nonatomic) UITableView* tableView;
+@property(nonatomic, readonly) BOOL noGamesAvailable;
 - (NSArray*)uniquePositions;
 - (void)createRoster;
 - (void)refreshRoster;

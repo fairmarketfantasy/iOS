@@ -172,6 +172,10 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 - (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
      viewControllerBeforeViewController:(UIViewController*)viewController
 {
+    if (self.teamController.noGamesAvailable == YES) {
+        return nil;
+    }
+    
     NSUInteger index = [[self getViewControllers] indexOfObject:viewController];
     if (index == NSNotFound) {
         WTFLog;
@@ -186,6 +190,10 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 - (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
       viewControllerAfterViewController:(UIViewController*)viewController
 {
+    if (self.teamController.noGamesAvailable == YES) {
+        return nil;
+    }
+    
     NSUInteger index = [[self getViewControllers] indexOfObject:viewController];
     if (index == NSNotFound) {
         WTFLog;
