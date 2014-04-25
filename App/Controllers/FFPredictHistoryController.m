@@ -27,7 +27,7 @@
 #import "FFContestType.h"
 #import "FFDate.h"
 
-#define ALERT_TAG 0xCCCF
+#define LOADING_VIEW_TAG 0xCCCF
 
 @interface FFPredictHistoryController () <UITableViewDataSource, UITableViewDelegate,
 FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
@@ -97,14 +97,14 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 {
     [super viewWillAppear:animated];
     [self hideTypeSelector];
-    __block FFAlertView* loading = [[FFAlertView alloc] initWithTitle:nil
+    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:nil
                                                              messsage:nil
                                                          loadingStyle:FFAlertViewLoadingStylePlain];
-    loading.tag = ALERT_TAG;
-    [loading showInView:self.navigationController.view];
+    loadingView.tag = LOADING_VIEW_TAG;
+    [loadingView showInView:self.navigationController.view];
     
     [self refreshWithCompletion:^{
-        [loading hide];
+        [loadingView hide];
     }];
 //    [self refresh];
 }
@@ -131,7 +131,17 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 - (void)predictionsTypeSelected:(FFPredictionsType)type
 {
     self.predictionType = type;
-    [self refresh];
+    
+    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:nil
+                                                             messsage:nil
+                                                         loadingStyle:FFAlertViewLoadingStylePlain];
+    loadingView.tag = LOADING_VIEW_TAG;
+    [loadingView showInView:self.navigationController.view];
+    
+    [self refreshWithCompletion:^{
+        [loadingView hide];
+    }];
+    
     [self showOrHideTypeSelectorIfNeeded];
 }
 
@@ -319,14 +329,14 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
     BOOL isHistory = segments.selectedSegmentIndex == 1;
     self.rosterPredictionType = isHistory ? FFRosterPredictionTypeFinished : FFRosterPredictionTypeSubmitted;
     
-    __block FFAlertView* loading = [[FFAlertView alloc] initWithTitle:nil
+    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:nil
                                                              messsage:nil
                                                          loadingStyle:FFAlertViewLoadingStylePlain];
-    loading.tag = ALERT_TAG;
-    [loading showInView:self.navigationController.view];
+    loadingView.tag = LOADING_VIEW_TAG;
+    [loadingView showInView:self.navigationController.view];
     
     [self refreshWithCompletion:^{
-        [loading hide];
+        [loadingView hide];
     }];
     
 //    [self refresh];
@@ -414,7 +424,10 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     switch (self.predictionType) {
         case FFPredictionsTypeIndividual: {
-            [self.individualPredictions fetch];
+            [self.individualPredictions fetchWithCompletion:^{
+                if (block)
+                    block();
+            }];
             [self.typeButton setTitle:NSLocalizedString(@"Individual", nil)
                              forState:UIControlStateNormal];
         }
