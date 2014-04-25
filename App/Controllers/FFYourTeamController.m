@@ -373,6 +373,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
                                                                forIndexPath:indexPath];
         cell.autoRemovedBenched.on = self.roster.removeBenched.integerValue == 1;
         if (_noGamesAvailable == NO || self.networkStatus == NotReachable) {
+            cell.autoRemovedBenched.enabled = YES;
             [cell.autoRemovedBenched addTarget:self
                                         action:@selector(autoRemovedBenched:)
                               forControlEvents:UIControlEventValueChanged];
