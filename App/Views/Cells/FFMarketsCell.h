@@ -14,7 +14,7 @@
 
 @property(nonatomic) FFMarketSelector* marketSelector;
 
-- (void)showNoGamesMessage;
-- (void)hideNoGamesMessage;
+- (void)showStatusLabelWithMessage:(NSString *)message;
+- (void)hideStatusLabel;
 
 @end

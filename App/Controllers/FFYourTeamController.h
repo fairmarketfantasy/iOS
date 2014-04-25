@@ -7,6 +7,7 @@
 //
 
 #import "FFBaseViewController.h"
+#import "Reachability.h"
 
 @protocol FFYourTeamProtocol <NSObject>
 
@@ -17,7 +18,9 @@
 @class FFMarket;
 @class FFMarketSet;
 
-@interface FFYourTeamController : FFBaseViewController
+@interface FFYourTeamController : FFBaseViewController {
+    Reachability* internetReachable;
+}
 
 @property(nonatomic, weak) id<FFYourTeamProtocol> delegate;
 @property(nonatomic, readonly) FFRoster* roster;

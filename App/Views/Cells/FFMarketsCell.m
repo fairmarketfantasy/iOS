@@ -47,14 +47,15 @@
     return self;
 }
 
-- (void)hideNoGamesMessage
-{
-    self.noGamesLabel.hidden = YES;
-}
-
-- (void)showNoGamesMessage
+- (void)showStatusLabelWithMessage:(NSString *)message
 {
     self.noGamesLabel.hidden = NO;
+    self.noGamesLabel.text = message;
+}
+
+- (void)hideStatusLabel
+{
+    self.noGamesLabel.hidden = YES;
 }
 
 @end

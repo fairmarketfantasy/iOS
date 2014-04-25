@@ -23,6 +23,9 @@
 #import "FFCollectionMarketCell.h"
 #import <libextobjc/EXTScope.h>
 #import <FlatUIKit.h>
+
+#import "Reachability.h"
+
 // models
 #import "FFRoster.h"
 #import "FFMarket.h"
@@ -39,6 +42,8 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 @property(nonatomic) FFSubmitView* submitView;
 @property(nonatomic) FFMarketSet* marketsSetRegular;
 @property(nonatomic) FFMarketSet* marketsSetSingle;
+
+@property(nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 
@@ -61,6 +66,41 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     [self.view bringSubviewToFront:self.submitView];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    internetReachable = [Reachability reachabilityForInternetConnection];
+	BOOL success = [internetReachable startNotifier];
+	if ( !success )
+		DLog(@"Failed to start notifier");
+    self.networkStatus = [internetReachable currentReachabilityStatus];
+    
+    if (self.networkStatus == NotReachable) {
+        self.tableView.userInteractionEnabled = NO;
+    }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+}
+
+- (void)checkNetworkStatus:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    
+    if (internetStatus != self.networkStatus) {
+        self.networkStatus = internetStatus;
+        [self updateMarkets];
+        
+        if (internetStatus == NotReachable) {
+            [self refreshRoster];
+            self.tableView.userInteractionEnabled = NO;
+        } else {
+            self.tableView.userInteractionEnabled = YES;
+        }
+    }
+}
+
 - (void)didMoveToParentViewController:(UIViewController *)parent
 {
     self.marketsSetRegular = [FFMarketSet.alloc initWithDataObjectClass:[FFMarket class]
@@ -79,6 +119,12 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 {
     [super viewDidAppear:animated];
     [self shorOrHideSubmitIfNeeded];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - private
@@ -299,24 +345,31 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
             cell.marketSelector.dataSource = self;
             cell.marketSelector.delegate = self;
             [cell.marketSelector reloadData];
-            if (self.selectedMarket && self.markets) {
+            if (self.selectedMarket && self.markets && self.networkStatus != NotReachable) {
                 _noGamesAvailable = NO;
-                [cell hideNoGamesMessage];
+                [cell hideStatusLabel];
                 NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
                 if (selectedMarket != NSNotFound) {
                     [cell.marketSelector updateSelectedMarket:selectedMarket
                                                      animated:NO] ;
                 }
-            } else if (self.markets.count == 0) {
-                _noGamesAvailable = YES;
-                [cell showNoGamesMessage];
+            } else if (self.markets.count == 0 || self.networkStatus == NotReachable) {
+                NSString *message = nil;
+                if (self.networkStatus == NotReachable) {
+                    message = NSLocalizedString(@"NO INTERNET CONNECTION", nil);
+                } else {
+                    _noGamesAvailable = YES;
+                    message = NSLocalizedString(@"NO GAMES SCHEDULED", nil);
+                }
+                
+                [cell showStatusLabelWithMessage:message];
             }
             return cell;
         }
         FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
                                                                forIndexPath:indexPath];
         cell.autoRemovedBenched.on = self.roster.removeBenched.integerValue == 1;
-        if (_noGamesAvailable == NO) {
+        if (_noGamesAvailable == NO || self.networkStatus == NotReachable) {
             [cell.autoRemovedBenched addTarget:self
                                         action:@selector(autoRemovedBenched:)
                               forControlEvents:UIControlEventValueChanged];
@@ -382,9 +435,6 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 - (void)tableView:(UITableView*)tableView
     didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if (_noGamesAvailable)
-        return;
-        
     NSString* position = [self positions][indexPath.row];
     [self.delegate showPosition:position];
 }
@@ -557,12 +607,13 @@ heightForHeaderInSection:(NSInteger)section
 {
     FFCollectionMarketCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MarketCell"
                                                                              forIndexPath:indexPath];
-    if (self.markets.count > indexPath.item) {
+    if (self.markets.count > indexPath.item && self.networkStatus != NotReachable) {
         FFMarket* market = self.markets[indexPath.item];
+        [cell showLabels];
         cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
         cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
-    } else if (self.markets.count == 0) {
-        [cell showNoGamesMessage];
+    } else if (self.markets.count == 0 || self.networkStatus == NotReachable) {
+        [cell hideLabels];
     }
     
     return cell;

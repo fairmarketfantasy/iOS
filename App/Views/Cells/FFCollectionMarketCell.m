@@ -42,25 +42,20 @@
         self.timeLabel.text = @"";
         [self.contentView addSubview:self.timeLabel];
         [self.contentView addSubview:self.marketLabel];
-        
-        self.noGamesLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, self.contentView.frame.size.width, 30.f)];
-        self.noGamesLabel.center = self.contentView.center;
-        self.noGamesLabel.font = [FFStyle blockFont:20.f];
-        self.noGamesLabel.textColor = [FFStyle lightGrey];
-        self.noGamesLabel.backgroundColor = [UIColor clearColor];
-        self.noGamesLabel.textAlignment = NSTextAlignmentCenter;
-        self.noGamesLabel.text = NSLocalizedString(@"NO GAMES SCHEDULED", nil);
-        [self.contentView addSubview:self.noGamesLabel];
-        self.noGamesLabel.hidden = YES;
     }
     return self;
 }
 
-- (void)showNoGamesMessage
+- (void)hideLabels
 {
-    self.noGamesLabel.hidden = NO;
     self.marketLabel.hidden = YES;
     self.timeLabel.hidden = YES;
+}
+
+- (void)showLabels
+{
+    self.marketLabel.hidden = NO;
+    self.timeLabel.hidden = NO;
 }
 
 @end
