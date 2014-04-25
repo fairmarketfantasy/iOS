@@ -465,7 +465,7 @@ failure:
 
 - (void)loginFbToken:(NSString*)accessToken
 {
-    FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Creating Account", nil)
+    FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil/*NSLocalizedString(@"Creating Account", nil)*/
                                                    messsage:nil
                                                loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.view];
