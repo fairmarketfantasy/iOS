@@ -17,6 +17,7 @@
 #import "FFWebViewController.h"
 #import "FFAlertView.h"
 #import "FFMenuViewController.h"
+#import "Reachability.h"
 // model
 #import "FFControllerProtocol.h"
 #import "FFMarketSet.h"
@@ -36,6 +37,8 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 @property(nonatomic) FFWideReceiverController* receiverController;
 @property(nonatomic) UIButton* globalMenuButton;
 @property(nonatomic) NSDictionary* positionsNames;
+
+@property(nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 
@@ -131,6 +134,45 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
                     animated:NO
                   completion:nil];
     [self.view bringSubviewToFront:self.pager];
+    
+    internetReachable = [Reachability reachabilityForInternetConnection];
+	BOOL success = [internetReachable startNotifier];
+	if ( !success )
+		DLog(@"Failed to start notifier");
+    self.networkStatus = [internetReachable currentReachabilityStatus];
+    
+    if (self.networkStatus == NotReachable) {
+        [self setScrollEnabled:NO];
+    }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+}
+
+- (void)setScrollEnabled:(BOOL)enabled
+{
+    for(UIView* view in self.view.subviews) {
+        if([view isKindOfClass:[UIScrollView class]]) {
+            UIScrollView* scrollView = (UIScrollView*)view;
+            [scrollView setScrollEnabled:enabled];
+            return;
+        }
+    }
+}
+
+- (void)checkNetworkStatus:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    
+    if (internetStatus != self.networkStatus) {
+        if (internetStatus == NotReachable) {
+            [self setScrollEnabled:NO];
+        } else {
+            [self setScrollEnabled:YES];
+        }
+        
+        self.networkStatus = internetStatus;
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue

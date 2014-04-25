@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FFPagerController : UIPageViewController
+@class Reachability;
+
+@interface FFPagerController : UIPageViewController {
+        Reachability* internetReachable;
+}
 
 @end
