@@ -301,6 +301,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
             [cell.marketSelector reloadData];
             if (self.selectedMarket && self.markets) {
                 _noGamesAvailable = NO;
+                [cell hideNoGamesMessage];
                 NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
                 if (selectedMarket != NSNotFound) {
                     [cell.marketSelector updateSelectedMarket:selectedMarket

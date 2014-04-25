@@ -15,5 +15,6 @@
 @property(nonatomic) FFMarketSelector* marketSelector;
 
 - (void)showNoGamesMessage;
+- (void)hideNoGamesMessage;
 
 @end

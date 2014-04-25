@@ -47,6 +47,11 @@
     return self;
 }
 
+- (void)hideNoGamesMessage
+{
+    self.noGamesLabel.hidden = YES;
+}
+
 - (void)showNoGamesMessage
 {
     self.noGamesLabel.hidden = NO;
