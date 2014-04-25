@@ -413,15 +413,14 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
     [self.tableView reloadData];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     switch (self.predictionType) {
-        case FFPredictionsTypeIndividual:
-        {
+        case FFPredictionsTypeIndividual: {
             [self.individualPredictions fetch];
             [self.typeButton setTitle:NSLocalizedString(@"Individual", nil)
                              forState:UIControlStateNormal];
         }
             break;
-        case FFPredictionsTypeRoster:
-        {
+            
+        case FFPredictionsTypeRoster: {
             if (self.rosterPredictionType == FFRosterPredictionTypeSubmitted) {
                 [self.rosterActivePredictions fetchWithCompletion:^{
                     if (block) {
@@ -436,10 +435,12 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
                                                         }]; // TODO: should be in one of MODELs
                 
             }
+            
             [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
                              forState:UIControlStateNormal];
         }
             break;
+            
         default:
             break;
     }

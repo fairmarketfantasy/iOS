@@ -17,12 +17,15 @@
 
 @property (nonatomic) SBUser *user;
 @property (nonatomic) SBSessionData *sessionData;
+
 - (id)initWithIdentifier:(NSString*)identifier
                userClass:(Class)userClass;
 
 @end
 
 @interface FFSession ()
+
+@property (nonatomic, assign) BOOL shouldStopFetchUser;
 
 @end
 
@@ -182,8 +185,27 @@ failure:
     }];
 }
 
+- (void)getOAuth:(SBUser *)user password:(NSString *)password success:(SBSuccessBlock)success failure:(SBErrorBlock)failure
+{
+    [self.authorizedHttpClient authenticateUsingOAuthWithPath:@"/oauth2/token" username:user.email
+                                                     password:password scope:nil success:
+     ^(AFOAuthCredential *credential) {
+         [AFOAuthCredential storeCredential:credential withIdentifier:self.identifier];
+         success(user);
+     } failure:^(NSError *error) {
+         NSLog(@"oauth crapped %@", error);
+         NSError *dumbError = [NSError errorWithDomain:@"" code:400 userInfo:
+                               @{ NSUnderlyingErrorKey: error,
+                                  NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid password", nil) }];
+         failure(dumbError);
+         //because 2 popups with errors
+         //         failure(error);
+     }];
+}
+
 - (void)logout
 {
+    self.shouldStopFetchUser = YES;
     // delete everything!
     [[SBSessionData meta] removeAll];
     [[FFMarket meta] removeAll];
@@ -232,7 +254,6 @@ failure:
                                                        isEqualTo:[FFSport stringFromSport:self.sport]];
 }
 
-
 #pragma mark - user retrieving
 
 - (void)pollUser
@@ -248,7 +269,8 @@ failure:
          double delayInSeconds = 10.0;
          dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
          dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-             [self pollUser];
+             if (!self.shouldStopFetchUser)
+                 [self pollUser];
          });
      }
                           failure:
@@ -257,7 +279,8 @@ failure:
          double delayInSeconds = 10.0;
          dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
          dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
-             [self pollUser];
+             if (!self.shouldStopFetchUser)
+                 [self pollUser];
          });
      }];
 }
