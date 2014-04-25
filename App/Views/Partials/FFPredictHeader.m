@@ -25,8 +25,8 @@
         self.segments.deselectedFontColor = [FFStyle white];
         self.segments.selectedFont = [FFStyle regularFont:14.f];
         self.segments.deselectedFont = [FFStyle regularFont:14.f];
-        self.segments.deselectedColor = [FFStyle brightGreen];
-        self.segments.selectedColor = [FFStyle darkGrey];
+        self.segments.deselectedColor = [FFStyle darkGrey];
+        self.segments.selectedColor = [FFStyle brightGreen];
         self.segments.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.segments.selectedSegmentIndex = 0;
         [self addSubview:self.segments];
