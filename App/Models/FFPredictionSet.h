@@ -12,6 +12,8 @@
 @interface FFPredictionSet : FFDataObjectResultSet
 
 - (void)fetch;
+- (void)fetchWithCompletion:(void(^)(void))block;
 - (void)fetchWithParameters:(NSDictionary*)parameters;
+- (void)fetchWithParameters:(NSDictionary*)parameters completion:(void(^)(void))block;
 
 @end

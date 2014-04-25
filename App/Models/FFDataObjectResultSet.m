@@ -112,6 +112,62 @@ failure:
     }];
 }
 
+- (void)refreshWithParameters:(NSDictionary*)parameters completion:(void(^)(void))block
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(resultSetWillReload:)]) {
+        [self.delegate resultSetWillReload:self];
+    }
+    [self.session authorizedJSONRequestWithMethod:@"GET"
+                                             path:[self path]
+                                        paramters:parameters
+                                          success:^(NSURLRequest* request, NSHTTPURLResponse* response, id JSON)
+     {
+         NSLog(@"got json: %@", JSON);
+         if ([super respondsToSelector:@selector(_setBeforeParams:)]) {
+             [super performSelector:@selector(_setBeforeParams:)
+                         withObject:JSON];
+         }
+         dispatch_async([self processingQueue], ^{
+             if (self.clearsCollectionBeforeSaving) {
+                 [[self query] removeAll];
+             }
+             NSArray* replacement = @[];
+             if ([super respondsToSelector:@selector(_processPage:)]) {
+                 id array = [super performSelector:@selector(_processPage:)
+                                        withObject:JSON];
+                 if ([array isKindOfClass:[NSArray class]]) {
+                     replacement = array;
+                 }
+             }
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 if ([super respondsToSelector:@selector(_reset:)]) {
+                     [super performSelector:@selector(_reset:)
+                                 withObject:replacement];
+                 }
+                 if (self.delegate && [self.delegate respondsToSelector:@selector(resultSetDidReload:)]) {
+                     [self.delegate resultSetDidReload:self];
+                 }
+                 
+                 if (block)
+                     block();
+             });
+         });
+     }
+                                          failure:
+     ^(NSURLRequest * request, NSHTTPURLResponse * response, NSError * error, id JSON)
+     {
+         NSLog(@"got error: %@ JSON: %@", error, JSON);
+         if (self.delegate && [self.delegate respondsToSelector:@selector(resultSet:
+                                                                          didFailToReload:)]) {
+             [self.delegate resultSet:self
+                      didFailToReload:error];
+         }
+         
+         if (block)
+             block();
+     }];
+}
+
 // fix NSDictionary class
 - (NSArray*)_processPage:(id)page
 {

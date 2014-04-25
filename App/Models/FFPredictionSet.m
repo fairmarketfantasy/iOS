@@ -29,6 +29,14 @@
     [self fetchWithParameters:@{}];
 }
 
+- (void)fetchWithCompletion:(void(^)(void))block
+{
+    [self fetchWithParameters:@{}completion:^{
+        if (block)
+            block();
+    }];
+}
+
 - (void)fetchWithParameters:(NSDictionary*)parameters
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
@@ -37,6 +45,18 @@
                                      @"sport" : [FFSport stringFromSport:self.session.sport]
                                      }];
     [self refreshWithParameters:[param copy]];
+}
+
+- (void)fetchWithParameters:(NSDictionary*)parameters completion:(void(^)(void))block
+{
+    NSAssert(self.query, @"Query shouldn't be nil!");
+    NSMutableDictionary* param = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    [param addEntriesFromDictionary:@{
+                                      @"sport" : [FFSport stringFromSport:self.session.sport]
+                                      }];
+    [self refreshWithParameters:[param copy] completion:^{
+        block();
+    }];
 }
 
 @end

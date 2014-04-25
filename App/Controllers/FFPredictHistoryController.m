@@ -17,6 +17,7 @@
 #import "FFPredictionsSelector.h"
 #import "FFStyle.h"
 #import "FFPredictRosterPagerController.h"
+#import "FFAlertView.h"
 // model
 #import "FFPredictionSet.h"
 #import "FFIndividualPrediction.h"
@@ -25,6 +26,8 @@
 #import "FFGame.h"
 #import "FFContestType.h"
 #import "FFDate.h"
+
+#define ALERT_TAG 0xCCCF
 
 @interface FFPredictHistoryController () <UITableViewDataSource, UITableViewDelegate,
 FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
@@ -94,7 +97,16 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 {
     [super viewWillAppear:animated];
     [self hideTypeSelector];
-    [self refresh];
+    __block FFAlertView* loading = [[FFAlertView alloc] initWithTitle:nil
+                                                             messsage:nil
+                                                         loadingStyle:FFAlertViewLoadingStylePlain];
+    loading.tag = ALERT_TAG;
+    [loading showInView:self.navigationController.view];
+    
+    [self refreshWithCompletion:^{
+        [loading hide];
+    }];
+//    [self refresh];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -306,7 +318,18 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     BOOL isHistory = segments.selectedSegmentIndex == 1;
     self.rosterPredictionType = isHistory ? FFRosterPredictionTypeFinished : FFRosterPredictionTypeSubmitted;
-    [self refresh];
+    
+    __block FFAlertView* loading = [[FFAlertView alloc] initWithTitle:nil
+                                                             messsage:nil
+                                                         loadingStyle:FFAlertViewLoadingStylePlain];
+    loading.tag = ALERT_TAG;
+    [loading showInView:self.navigationController.view];
+    
+    [self refreshWithCompletion:^{
+        [loading hide];
+    }];
+    
+//    [self refresh];
 }
 
 #pragma mark - private
@@ -366,11 +389,52 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
                     [self.rosterActivePredictions fetch];
                     break;
                 case FFRosterPredictionTypeFinished:
+                    [self.rosterHistoryPredictions fetchWithParameters:@{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
+                    break;
                     [self.rosterHistoryPredictions fetchWithParameters:
                      @{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
                     break;
                 default:
                     break;
+            }
+            [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
+                             forState:UIControlStateNormal];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)refreshWithCompletion:(void(^)(void))block
+{
+    [self.tableView setPredictionType:self.predictionType
+                 rosterPredictionType:self.rosterPredictionType];
+    [self.tableView reloadData];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    switch (self.predictionType) {
+        case FFPredictionsTypeIndividual:
+        {
+            [self.individualPredictions fetch];
+            [self.typeButton setTitle:NSLocalizedString(@"Individual", nil)
+                             forState:UIControlStateNormal];
+        }
+            break;
+        case FFPredictionsTypeRoster:
+        {
+            if (self.rosterPredictionType == FFRosterPredictionTypeSubmitted) {
+                [self.rosterActivePredictions fetchWithCompletion:^{
+                    if (block) {
+                        block();
+                    }
+                }];
+            } else if (self.rosterPredictionType == FFRosterPredictionTypeFinished) {
+                [self.rosterHistoryPredictions fetchWithParameters:@{ @"historical" : @"true" }
+                                                        completion:^{
+                                                            if (block)
+                                                                block();
+                                                        }]; // TODO: should be in one of MODELs
+                
             }
             [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
                              forState:UIControlStateNormal];

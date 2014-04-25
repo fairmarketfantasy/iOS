@@ -12,6 +12,8 @@
 @interface FFDataObjectResultSet : SBDataObjectResultSet
 
 @property (nonatomic, readonly) FFSession* session;
+
 - (void)refreshWithParameters:(NSDictionary*)parameters;
+- (void)refreshWithParameters:(NSDictionary*)parameters completion:(void(^)(void))block;
 
 @end
