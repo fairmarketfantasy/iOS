@@ -70,8 +70,11 @@
 - (void)selectPosition:(NSUInteger)position
 {
     self.position = position;
-    [self fetchPlayers];
-    [self.tableView reloadData];
+//    [self fetchPlayers];
+//    [self.tableView reloadData];
+    [self fetchPlayersWithCompletion:^{
+        [self.tableView reloadData];
+    }];
 }
 
 - (void)fetchPlayers
@@ -112,6 +115,55 @@
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                     autoHide:YES]
+          showInView:self.navigationController.view];
+          */
+     }];
+}
+
+- (void)fetchPlayersWithCompletion:(void(^)(void))block
+{
+    if (!self.delegate.rosterId) {
+        self.players = @[];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
+        return;
+    }
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Loading Players"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [FFPlayer fetchPlayersForRoster:self.delegate.rosterId
+                           position:self.delegate.positions[self.position]
+                     removedBenched:self.delegate.autoRemovedBenched
+                            session:self.session
+                            success:
+     ^(id successObj) {
+         @strongify(self)
+         self.players = successObj;
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [alert hide];
+         
+         if (block)
+             block();
+     }
+                            failure:
+     ^(NSError *error) {
+         @strongify(self)
+         self.players = @[];
+         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         [alert hide];
+         
+         if (block)
+             block();
+         /* !!!: disable error alerts NBA-659
+          [[[FFAlertView alloc] initWithError:error
+          title:nil
+          cancelButtonTitle:nil
+          okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+          autoHide:YES]
           showInView:self.navigationController.view];
           */
      }];

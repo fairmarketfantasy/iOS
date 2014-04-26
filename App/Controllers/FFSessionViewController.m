@@ -518,12 +518,26 @@ failure:
             [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"FBRegisterOAuthError: %@", error]
                               withLevel:UTLogLevelError];
             [alert hide];
-            FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
-                                                               title:nil
-                                                   cancelButtonTitle:nil
-                                                     okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                                            autoHide:YES];
-            [ealert showInView:self.view];
+            
+            //TODO:should replace
+            NSString *localizedDescription = error.userInfo[@"NSLocalizedDescription"];
+            
+            FFAlertView *alert = nil;
+            if ([localizedDescription rangeOfString:@"500"].location != NSNotFound) {
+                alert = [[FFAlertView alloc] initWithTitle:nil
+                                                   message:NSLocalizedString(@"Facebook sign ining is unavailable now", nil)
+                                         cancelButtonTitle:nil
+                                           okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                                  autoHide:YES];
+            } else {
+                alert = [[FFAlertView alloc] initWithError:error
+                                                     title:nil
+                                         cancelButtonTitle:nil
+                                           okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                                  autoHide:YES];
+            }
+            
+            [alert showInView:self.view];
         }];
     }];
 }

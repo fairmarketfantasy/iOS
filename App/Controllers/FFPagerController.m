@@ -382,11 +382,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          //1)user has choosen player on some position
          //2)this position is already occupied buy another player
          //3)nothing happens after it
-         NSString *errorMessage = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-         NSString *mainPart = @"There is no room for another";
-         if ([errorMessage rangeOfString:mainPart].location != NSNotFound) {
+         NSString *localizedDescription = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+         NSString *errorBody = @"There is no room for another";
+         if ([localizedDescription rangeOfString:errorBody].location != NSNotFound) {
              FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
-                                                             message:errorMessage
+                                                             message:localizedDescription
                                                    cancelButtonTitle:nil
                                                      okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
                                                             autoHide:YES];
