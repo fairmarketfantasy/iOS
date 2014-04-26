@@ -377,6 +377,22 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      ^(NSError *error) {
 //         @strongify(self)
          [alert hide];
+         
+          //show this alert cause unclear situation:
+         //1)user has choosen player on some position
+         //2)this position is already occupied buy another player
+         //3)nothing happens after it
+         NSString *errorMessage = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+         NSString *mainPart = @"There is no room for another";
+         if ([errorMessage rangeOfString:mainPart].location != NSNotFound) {
+             FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
+                                                             message:errorMessage
+                                                   cancelButtonTitle:nil
+                                                     okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                                            autoHide:YES];
+             
+             [alert showInView:self.navigationController.view];
+         }
          /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
