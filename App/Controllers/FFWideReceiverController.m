@@ -141,8 +141,8 @@
      ^(id successObj) {
          @strongify(self)
          self.players = successObj;
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
+//         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+//                       withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
          
          if (block)
@@ -152,8 +152,8 @@
      ^(NSError *error) {
          @strongify(self)
          self.players = @[];
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
+//         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+//                       withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
          
          if (block)
