@@ -439,6 +439,9 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 - (void)tableView:(UITableView*)tableView
     didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
+    if (_noGamesAvailable)
+        return;
+    
     NSString* position = [self positions][indexPath.row];
     [self.delegate showPosition:position];
 }
