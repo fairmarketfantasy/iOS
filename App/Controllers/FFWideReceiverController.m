@@ -46,7 +46,14 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self fetchPlayers];
+//    [self fetchPlayers];
+//    [self.tableView reloadData];
+
+    if (self.players.count == 0) {
+        [self fetchPlayersWithCompletion:^{
+            [self.tableView reloadData];
+        }];
+    }
     [self.tableView reloadData];
 }
 

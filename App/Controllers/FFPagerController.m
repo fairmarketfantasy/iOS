@@ -362,10 +362,10 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                   success:
      ^(id successObj) {
          @strongify(self)
-         [self.teamController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                                          withRowAnimation:UITableViewRowAnimationAutomatic];
+//         [self.teamController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+//                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+//         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+//                                          withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
          [self.teamController refreshRoster];
          [self setViewControllers:@[self.teamController]
