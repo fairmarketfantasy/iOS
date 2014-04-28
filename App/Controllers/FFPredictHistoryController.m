@@ -97,7 +97,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 {
     [super viewWillAppear:animated];
     [self hideTypeSelector];
-    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:nil
+    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
                                                              messsage:nil
                                                          loadingStyle:FFAlertViewLoadingStylePlain];
     loadingView.tag = LOADING_VIEW_TAG;
@@ -132,7 +132,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 {
     self.predictionType = type;
     
-    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:nil
+    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
                                                              messsage:nil
                                                          loadingStyle:FFAlertViewLoadingStylePlain];
     loadingView.tag = LOADING_VIEW_TAG;
@@ -329,7 +329,7 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
     BOOL isHistory = segments.selectedSegmentIndex == 1;
     self.rosterPredictionType = isHistory ? FFRosterPredictionTypeFinished : FFRosterPredictionTypeSubmitted;
     
-    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:nil
+    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
                                                              messsage:nil
                                                          loadingStyle:FFAlertViewLoadingStylePlain];
     loadingView.tag = LOADING_VIEW_TAG;
@@ -399,8 +399,6 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
                     [self.rosterActivePredictions fetch];
                     break;
                 case FFRosterPredictionTypeFinished:
-                    [self.rosterHistoryPredictions fetchWithParameters:@{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
-                    break;
                     [self.rosterHistoryPredictions fetchWithParameters:
                      @{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
                     break;
