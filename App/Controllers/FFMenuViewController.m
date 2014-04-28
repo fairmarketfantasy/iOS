@@ -309,7 +309,7 @@
            treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
 {
     if (!self.delegate) {
-        NSLog(@"all dressed up with no delegate and no where to go");
+        DebugLog(@"all dressed up with no delegate and no where to go");
         WTFLog;
         return;
     }

@@ -72,7 +72,7 @@
                                         paramters:parameters
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* response, id JSON)
     {
-        NSLog(@"got json: %@", JSON);
+        DebugLog(@"got json: %@", JSON);
         if ([super respondsToSelector:@selector(_setBeforeParams:)]) {
             [super performSelector:@selector(_setBeforeParams:)
                         withObject:JSON];
@@ -103,7 +103,7 @@
 failure:
     ^(NSURLRequest * request, NSHTTPURLResponse * response, NSError * error, id JSON)
     {
-        NSLog(@"got error: %@ JSON: %@", error, JSON);
+        DebugLog(@"got error: %@ JSON: %@", error, JSON);
         if (self.delegate && [self.delegate respondsToSelector:@selector(resultSet:
                                                                    didFailToReload:)]) {
             [self.delegate resultSet:self
@@ -122,7 +122,7 @@ failure:
                                         paramters:parameters
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* response, id JSON)
      {
-         NSLog(@"got json: %@", JSON);
+         DebugLog(@"got json: %@", JSON);
          if ([super respondsToSelector:@selector(_setBeforeParams:)]) {
              [super performSelector:@selector(_setBeforeParams:)
                          withObject:JSON];
@@ -156,7 +156,7 @@ failure:
                                           failure:
      ^(NSURLRequest * request, NSHTTPURLResponse * response, NSError * error, id JSON)
      {
-         NSLog(@"got error: %@ JSON: %@", error, JSON);
+         DebugLog(@"got error: %@ JSON: %@", error, JSON);
          if (self.delegate && [self.delegate respondsToSelector:@selector(resultSet:
                                                                           didFailToReload:)]) {
              [self.delegate resultSet:self
@@ -182,7 +182,7 @@ failure:
             stuff = page;
             all = [NSMutableArray arrayWithCapacity:[page count]];
         } else {
-            NSLog(@"SBDataObjectResultSet was unable to process a page %@", page);
+            DebugLog(@"SBDataObjectResultSet was unable to process a page %@", page);
             return;
         }
         for (NSDictionary *rep in stuff) {

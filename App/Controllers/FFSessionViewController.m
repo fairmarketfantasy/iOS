@@ -68,7 +68,7 @@
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
 	if ( !success )
-		NSLog(@"Failed to start notifier");
+		DebugLog(@"Failed to start notifier");
     self.networkStatus = [internetReachability currentReachabilityStatus];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
@@ -146,12 +146,12 @@
 
 - (void)gotLogout:(NSNotification*)note
 {
-    NSLog(@"Got login/logout notification: %@", note);
+    DebugLog(@"Got login/logout notification: %@", note);
     self.session = nil;
 
     [self dismissViewControllerAnimated:YES
                              completion:^{
-        NSLog(@"done dismissing view controllers");
+        DebugLog(@"done dismissing view controllers");
                              }];
 }
 
@@ -331,7 +331,7 @@
         [FFSession setLastUsedSession:sesh];
         [self performSegueWithIdentifier:@"GotoHome"
                                   sender:nil];
-        NSLog(@"successful login %@", user);
+        DebugLog(@"successful login %@", user);
     }
 failure:
     ^(NSError * err)

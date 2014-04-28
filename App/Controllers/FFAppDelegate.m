@@ -79,7 +79,7 @@
                                        withString:@""]
             stringByReplacingOccurrencesOfString:@">"
                                       withString:@""];
-    NSLog(@"successfully got push token: %@", self.pushToken);
+    DebugLog(@"successfully got push token: %@", self.pushToken);
     [[NSNotificationCenter defaultCenter]
         postNotificationName:SBDidReceiveRemoteNotificationAuthorization
                       object:nil
@@ -91,7 +91,7 @@
 - (void)application:(UIApplication*)app
     didFailToRegisterForRemoteNotificationsWithError:(NSError*)err
 {
-    NSLog(@"Error in push registration. Error: %@", err);
+    DebugLog(@"Error in push registration. Error: %@", err);
 }
 
 - (void)application:(UIApplication*)application

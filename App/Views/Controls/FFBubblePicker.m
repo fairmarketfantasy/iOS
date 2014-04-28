@@ -74,7 +74,7 @@
 
 - (IBAction)didTap:(UITapGestureRecognizer*)sender
 {
-    NSLog(@"did tap on your face butt");
+    DebugLog(@"did tap on your face butt");
     [_textField becomeFirstResponder];
 }
 
@@ -268,7 +268,7 @@
 
 - (IBAction)textFieldChanged:(UITextField*)sender
 {
-    NSLog(@"text field changed to %@", sender.text);
+    DebugLog(@"text field changed to %@", sender.text);
     [self setNeedsLayout];
     if (self.delegate && [self.delegate respondsToSelector:@selector(bubblePicker:
                                                                     didUpdateText:)]) {
@@ -292,7 +292,7 @@
 
 - (BOOL)textFieldShouldEndEditing:(UITextField*)textField
 {
-    NSLog(@"text field will end");
+    DebugLog(@"text field will end");
     [self setNeedsLayout];
     return YES;
 }

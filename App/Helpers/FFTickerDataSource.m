@@ -56,7 +56,7 @@
     failure:
         ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
         {
-            NSLog(@"failed to get public player timeline %@ %@", error, JSON);
+            DebugLog(@"failed to get public player timeline %@ %@", error, JSON);
             [self notifyDelegatesError:error.userInfo[NSLocalizedDescriptionKey]];
         }];
         return;
@@ -90,14 +90,14 @@
     failure:
         ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
         {
-            NSLog(@"Failed to get ticker (public): %@ %@", error, JSON);
+            DebugLog(@"Failed to get ticker (public): %@ %@", error, JSON);
             [self notifyDelegatesError:error.userInfo[NSLocalizedDescriptionKey]];
         }];
     }
 failure:
     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
     {
-        NSLog(@"Failed to get ticker (mine): %@ %@", error, JSON);
+        DebugLog(@"Failed to get ticker (mine): %@ %@", error, JSON);
         [self notifyDelegatesError:error.userInfo[NSLocalizedDescriptionKey]];
     }];
 }

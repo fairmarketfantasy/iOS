@@ -348,7 +348,7 @@
         }
     }
     default:
-        NSLog(@"fart");
+//        DebugLog(@"fart");
         return nil;
     }
 }
@@ -672,7 +672,7 @@ failure:
 {
     // TODO: move to separate model!!!
     if (newState == _state) {
-        NSLog(@"tried to transition to the current state... ignoring");
+        DebugLog(@"tried to transition to the current state... ignoring");
         return;
     }
     FFContestViewControllerState previousState = _state;
@@ -791,7 +791,7 @@ failure:
           || _state == FFContestViewControllerStateContestEntered
           || _state == FFContestViewControllerStateShowFriendRoster
           || _state == FFContestViewControllerStateContestCompleted)) {
-        NSLog(@"attempting to show roster players, but in the wrong state");
+        DebugLog(@"attempting to show roster players, but in the wrong state");
         return;
     }
 

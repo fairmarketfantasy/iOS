@@ -18,4 +18,11 @@
 #define DLog(format, ...) CFShow((__bridge CFStringRef)LOG_FMT_STR(format, ##__VA_ARGS__))
 
 #define WTFLog NSLog(@"How did we even get here?")
+
+#ifdef DEBUG
+#define DebugLog(s, ...) NSLog( @"<%p %@:(%d)> %@", self, [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#else
+#define DebugLog(s, ...)
+#endif
+
 #endif

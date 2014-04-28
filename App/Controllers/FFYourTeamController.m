@@ -75,7 +75,6 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     [self updateMarkets];
     // roster
     self.tryCreateRosterTimes = 3;
-    NSLog(@"Create roster - #1");
     [self createRoster];
 }
 
@@ -109,7 +108,6 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 //    [self updateMarkets];
 //    // roster
 //    self.tryCreateRosterTimes = 3;
-//    NSLog(@"Create roster - #1");
 //    [self createRoster];
 //}
 

@@ -97,7 +97,7 @@
 
     [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
     {
-        NSLog(@"got fb login response response %@", responseObject);
+        DebugLog(@"got fb login response response %@", responseObject);
         [user setValuesForKeysWithNetworkDictionary:responseObject];
         [user save];
         self.user = user;
@@ -117,7 +117,7 @@
 failure:
     ^(AFHTTPRequestOperation * operation, NSError * error)
     {
-        NSLog(@"register failed to post user operation=%@ error=%@", operation, error);
+        DebugLog(@"register failed to post user operation=%@ error=%@", operation, error);
         failure(error);
     }];
     [self.anonymousHttpClient enqueueHTTPRequestOperation:op];
@@ -187,7 +187,7 @@ failure:
          [AFOAuthCredential storeCredential:credential withIdentifier:self.identifier];
          success(user);
      } failure:^(NSError *error) {
-         NSLog(@"oauth crapped %@", error);
+         DebugLog(@"oauth crapped %@", error);
          NSError *dumbError = [NSError errorWithDomain:@"" code:400 userInfo:
                                @{ NSUnderlyingErrorKey: error,
                                   NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid password", nil) }];
@@ -225,11 +225,11 @@ failure:
          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
              [self.user save];
              success(self.user);
-             NSLog(@"successfully got and saved user");
+             DebugLog(@"successfully got and saved user");
              //             [self syncPushToken];
          });
      } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
-         NSLog(@"failed to get current user error=%@ json=%@", error, JSON);
+         DebugLog(@"failed to get current user error=%@ json=%@", error, JSON);
          failure(error);
      }];
 }
@@ -293,7 +293,7 @@ failure:
                           failure:
      ^(NSError * error)
      {
-         NSLog(@"failed to get user");
+         DebugLog(@"failed to get user");
      }];
 }
 

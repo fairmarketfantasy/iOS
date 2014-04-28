@@ -594,7 +594,7 @@
 - (void)showInView:(UIView*)view
 {
     if (!view) {
-        NSLog(@"attempting to present alert on a nil view. booo");
+        DebugLog(@"attempting to present alert on a nil view. booo");
         return;
     }
     self.alpha = 0;
