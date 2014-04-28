@@ -83,4 +83,6 @@ typedef NS_ENUM(NSUInteger, FFAlertViewLoadingStyle) {
 + (FFCustomButton*)blueButtonTitled:(NSString*)str;
 + (FFCustomButton*)greyButtonTitled:(NSString*)str;
 
++ (FFAlertView *)noInternetConnectionAlert;
+
 @end

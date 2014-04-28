@@ -7,18 +7,18 @@
 //
 
 #import "FFSessionViewController.h"
-#import <QuartzCore/QuartzCore.h>
 #import "FFTextField.h"
 #import "FFAlertView.h"
-#import "UIView+FindFirstResponder.h"
-#import <SBData/SBData.h>
 #import "FFUser.h"
 #import "FFSession.h"
 #import "FFWebViewController.h"
 #import "FFNavigationBarItemView.h"
-#import <FacebookSDK/FacebookSDK.h>
-#import "FFAlertView.h"
 #import "FFForgotPassword.h"
+#import "Reachability.h"
+#import "UIView+FindFirstResponder.h"
+#import <FacebookSDK/FacebookSDK.h>
+#import <SBData/SBData.h>
+#import <QuartzCore/QuartzCore.h>
 
 #define FORGOT_PASS_ALERT_TAG 0xC005
 
@@ -36,6 +36,7 @@
 @property(nonatomic) FFTickerMaximizedDrawerViewController* signInTicker;
 @property(nonatomic) UIView* container;
 @property(nonatomic) UITextField* forgotPasswordField;
+@property(nonatomic, assign) NetworkStatus networkStatus;
 
 - (void)setupSignInView;
 - (void)signIn:(id)sender;
@@ -63,6 +64,15 @@
     _dismissKeyboardRecognizer.delegate = self;
     [self.view addGestureRecognizer:_dismissKeyboardRecognizer];
     self.navigationController.navigationBar.translucent = YES;
+    
+    internetReachability = [Reachability reachabilityForInternetConnection];
+	BOOL success = [internetReachability startNotifier];
+	if ( !success )
+		NSLog(@"Failed to start notifier");
+    self.networkStatus = [internetReachability currentReachabilityStatus];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -87,6 +97,10 @@
                                              selector:@selector(gotLogout:)
                                                  name:SBLoginDidBecomeInvalidNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    
     if (!self.session) {
         [self.tickerDataSource refresh];
         return;
@@ -107,6 +121,19 @@
     
     [super viewDidDisappear:animated];
 }
+
+#pragma mark -
+
+- (void)checkNetworkStatus:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    
+    if (internetStatus != self.networkStatus) {
+        self.networkStatus = internetStatus;
+    }
+}
+
+#pragma mark -
 
 - (id)ticker
 {
@@ -256,6 +283,12 @@
         }
     }
 
+    if (self.networkStatus == NotReachable) {
+        [self showNoInternetConnectionAlert];
+        
+        return;
+    }
+    
     NSString* errorTitle = nil;
 
     if (!self.usernameSigninField.text.length) {
@@ -280,7 +313,7 @@
                                    autoHide:YES] showInView:self.view];
         return;
     }
-
+    
     FFAlertView* progressAlert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Finding Account", @"creating account")
                                                            messsage:NSLocalizedString(@"In a few short moments you'll be on your way!",
                                                                                       @"on sign in, tells the user they will be signed in soon")
@@ -317,6 +350,12 @@ failure:
 
 - (void)forgotPassword:(id)sender
 {
+    if (self.networkStatus == NotReachable) {
+        [self showNoInternetConnectionAlert];
+        
+        return;
+    }
+    
     FFForgotPassword *view = [[FFForgotPassword alloc] initWithFrame:CGRectMake(0.f, 0.f, 260.f, 145.f)];
     self.forgotPasswordField = view.mailField;
     view.mailField.delegate = self;
@@ -422,6 +461,12 @@ failure:
 
 - (void)signInFacebook:(id)sender
 {
+    if (self.networkStatus == NotReachable) {
+        [self showNoInternetConnectionAlert];
+        
+        return;
+    }
+    
     [FBSession openActiveSessionWithReadPermissions:@[@"basic_info", @"email"]
                                        allowLoginUI:YES
                                   completionHandler:
@@ -540,6 +585,14 @@ failure:
             [alert showInView:self.view];
         }];
     }];
+}
+
+#pragma mark
+
+- (void)showNoInternetConnectionAlert
+{
+    FFAlertView *alert = [FFAlertView noInternetConnectionAlert];
+    [alert showInView:self.view];
 }
 
 #pragma mark - gestures

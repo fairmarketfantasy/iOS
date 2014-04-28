@@ -458,6 +458,19 @@
     return self;
 }
 
+#pragma mark -
+
++ (FFAlertView *)noInternetConnectionAlert
+{
+    return [[FFAlertView alloc] initWithTitle:nil
+                                      message:NSLocalizedString(@"No Internet Connection", nil)
+                            cancelButtonTitle:nil
+                              okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                                     autoHide:YES];
+}
+
+#pragma mark -
+
 - (void)_setupHorizontalButtonsCancelTitle:(NSString*)cancelTitle okayTitle:(NSString*)okayTitle
 {
     UIButton* cancelButton = nil;

@@ -14,6 +14,10 @@
 #import "FFBaseViewController.h"
 #import "FFTickerDataSource.h"
 
-@interface FFSessionViewController : FFBaseViewController
+@class Reachability;
+
+@interface FFSessionViewController : FFBaseViewController {
+    Reachability* internetReachability;
+}
 
 @end
