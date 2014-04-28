@@ -64,6 +64,19 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
     [self.view bringSubviewToFront:self.submitView];
+    
+    //code from didMoveToParentViewController:
+    self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                  session:self.session authorized:YES];
+    self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                               session:self.session authorized:YES];
+    self.marketsSetRegular.delegate = self;
+    self.marketsSetSingle.delegate = self;
+    [self updateMarkets];
+    // roster
+    self.tryCreateRosterTimes = 3;
+    NSLog(@"Create roster - #1");
+    [self createRoster];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -85,19 +98,20 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
 }
 
-- (void)didMoveToParentViewController:(UIViewController *)parent
-{
-    self.marketsSetRegular = [FFMarketSet.alloc initWithDataObjectClass:[FFMarket class]
-                                                                session:self.session authorized:YES];
-    self.marketsSetSingle = [FFMarketSet.alloc initWithDataObjectClass:[FFMarket class]
-                                                               session:self.session authorized:YES];
-    self.marketsSetRegular.delegate = self;
-    self.marketsSetSingle.delegate = self;
-    [self updateMarkets];
-    // roster
-    self.tryCreateRosterTimes = 3;
-    [self createRoster];
-}
+//- (void)didMoveToParentViewController:(UIViewController *)parent
+//{
+//    self.marketsSetRegular = [FFMarketSet.alloc initWithDataObjectClass:[FFMarket class]
+//                                                                session:self.session authorized:YES];
+//    self.marketsSetSingle = [FFMarketSet.alloc initWithDataObjectClass:[FFMarket class]
+//                                                               session:self.session authorized:YES];
+//    self.marketsSetRegular.delegate = self;
+//    self.marketsSetSingle.delegate = self;
+//    [self updateMarkets];
+//    // roster
+//    self.tryCreateRosterTimes = 3;
+//    NSLog(@"Create roster - #1");
+//    [self createRoster];
+//}
 
 - (void)viewDidAppear:(BOOL)animated
 {
