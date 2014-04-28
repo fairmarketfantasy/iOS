@@ -17,6 +17,17 @@
 
 @end
 
+/*
+ should delete httpHeader with key @"Authorization" in method
+ 
+ - (void)authenticateUsingOAuthWithPath:(NSString *)path
+                             parameters:(NSDictionary *)parameters
+                                success:(void (^)(AFOAuthCredential *credential))success
+                                failure:(void (^)(NSError *error))failure
+ 
+ of AFOAuth2Client class in pods.
+*/
+
 @interface FFSession : SBSession
 
 @property(nonatomic, readonly) FFUser* user;
