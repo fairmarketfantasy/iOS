@@ -336,8 +336,6 @@
 failure:
     ^(NSError * err)
     {
-        [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"SignInError: %@", err]
-                          withLevel:UTLogLevelError];
         [progressAlert hide];
         [[[FFAlertView alloc] initWithError:err
                                       title:nil
@@ -498,8 +496,7 @@ failure:
     if (!error || error.code == 2) {
         return;
     }
-    [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"FBSessionError: %@", error]
-                      withLevel:UTLogLevelError];
+
     [[[UIAlertView alloc]
              initWithTitle:@"Error"
                    message:error.localizedDescription
@@ -518,8 +515,6 @@ failure:
     [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error)
     {
         if (error) {
-            [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"FBGetMeError: %@", error]
-                              withLevel:UTLogLevelError];
             [alert hide];
             FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
                                                                title:nil
@@ -532,8 +527,7 @@ failure:
         
         if (!result[@"email"] || [result[@"email"] isEqual:[NSNull null]]) {
             [alert hide];
-            [[Ubertesters shared] UTLog:@"FBNoEmailError: There was no email for a provided account"
-                              withLevel:UTLogLevelError];
+
             FFAlertView* ealert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil)
                                                              message:NSLocalizedString(@"The provided Facebook account does not have a verified email address associated with it. It could be a new account, to which Facebook does not yet give us access to the email. For now, you'll have to use a regular username and password to create an account.", nil)
                                                    cancelButtonTitle:nil
@@ -560,8 +554,6 @@ failure:
     failure:
         ^(NSError * error)
         {
-            [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"FBRegisterOAuthError: %@", error]
-                              withLevel:UTLogLevelError];
             [alert hide];
             
             //TODO:should replace
