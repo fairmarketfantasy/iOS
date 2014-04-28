@@ -53,7 +53,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 {
     [super viewDidLoad];
     // submit view
-    self.submitView = FFSubmitView.new;
+    self.submitView = [FFSubmitView new];
     [self.submitView.segments addTarget:self
                                  action:@selector(onSubmit:)
                        forControlEvents:UIControlEventValueChanged];
@@ -65,6 +65,12 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     [self.view addSubview:self.tableView];
     [self.view bringSubviewToFront:self.submitView];
     
+    //refresh control
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.tintColor = [FFStyle lightGrey];
+    [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
+    
     //code from didMoveToParentViewController:
     self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
                                                                   session:self.session authorized:YES];
@@ -75,7 +81,6 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     [self updateMarkets];
     // roster
     self.tryCreateRosterTimes = 3;
-    NSLog(@"Create roster - #1");
     [self createRoster];
 }
 
@@ -123,6 +128,14 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self name:kReachabilityChangedNotification object:nil];
     [super viewDidDisappear:animated];
+}
+
+#pragma mark -
+
+- (void)pullToRefresh:(UIRefreshControl *)refreshControl
+{
+    [self refreshRoster];
+    [refreshControl endRefreshing];
 }
 
 #pragma mark -

@@ -41,6 +41,12 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
+    
+    //refresh control
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.tintColor = [FFStyle lightGrey];
+    [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -48,13 +54,22 @@
     [super viewWillAppear:animated];
 //    [self fetchPlayers];
 //    [self.tableView reloadData];
-
+    
     if (self.players.count == 0) {
         [self fetchPlayersWithCompletion:^{
             [self.tableView reloadData];
         }];
     }
+    
     [self.tableView reloadData];
+}
+
+#pragma mark - 
+
+- (void)pullToRefresh:(UIRefreshControl *)refreshControl
+{
+    [self selectPosition:self.position];
+    [refreshControl endRefreshing];
 }
 
 #pragma mark - public
