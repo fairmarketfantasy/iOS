@@ -19,7 +19,7 @@
 @class Reachability;
 
 @interface FFYourTeamController : FFBaseViewController {
-    Reachability* internetReachable;
+    Reachability* internetReachability;
 }
 
 @property(nonatomic, weak) id<FFYourTeamProtocol> delegate;

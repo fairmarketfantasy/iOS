@@ -83,11 +83,11 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 {
     [super viewWillAppear:animated];
     
-    internetReachable = [Reachability reachabilityForInternetConnection];
-	BOOL success = [internetReachable startNotifier];
+    internetReachability = [Reachability reachabilityForInternetConnection];
+	BOOL success = [internetReachability startNotifier];
 	if ( !success )
 		DLog(@"Failed to start notifier");
-    self.networkStatus = [internetReachable currentReachabilityStatus];
+    self.networkStatus = [internetReachability currentReachabilityStatus];
     
     if (self.networkStatus == NotReachable) {
         self.tableView.userInteractionEnabled = NO;
@@ -129,7 +129,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 
 - (void)checkNetworkStatus:(NSNotification *)notification
 {
-    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;

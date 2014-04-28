@@ -11,7 +11,7 @@
 @class Reachability;
 
 @interface FFPagerController : UIPageViewController {
-        Reachability* internetReachable;
+        Reachability* internetReachability;
 }
 
 @end

@@ -135,11 +135,11 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
                   completion:nil];
     [self.view bringSubviewToFront:self.pager];
     
-    internetReachable = [Reachability reachabilityForInternetConnection];
-	BOOL success = [internetReachable startNotifier];
+    internetReachability = [Reachability reachabilityForInternetConnection];
+	BOOL success = [internetReachability startNotifier];
 	if ( !success )
 		DLog(@"Failed to start notifier");
-    self.networkStatus = [internetReachable currentReachabilityStatus];
+    self.networkStatus = [internetReachability currentReachabilityStatus];
     
     if (self.networkStatus == NotReachable) {
         [self setScrollEnabled:NO];
@@ -162,7 +162,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 
 - (void)checkNetworkStatus:(NSNotification *)notification
 {
-    NetworkStatus internetStatus = [internetReachable currentReachabilityStatus];
+    NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
     
     if (internetStatus != self.networkStatus) {
         if (internetStatus == NotReachable) {
