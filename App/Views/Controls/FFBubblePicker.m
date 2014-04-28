@@ -131,7 +131,7 @@
 
 - (void)didTouchButton:(UIButton*)sender
 {
-    int i = [_buttons indexOfObject:sender];
+    NSInteger i = [_buttons indexOfObject:sender];
     if (self.delegate && [self.delegate respondsToSelector:@selector(bubblePicker:
                                                                     didSelectItem:)]) {
         [self.delegate bubblePicker:self
@@ -141,7 +141,7 @@
 
 - (id)removeItem:(id)item animated:(BOOL)animated
 {
-    int i = [_items indexOfObject:item];
+    NSInteger i = [_items indexOfObject:item];
     [_items removeObjectAtIndex:i];
     if (self.delegate && [self.delegate respondsToSelector:@selector(bubblePickerDidUpdateItems:)]) {
         [self.delegate bubblePickerDidUpdateItems:self];
@@ -317,7 +317,7 @@
 
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
-    int compensation = INSET_Y_COMPENSATION;
+    NSInteger compensation = INSET_Y_COMPENSATION;
     if (self.editing) {
         compensation = INSET_Y_COMPENSATION_EDITING;
     }
@@ -331,7 +331,7 @@
 
 - (CGRect)editingRectForBounds:(CGRect)bounds
 {
-    int compensation = INSET_Y_COMPENSATION;
+    NSInteger compensation = INSET_Y_COMPENSATION;
     if (self.editing) {
         compensation = INSET_Y_COMPENSATION_EDITING;
     }

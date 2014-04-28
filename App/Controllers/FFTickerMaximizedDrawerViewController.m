@@ -61,7 +61,7 @@
     ppg.text = ppgValue;
     [cell.contentView addSubview:ppg];
 
-    double currency = [player[@"buy_price"] doubleValue];
+    CGFloat currency = [player[@"buy_price"] doubleValue];
     static NSNumberFormatter* formatter = nil;
     if (!formatter) {
         formatter = [[NSNumberFormatter alloc] init];

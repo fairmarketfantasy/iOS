@@ -131,7 +131,7 @@
     }
 
     //Add center line
-    float centerLineWidth = _pathWidth - LINE_BORDER_WIDTH*2.0;
+    CGFloat centerLineWidth = _pathWidth - LINE_BORDER_WIDTH*2.0;
     
     rectImage.origin.x -= LINE_BORDER_WIDTH/2.0+centerLineWidth/2.0;
     rectImage.origin.y -= LINE_BORDER_WIDTH/2.0+centerLineWidth/2.0;

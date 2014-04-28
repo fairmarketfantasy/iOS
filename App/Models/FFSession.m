@@ -58,11 +58,11 @@
             return [NSArray array];
         }
         NSMutableArray* ret = [NSMutableArray array];
-        int klength = [lst[0] integerValue];
-        int i = 1 + klength;
+        NSInteger klength = [lst[0] integerValue];
+        NSInteger i = 1 + klength;
         while (i < lst.count) {
             NSMutableDictionary* d = [NSMutableDictionary dictionary];
-            int ki = 0;
+            NSInteger ki = 0;
             while (ki < klength) {
                 ki++;
                 d[lst[ki]] = lst[i];
@@ -266,7 +266,7 @@ failure:
                  [self.delegate didUpdateUser:user];
              });
          }
-         double delayInSeconds = 10.0;
+         CGFloat delayInSeconds = 10.0;
          dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
          dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
              if (!self.shouldStopFetchUser)
@@ -276,7 +276,7 @@ failure:
                           failure:
      ^(NSError * error)
      {
-         double delayInSeconds = 10.0;
+         CGFloat delayInSeconds = 10.0;
          dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
          dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
              if (!self.shouldStopFetchUser)

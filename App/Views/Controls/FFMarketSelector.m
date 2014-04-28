@@ -169,7 +169,7 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView*)scrollView
 {
     CGFloat pageWidth = scrollView.frame.size.width;
-    float fractionalPage = scrollView.contentOffset.x / pageWidth;
+    CGFloat fractionalPage = scrollView.contentOffset.x / pageWidth;
     NSInteger page = lround(fractionalPage);
     self.selectedMarket = page;
 }

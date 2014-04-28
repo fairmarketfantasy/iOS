@@ -167,9 +167,9 @@
             _price.frame = CGRectMake(82, 50, [_price.text sizeWithFont:_price.font].width, 16);
             _diff.hidden = NO;
 
-            double sellPrice = [player[@"sell_price"] doubleValue],
+            CGFloat sellPrice = [player[@"sell_price"] doubleValue],
                    purchasePrice = [player[@"purchase_price"] doubleValue];
-            double diff = ((sellPrice - purchasePrice) / purchasePrice) * 100;
+            CGFloat diff = ((sellPrice - purchasePrice) / purchasePrice) * 100;
 
             _diff.text = [NSString stringWithFormat:@"%.2lf%%", diff];
             _diff.frame = CGRectMake(CGRectGetMaxX(_price.frame) + 5, 50, 80, 16);
@@ -191,7 +191,7 @@
 
         if ([self marketStarted]) {
             _points.hidden = NO;
-            int score = [player[@"score"] integerValue];
+            NSInteger score = [player[@"score"] integerValue];
 
             if (score) {
                 _points.textColor = [FFStyle darkerColorForColor:[FFStyle brightBlue]];
