@@ -134,8 +134,10 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    [self refreshRoster];
-    [refreshControl endRefreshing];
+    [self refreshRosterWithShowingAlert:NO comletion:^{
+        [self.tableView reloadData];
+        [refreshControl endRefreshing];
+    }];
 }
 
 #pragma mark -
@@ -149,8 +151,10 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
         [self updateMarkets];
         
         if (internetStatus == NotReachable) {
-            [self refreshRoster];
-            self.tableView.userInteractionEnabled = NO;
+            [self refreshRosterWithShowingAlert:NO comletion:^{
+                [self.tableView reloadData];
+//                self.tableView.userInteractionEnabled = NO;
+            }];
         } else {
             self.tableView.userInteractionEnabled = YES;
         }
@@ -248,12 +252,16 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
      }];
 }
 
-- (void)refreshRoster
+- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow comletion:(void(^)(void))block
 {
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
+    __block FFAlertView* alert = nil;
+    if (shouldShow) {
+        alert = [[FFAlertView alloc] initWithTitle:@""
+                                          messsage:nil
+                                      loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.navigationController.view];
+    }
+    
     @weakify(self)
     [self.roster refreshInBackgroundWithBlock:
      ^(id successObj) {
@@ -261,7 +269,11 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
          self.roster = successObj;
          [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
-         [alert hide];
+         
+         if (alert)
+             [alert hide];
+         if (block)
+             block();
      }
                                       failure:
      ^(NSError *error) {
@@ -270,12 +282,17 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
          self.roster = nil;
          [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
+         
+         if (alert)
+             [alert hide];
+         if (block)
+             block();
          /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
+          [[[FFAlertView alloc] initWithError:error
+          title:nil
+          cancelButtonTitle:nil
+          okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+          autoHide:YES]
           showInView:self.navigationController.view];
           */
      }];
@@ -579,27 +596,28 @@ heightForHeaderInSection:(NSInteger)section
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
     @weakify(self)
-    [self.roster  removePlayer:player
-                       success:
+    [self.roster removePlayer:player
+                      success:
      ^(id successObj) {
          @strongify(self)
-         [self.tableView reloadData];
          [self shorOrHideSubmitIfNeeded];
          [alert hide];
-         [self refreshRoster];
+         [self refreshRosterWithShowingAlert:YES comletion:^{
+             [self.tableView reloadData];
+         }];
          [self.delegate showPosition:player.position];
      }
-                                  failure:
+                      failure:
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
          [self shorOrHideSubmitIfNeeded];
          /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
+          [[[FFAlertView alloc] initWithError:error
+          title:nil
+          cancelButtonTitle:nil
+          okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+          autoHide:YES]
           showInView:self.navigationController.view];
           */
      }];

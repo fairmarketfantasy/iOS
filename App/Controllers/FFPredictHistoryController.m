@@ -69,6 +69,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                         action:@selector(showOrHideTypeSelectorIfNeeded)
               forControlEvents:UIControlEventTouchUpInside];
     self.typeButton.contentMode = UIViewContentModeScaleAspectFit;
+    
     // table view
     self.tableView = [[FFPredictHistoryTable alloc] initWithFrame:self.view.bounds];
     self.tableView.historyDelegate = self;
@@ -76,6 +77,13 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
     [self.view bringSubviewToFront:self.typeSelector];
+    
+    //refresh control
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.tintColor = [FFStyle lightGrey];
+    [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
+    
     // title
     self.navigationItem.titleView = self.typeButton;
 }
@@ -104,9 +112,9 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     [loadingView showInView:self.navigationController.view];
     
     [self refreshWithCompletion:^{
+        [self.tableView reloadData];
         [loadingView hide];
     }];
-//    [self refresh];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -126,6 +134,16 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     }
 }
 
+#pragma mark -
+
+- (void)pullToRefresh:(UIRefreshControl *)refreshControl
+{
+    [self refreshWithCompletion:^{
+        [self.tableView reloadData];
+        [refreshControl endRefreshing];
+    }];
+}
+
 #pragma mark - FFPredictionsProtocol
 
 - (void)predictionsTypeSelected:(FFPredictionsType)type
@@ -139,6 +157,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     [loadingView showInView:self.navigationController.view];
     
     [self refreshWithCompletion:^{
+        [self.tableView reloadData];
         [loadingView hide];
     }];
     
@@ -338,8 +357,6 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
     [self refreshWithCompletion:^{
         [loadingView hide];
     }];
-    
-//    [self refresh];
 }
 
 #pragma mark - private
@@ -378,47 +395,10 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
      }];
 }
 
-- (void)refresh
-{
-    [self.tableView setPredictionType:self.predictionType
-                 rosterPredictionType:self.rosterPredictionType];
-    [self.tableView reloadData];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    switch (self.predictionType) {
-        case FFPredictionsTypeIndividual:
-        {
-            [self.individualPredictions fetch];
-            [self.typeButton setTitle:NSLocalizedString(@"Individual", nil)
-                             forState:UIControlStateNormal];
-        }
-            break;
-        case FFPredictionsTypeRoster:
-        {
-            switch (self.rosterPredictionType) {
-                case FFRosterPredictionTypeSubmitted:
-                    [self.rosterActivePredictions fetch];
-                    break;
-                case FFRosterPredictionTypeFinished:
-                    [self.rosterHistoryPredictions fetchWithParameters:
-                     @{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
-                    break;
-                default:
-                    break;
-            }
-            [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
-                             forState:UIControlStateNormal];
-        }
-            break;
-        default:
-            break;
-    }
-}
-
 - (void)refreshWithCompletion:(void(^)(void))block
 {
     [self.tableView setPredictionType:self.predictionType
                  rosterPredictionType:self.rosterPredictionType];
-    [self.tableView reloadData];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     switch (self.predictionType) {
         case FFPredictionsTypeIndividual: {

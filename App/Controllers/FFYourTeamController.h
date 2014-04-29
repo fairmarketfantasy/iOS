@@ -27,9 +27,10 @@
 @property(nonatomic) FFMarket* selectedMarket;
 @property(nonatomic) UITableView* tableView;
 @property(nonatomic, readonly) BOOL noGamesAvailable;
+
 - (NSArray*)uniquePositions;
 - (void)createRoster;
-- (void)refreshRoster;
+- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow comletion:(void(^)(void))block;
 - (void)updateMarkets;
 
 @end

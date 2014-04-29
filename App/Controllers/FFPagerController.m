@@ -367,7 +367,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 //         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
 //                                          withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
-         [self.teamController refreshRoster];
+         [self.teamController refreshRosterWithShowingAlert:YES comletion:nil];
          [self setViewControllers:@[self.teamController]
                         direction:UIPageViewControllerNavigationDirectionReverse
                          animated:YES

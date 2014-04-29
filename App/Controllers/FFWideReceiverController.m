@@ -52,11 +52,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    [self fetchPlayers];
-//    [self.tableView reloadData];
     
     if (self.players.count == 0) {
-        [self fetchPlayersWithCompletion:^{
+        [self fetchPlayersWithShowingAlert:YES completion:^{
             [self.tableView reloadData];
         }];
     }
@@ -64,12 +62,14 @@
     [self.tableView reloadData];
 }
 
-#pragma mark - 
+#pragma mark
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    [self selectPosition:self.position];
-    [refreshControl endRefreshing];
+    [self fetchPlayersWithShowingAlert:NO completion:^{
+        [self.tableView reloadData];
+        [refreshControl endRefreshing];
+    }];
 }
 
 #pragma mark - public
@@ -79,6 +79,7 @@
     if (self.delegate.positions.count == 0) {
         return;
     }
+    
     for (NSString* positionName in self.delegate.positions) {
         if ([positionName isEqualToString:position]) {
             [self selectPosition:[self.delegate.positions indexOfObject:positionName]];
@@ -92,14 +93,12 @@
 - (void)selectPosition:(NSUInteger)position
 {
     self.position = position;
-//    [self fetchPlayers];
-//    [self.tableView reloadData];
-    [self fetchPlayersWithCompletion:^{
+    [self fetchPlayersWithShowingAlert:YES completion:^{
         [self.tableView reloadData];
     }];
 }
 
-- (void)fetchPlayers
+- (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
     if (!self.delegate.rosterId) {
         self.players = @[];
@@ -107,10 +106,15 @@
                       withRowAnimation:UITableViewRowAnimationAutomatic];
         return;
     }
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Loading Players"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
+    
+    __block FFAlertView* alert = nil;
+    if (shouldShow) {
+        alert = [[FFAlertView alloc] initWithTitle:@"Loading Players"
+                                          messsage:nil
+                                      loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.navigationController.view];
+    }
+    
     @weakify(self)
     [FFPlayer fetchPlayersForRoster:self.delegate.rosterId
                            position:self.delegate.positions[self.position]
@@ -120,53 +124,10 @@
      ^(id successObj) {
          @strongify(self)
          self.players = successObj;
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
-         [alert hide];
-     }
-                            failure:
-     ^(NSError *error) {
-         @strongify(self)
-         self.players = @[];
-         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                       withRowAnimation:UITableViewRowAnimationAutomatic];
-         [alert hide];
-         /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-          */
-     }];
-}
-
-- (void)fetchPlayersWithCompletion:(void(^)(void))block
-{
-    if (!self.delegate.rosterId) {
-        self.players = @[];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
-        return;
-    }
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Loading Players"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    @weakify(self)
-    [FFPlayer fetchPlayersForRoster:self.delegate.rosterId
-                           position:self.delegate.positions[self.position]
-                     removedBenched:self.delegate.autoRemovedBenched
-                            session:self.session
-                            success:
-     ^(id successObj) {
-         @strongify(self)
-         self.players = successObj;
-//         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-//                       withRowAnimation:UITableViewRowAnimationAutomatic];
-         [alert hide];
-         
+         //         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+         //                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         if(alert)
+             [alert hide];
          if (block)
              block();
      }
@@ -174,10 +135,10 @@
      ^(NSError *error) {
          @strongify(self)
          self.players = @[];
-//         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-//                       withRowAnimation:UITableViewRowAnimationAutomatic];
-         [alert hide];
-         
+         //         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+         //                       withRowAnimation:UITableViewRowAnimationAutomatic];
+         if(alert)
+             [alert hide];
          if (block)
              block();
          /* !!!: disable error alerts NBA-659

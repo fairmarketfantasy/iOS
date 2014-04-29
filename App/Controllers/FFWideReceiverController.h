@@ -17,15 +17,18 @@
 @property(nonatomic, readonly) NSArray* positions;
 @property(nonatomic, readonly) NSDictionary* positionsNames;
 @property(nonatomic, readonly) BOOL autoRemovedBenched;
+
 - (void)addPlayer:(FFPlayer*)player;
 
 @end
+
 
 @interface FFWideReceiverController : FFBaseViewController
 
 @property(nonatomic) NSArray* players; // should contain FFPlayer*
 @property(nonatomic, weak) id<FFPlayersProtocol> delegate;
 @property(nonatomic) UITableView* tableView;
+
 - (void)showPosition:(NSString*)position;
 
 @end
