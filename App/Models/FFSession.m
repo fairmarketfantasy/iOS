@@ -196,7 +196,7 @@ failure:
          NSLog(@"oauth crapped %@", error);
          NSError *dumbError = [NSError errorWithDomain:@"" code:400 userInfo:
                                @{ NSUnderlyingErrorKey: error,
-                                  NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid password", nil) }];
+                                  NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid username or password", nil) }];
          failure(dumbError);
          //because 2 popups with errors
          //         failure(error);
