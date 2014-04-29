@@ -39,6 +39,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 @property(nonatomic) NSDictionary* positionsNames;
 
 @property(nonatomic, assign) NetworkStatus networkStatus;
+@property(nonatomic, assign) BOOL isFirstLaunch;
 
 @end
 
@@ -62,6 +63,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
                                    instantiateViewControllerWithIdentifier:@"ReceiverController"];
         self.teamController.delegate = self;
         self.receiverController.delegate = self;
+        self.isFirstLaunch = YES;
     }
     return self;
 }
@@ -123,17 +125,26 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.pager.numberOfPages = (int)[self getViewControllers].count;
+    
     // session
     self.teamController.session = self.session;
     self.receiverController.session = self.session;
     // get player position names
     [self fetchPositionsNames];
-    [self setViewControllers:@[[self getViewControllers].firstObject]
-                   direction:UIPageViewControllerNavigationDirectionForward
-                    animated:NO
-                  completion:nil];
-    [self.view bringSubviewToFront:self.pager];
+    
+    if (self.isFirstLaunch) {
+        [self setViewControllers:@[[self getViewControllers].firstObject]
+                       direction:UIPageViewControllerNavigationDirectionForward
+                        animated:NO
+                      completion:nil];
+        
+        [self.view bringSubviewToFront:self.pager];
+    }
+    
+    self.isFirstLaunch = NO;
+    
+    self.pager.numberOfPages = (int)[self getViewControllers].count;
+    self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:self.viewControllers.firstObject];
     
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
@@ -372,6 +383,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                         direction:UIPageViewControllerNavigationDirectionReverse
                          animated:YES
                        completion:nil];
+         
+         self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+                                        self.viewControllers.firstObject];
      }
                                   failure:
      ^(NSError *error) {
@@ -422,6 +436,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                   completion:
      ^(BOOL finished) {
          @strongify(self)
+         self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+                                        self.viewControllers.firstObject];
+         
          [self.receiverController showPosition:position];
      }];
 }
