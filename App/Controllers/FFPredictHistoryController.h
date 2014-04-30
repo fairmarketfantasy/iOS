@@ -8,6 +8,10 @@
 
 #import "FFBaseViewController.h"
 
-@interface FFPredictHistoryController : FFBaseViewController
+@class Reachability;
+
+@interface FFPredictHistoryController : FFBaseViewController {
+    Reachability* internetReachability;
+}
 
 @end

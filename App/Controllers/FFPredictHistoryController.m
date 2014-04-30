@@ -18,6 +18,7 @@
 #import "FFStyle.h"
 #import "FFPredictRosterPagerController.h"
 #import "FFAlertView.h"
+#import "Reachability.h"
 // model
 #import "FFPredictionSet.h"
 #import "FFIndividualPrediction.h"
@@ -26,8 +27,6 @@
 #import "FFGame.h"
 #import "FFContestType.h"
 #import "FFDate.h"
-
-#define LOADING_VIEW_TAG 0xCCCF
 
 @interface FFPredictHistoryController () <UITableViewDataSource, UITableViewDelegate,
 FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
@@ -41,6 +40,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 @property(nonatomic) FFPredictionSet* individualPredictions;
 @property(nonatomic) FFPredictionSet* rosterActivePredictions;
 @property(nonatomic) FFPredictionSet* rosterHistoryPredictions;
+
+@property(nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 
@@ -86,6 +87,19 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     
     // title
     self.navigationItem.titleView = self.typeButton;
+    
+    internetReachability = [Reachability reachabilityForInternetConnection];
+	BOOL success = [internetReachability startNotifier];
+	if ( !success )
+		DLog(@"Failed to start notifier");
+    self.networkStatus = [internetReachability currentReachabilityStatus];
+    
+    if (self.networkStatus == NotReachable) {
+        [self.tableView reloadData];
+    }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
 }
 
 - (void)willMoveToParentViewController:(UIViewController *)parent
@@ -105,15 +119,9 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 {
     [super viewWillAppear:animated];
     [self hideTypeSelector];
-    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
-                                                             messsage:nil
-                                                         loadingStyle:FFAlertViewLoadingStylePlain];
-    loadingView.tag = LOADING_VIEW_TAG;
-    [loadingView showInView:self.navigationController.view];
     
     [self refreshWithCompletion:^{
         [self.tableView reloadData];
-        [loadingView hide];
     }];
 }
 
@@ -134,6 +142,23 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     }
 }
 
+#pragma mark
+
+- (void)checkNetworkStatus:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    
+    if (internetStatus != self.networkStatus) {
+        self.networkStatus = internetStatus;
+        
+        if (internetStatus == NotReachable) {
+            [self refreshWithCompletion:^{
+                [self.tableView reloadData];
+            }];
+        }
+    }
+}
+
 #pragma mark -
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
@@ -149,16 +174,9 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 - (void)predictionsTypeSelected:(FFPredictionsType)type
 {
     self.predictionType = type;
-    
-    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
-                                                             messsage:nil
-                                                         loadingStyle:FFAlertViewLoadingStylePlain];
-    loadingView.tag = LOADING_VIEW_TAG;
-    [loadingView showInView:self.navigationController.view];
-    
+
     [self refreshWithCompletion:^{
         [self.tableView reloadData];
-        [loadingView hide];
     }];
     
     [self showOrHideTypeSelectorIfNeeded];
@@ -347,15 +365,8 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     BOOL isHistory = segments.selectedSegmentIndex == 1;
     self.rosterPredictionType = isHistory ? FFRosterPredictionTypeFinished : FFRosterPredictionTypeSubmitted;
-    
-    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
-                                                             messsage:nil
-                                                         loadingStyle:FFAlertViewLoadingStylePlain];
-    loadingView.tag = LOADING_VIEW_TAG;
-    [loadingView showInView:self.navigationController.view];
-    
     [self refreshWithCompletion:^{
-        [loadingView hide];
+        [self.tableView reloadData];
     }];
 }
 
@@ -397,12 +408,24 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 
 - (void)refreshWithCompletion:(void(^)(void))block
 {
+    if (self.networkStatus == NotReachable) {
+        [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+        block();
+        return;
+    }
+    
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
+                                                                 messsage:nil
+                                                             loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+        
     [self.tableView setPredictionType:self.predictionType
                  rosterPredictionType:self.rosterPredictionType];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     switch (self.predictionType) {
         case FFPredictionsTypeIndividual: {
             [self.individualPredictions fetchWithCompletion:^{
+                [alert hide];
                 if (block)
                     block();
             }];
@@ -414,6 +437,7 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
         case FFPredictionsTypeRoster: {
             if (self.rosterPredictionType == FFRosterPredictionTypeSubmitted) {
                 [self.rosterActivePredictions fetchWithCompletion:^{
+                    [alert hide];
                     if (block) {
                         block();
                     }
@@ -421,6 +445,7 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
             } else if (self.rosterPredictionType == FFRosterPredictionTypeFinished) {
                 [self.rosterHistoryPredictions fetchWithParameters:@{ @"historical" : @"true" }
                                                         completion:^{
+                                                            [alert hide];
                                                             if (block)
                                                                 block();
                                                         }]; // TODO: should be in one of MODELs
