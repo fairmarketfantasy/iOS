@@ -152,23 +152,8 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 		DLog(@"Failed to start notifier");
     self.networkStatus = [internetReachability currentReachabilityStatus];
     
-    if (self.networkStatus == NotReachable) {
-        [self setScrollEnabled:NO];
-    }
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
-}
-
-- (void)setScrollEnabled:(BOOL)enabled
-{
-    for(UIView* view in self.view.subviews) {
-        if([view isKindOfClass:[UIScrollView class]]) {
-            UIScrollView* scrollView = (UIScrollView*)view;
-            [scrollView setScrollEnabled:enabled];
-            return;
-        }
-    }
 }
 
 - (void)checkNetworkStatus:(NSNotification *)notification
@@ -176,12 +161,6 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
     NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
     
     if (internetStatus != self.networkStatus) {
-        if (internetStatus == NotReachable) {
-            [self setScrollEnabled:NO];
-        } else {
-            [self setScrollEnabled:YES];
-        }
-        
         self.networkStatus = internetStatus;
     }
 }
