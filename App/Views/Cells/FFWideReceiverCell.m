@@ -10,6 +10,11 @@
 #import <FlatUIKit.h>
 #import "FFStyle.h"
 
+@interface FFWideReceiverCell()
+
+@property(nonatomic, strong) UILabel *noConnectionLabel;
+
+@end
 
 @implementation FFWideReceiverCell
 
@@ -33,6 +38,15 @@
         self.segments.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         self.segments.selectedSegmentIndex = 0;
         [self.contentView addSubview:self.segments];
+        
+        self.noConnectionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 18.f, self.contentView.frame.size.width, 30.f)];
+        self.noConnectionLabel.font = [FFStyle blockFont:20.f];
+        self.noConnectionLabel.textColor = [FFStyle lightGrey];
+        self.noConnectionLabel.backgroundColor = [UIColor clearColor];
+        self.noConnectionLabel.textAlignment = NSTextAlignmentCenter;
+        self.noConnectionLabel.text = NSLocalizedString(@"NO INTERNET CONNECTION", nil);
+        [self.contentView addSubview:self.noConnectionLabel];
+        self.noConnectionLabel.hidden = YES;
     }
     return self;
 }
@@ -48,6 +62,12 @@
                                       atIndex:self.segments.numberOfSegments
                                      animated:NO];
     }
+}
+
+- (void)setNoConnectionHidden:(BOOL)hidden
+{
+    self.noConnectionLabel.hidden = hidden ? YES : NO;
+    self.segments.hidden = hidden ? NO : YES;    
 }
 
 @end
