@@ -95,7 +95,6 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     self.networkStatus = [internetReachability currentReachabilityStatus];
     
     if (self.networkStatus == NotReachable) {
-        self.tableView.userInteractionEnabled = NO;
         [self.tableView reloadData];
     }
     
@@ -254,6 +253,12 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow comletion:(void(^)(void))block
 {
+    if (self.networkStatus == NotReachable) {
+        [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+        block();
+        return;
+    }
+    
     __block FFAlertView* alert = nil;
     if (shouldShow) {
         alert = [[FFAlertView alloc] initWithTitle:@""
@@ -394,6 +399,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
             [cell.marketSelector reloadData];
             if (self.selectedMarket && self.markets && self.networkStatus != NotReachable) {
                 _noGamesAvailable = NO;
+                cell.contentView.userInteractionEnabled = YES;
                 [cell hideStatusLabel];
                 NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
                 if (selectedMarket != NSNotFound) {
@@ -410,13 +416,14 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
                 }
                 
                 [cell showStatusLabelWithMessage:message];
+                cell.contentView.userInteractionEnabled = NO;
             }
             return cell;
         }
         FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
                                                                forIndexPath:indexPath];
         cell.autoRemovedBenched.on = self.roster.removeBenched.integerValue == 1;
-        if (_noGamesAvailable == NO || self.networkStatus == NotReachable) {
+        if (_noGamesAvailable == NO) {
             cell.autoRemovedBenched.enabled = YES;
             [cell.autoRemovedBenched addTarget:self
                                         action:@selector(autoRemovedBenched:)
@@ -483,7 +490,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 - (void)tableView:(UITableView*)tableView
     didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if (_noGamesAvailable)
+    if (_noGamesAvailable || self.networkStatus == NotReachable)
         return;
     
     NSString* position = [self positions][indexPath.row];
@@ -522,6 +529,11 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)toggleRemoveBench:(FUISwitch*)sender
 {
+    if (self.networkStatus == NotReachable) {
+        [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+        return;
+    }
+    
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Toggle Auto-Remove Benched Players"
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
@@ -555,6 +567,11 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)autoFill:(UIButton*)button
 {
+    if (self.networkStatus == NotReachable) {
+        [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+        return;
+    }
+    
     if (_noGamesAvailable)
         return;
     
