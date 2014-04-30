@@ -83,21 +83,12 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     // roster
     self.tryCreateRosterTimes = 3;
     [self createRoster];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
     
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
 	if ( !success )
 		DLog(@"Failed to start notifier");
     self.networkStatus = [internetReachability currentReachabilityStatus];
-    
-    if (self.networkStatus == NotReachable) {
-        [self.tableView reloadData];
-    }
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
@@ -153,10 +144,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
         if (internetStatus == NotReachable) {
             [self refreshRosterWithShowingAlert:NO comletion:^{
                 [self.tableView reloadData];
-//                self.tableView.userInteractionEnabled = NO;
             }];
-        } else {
-            self.tableView.userInteractionEnabled = YES;
         }
     }
 }
