@@ -20,6 +20,7 @@
 #import "FFPathImageView.h"
 #import "FFAlertView.h"
 #import "FFPTController.h"
+#import "Reachability.h"
 // model
 #import "FFUser.h"
 #import "FFRoster.h"
@@ -28,6 +29,7 @@
 @interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate>
 
 @property(nonatomic, assign) NSUInteger position;
+@property(nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 
@@ -47,6 +49,15 @@
     refreshControl.tintColor = [FFStyle lightGrey];
     [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
+    
+    internetReachability = [Reachability reachabilityForInternetConnection];
+	BOOL success = [internetReachability startNotifier];
+	if ( !success )
+		DLog(@"Failed to start notifier");
+    self.networkStatus = [internetReachability currentReachabilityStatus];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -54,22 +65,39 @@
     [super viewWillAppear:animated];
     
     if (self.players.count == 0) {
-        [self fetchPlayersWithShowingAlert:YES completion:^{
+        [self fetchPlayersWithShowingAlert:NO completion:^{
             [self.tableView reloadData];
         }];
     }
-    
-    [self.tableView reloadData];
 }
 
 #pragma mark
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    [self fetchPlayersWithShowingAlert:NO completion:^{
+    [self fetchPlayersWithShowingAlert:YES completion:^{
         [self.tableView reloadData];
         [refreshControl endRefreshing];
     }];
+}
+
+#pragma mark -
+
+- (void)checkNetworkStatus:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    
+    if (internetStatus != self.networkStatus) {
+        self.networkStatus = internetStatus;
+        
+        if (internetStatus == NotReachable) {
+            [self.tableView reloadData];
+        } else {
+            [self fetchPlayersWithShowingAlert:YES completion:^{
+                [self.tableView reloadData];
+            }];
+        }
+    }
 }
 
 #pragma mark - public
@@ -100,6 +128,15 @@
 
 - (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
+    if (self.networkStatus == NotReachable) {
+        if (shouldShow) {
+            [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+        }
+        
+        block();
+        return;
+    }
+    
     if (!self.delegate.rosterId) {
         self.players = @[];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
@@ -156,7 +193,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
-    return 2;
+    return self.networkStatus == NotReachable ? 1 : 2;
 }
 
 - (NSInteger)tableView:(UITableView*)tableView
@@ -165,7 +202,8 @@
     if (section == 0) {
         return 1;
     }
-    return self.players.count;
+    
+    return self.networkStatus == NotReachable ? 1 : self.players.count;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
@@ -183,13 +221,19 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
     if (indexPath.section == 0) {
         FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:@"ReceiverCell"
                                                                    forIndexPath:indexPath];
-        [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
-        if (cell.segments.numberOfSegments > self.position) {
-            cell.segments.selectedSegmentIndex = self.position;
+        if (self.networkStatus == NotReachable) {
+            [cell setNoConnectionHidden:NO];
+        } else {
+            [cell setNoConnectionHidden:YES];
+            [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
+            if (cell.segments.numberOfSegments > self.position) {
+                cell.segments.selectedSegmentIndex = self.position;
+            }
+            [cell.segments addTarget:self
+                              action:@selector(segments:)
+                    forControlEvents:UIControlEventValueChanged];
         }
-        [cell.segments addTarget:self
-                          action:@selector(segments:)
-                forControlEvents:UIControlEventValueChanged];
+        
         return cell;
     }
     FFTeamAddCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamAddCell"
@@ -242,7 +286,7 @@ viewForHeaderInSection:(NSInteger)section
     if (section == 1) {
         FFRosterTableHeader* view = [FFRosterTableHeader new];
         NSString* positionName = @"";
-        if (self.delegate) {
+        if (self.delegate && self.networkStatus != NotReachable) {
             positionName = self.delegate.positions[self.position];
             NSString* positionFullName = self.delegate.positionsNames[positionName];
             if (positionFullName) {

@@ -22,8 +22,11 @@
 
 @end
 
+@class Reachability;
 
-@interface FFWideReceiverController : FFBaseViewController
+@interface FFWideReceiverController : FFBaseViewController {
+       Reachability* internetReachability;
+}
 
 @property(nonatomic) NSArray* players; // should contain FFPlayer*
 @property(nonatomic, weak) id<FFPlayersProtocol> delegate;
