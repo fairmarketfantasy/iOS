@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define kWideRecieverCellIdentifier @"ReceiverCell"
+
 @class FUISegmentedControl;
 
 @interface FFWideReceiverCell : UITableViewCell

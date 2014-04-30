@@ -8,6 +8,8 @@
 
 #import "FFTeamCell.h"
 
+#define kTeamAddCellIdentifier @"TeamAddCell"
+
 @class FFCustomButton;
 
 @interface FFTeamAddCell : FFTeamCell

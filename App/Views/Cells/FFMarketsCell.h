@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define kMarketsCellIdentifier @"MarketsCell"
+
 @class FFMarketSelector;
 
 @interface FFMarketsCell : UITableViewCell

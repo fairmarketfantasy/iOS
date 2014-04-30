@@ -11,6 +11,7 @@
 #import "FFTeamTradeCell.h"
 #import "FFMarketsCell.h"
 #import "FFAutoFillCell.h"
+#import "FFNoConnectionCell.h"
 #import "FFStyle.h"
 
 @implementation FFTeamTable
@@ -24,13 +25,15 @@
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
         // cells
         [self registerClass:[FFMarketsCell class]
-     forCellReuseIdentifier:@"MarketsCell"];
+     forCellReuseIdentifier:kMarketsCellIdentifier];
         [self registerClass:[FFAutoFillCell class]
-     forCellReuseIdentifier:@"AutoFillCell"];
+     forCellReuseIdentifier:kAutoFillCellIdentifier];
         [self registerClass:[FFTeamCell class]
-     forCellReuseIdentifier:@"TeamCell"];
+     forCellReuseIdentifier:kTeamCellIdentifier];
         [self registerClass:[FFTeamTradeCell class]
-     forCellReuseIdentifier:@"TeamTradeCell"];
+     forCellReuseIdentifier:kTeamTradeCellIdentifier];
+        [self registerClass:[FFNoConnectionCell class]
+     forCellReuseIdentifier:kNoConnectionCellIdentifier];
     }
     return self;
 }
