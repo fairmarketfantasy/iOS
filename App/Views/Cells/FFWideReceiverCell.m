@@ -64,10 +64,4 @@
     }
 }
 
-- (void)setNoConnectionHidden:(BOOL)hidden
-{
-    self.noConnectionLabel.hidden = hidden ? YES : NO;
-    self.segments.hidden = hidden ? NO : YES;    
-}
-
 @end

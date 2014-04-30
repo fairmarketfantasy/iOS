@@ -47,15 +47,9 @@
     return self;
 }
 
-- (void)showStatusLabelWithMessage:(NSString *)message
+- (void)setNoGamesLabelHidden:(BOOL)hidden
 {
-    self.noGamesLabel.hidden = NO;
-    self.noGamesLabel.text = message;
-}
-
-- (void)hideStatusLabel
-{
-    self.noGamesLabel.hidden = YES;
+    self.noGamesLabel.hidden = hidden;
 }
 
 @end

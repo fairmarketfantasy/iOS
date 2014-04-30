@@ -7,20 +7,21 @@
 //
 
 #import "FFWideReceiverController.h"
-#import <libextobjc/EXTScope.h>
 #import "FFWideReceiverTable.h"
 #import "FFWideReceiverCell.h"
-#import <FlatUIKit.h>
-#import "FFRosterTableHeader.h"
 #import "FFTeamAddCell.h"
-#import "FFStyle.h"
-#import <libextobjc/EXTScope.h>
+#import "FFNoConnectionCell.h"
+#import "FFRosterTableHeader.h"
 #import "FFAccountHeader.h"
-#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "FFStyle.h"
 #import "FFPathImageView.h"
-#import "FFAlertView.h"
 #import "FFPTController.h"
+#import "FFAlertView.h"
 #import "Reachability.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import <libextobjc/EXTScope.h>
+#import <libextobjc/EXTScope.h>
+#import <FlatUIKit.h>
 // model
 #import "FFUser.h"
 #import "FFRoster.h"
@@ -210,7 +211,8 @@
 heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.section == 0) {
-        return 60.f;
+        //navigation bar height + status bar height = 64
+        return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
     }
     return 80.f;
 }
@@ -219,24 +221,24 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
         cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.section == 0) {
-        FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:@"ReceiverCell"
-                                                                   forIndexPath:indexPath];
         if (self.networkStatus == NotReachable) {
-            [cell setNoConnectionHidden:NO];
-        } else {
-            [cell setNoConnectionHidden:YES];
-            [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
-            if (cell.segments.numberOfSegments > self.position) {
-                cell.segments.selectedSegmentIndex = self.position;
-            }
-            [cell.segments addTarget:self
-                              action:@selector(segments:)
-                    forControlEvents:UIControlEventValueChanged];
-        }
+            FFNoConnectionCell *cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
+                                                                       forIndexPath:indexPath];
+            return cell;
+         }
         
+        FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:kWideRecieverCellIdentifier
+                                                                   forIndexPath:indexPath];
+        [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
+        if (cell.segments.numberOfSegments > self.position) {
+            cell.segments.selectedSegmentIndex = self.position;
+        }
+        [cell.segments addTarget:self
+                          action:@selector(segments:)
+                forControlEvents:UIControlEventValueChanged];
         return cell;
     }
-    FFTeamAddCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamAddCell"
+    FFTeamAddCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamAddCellIdentifier
                                                           forIndexPath:indexPath];
     if (self.players.count > indexPath.row) {
         __block FFPlayer* player = self.players[indexPath.row];

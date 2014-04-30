@@ -17,6 +17,5 @@
 @property(nonatomic) FUISegmentedControl* segments;
 
 - (void)setItems:(NSArray*)items;
-- (void)setNoConnectionHidden:(BOOL)hidden;
 
 @end

@@ -13,6 +13,7 @@
 #import "FFMarketsCell.h"
 #import "FFTeamCell.h"
 #import "FFTeamTradeCell.h"
+#import "FFNoConnectionCell.h"
 #import "FFSubmitView.h"
 #import "FFAlertView.h"
 #import "FFRosterTableHeader.h"
@@ -254,7 +255,10 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow comletion:(void(^)(void))block
 {
     if (self.networkStatus == NotReachable) {
-        [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+        if (shouldShow) {
+            [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+        }
+        
         block();
         return;
     }
@@ -362,14 +366,14 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
-    return 2;
+    return self.networkStatus == NotReachable ? 1 : 2;
 }
 
 - (NSInteger)tableView:(UITableView*)tableView
     numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 2;
+        return self.networkStatus == NotReachable ? 1 : 2;
     }
     return [self positions].count;
 }
@@ -379,7 +383,8 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            return 60.f;
+            //navigation bar height + status bar height = 64
+            return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
         }
         return 50.f;
     }
@@ -392,35 +397,35 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     switch (indexPath.section) {
     case 0: {
         if (indexPath.row == 0) {
-            FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:@"MarketsCell"
+            if (self.networkStatus == NotReachable) {
+                FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
+                                                                           forIndexPath:indexPath];
+                return cell;
+            }
+            
+            FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:kMarketsCellIdentifier
                                                                   forIndexPath:indexPath];
             cell.marketSelector.dataSource = self;
             cell.marketSelector.delegate = self;
             [cell.marketSelector reloadData];
-            if (self.selectedMarket && self.markets && self.networkStatus != NotReachable) {
+            if (self.selectedMarket && self.markets) {
                 _noGamesAvailable = NO;
                 cell.contentView.userInteractionEnabled = YES;
-                [cell hideStatusLabel];
+                [cell setNoGamesLabelHidden:YES];
                 NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
                 if (selectedMarket != NSNotFound) {
                     [cell.marketSelector updateSelectedMarket:selectedMarket
                                                      animated:NO] ;
                 }
-            } else if (self.markets.count == 0 || self.networkStatus == NotReachable) {
-                NSString *message = nil;
+            } else if (self.markets.count == 0) {
                 if (self.networkStatus == NotReachable) {
-                    message = NSLocalizedString(@"NO INTERNET CONNECTION", nil);
-                } else {
-                    _noGamesAvailable = YES;
-                    message = NSLocalizedString(@"NO GAMES SCHEDULED", nil);
+                    [cell setNoGamesLabelHidden:NO];
+                    cell.contentView.userInteractionEnabled = NO;
                 }
-                
-                [cell showStatusLabelWithMessage:message];
-                cell.contentView.userInteractionEnabled = NO;
             }
             return cell;
         }
-        FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:@"AutoFillCell"
+        FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:kAutoFillCellIdentifier
                                                                forIndexPath:indexPath];
         cell.autoRemovedBenched.on = self.roster.removeBenched.integerValue == 1;
         if (_noGamesAvailable == NO) {
@@ -441,7 +446,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
         NSString* position = [self positions][indexPath.row];
         for (FFPlayer* player in self.roster.players) {
             if ([player.position isEqualToString:position]) {
-                FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamTradeCell"
+                FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamTradeCellIdentifier
                                                                         forIndexPath:indexPath];
                 cell.titleLabel.text = player.team;
                 cell.nameLabel.text = player.name;
@@ -474,7 +479,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
                 return cell;
             }
         }
-        FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamCell"
+        FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamCellIdentifier
                                                            forIndexPath:indexPath];
         cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", position,
                                 NSLocalizedString(@"Not Selected", nil)];
