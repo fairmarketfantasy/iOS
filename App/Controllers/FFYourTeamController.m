@@ -136,7 +136,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    [self refreshRosterWithShowingAlert:YES completion:^{
+    [self refreshRosterWithShowingAlert:NO completion:^{
         [self.tableView reloadData];
         [refreshControl endRefreshing];
     }];

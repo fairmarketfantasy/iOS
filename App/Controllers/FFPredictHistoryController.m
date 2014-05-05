@@ -172,7 +172,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    [self refreshWithShowingAlert:YES completion:^{
+    [self refreshWithShowingAlert:NO completion:^{
         [self.tableView reloadData];
         [refreshControl endRefreshing];
     }];

@@ -80,7 +80,7 @@
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    [self fetchPlayersWithShowingAlert:YES completion:^{
+    [self fetchPlayersWithShowingAlert:NO completion:^{
         [self.tableView reloadData];
         [refreshControl endRefreshing];
     }];
