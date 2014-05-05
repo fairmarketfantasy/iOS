@@ -51,14 +51,18 @@
     [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
 	if ( !success )
 		DLog(@"Failed to start notifier");
     self.networkStatus = [internetReachability currentReachabilityStatus];
-    
+}
+
+- (void)dealloc
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -87,16 +91,21 @@
 - (void)checkNetworkStatus:(NSNotification *)notification
 {
     NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    NetworkStatus previousStatus = self.networkStatus;
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
         
-        if (internetStatus == NotReachable) {
-            [self.tableView reloadData];
-        } else {
-            [self fetchPlayersWithShowingAlert:YES completion:^{
+        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
+            (internetStatus == NotReachable && previousStatus != NotReachable)) {
+            
+            if (internetStatus == NotReachable) {
                 [self.tableView reloadData];
-            }];
+            } else {
+                [self fetchPlayersWithShowingAlert:YES completion:^{
+                    [self.tableView reloadData];
+                }];
+            }
         }
     }
 }

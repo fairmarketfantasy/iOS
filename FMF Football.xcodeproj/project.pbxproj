@@ -190,6 +190,7 @@
 		89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E70018BE249A00B23A99 /* accessory_uncheck@2x.png */; };
 		89F2E70618BE249A00B23A99 /* accessory_uncollapse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E70118BE249A00B23A99 /* accessory_uncollapse@2x.png */; };
 		89F6D15C18F56A4C001DE023 /* FFDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F6D15B18F56A4C001DE023 /* FFDate.m */; };
+		F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -482,6 +483,8 @@
 		89F6D15A18F56A4C001DE023 /* FFDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFDate.h; sourceTree = "<group>"; };
 		89F6D15B18F56A4C001DE023 /* FFDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFDate.m; sourceTree = "<group>"; };
 		C7A0D11613844A1D9BF1BC9E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9FBDD5A19112D0C0009066D /* FFNoConnectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNoConnectionCell.h; sourceTree = "<group>"; };
+		F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNoConnectionCell.m; sourceTree = "<group>"; };
 		FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -880,6 +883,8 @@
 				893D691418E5CDEA005E305B /* FFPredictHistoryCell.m */,
 				892E4FB918EDD30100F57860 /* FFPredictIndividualCell.h */,
 				892E4FBA18EDD30100F57860 /* FFPredictIndividualCell.m */,
+				F9FBDD5A19112D0C0009066D /* FFNoConnectionCell.h */,
+				F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1139,6 +1144,7 @@
 				8985933F18F5A97D0006405A /* FFDataObject.m in Sources */,
 				893D690F18E5CB22005E305B /* FFPredictHistoryTable.m in Sources */,
 				896ACCEF18B664F5001E9C64 /* FFSession.m in Sources */,
+				F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */,
 				896ACCE518B664F5001E9C64 /* main.m in Sources */,
 				896ACCD718B664F5001E9C64 /* FFStyle.m in Sources */,
 				896ACCF518B664F5001E9C64 /* FFPlayerSelectCell.m in Sources */,
@@ -1293,7 +1299,7 @@
 				GCC_PREFIX_HEADER = "App/FMF Football-Prefix.pch";
 				INFOPLIST_FILE = "App/FMF Football-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "A00CC7DD-D62C-4BE6-A7DF-6EDC1C2972EB";
+				PROVISIONING_PROFILE = "9D8814CF-BFA9-4605-9280-C3611C2E84D5";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1313,8 +1319,8 @@
 				GCC_PREFIX_HEADER = "App/FMF Football-Prefix.pch";
 				INFOPLIST_FILE = "App/FMF Football-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "A00CC7DD-D62C-4BE6-A7DF-6EDC1C2972EB";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A00CC7DD-D62C-4BE6-A7DF-6EDC1C2972EB";
+				PROVISIONING_PROFILE = "9D8814CF-BFA9-4605-9280-C3611C2E84D5";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9D8814CF-BFA9-4605-9280-C3611C2E84D5";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

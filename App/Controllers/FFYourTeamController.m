@@ -53,12 +53,14 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     // submit view
     self.submitView = [FFSubmitView new];
     [self.submitView.segments addTarget:self
                                  action:@selector(onSubmit:)
                        forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.submitView];
+
     // table view
     self.tableView = [FFTeamTable.alloc initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
@@ -80,18 +82,24 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     self.marketsSetRegular.delegate = self;
     self.marketsSetSingle.delegate = self;
     [self updateMarkets];
+    
     // roster
     self.tryCreateRosterTimes = 3;
     [self createRoster];
+    
+    //reachability
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
     
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
 	if ( !success )
 		DLog(@"Failed to start notifier");
     self.networkStatus = [internetReachability currentReachabilityStatus];
-    
+}
+
+- (void)dealloc
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
 }
 
 //- (void)didMoveToParentViewController:(UIViewController *)parent
@@ -109,23 +117,26 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 //    [self createRoster];
 //}
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (self.networkStatus == NotReachable) {
+        [self.tableView reloadData];
+    }
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self shorOrHideSubmitIfNeeded];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:kReachabilityChangedNotification object:nil];
-    [super viewDidDisappear:animated];
+    [self showOrHideSubmitIfNeeded];
 }
 
 #pragma mark -
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    [self refreshRosterWithShowingAlert:NO comletion:^{
+    [self refreshRosterWithShowingAlert:YES completion:^{
         [self.tableView reloadData];
         [refreshControl endRefreshing];
     }];
@@ -136,22 +147,29 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 - (void)checkNetworkStatus:(NSNotification *)notification
 {
     NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    NetworkStatus previousStatus = self.networkStatus;
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
-        [self updateMarkets];
         
-        if (internetStatus == NotReachable) {
-            [self refreshRosterWithShowingAlert:NO comletion:^{
+        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
+            (internetStatus == NotReachable && previousStatus != NotReachable)) {
+            
+            if (internetStatus == NotReachable) {
                 [self.tableView reloadData];
-            }];
+            } else {
+                [self updateMarkets];
+                [self refreshRosterWithShowingAlert:YES completion:^{
+                    [self.tableView reloadData];
+                }];
+            }
         }
     }
 }
 
 #pragma mark - private
 
-- (void)shorOrHideSubmitIfNeeded
+- (void)showOrHideSubmitIfNeeded
 {
     BOOL anyPlayer = self.roster.players.count > 0;
     CGFloat submitHeight = 70.f;
@@ -198,7 +216,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     if (!self.selectedMarket) {
         self.roster = nil;
         [self.tableView reloadData];
-        [self shorOrHideSubmitIfNeeded];
+        [self showOrHideSubmitIfNeeded];
         return;
     }
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
@@ -213,7 +231,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
          @strongify(self)
          self.roster = successObj;
          [self.tableView reloadData];
-         [self shorOrHideSubmitIfNeeded];
+         [self showOrHideSubmitIfNeeded];
          [alert hide];
      }
                                failure:
@@ -227,7 +245,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
              self.roster = nil;
              [self.tableView reloadData];
              [alert hide];
-             [self shorOrHideSubmitIfNeeded];
+             [self showOrHideSubmitIfNeeded];
              /* !!!: disable error alerts NBA-659
              [[[FFAlertView alloc] initWithError:error
                                            title:nil
@@ -240,7 +258,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
      }];
 }
 
-- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow comletion:(void(^)(void))block
+- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
     if (self.networkStatus == NotReachable) {
         if (shouldShow) {
@@ -265,7 +283,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
          @strongify(self)
          self.roster = successObj;
          [self.tableView reloadData];
-         [self shorOrHideSubmitIfNeeded];
+         [self showOrHideSubmitIfNeeded];
          
          if (alert)
              [alert hide];
@@ -278,7 +296,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
          [alert hide];
          self.roster = nil;
          [self.tableView reloadData];
-         [self shorOrHideSubmitIfNeeded];
+         [self showOrHideSubmitIfNeeded];
          
          if (alert)
              [alert hide];
@@ -338,7 +356,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
          @strongify(self)
          [self.tableView reloadData];
          [alert hide];
-         [self shorOrHideSubmitIfNeeded];
+         [self showOrHideSubmitIfNeeded];
          /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
@@ -537,7 +555,7 @@ heightForHeaderInSection:(NSInteger)section
          @strongify(self)
          self.roster = successObj;
          [self.tableView reloadData];
-         [self shorOrHideSubmitIfNeeded];
+         [self showOrHideSubmitIfNeeded];
          [alert hide];
      }
                          failure:
@@ -546,7 +564,7 @@ heightForHeaderInSection:(NSInteger)section
          [alert hide];
          self.roster = nil;
          [self.tableView reloadData];
-         [self shorOrHideSubmitIfNeeded];
+         [self showOrHideSubmitIfNeeded];
          /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
@@ -578,7 +596,7 @@ heightForHeaderInSection:(NSInteger)section
          @strongify(self)
          self.roster = successObj;
          [self.tableView reloadData];
-         [self shorOrHideSubmitIfNeeded];
+         [self showOrHideSubmitIfNeeded];
          [alert hide];
      }
                          failure:
@@ -587,7 +605,7 @@ heightForHeaderInSection:(NSInteger)section
          [alert hide];
          self.roster = nil;
          [self.tableView reloadData];
-         [self shorOrHideSubmitIfNeeded];
+         [self showOrHideSubmitIfNeeded];
          /* !!!: disable error alerts NBA-659
          [[[FFAlertView alloc] initWithError:error
                                        title:nil
@@ -610,9 +628,9 @@ heightForHeaderInSection:(NSInteger)section
                       success:
      ^(id successObj) {
          @strongify(self)
-         [self shorOrHideSubmitIfNeeded];
+         [self showOrHideSubmitIfNeeded];
          [alert hide];
-         [self refreshRosterWithShowingAlert:YES comletion:^{
+         [self refreshRosterWithShowingAlert:YES completion:^{
              [self.tableView reloadData];
          }];
          [self.delegate showPosition:player.position];
@@ -621,7 +639,7 @@ heightForHeaderInSection:(NSInteger)section
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
-         [self shorOrHideSubmitIfNeeded];
+         [self showOrHideSubmitIfNeeded];
          /* !!!: disable error alerts NBA-659
           [[[FFAlertView alloc] initWithError:error
           title:nil

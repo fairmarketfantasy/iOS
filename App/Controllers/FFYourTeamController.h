@@ -30,7 +30,7 @@
 
 - (NSArray*)uniquePositions;
 - (void)createRoster;
-- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow comletion:(void(^)(void))block;
+- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
 - (void)updateMarkets;
 
 @end

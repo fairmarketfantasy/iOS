@@ -9,7 +9,9 @@
 #import "FFPredictHistoryTable.h"
 #import "FFPredictHistoryCell.h"
 #import "FFPredictIndividualCell.h"
+#import "FFNoConnectionCell.h"
 #import "FFPredictHeader.h"
+#import "Reachability.h"
 #import <FlatUIKit.h>
 
 @implementation FFPredictHistoryTable
@@ -22,10 +24,9 @@
         self.backgroundColor = [FFStyle darkGrey];
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
 
-        [self registerClass:[FFPredictHistoryCell class]
-     forCellReuseIdentifier:@"PredictCell"];
-        [self registerClass:[FFPredictIndividualCell class]
-     forCellReuseIdentifier:@"PredictIndividualCell"];
+        [self registerClass:[FFPredictHistoryCell class] forCellReuseIdentifier:@"PredictCell"];
+        [self registerClass:[FFPredictIndividualCell class] forCellReuseIdentifier:@"PredictIndividualCell"];
+        [self registerClass:[FFNoConnectionCell class] forCellReuseIdentifier:kNoConnectionCellIdentifier];
 
         // header
         [self setPredictionType:FFPredictionsTypeRoster
@@ -33,9 +34,15 @@
     }
     return self;
 }
+
 - (void)setPredictionType:(FFPredictionsType)type
      rosterPredictionType:(FFRosterPredictionType)rosterType
 {
+    if ([self networkStatus] == NotReachable) {
+        self.tableHeaderView = nil;
+        return;
+    }
+    
     switch (type) {
         case FFPredictionsTypeIndividual:
             self.tableHeaderView = nil;
@@ -72,6 +79,14 @@
     if (self.historyDelegate) {
         [self.historyDelegate changeHistory:segments];
     }
+}
+
+#pragma mark
+
+- (NetworkStatus)networkStatus
+{
+    Reachability *reachability = [Reachability reachabilityForInternetConnection];
+    return [reachability currentReachabilityStatus];
 }
 
 @end
