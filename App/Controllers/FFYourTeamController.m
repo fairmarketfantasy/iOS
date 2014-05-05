@@ -156,6 +156,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
             (internetStatus == NotReachable && previousStatus != NotReachable)) {
             
             if (internetStatus == NotReachable) {
+                [self showOrHideSubmitIfNeeded];
                 [self.tableView reloadData];
             } else {
                 [self updateMarkets];
@@ -181,7 +182,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
                                             : self.view.bounds.size.height,
                                             self.view.bounds.size.width,
                                             submitHeight);
-         self.submitView.alpha = anyPlayer ? 1.f : 0.f;
+         self.submitView.alpha = (anyPlayer && self.networkStatus != NotReachable) ? 1.f : 0.f;
          self.submitView.userInteractionEnabled = anyPlayer;
          UIEdgeInsets tableInsets = self.tableView.contentInset;
          tableInsets.bottom = anyPlayer ? submitHeight : 0.f;
