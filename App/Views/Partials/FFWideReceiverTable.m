@@ -27,6 +27,8 @@
      forCellReuseIdentifier:kTeamAddCellIdentifier];
         [self registerClass:[FFNoConnectionCell class]
      forCellReuseIdentifier:kNoConnectionCellIdentifier];
+        [self registerClass:[UITableViewCell class]
+     forCellReuseIdentifier:kPickerCellIdentifier];
     }
     return self;
 }

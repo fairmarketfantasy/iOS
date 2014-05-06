@@ -27,10 +27,12 @@
 #import "FFRoster.h"
 #import "FFPlayer.h"
 
-@interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate>
+@interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property(nonatomic, assign) NSUInteger position;
 @property(nonatomic, assign) NetworkStatus networkStatus;
+
+@property(nonatomic, strong) UIPickerView *picker;
 
 @end
 
@@ -51,13 +53,24 @@
     [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     
+    //reachability
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
-    
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
 	if ( !success )
 		DLog(@"Failed to start notifier");
     self.networkStatus = [internetReachability currentReachabilityStatus];
+    
+    //custom picker
+    self.picker = [[UIPickerView alloc] initWithFrame:CGRectZero];
+    self.picker.delegate = self;
+    self.picker.dataSource = self;
+    
+    CGAffineTransform t0 = CGAffineTransformMakeTranslation(self.picker.bounds.size.width/2, self.picker.bounds.size.height/2);
+	CGAffineTransform s0 = CGAffineTransformMakeScale(1.0, 0.3);
+	CGAffineTransform t1 = CGAffineTransformMakeTranslation(-self.picker.bounds.size.width/2, -self.picker.bounds.size.height/2);
+	self.picker.transform = CGAffineTransformConcat(t0, CGAffineTransformConcat(s0, t1));
+    self.picker.backgroundColor = [FFStyle darkGrey];
 }
 
 - (void)dealloc
@@ -121,6 +134,8 @@
     for (NSString* positionName in self.delegate.positions) {
         if ([positionName isEqualToString:position]) {
             [self selectPosition:[self.delegate.positions indexOfObject:positionName]];
+            NSUInteger selectedIndex = [self.delegate.positions indexOfObject:positionName];
+            [self.picker selectRow:selectedIndex inComponent:0 animated:YES];
             break;
         }
     }
@@ -199,6 +214,48 @@
      }];
 }
 
+#pragma mark - UIPickerViewDataSource
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    return self.delegate.positions.count;
+}
+
+#pragma mark - UIPickerViewDelegate
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
+{
+    return 60.0;
+}
+
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
+{
+    UILabel *pickerLabel = (UILabel *)view;
+    
+    if (pickerLabel == nil) {
+        pickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 60.f)];
+        pickerLabel.textAlignment = NSTextAlignmentCenter;
+        pickerLabel.textColor = [UIColor clearColor];
+        pickerLabel.font = [FFStyle blockFont:35.0f];
+        pickerLabel.textColor = [UIColor whiteColor];
+    }
+    
+    NSString *positionName = self.delegate.positions[row];
+    pickerLabel.text = self.delegate.positionsNames[positionName];
+    
+    return pickerLabel;
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    [self selectPosition:row];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -221,7 +278,7 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.section == 0) {
         //navigation bar height + status bar height = 64
-        return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
+        return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 65.f;
     }
     return 80.f;
 }
@@ -236,16 +293,20 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
             return cell;
          }
         
-        FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:kWideRecieverCellIdentifier
-                                                                   forIndexPath:indexPath];
-        [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
-        if (cell.segments.numberOfSegments > self.position) {
-            cell.segments.selectedSegmentIndex = self.position;
-        }
-        [cell.segments addTarget:self
-                          action:@selector(segments:)
-                forControlEvents:UIControlEventValueChanged];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPickerCellIdentifier forIndexPath:indexPath];
+        [cell addSubview:self.picker];
         return cell;
+        
+//        FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:kWideRecieverCellIdentifier
+//                                                                   forIndexPath:indexPath];
+//        [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
+//        if (cell.segments.numberOfSegments > self.position) {
+//            cell.segments.selectedSegmentIndex = self.position;
+//        }
+//        [cell.segments addTarget:self
+//                          action:@selector(segments:)
+//                forControlEvents:UIControlEventValueChanged];
+//        return cell;
     }
     FFTeamAddCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamAddCellIdentifier
                                                           forIndexPath:indexPath];

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define kPickerCellIdentifier @"PickerCell"
+
 @interface FFWideReceiverTable : UITableView
 
 @end
