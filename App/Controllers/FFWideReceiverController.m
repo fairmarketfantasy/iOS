@@ -230,7 +230,7 @@
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
-    return 55.0;
+    return 75.0;
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
@@ -238,10 +238,10 @@
     UILabel *pickerLabel = (UILabel *)view;
     
     if (pickerLabel == nil) {
-        pickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 55.f)];
+        pickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 75.f)];
         pickerLabel.textAlignment = NSTextAlignmentCenter;
         pickerLabel.textColor = [UIColor clearColor];
-        pickerLabel.font = [FFStyle blockFont:38.0f];
+        pickerLabel.font = [FFStyle blockFont:35.0f];
         pickerLabel.textColor = [UIColor whiteColor];
     }
     
