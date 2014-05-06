@@ -62,12 +62,12 @@
     self.networkStatus = [internetReachability currentReachabilityStatus];
     
     //custom picker
-    self.picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 216.f)];
+    self.picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 162.f)];
     self.picker.delegate = self;
     self.picker.dataSource = self;
     
     CGAffineTransform t0 = CGAffineTransformMakeTranslation(self.picker.bounds.size.width/2, self.picker.bounds.size.height/2);
-	CGAffineTransform s0 = CGAffineTransformMakeScale(1.0, 0.35);
+	CGAffineTransform s0 = CGAffineTransformMakeScale(1.0, 0.47);
 	CGAffineTransform t1 = CGAffineTransformMakeTranslation(-self.picker.bounds.size.width/2, -self.picker.bounds.size.height/2);
 	self.picker.transform = CGAffineTransformConcat(t0, CGAffineTransformConcat(s0, t1));
     self.picker.backgroundColor = [FFStyle darkGrey];
@@ -230,7 +230,7 @@
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
-    return 75.0;
+    return 54.0;
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
@@ -238,10 +238,10 @@
     UILabel *pickerLabel = (UILabel *)view;
     
     if (pickerLabel == nil) {
-        pickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 75.f)];
+        pickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 54.f)];
         pickerLabel.textAlignment = NSTextAlignmentCenter;
         pickerLabel.textColor = [UIColor clearColor];
-        pickerLabel.font = [FFStyle blockFont:35.0f];
+        pickerLabel.font = [FFStyle blockFont:30.0f];
         pickerLabel.textColor = [UIColor whiteColor];
     }
     
