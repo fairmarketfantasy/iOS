@@ -82,6 +82,8 @@
 {
     [super viewWillAppear:animated];
     
+    [self.picker reloadAllComponents];
+    
     if (self.players.count == 0) {
         [self fetchPlayersWithShowingAlert:NO completion:^{
             [self.tableView reloadData];
