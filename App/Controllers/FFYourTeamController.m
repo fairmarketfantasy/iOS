@@ -45,6 +45,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 @property(nonatomic) FFMarketSet* marketsSetSingle;
 
 @property(nonatomic, assign) NetworkStatus networkStatus;
+@property(nonatomic, strong) NSMutableArray *myTeam;
 
 @end
 
@@ -53,6 +54,8 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.myTeam = [NSMutableArray array];
     
     // submit view
     self.submitView = [FFSubmitView new];
@@ -113,7 +116,6 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 //    [self updateMarkets];
 //    // roster
 //    self.tryCreateRosterTimes = 3;
-//    NSLog(@"Create roster - #1");
 //    [self createRoster];
 //}
 
@@ -163,6 +165,73 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
                 [self refreshRosterWithShowingAlert:YES completion:^{
                     [self.tableView reloadData];
                 }];
+            }
+        }
+    }
+}
+
+#pragma mark - Manage My Team
+
+- (NSMutableDictionary *)emptyPosition
+{
+    return  [NSMutableDictionary dictionaryWithObjectsAndKeys:@"", @"name", @"", @"player", nil];
+}
+
+- (BOOL)isPositionUnique:(NSString *)position
+{
+    NSUInteger counter = 0;
+    for (NSString *pos in [self positions]) {
+        if ([position isEqualToString:pos])
+            counter++;
+    }
+    
+    if (counter == 1)
+        return YES;
+    else if (counter > 1)
+        return NO;
+    else
+        assert(NO);
+}
+
+- (NSMutableArray *)newTeamWithPositions:(NSArray *)positions
+{
+    NSMutableArray *newTeam = [NSMutableArray array];
+    for (NSUInteger i = 0; i < positions.count; ++i) {
+        [newTeam addObject:[self emptyPosition]];
+        [newTeam[i] setObject:positions[i] forKey:@"name"];
+    }
+    
+    return newTeam;
+}
+
+- (void)addPlayerToMyTeam:(FFPlayer *)player
+{
+    for (NSMutableDictionary *position in self.myTeam) {
+        if ([position[@"name"] isEqualToString:player.position]) {
+            if ([self isPositionUnique:player.position]) {
+                [position setObject:player forKey:@"player"];
+                break;
+            } else {
+                if ([position[@"player"] isKindOfClass:[NSString class]]) {
+                    if ([position[@"player"] isEqualToString:@""]) {
+                        [position setObject:player forKey:@"player"];
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+            }
+        }
+    }
+}
+
+- (void)removePlayerFromMyTeam:(FFPlayer *)player
+{
+    for (NSMutableDictionary *position in self.myTeam) {
+        if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
+            FFPlayer *pl = position[@"player"];
+            if ([pl.name isEqualToString:player.name]) {
+                [position setObject:@"" forKey:@"player"];
             }
         }
     }
@@ -231,6 +300,9 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
      ^(id successObj) {
          @strongify(self)
          self.roster = successObj;
+         
+         self.myTeam = [self newTeamWithPositions:[self positions]];
+         
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          [alert hide];
@@ -369,6 +441,124 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
      }];
 }
 
+#pragma mark - Cells
+
+- (FFMarketsCell *)provideMarketsCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
+{
+    FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:kMarketsCellIdentifier
+                                                          forIndexPath:indexPath];
+    cell.marketSelector.dataSource = self;
+    cell.marketSelector.delegate = self;
+    [cell.marketSelector reloadData];
+    if (self.selectedMarket && self.markets) {
+        _noGamesAvailable = NO;
+        cell.contentView.userInteractionEnabled = YES;
+        [cell setNoGamesLabelHidden:YES];
+        NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
+        if (selectedMarket != NSNotFound) {
+            [cell.marketSelector updateSelectedMarket:selectedMarket
+                                             animated:NO] ;
+        }
+    } else if (self.markets.count == 0) {
+        if (self.networkStatus == NotReachable) {
+            [cell setNoGamesLabelHidden:NO];
+            cell.contentView.userInteractionEnabled = NO;
+        }
+    }
+    
+    return cell;
+}
+
+- (FFAutoFillCell *)provideAutoFillCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
+{
+    FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:kAutoFillCellIdentifier
+                                                           forIndexPath:indexPath];
+    cell.autoRemovedBenched.on = self.roster.removeBenched.integerValue == 1;
+    if (_noGamesAvailable == NO) {
+        cell.autoRemovedBenched.enabled = YES;
+        [cell.autoRemovedBenched addTarget:self
+                                    action:@selector(autoRemovedBenched:)
+                          forControlEvents:UIControlEventValueChanged];
+        [cell.autoFillButton addTarget:self
+                                action:@selector(autoFill:)
+                      forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        cell.autoRemovedBenched.enabled = NO;
+    }
+    
+    return cell;
+}
+
+- (FFTeamTradeCell *)provideTeamTradeCellWithPlayer:(FFPlayer *)player forTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
+{
+    FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamTradeCellIdentifier
+                                                            forIndexPath:indexPath];
+    cell.titleLabel.text = player.team;
+    cell.nameLabel.text = player.name;
+    cell.costLabel.text = [FFStyle.priceFormatter
+                           stringFromNumber:@([player.purchasePrice floatValue])];
+    cell.centLabel.text = @"";
+    BOOL benched = player.benched.integerValue == 1;
+    UIColor* avatarColor = benched ? [FFStyle brightOrange] : [FFStyle brightGreen];
+    cell.avatar.borderColor = avatarColor;
+    cell.avatar.pathColor = avatarColor;
+    [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
+                placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
+     usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [cell.avatar draw];
+    cell.benched.hidden = !benched;
+    cell.PTButton.hidden = benched;
+    __block FFPlayer* blockPlayer = player;
+    @weakify(self)
+    [cell.PTButton setAction:kUIButtonBlockTouchUpInside
+                   withBlock:^{
+                       @strongify(self)
+                       [self.parentViewController performSegueWithIdentifier:@"GotoPT"
+                                                                      sender:blockPlayer]; // TODO: refactode it (?)
+                   }];
+    [cell.tradeButton setAction:kUIButtonBlockTouchUpInside
+                      withBlock:^{
+                          @strongify(self)
+                          [self removePlayer:blockPlayer];
+                      }];
+    return cell;
+    //        for (FFPlayer* player in self.roster.players) {
+    //            if ([player.position isEqualToString:position]) {
+    //                FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamTradeCellIdentifier
+    //                                                                        forIndexPath:indexPath];
+    //                cell.titleLabel.text = player.team;
+    //                cell.nameLabel.text = player.name;
+    //                cell.costLabel.text = [FFStyle.priceFormatter
+    //                                       stringFromNumber:@([player.purchasePrice floatValue])];
+    //                cell.centLabel.text = @"";
+    //                BOOL benched = player.benched.integerValue == 1;
+    //                UIColor* avatarColor = benched ? [FFStyle brightOrange] : [FFStyle brightGreen];
+    //                cell.avatar.borderColor = avatarColor;
+    //                cell.avatar.pathColor = avatarColor;
+    //                [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
+    //                            placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
+    //                 usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    //                [cell.avatar draw];
+    //                cell.benched.hidden = !benched;
+    //                cell.PTButton.hidden = benched;
+    //                __block FFPlayer* blockPlayer = player;
+    //                @weakify(self)
+    //                [cell.PTButton setAction:kUIButtonBlockTouchUpInside
+    //                               withBlock:^{
+    //                                   @strongify(self)
+    //                                   [self.parentViewController performSegueWithIdentifier:@"GotoPT"
+    //                                                                                  sender:blockPlayer];
+    //                               }];
+    //                [cell.tradeButton setAction:kUIButtonBlockTouchUpInside
+    //                                  withBlock:^{
+    //                                      @strongify(self)
+    //                                      [self removePlayer:blockPlayer];
+    //                                  }];
+    //                return cell;
+    //            }
+    //        }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -402,98 +592,40 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
         cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     switch (indexPath.section) {
-    case 0: {
-        if (indexPath.row == 0) {
-            if (self.networkStatus == NotReachable) {
-                FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
-                                                                           forIndexPath:indexPath];
-                return cell;
+        case 0: {
+            if (indexPath.row == 0) {
+                if (self.networkStatus == NotReachable) {
+                    FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
+                                                                               forIndexPath:indexPath];
+                    return cell;
+                }
+                
+                return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
             }
             
-            FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:kMarketsCellIdentifier
-                                                                  forIndexPath:indexPath];
-            cell.marketSelector.dataSource = self;
-            cell.marketSelector.delegate = self;
-            [cell.marketSelector reloadData];
-            if (self.selectedMarket && self.markets) {
-                _noGamesAvailable = NO;
-                cell.contentView.userInteractionEnabled = YES;
-                [cell setNoGamesLabelHidden:YES];
-                NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
-                if (selectedMarket != NSNotFound) {
-                    [cell.marketSelector updateSelectedMarket:selectedMarket
-                                                     animated:NO] ;
-                }
-            } else if (self.markets.count == 0) {
-                if (self.networkStatus == NotReachable) {
-                    [cell setNoGamesLabelHidden:NO];
-                    cell.contentView.userInteractionEnabled = NO;
-                }
+            return [self provideAutoFillCellForTable:tableView atIndexPath:indexPath];
+        }
+            
+        case 1: {
+            NSString* positionName = [self positions][indexPath.row];
+            NSMutableDictionary *position = self.myTeam[indexPath.row];
+            if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
+                FFPlayer *player = [self.roster playerByName:[(FFPlayer *)position[@"player"] name]];
+                if (!player)
+                    assert(NO);
+                
+                return [self provideTeamTradeCellWithPlayer:player forTable:tableView atIndexPath:indexPath];
             }
+            
+            FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamCellIdentifier
+                                                               forIndexPath:indexPath];
+            cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", positionName,
+                                    NSLocalizedString(@"Not Selected", nil)];
             return cell;
         }
-        FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:kAutoFillCellIdentifier
-                                                               forIndexPath:indexPath];
-        cell.autoRemovedBenched.on = self.roster.removeBenched.integerValue == 1;
-        if (_noGamesAvailable == NO) {
-            cell.autoRemovedBenched.enabled = YES;
-            [cell.autoRemovedBenched addTarget:self
-                                        action:@selector(autoRemovedBenched:)
-                              forControlEvents:UIControlEventValueChanged];
-            [cell.autoFillButton addTarget:self
-                                    action:@selector(autoFill:)
-                          forControlEvents:UIControlEventTouchUpInside];
-        } else {
-            cell.autoRemovedBenched.enabled = NO;
-        }
-        
-        return cell;
-    }
-    case 1: {
-        NSString* position = [self positions][indexPath.row];
-        for (FFPlayer* player in self.roster.players) {
-            if ([player.position isEqualToString:position]) {
-                FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamTradeCellIdentifier
-                                                                        forIndexPath:indexPath];
-                cell.titleLabel.text = player.team;
-                cell.nameLabel.text = player.name;
-                cell.costLabel.text = [FFStyle.priceFormatter
-                                       stringFromNumber:@([player.purchasePrice floatValue])];
-                cell.centLabel.text = @"";
-                BOOL benched = player.benched.integerValue == 1;
-                UIColor* avatarColor = benched ? [FFStyle brightOrange] : [FFStyle brightGreen];
-                cell.avatar.borderColor = avatarColor;
-                cell.avatar.pathColor = avatarColor;
-                [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
-                            placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
-                 usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-                [cell.avatar draw];
-                cell.benched.hidden = !benched;
-                cell.PTButton.hidden = benched;
-                __block FFPlayer* blockPlayer = player;
-                @weakify(self)
-                [cell.PTButton setAction:kUIButtonBlockTouchUpInside
-                               withBlock:^{
-                                   @strongify(self)
-                                   [self.parentViewController performSegueWithIdentifier:@"GotoPT"
-                                                                                  sender:blockPlayer]; // TODO: refactode it (?)
-                               }];
-                [cell.tradeButton setAction:kUIButtonBlockTouchUpInside
-                                  withBlock:^{
-                                      @strongify(self)
-                                      [self removePlayer:blockPlayer];
-                                  }];
-                return cell;
-            }
-        }
-        FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamCellIdentifier
-                                                           forIndexPath:indexPath];
-        cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", position,
-                                NSLocalizedString(@"Not Selected", nil)];
-        return cell;
-    }
-    default:
-        return nil;
+            
+        default:
+            return nil;
     }
 }
 
@@ -631,6 +763,7 @@ heightForHeaderInSection:(NSInteger)section
          @strongify(self)
          [self showOrHideSubmitIfNeeded];
          [alert hide];
+         [self removePlayerFromMyTeam:player];
          [self refreshRosterWithShowingAlert:YES completion:^{
              [self.tableView reloadData];
          }];

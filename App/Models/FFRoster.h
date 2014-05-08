@@ -91,4 +91,6 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 - (void)autofillSuccess:(SBSuccessBlock)success
                 failure:(SBErrorBlock)failure;
 
+- (FFPlayer *)playerByName:(NSString *)name;
+
 @end

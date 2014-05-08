@@ -17,6 +17,7 @@
 @class FFMarket;
 @class FFMarketSet;
 @class Reachability;
+@class FFPlayer;
 
 @interface FFYourTeamController : FFBaseViewController {
     Reachability* internetReachability;
@@ -32,5 +33,7 @@
 - (void)createRoster;
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
 - (void)updateMarkets;
+
+- (void)addPlayerToMyTeam:(FFPlayer *)player;
 
 @end
