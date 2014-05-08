@@ -25,6 +25,7 @@
 @interface FFSessionViewController () <UIGestureRecognizerDelegate, UITextFieldDelegate>
 
 @property(nonatomic) UIView* signInView;
+@property(nonatomic) UIImageView *backgroundView;
 @property(nonatomic) UIButton* signInFacebookButton;
 @property(nonatomic) UIButton* signInButton;
 @property(nonatomic) UIButton* signInHeaderButton;
@@ -37,6 +38,9 @@
 @property(nonatomic) UIView* container;
 @property(nonatomic) UITextField* forgotPasswordField;
 @property(nonatomic, assign) NetworkStatus networkStatus;
+@property(nonatomic, assign) NSUInteger indexShowingSport;
+@property(nonatomic, strong) NSArray *availableSports;
+@property(nonatomic, strong) NSTimer *timer;
 
 - (void)setupSignInView;
 - (void)signIn:(id)sender;
@@ -51,11 +55,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.session = [FFSession lastUsedSessionWithUserClass:[FFUser class]];
+    self.availableSports = @[[NSNumber numberWithInteger:FFMarketSportNBA], [NSNumber numberWithInteger:FFMarketSportMLB]];
+    self.indexShowingSport = 0;
     self.signInView = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, self.view.frame.size.height)];
     [self setupSignInView];
-
     [self.view addSubview:self.signInView];
+    
     [_signInTicker viewDidAppear:NO];
 
     _dismissKeyboardRecognizer = [[UITapGestureRecognizer alloc]
@@ -101,6 +108,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
     
+    [self createTimer];
+    
     if (!self.session) {
         [self.tickerDataSource refresh];
         return;
@@ -118,6 +127,9 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardDidHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SBLogoutNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:SBLoginDidBecomeInvalidNotification object:nil];
+    
+    [self.timer invalidate];
+    self.timer = nil;
     
     [super viewDidDisappear:animated];
 }
@@ -155,16 +167,63 @@
                              }];
 }
 
+#pragma mark
+
+- (void)changeBackgroundImage:(NSTimer *)timer
+{
+    NSString *smallImageName = nil;
+    NSString *bigImageName = nil;
+    
+    switch ([self.availableSports[self.indexShowingSport] integerValue]) {
+        case FFMarketSportMLB:
+            smallImageName = @"loginmlb";
+            bigImageName = @"loginmlb-586h";
+            break;
+            
+        case FFMarketSportNBA:
+            smallImageName = @"loginbg";
+            bigImageName = @"loginbg-586h";
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (self.indexShowingSport == self.availableSports.count - 1)
+        self.indexShowingSport = 0;
+    else
+        self.indexShowingSport++;
+    
+    NSString *imageName = IS_SMALL_DEVICE ? smallImageName : bigImageName;
+    
+    [UIView transitionWithView:self.backgroundView
+                      duration:1.0f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                        self.backgroundView.image = [UIImage imageNamed:imageName];
+                    } completion:nil];
+}
+
+- (void)createTimer
+{
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:5.0f
+                                                  target:self
+                                                selector:@selector(changeBackgroundImage:)
+                                                userInfo:nil
+                                                 repeats:YES];
+    [self.timer fire];
+}
+
+#pragma mark
+
 // TODO: move into separate VIEW
 - (void)setupSignInView
 {
     // background
-    NSString *imageName = IS_SMALL_DEVICE ? @"loginbg.png" : @"loginbg-586h.png";
-    UIImageView* backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-    
+    self.backgroundView = [UIImageView new];
 //    backgroundView.contentMode = UIViewContentModeTop;
-    backgroundView.frame = self.signInView.bounds;
-    [self.signInView addSubview:backgroundView];
+    self.backgroundView.frame = self.signInView.bounds;
+    [self.signInView addSubview:self.backgroundView];
 
     self.container = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, self.view.frame.size.height)];
     self.container.backgroundColor = [UIColor clearColor];

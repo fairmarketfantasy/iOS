@@ -371,6 +371,16 @@
     if (![header isKindOfClass:[FFAccountHeader class]]) {
         return;
     }
+    
+    NSString *imageName = nil;
+    if (self.session.sport == FFMarketSportNBA) {
+        imageName = @"loginbg";
+    } else if (self.session.sport == FFMarketSportMLB) {
+        imageName = @"loginmlb";
+    }
+    
+    [header setBackgroundImage:[UIImage imageNamed:imageName]];
+    
     [header.avatar setImageWithURL:[NSURL URLWithString:self.session.user.imageUrl]
                   placeholderImage:[UIImage imageNamed:@"defaultuser"]
        usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
