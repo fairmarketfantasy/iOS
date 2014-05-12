@@ -38,9 +38,14 @@
     self = [super initWithIdentifier:identifier
                            userClass:userClass];
     if (self) {
-        self.sport = FFMarketSportNBA;
+        self.sport = [self currentSport];
     }
     return self;
+}
+
+- (FFMarketSport)currentSport
+{
+    return [[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentSport] integerValue];
 }
 
 - (void)clearCredentials

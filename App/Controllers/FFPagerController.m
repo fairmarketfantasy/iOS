@@ -304,6 +304,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)didUpdateToNewSport:(FFMarketSport)sport
 {
     self.session.sport = sport;
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:sport] forKey:kCurrentSport];
     [self.teamController updateMarkets];
 }
 
