@@ -7,6 +7,9 @@
 //
 
 #import "FFBaseViewController.h"
+#import "FFYourTeamDataSource.h"
+
+@class FFRoster;
 
 @protocol FFYourTeamProtocol <NSObject>
 
@@ -24,10 +27,10 @@
 }
 
 @property(nonatomic, weak) id<FFYourTeamProtocol> delegate;
-@property(nonatomic, readonly) FFRoster* roster;
-@property(nonatomic) FFMarket* selectedMarket;
+@property(nonatomic, weak) id<FFYourTeamDataSource> dataSource;
 @property(nonatomic) UITableView* tableView;
 @property(nonatomic, readonly) BOOL noGamesAvailable;
+@property(nonatomic, strong) NSMutableArray *myTeam;
 
 - (NSArray*)uniquePositions;
 - (void)createRoster;
@@ -35,5 +38,6 @@
 - (void)updateMarkets;
 
 - (void)addPlayerToMyTeam:(FFPlayer *)player;
+- (void)showOrHideSubmitIfNeeded;
 
 @end

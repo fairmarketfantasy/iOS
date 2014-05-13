@@ -7,6 +7,7 @@
 //
 
 #import "FFBaseViewController.h"
+#import "FFYourTeamDataSource.h"
 
 @class FFPlayer;
 
@@ -30,6 +31,7 @@
 
 @property(nonatomic) NSArray* players; // should contain FFPlayer*
 @property(nonatomic, weak) id<FFPlayersProtocol> delegate;
+@property(nonatomic, weak) id<FFYourTeamDataSource> dataSource;
 @property(nonatomic) UITableView* tableView;
 
 - (void)showPosition:(NSString*)position;

@@ -38,14 +38,13 @@
 @interface FFYourTeamController () <UITableViewDataSource, UITableViewDelegate,
 FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDelegate>
 // models
-@property(nonatomic) FFRoster* roster;
+
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 @property(nonatomic) FFSubmitView* submitView;
 @property(nonatomic) FFMarketSet* marketsSetRegular;
 @property(nonatomic) FFMarketSet* marketsSetSingle;
 
 @property(nonatomic, assign) NetworkStatus networkStatus;
-@property(nonatomic, strong) NSMutableArray *myTeam;
 
 @end
 
@@ -78,17 +77,27 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     [self.tableView addSubview:refreshControl];
     
     //code from didMoveToParentViewController:
-    self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-                                                                  session:self.session authorized:YES];
-    self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-                                                               session:self.session authorized:YES];
-    self.marketsSetRegular.delegate = self;
-    self.marketsSetSingle.delegate = self;
-    [self updateMarkets];
+//    self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+//                                                                  session:self.session authorized:YES];
+//    self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+//                                                               session:self.session authorized:YES];
+//    self.marketsSetRegular.delegate = self;
+//    self.marketsSetSingle.delegate = self;
+//    [self updateMarkets];
     
     // roster
-    self.tryCreateRosterTimes = 3;
-    [self createRoster];
+//    self.tryCreateRosterTimes = 3;
+//    [self createRoster];
+
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    [self.dataSource createRosterWithCompletion:^{
+        [alert hide];
+        [self.tableView reloadData];
+    }];
+
     
     //reachability
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
@@ -123,9 +132,9 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 {
     [super viewWillAppear:animated];
     
-    if (self.networkStatus == NotReachable) {
+//    if (self.networkStatus == NotReachable) {
         [self.tableView reloadData];
-    }
+//    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -241,7 +250,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 
 - (void)showOrHideSubmitIfNeeded
 {
-    BOOL anyPlayer = self.roster.players.count > 0;
+    BOOL anyPlayer = [self.dataSource currentRoster].players.count > 0;
     CGFloat submitHeight = 70.f;
     [UIView animateWithDuration:(NSTimeInterval).3f
                      animations:
@@ -258,9 +267,10 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
          self.tableView.contentInset = tableInsets;
      }];
 }
+
 - (NSArray*)positions
 {
-    return [self.roster.positions componentsSeparatedByString:@","];
+    return [[self.dataSource currentRoster].positions componentsSeparatedByString:@","];
 }
 
 #pragma mark - public
@@ -279,56 +289,6 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
         [processed addObject:position];
     }
     return [unique copy];
-}
-
-- (void)createRoster
-{
-    if (!self.selectedMarket) {
-        self.roster = nil;
-        [self.tableView reloadData];
-        [self showOrHideSubmitIfNeeded];
-        return;
-    }
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    @weakify(self)
-    [FFRoster createNewRosterForMarket:self.selectedMarket.objId
-                               session:self.session
-                               success:
-     ^(id successObj) {
-         @strongify(self)
-         self.roster = successObj;
-         
-         self.myTeam = [self newTeamWithPositions:[self positions]];
-         
-         [self.tableView reloadData];
-         [self showOrHideSubmitIfNeeded];
-         [alert hide];
-     }
-                               failure:
-     ^(NSError * error) {
-         @strongify(self)
-         if (self.tryCreateRosterTimes > 0) {
-             [alert hide];
-             self.tryCreateRosterTimes--;
-             [self createRoster];
-         } else {
-             self.roster = nil;
-             [self.tableView reloadData];
-             [alert hide];
-             [self showOrHideSubmitIfNeeded];
-             /* !!!: disable error alerts NBA-659
-             [[[FFAlertView alloc] initWithError:error
-                                           title:nil
-                               cancelButtonTitle:nil
-                                 okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                        autoHide:YES]
-              showInView:self.navigationController.view];
-              */
-         }
-     }];
 }
 
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
@@ -351,10 +311,10 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     }
     
     @weakify(self)
-    [self.roster refreshInBackgroundWithBlock:
+    [[self.dataSource currentRoster] refreshInBackgroundWithBlock:
      ^(id successObj) {
          @strongify(self)
-         self.roster = successObj;
+         [self.dataSource setupCurrentRoster:successObj];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          
@@ -367,7 +327,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
-         self.roster = nil;
+         [self.dataSource setupCurrentRoster:nil];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          
@@ -392,7 +352,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     if (self.markets.count > 0) {
         [self marketSelected:self.markets.firstObject];
     } else {
-        self.selectedMarket = nil;
+        [self.dataSource setupSelectedMarket:nil];
         [self createRoster];
     }
 }
@@ -411,13 +371,13 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
     @weakify(self)
-    [self.roster submitContent:rosterType
+    [[self.dataSource currentRoster] submitContent:rosterType
                        success:
      ^(id successObj) {
          @strongify(self)
          [alert hide];
          [[[FFAlertView alloc] initWithTitle:nil
-                                     message:self.roster.messageAfterSubmit
+                                     message:[self.dataSource currentRoster].messageAfterSubmit
                            cancelButtonTitle:nil
                              okayButtonTitle:NSLocalizedString(@"Ok", nil)
                                     autoHide:YES]
@@ -450,11 +410,11 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
     cell.marketSelector.dataSource = self;
     cell.marketSelector.delegate = self;
     [cell.marketSelector reloadData];
-    if (self.selectedMarket && self.markets) {
+    if ([self.dataSource getSelectedMarket] && self.markets) {
         _noGamesAvailable = NO;
         cell.contentView.userInteractionEnabled = YES;
         [cell setNoGamesLabelHidden:YES];
-        NSUInteger selectedMarket = [self.markets indexOfObject:self.selectedMarket];
+        NSUInteger selectedMarket = [self.markets indexOfObject:[self.dataSource getSelectedMarket]];
         if (selectedMarket != NSNotFound) {
             [cell.marketSelector updateSelectedMarket:selectedMarket
                                              animated:NO] ;
@@ -473,7 +433,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 {
     FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:kAutoFillCellIdentifier
                                                            forIndexPath:indexPath];
-    cell.autoRemovedBenched.on = self.roster.removeBenched.integerValue == 1;
+    cell.autoRemovedBenched.on = [self.dataSource currentRoster].removeBenched.integerValue == 1;
     if (_noGamesAvailable == NO) {
         cell.autoRemovedBenched.enabled = YES;
         [cell.autoRemovedBenched addTarget:self
@@ -610,7 +570,8 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
             NSString* positionName = [self positions][indexPath.row];
             NSMutableDictionary *position = self.myTeam[indexPath.row];
             if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
-                FFPlayer *player = [self.roster playerByName:[(FFPlayer *)position[@"player"] name]];
+//                FFPlayer *player = [self.roster playerByName:[(FFPlayer *)position[@"player"] name]];
+                FFPlayer *player = [[self.dataSource currentRoster] playerByName:[(FFPlayer *)position[@"player"] name]];
                 if (!player)
                     assert(NO);
                 
@@ -647,8 +608,8 @@ viewForHeaderInSection:(NSInteger)section
     if (section == 1) {
         FFRosterTableHeader* view = FFRosterTableHeader.new;
         view.titleLabel.text = NSLocalizedString(@"Your Team", nil);
-        view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.roster.remainingSalary.floatValue)];
-        view.priceLabel.textColor = self.roster.remainingSalary.floatValue > 0.f
+        view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@([self.dataSource currentRoster].remainingSalary.floatValue)];
+        view.priceLabel.textColor = [self.dataSource currentRoster].remainingSalary.floatValue > 0.f
         ? [FFStyle brightGreen] : [FFStyle brightRed];
         return view;
     }
@@ -683,10 +644,10 @@ heightForHeaderInSection:(NSInteger)section
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
     @weakify(self)
-    [self.roster toggleRemoveBenchedSuccess:
+    [[self.dataSource currentRoster] toggleRemoveBenchedSuccess:
      ^(id successObj) {
          @strongify(self)
-         self.roster = successObj;
+         [self.dataSource setupCurrentRoster:successObj];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          [alert hide];
@@ -695,7 +656,7 @@ heightForHeaderInSection:(NSInteger)section
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
-         self.roster = nil;
+         [self.dataSource setupCurrentRoster:nil];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          /* !!!: disable error alerts NBA-659
@@ -724,10 +685,10 @@ heightForHeaderInSection:(NSInteger)section
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
     @weakify(self)
-    [self.roster autofillSuccess:
+    [[self.dataSource currentRoster] autofillSuccess:
      ^(id successObj) {
          @strongify(self)
-         self.roster = successObj;
+         [self.dataSource setupCurrentRoster:successObj];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          [alert hide];
@@ -736,7 +697,7 @@ heightForHeaderInSection:(NSInteger)section
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
-         self.roster = nil;
+         [self.dataSource setupCurrentRoster:nil];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          /* !!!: disable error alerts NBA-659
@@ -757,8 +718,8 @@ heightForHeaderInSection:(NSInteger)section
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
     @weakify(self)
-    [self.roster removePlayer:player
-                      success:
+    [[self.dataSource currentRoster] removePlayer:player
+                                          success:
      ^(id successObj) {
          @strongify(self)
          [self showOrHideSubmitIfNeeded];
@@ -769,7 +730,7 @@ heightForHeaderInSection:(NSInteger)section
          }];
          [self.delegate showPosition:player.position];
      }
-                      failure:
+                                          failure:
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
@@ -796,11 +757,7 @@ heightForHeaderInSection:(NSInteger)section
 
 - (NSArray*)markets
 {
-    NSMutableArray* markets = [NSMutableArray arrayWithCapacity:self.marketsSetRegular.allObjects.count +
-                               self.marketsSetSingle.allObjects.count];
-    [markets addObjectsFromArray:self.marketsSetRegular.allObjects];
-    [markets addObjectsFromArray:self.marketsSetSingle.allObjects];
-    return [markets copy];
+    return [self.dataSource availableMarkets];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -810,8 +767,7 @@ heightForHeaderInSection:(NSInteger)section
     return 1;
 }
 
-- (NSInteger)collectionView:(UICollectionView*)collectionView
-     numberOfItemsInSection:(NSInteger)section
+- (NSInteger)collectionView:(UICollectionView*)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return self.markets.count;
 }
@@ -837,12 +793,21 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
-    self.selectedMarket = selectedMarket;
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
-                                                                inSection:0]]
+    [self.dataSource setupSelectedMarket:selectedMarket];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
                           withRowAnimation:UITableViewRowAnimationAutomatic];
     self.tryCreateRosterTimes = 3;
-    [self createRoster];
+
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    [self.dataSource createRosterWithCompletion:^{
+        [alert hide];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }];
 }
 
 #pragma mark - SBDataObjectResultSetDelegate

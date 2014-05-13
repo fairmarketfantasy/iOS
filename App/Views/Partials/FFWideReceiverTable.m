@@ -10,6 +10,7 @@
 #import "FFWideReceiverCell.h"
 #import "FFTeamAddCell.h"
 #import "FFNoConnectionCell.h"
+#import "FFMarketsCell.h"
 
 @implementation FFWideReceiverTable
 
@@ -23,6 +24,8 @@
         // cells
         [self registerClass:[FFWideReceiverCell class]
      forCellReuseIdentifier:kWideRecieverCellIdentifier];
+        [self registerClass:[FFMarketsCell class]
+     forCellReuseIdentifier:kMarketsCellIdentifier];
         [self registerClass:[FFTeamAddCell class]
      forCellReuseIdentifier:kTeamAddCellIdentifier];
         [self registerClass:[FFNoConnectionCell class]

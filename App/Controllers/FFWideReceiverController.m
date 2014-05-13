@@ -7,13 +7,21 @@
 //
 
 #import "FFWideReceiverController.h"
+#import "FFYourTeamDataSource.h"
+#import "FFPagerController.h"
 #import "FFWideReceiverTable.h"
 #import "FFWideReceiverCell.h"
 #import "FFTeamAddCell.h"
 #import "FFNoConnectionCell.h"
+#import "FFCollectionMarketCell.h"
+#import "FFMarketsCell.h"
 #import "FFRosterTableHeader.h"
+#import "FFMarketSelector.h"
 #import "FFAccountHeader.h"
 #import "FFStyle.h"
+#import "FFMarket.h"
+#import "FFDate.h"
+#import "FFMarketSet.h"
 #import "FFPathImageView.h"
 #import "FFPTController.h"
 #import "FFAlertView.h"
@@ -27,12 +35,16 @@
 #import "FFRoster.h"
 #import "FFPlayer.h"
 
-@interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+@interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
 @property(nonatomic, assign) NSUInteger position;
 @property(nonatomic, assign) NetworkStatus networkStatus;
 
 @property(nonatomic, strong) UIPickerView *picker;
+
+@property(nonatomic) FFMarketSet* marketsSetRegular;
+@property(nonatomic) FFMarketSet* marketsSetSingle;
+@property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
 @end
 
@@ -88,6 +100,8 @@
         [self fetchPlayersWithShowingAlert:NO completion:^{
             [self.tableView reloadData];
         }];
+    } else {
+        [self.tableView reloadData];
     }
 }
 
@@ -265,56 +279,86 @@
     return self.networkStatus == NotReachable ? 1 : 2;
 }
 
-- (NSInteger)tableView:(UITableView*)tableView
- numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 1;
+        return 2;
     }
     
     return self.networkStatus == NotReachable ? 1 : self.players.count;
 }
 
-- (CGFloat)tableView:(UITableView*)tableView
-heightForRowAtIndexPath:(NSIndexPath*)indexPath
+- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.section == 0) {
-        //navigation bar height + status bar height = 64
-        return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 76.f;
+        if (indexPath.row == 0) {
+            return 60.f;
+        } else {
+            //navigation bar height + status bar height = 64
+            return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 76.f;
+        }
     }
     return 80.f;
 }
 
-- (UITableViewCell*)tableView:(UITableView*)tableView
-        cellForRowAtIndexPath:(NSIndexPath*)indexPath
+- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.section == 0) {
-        if (self.networkStatus == NotReachable) {
-            FFNoConnectionCell *cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
-                                                                       forIndexPath:indexPath];
+        if (indexPath.row == 0) {
+            if (self.networkStatus == NotReachable) {
+                FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
+                                                                           forIndexPath:indexPath];
+                return cell;
+            }
+            return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
+        } else if (indexPath.row == 1) {
+            //            [self provideWideRecieverCellForTable:tableView atIndexPath:indexPath];
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPickerCellIdentifier forIndexPath:indexPath];
+            [cell addSubview:self.picker];
             return cell;
-         }
-        
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPickerCellIdentifier forIndexPath:indexPath];
-        [cell addSubview:self.picker];
-        return cell;
-        
-//        FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:kWideRecieverCellIdentifier
-//                                                                   forIndexPath:indexPath];
-//        [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
-//        if (cell.segments.numberOfSegments > self.position) {
-//            cell.segments.selectedSegmentIndex = self.position;
-//        }
-//        [cell.segments addTarget:self
-//                          action:@selector(segments:)
-//                forControlEvents:UIControlEventValueChanged];
-//        return cell;
+        }
+    } else if (indexPath.section == 1) {
+        return [self provideTeamAddCellForTable:tableView atIndexPath:indexPath];
     }
+    
+    return nil;
+}
+
+#pragma mark - Cells
+
+- (FFMarketsCell *)provideMarketsCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
+{
+    FFMarketsCell* cell = [tableView dequeueReusableCellWithIdentifier:kMarketsCellIdentifier
+                                                          forIndexPath:indexPath];
+    cell.marketSelector.dataSource = self;
+    cell.marketSelector.delegate = self;
+    [cell.marketSelector reloadData];
+    if ([self.dataSource getSelectedMarket] && self.markets) {
+//        _noGamesAvailable = NO;
+        cell.contentView.userInteractionEnabled = YES;
+        [cell setNoGamesLabelHidden:YES];
+        NSUInteger selectedMarket = [self.markets indexOfObject:[self.dataSource getSelectedMarket]];
+        if (selectedMarket != NSNotFound) {
+            [cell.marketSelector updateSelectedMarket:selectedMarket
+                                             animated:NO] ;
+        }
+    } else if (self.markets.count == 0) {
+        if (self.networkStatus == NotReachable) {
+            [cell setNoGamesLabelHidden:NO];
+            cell.contentView.userInteractionEnabled = NO;
+        }
+    }
+    
+    return cell;
+}
+
+- (FFTeamAddCell *)provideTeamAddCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
+{
     FFTeamAddCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamAddCellIdentifier
                                                           forIndexPath:indexPath];
     if (self.players.count > indexPath.row) {
         __block FFPlayer* player = self.players[indexPath.row];
-
+        
         cell.titleLabel.text =  player.team;
         cell.nameLabel.text = player.name;
         cell.costLabel.text = [FFStyle.priceFormatter stringFromNumber:@([player.buyPrice floatValue])];
@@ -343,6 +387,21 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
                             }
                         }];
     }
+    
+    return cell;
+}
+
+- (FFWideReceiverCell *)provideWideRecieverCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
+{
+    FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:kWideRecieverCellIdentifier
+                                                               forIndexPath:indexPath];
+    [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
+    if (cell.segments.numberOfSegments > self.position) {
+        cell.segments.selectedSegmentIndex = self.position;
+    }
+    [cell.segments addTarget:self
+                      action:@selector(segments:)
+            forControlEvents:UIControlEventValueChanged];
     return cell;
 }
 
@@ -391,6 +450,65 @@ heightForHeaderInSection:(NSInteger)section
 - (void)segments:(FUISegmentedControl*)segments
 {
     [self selectPosition:segments.selectedSegmentIndex];
+}
+
+#pragma mark - FFMarketSelectorDataSource
+
+- (NSArray*)markets
+{
+    return [self.dataSource availableMarkets];
+}
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView*)collectionView
+{
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView*)collectionView
+     numberOfItemsInSection:(NSInteger)section
+{
+    return self.markets.count;
+}
+
+- (UICollectionViewCell*)collectionView:(UICollectionView*)collectionView
+                 cellForItemAtIndexPath:(NSIndexPath*)indexPath
+{
+    FFCollectionMarketCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MarketCell"
+                                                                             forIndexPath:indexPath];
+    if (self.markets.count > indexPath.item && self.networkStatus != NotReachable) {
+        FFMarket* market = self.markets[indexPath.item];
+        [cell showLabels];
+        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
+        cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
+    } else if (self.markets.count == 0 || self.networkStatus == NotReachable) {
+        [cell hideLabels];
+    }
+    
+    return cell;
+}
+
+#pragma mark - FFMarketSelectorDelegate
+
+- (void)marketSelected:(FFMarket*)selectedMarket
+{
+    [self.dataSource setupSelectedMarket:selectedMarket];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                inSection:0]]
+                          withRowAnimation:UITableViewRowAnimationAutomatic];
+    self.tryCreateRosterTimes = 3;
+
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    [self.dataSource createRosterWithCompletion:^{
+        [alert hide];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }];
 }
 
 @end
