@@ -32,6 +32,9 @@
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
 FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtocol, FFYourTeamProtocol, SBDataObjectResultSetDelegate, FFYourTeamDataSource>
+{
+    __block BOOL _rosterIsCreating;
+}
 
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFYourTeamController* teamController;
@@ -79,6 +82,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
         self.receiverController.dataSource = self;
         
         self.isFirstLaunch = YES;
+        _rosterIsCreating = NO;
     }
     return self;
 }
@@ -329,7 +333,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 {
     self.session.sport = sport;
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:sport] forKey:kCurrentSport];
-    [self.teamController updateMarkets];
+    [self updateMarkets];
     
     [self setViewControllers:@[self.teamController]
                    direction:UIPageViewControllerNavigationDirectionReverse
@@ -399,7 +403,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      }
                                   failure:
      ^(NSError *error) {
-//         @strongify(self)
+         @strongify(self)
          [alert hide];
          
           //show this alert cause unclear situation:
@@ -476,7 +480,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         }
     } else {
         self.selectedMarket = nil;
-//        [self createRoster];
     }
 }
 
@@ -493,6 +496,14 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)setupSelectedMarket:(FFMarket *)market
 {
     self.selectedMarket = market;
+    if (_rosterIsCreating == NO) {
+        [self createRosterWithCompletion:^{
+            [self.teamController.tableView reloadData];
+            [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
+                [self.receiverController.tableView reloadData];
+            }];
+        }];
+    }
 }
 
 - (FFMarket *)getSelectedMarket
@@ -521,6 +532,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)createRosterWithCompletion:(void(^)(void))block
 {
+    _rosterIsCreating = YES;
+    
     if (!self.selectedMarket) {
         self.roster = nil;
         [self.teamController.tableView reloadData];
@@ -541,6 +554,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                success:
      ^(id successObj) {
          @strongify(self)
+         _rosterIsCreating = NO;
          self.roster = successObj;
          
          self.teamController.myTeam = [self newTeamWithPositions:[self positions]];
@@ -556,6 +570,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                failure:
      ^(NSError * error) {
          @strongify(self)
+         _rosterIsCreating = NO;
          if (self.tryCreateRosterTimes > 0) {
              [alert hide];
              self.tryCreateRosterTimes--;

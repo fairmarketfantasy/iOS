@@ -33,9 +33,7 @@
 @property(nonatomic, strong) NSMutableArray *myTeam;
 
 - (NSArray*)uniquePositions;
-- (void)createRoster;
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
-- (void)updateMarkets;
 
 - (void)addPlayerToMyTeam:(FFPlayer *)player;
 - (void)showOrHideSubmitIfNeeded;

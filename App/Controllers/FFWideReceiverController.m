@@ -499,16 +499,16 @@ heightForHeaderInSection:(NSInteger)section
                           withRowAnimation:UITableViewRowAnimationAutomatic];
     self.tryCreateRosterTimes = 3;
 
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    [self.dataSource createRosterWithCompletion:^{
-        [alert hide];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
-    }];
+//    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
+//                                                           messsage:nil
+//                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+//    [alert showInView:self.navigationController.view];
+//    [self.dataSource createRosterWithCompletion:^{
+//        [alert hide];
+//        [self fetchPlayersWithShowingAlert:NO completion:^{
+//            [self.tableView reloadData];
+//        }];
+//    }];
 }
 
 @end

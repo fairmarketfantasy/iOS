@@ -35,5 +35,6 @@
 @property(nonatomic) UITableView* tableView;
 
 - (void)showPosition:(NSString*)position;
+- (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
 
 @end

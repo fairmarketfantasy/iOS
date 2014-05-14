@@ -35,10 +35,9 @@
 #import "FFPlayer.h"
 #import "FFDate.h"
 
-@interface FFYourTeamController () <UITableViewDataSource, UITableViewDelegate,
-FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDelegate>
-// models
+@interface FFYourTeamController () <UITableViewDataSource, UITableViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
+// models
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 @property(nonatomic) FFSubmitView* submitView;
 @property(nonatomic) FFMarketSet* marketsSetRegular;
@@ -89,14 +88,14 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
 //    self.tryCreateRosterTimes = 3;
 //    [self createRoster];
 
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    [self.dataSource createRosterWithCompletion:^{
-        [alert hide];
-        [self.tableView reloadData];
-    }];
+//    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
+//                                                           messsage:nil
+//                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+//    [alert showInView:self.navigationController.view];
+//    [self.dataSource createRosterWithCompletion:^{
+//        [alert hide];
+//        [self.tableView reloadData];
+//    }];
 
     
     //reachability
@@ -170,7 +169,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
                 [self showOrHideSubmitIfNeeded];
                 [self.tableView reloadData];
             } else {
-                [self updateMarkets];
+//                [self updateMarkets];
                 [self refreshRosterWithShowingAlert:YES completion:^{
                     [self.tableView reloadData];
                 }];
@@ -346,24 +345,6 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
      }];
 }
 
-- (void)marketsUpdated
-{
-    [self.tableView reloadData];
-    if (self.markets.count > 0) {
-        [self marketSelected:self.markets.firstObject];
-    } else {
-        [self.dataSource setupSelectedMarket:nil];
-        [self createRoster];
-    }
-}
-
-- (void)updateMarkets
-{
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason];
-    [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination];
-}
-
 - (void)submitRoster:(FFRosterSubmitType)rosterType
 {
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Submitting Roster"
@@ -382,7 +363,7 @@ FFMarketSelectorDelegate, FFMarketSelectorDataSource, SBDataObjectResultSetDeleg
                              okayButtonTitle:NSLocalizedString(@"Ok", nil)
                                     autoHide:YES]
           showInView:self.navigationController.view];
-         [self createRoster];
+//         [self createRoster];
      }
                        failure:
      ^(NSError * error) {
@@ -798,24 +779,16 @@ heightForHeaderInSection:(NSInteger)section
                           withRowAnimation:UITableViewRowAnimationAutomatic];
     self.tryCreateRosterTimes = 3;
 
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    [self.dataSource createRosterWithCompletion:^{
-        [alert hide];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-        });
-    }];
-}
-
-#pragma mark - SBDataObjectResultSetDelegate
-
-- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
-{
-    [self marketsUpdated];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+//    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
+//                                                           messsage:nil
+//                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+//    [alert showInView:self.navigationController.view];
+//    [self.dataSource createRosterWithCompletion:^{
+//        [alert hide];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.tableView reloadData];
+//        });
+//    }];
 }
 
 @end
