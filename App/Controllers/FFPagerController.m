@@ -83,7 +83,10 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
         
         self.isFirstLaunch = YES;
         _rosterIsCreating = NO;
+        
+        self.myTeam = [NSMutableArray array];
     }
+    
     return self;
 }
 
@@ -149,18 +152,18 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
     self.teamController.session = self.session;
     self.receiverController.session = self.session;
     
-    self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-                                                                  session:self.session authorized:YES];
-    self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-                                                                 session:self.session authorized:YES];
-    self.marketsSetRegular.delegate = self;
-    self.marketsSetSingle.delegate = self;
-    [self updateMarkets];
-
     // get player position names
     [self fetchPositionsNames];
     
     if (self.isFirstLaunch) {
+        self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                      session:self.session authorized:YES];
+        self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                     session:self.session authorized:YES];
+        self.marketsSetRegular.delegate = self;
+        self.marketsSetSingle.delegate = self;
+        [self updateMarkets];
+        
         [self setViewControllers:@[[self getViewControllers].firstObject]
                        direction:UIPageViewControllerNavigationDirectionForward
                         animated:NO
@@ -367,7 +370,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (NSArray*)positions
 {
-    return [self.teamController uniquePositions];
+    return [self uniquePositions];
 }
 
 - (BOOL)autoRemovedBenched
@@ -391,7 +394,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          //         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
          //                                          withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
-         [self.teamController addPlayerToMyTeam:player];
+         [self addPlayerToMyTeam:player];
          [self.teamController refreshRosterWithShowingAlert:YES completion:nil];
          [self setViewControllers:@[self.teamController]
                         direction:UIPageViewControllerNavigationDirectionReverse
@@ -401,7 +404,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
                                         self.viewControllers.firstObject];
      }
-                                  failure:
+                   failure:
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
@@ -421,14 +424,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              
              [alert showInView:self.navigationController.view];
          }
-         /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-          */
      }];
 }
 
@@ -454,6 +449,24 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                         self.viewControllers.firstObject];
          
          [self.receiverController showPosition:position];
+     }];
+}
+
+- (void)removePlayer:(FFPlayer*)player completion:(void(^)(BOOL success))block
+{
+    @weakify(self)
+    [self.roster removePlayer:player
+                      success:
+     ^(id successObj) {
+         @strongify(self)
+         [self removePlayerFromMyTeam:player];
+         if (block)
+             block(YES);
+     }
+                      failure:
+     ^(NSError *error) {
+         if (block)
+             block(NO);
      }];
 }
 
@@ -493,20 +506,47 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 #pragma mark - FFYourTeamDataSource
 
-- (void)setupSelectedMarket:(FFMarket *)market
+- (NSArray *)getMyTeam
+{
+    return self.myTeam;
+}
+
+- (NSArray*)allPositions
+{
+    return [self.roster.positions componentsSeparatedByString:@","];
+}
+
+- (NSArray*)uniquePositions
+{
+    NSArray* positions = [self allPositions];
+    // make unique
+    NSMutableArray* unique = [NSMutableArray arrayWithCapacity:positions.count];
+    NSMutableSet* processed = [NSMutableSet set];
+    for (NSString* position in positions) {
+        if ([processed containsObject:position]) {
+            continue;
+        }
+        [unique addObject:position];
+        [processed addObject:position];
+    }
+    return [unique copy];
+}
+
+- (void)setCurrentMarket:(FFMarket *)market
 {
     self.selectedMarket = market;
     if (_rosterIsCreating == NO) {
         [self createRosterWithCompletion:^{
             [self.teamController.tableView reloadData];
-            [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
+            [self.teamController showOrHideSubmitIfNeeded];
+            [self.receiverController fetchPlayersWithShowingAlert:NO completion:^{
                 [self.receiverController.tableView reloadData];
             }];
         }];
     }
 }
 
-- (FFMarket *)getSelectedMarket
+- (FFMarket *)currentMarket
 {
     return self.selectedMarket;
 }
@@ -525,7 +565,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     return self.roster;
 }
 
-- (void)setupCurrentRoster:(FFRoster *)roster
+- (void)setCurrentRoster:(FFRoster *)roster
 {
     self.roster = roster;
 }
@@ -536,9 +576,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     
     if (!self.selectedMarket) {
         self.roster = nil;
-        [self.teamController.tableView reloadData];
-        [self.teamController showOrHideSubmitIfNeeded];
-        [self.receiverController.tableView reloadData];
         if (block) {
             block();
         }
@@ -557,11 +594,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          _rosterIsCreating = NO;
          self.roster = successObj;
          
-         self.teamController.myTeam = [self newTeamWithPositions:[self positions]];
-         
-         [self.teamController.tableView reloadData];
-         [self.teamController showOrHideSubmitIfNeeded];
-         [self.receiverController.tableView reloadData];
+         self.myTeam = [self newTeamWithPositions:[self allPositions]];
+        
          [alert hide];
          if (block) {
              block();
@@ -580,22 +614,35 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              }
          } else {
              self.roster = nil;
-             [self.teamController.tableView reloadData];
-             [self.teamController showOrHideSubmitIfNeeded];
-             [self.receiverController.tableView reloadData];
              [alert hide];
              if (block) {
                  block();
              }
-             /* !!!: disable error alerts NBA-659
-              [[[FFAlertView alloc] initWithError:error
-              title:nil
-              cancelButtonTitle:nil
-              okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-              autoHide:YES]
-              showInView:self.navigationController.view];
-              */
          }
+     }];
+}
+
+- (void)submitRoster:(FFRosterSubmitType)rosterType completion:(void (^)(BOOL))block
+{
+    @weakify(self)
+    [self.roster submitContent:rosterType
+                       success:
+     ^(id successObj) {
+         @strongify(self)
+         if (block)
+             block(YES);
+
+         [self createRosterWithCompletion:^{
+             [self.teamController.tableView reloadData];
+             [self.receiverController.tableView reloadData];
+         }];
+     }
+                       failure:
+     ^(NSError * error) {
+         @strongify(self)
+         if (block)
+             block(NO);
+         [self.teamController.tableView reloadData];
      }];
 }
 
@@ -609,7 +656,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (BOOL)isPositionUnique:(NSString *)position
 {
     NSUInteger counter = 0;
-    for (NSString *pos in [self positions]) {
+    for (NSString *pos in [self allPositions]) {
         if ([position isEqualToString:pos])
             counter++;
     }

@@ -14,6 +14,7 @@
 @protocol FFYourTeamProtocol <NSObject>
 
 - (void)showPosition:(NSString*)position;
+- (void)removePlayer:(FFPlayer*)player completion:(void(^)(BOOL success))block;
 
 @end
 
@@ -30,12 +31,8 @@
 @property(nonatomic, weak) id<FFYourTeamDataSource> dataSource;
 @property(nonatomic) UITableView* tableView;
 @property(nonatomic, readonly) BOOL noGamesAvailable;
-@property(nonatomic, strong) NSMutableArray *myTeam;
 
-- (NSArray*)uniquePositions;
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
-
-- (void)addPlayerToMyTeam:(FFPlayer *)player;
 - (void)showOrHideSubmitIfNeeded;
 
 @end

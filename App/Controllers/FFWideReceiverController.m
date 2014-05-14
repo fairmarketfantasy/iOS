@@ -333,11 +333,11 @@
     cell.marketSelector.dataSource = self;
     cell.marketSelector.delegate = self;
     [cell.marketSelector reloadData];
-    if ([self.dataSource getSelectedMarket] && self.markets) {
+    if (self.dataSource.currentMarket && self.markets) {
 //        _noGamesAvailable = NO;
         cell.contentView.userInteractionEnabled = YES;
         [cell setNoGamesLabelHidden:YES];
-        NSUInteger selectedMarket = [self.markets indexOfObject:[self.dataSource getSelectedMarket]];
+        NSUInteger selectedMarket = [self.markets indexOfObject:self.dataSource.currentMarket];
         if (selectedMarket != NSNotFound) {
             [cell.marketSelector updateSelectedMarket:selectedMarket
                                              animated:NO] ;
@@ -407,14 +407,12 @@
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView*)tableView
-didSelectRowAtIndexPath:(NSIndexPath*)indexPath
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     // TODO: implement
 }
 
-- (UIView *)tableView:(UITableView *)tableView
-viewForHeaderInSection:(NSInteger)section
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
         FFRosterTableHeader* view = [FFRosterTableHeader new];
@@ -436,8 +434,7 @@ viewForHeaderInSection:(NSInteger)section
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView
-heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
         return 40.f;
@@ -493,22 +490,11 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
-    [self.dataSource setupSelectedMarket:selectedMarket];
+    [self.dataSource setCurrentMarket:selectedMarket];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
                                                                 inSection:0]]
                           withRowAnimation:UITableViewRowAnimationAutomatic];
     self.tryCreateRosterTimes = 3;
-
-//    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-//                                                           messsage:nil
-//                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-//    [alert showInView:self.navigationController.view];
-//    [self.dataSource createRosterWithCompletion:^{
-//        [alert hide];
-//        [self fetchPlayersWithShowingAlert:NO completion:^{
-//            [self.tableView reloadData];
-//        }];
-//    }];
 }
 
 @end

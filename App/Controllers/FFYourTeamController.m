@@ -53,8 +53,6 @@
 {
     [super viewDidLoad];
     
-    self.myTeam = [NSMutableArray array];
-    
     // submit view
     self.submitView = [FFSubmitView new];
     [self.submitView.segments addTarget:self
@@ -74,29 +72,6 @@
     refreshControl.tintColor = [FFStyle lightGrey];
     [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
-    
-    //code from didMoveToParentViewController:
-//    self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-//                                                                  session:self.session authorized:YES];
-//    self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-//                                                               session:self.session authorized:YES];
-//    self.marketsSetRegular.delegate = self;
-//    self.marketsSetSingle.delegate = self;
-//    [self updateMarkets];
-    
-    // roster
-//    self.tryCreateRosterTimes = 3;
-//    [self createRoster];
-
-//    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-//                                                           messsage:nil
-//                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-//    [alert showInView:self.navigationController.view];
-//    [self.dataSource createRosterWithCompletion:^{
-//        [alert hide];
-//        [self.tableView reloadData];
-//    }];
-
     
     //reachability
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
@@ -131,9 +106,9 @@
 {
     [super viewWillAppear:animated];
     
-//    if (self.networkStatus == NotReachable) {
+    if (self.networkStatus == NotReachable) {
         [self.tableView reloadData];
-//    }
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -178,78 +153,11 @@
     }
 }
 
-#pragma mark - Manage My Team
-
-- (NSMutableDictionary *)emptyPosition
-{
-    return  [NSMutableDictionary dictionaryWithObjectsAndKeys:@"", @"name", @"", @"player", nil];
-}
-
-- (BOOL)isPositionUnique:(NSString *)position
-{
-    NSUInteger counter = 0;
-    for (NSString *pos in [self positions]) {
-        if ([position isEqualToString:pos])
-            counter++;
-    }
-    
-    if (counter == 1)
-        return YES;
-    else if (counter > 1)
-        return NO;
-    else
-        assert(NO);
-}
-
-- (NSMutableArray *)newTeamWithPositions:(NSArray *)positions
-{
-    NSMutableArray *newTeam = [NSMutableArray array];
-    for (NSUInteger i = 0; i < positions.count; ++i) {
-        [newTeam addObject:[self emptyPosition]];
-        [newTeam[i] setObject:positions[i] forKey:@"name"];
-    }
-    
-    return newTeam;
-}
-
-- (void)addPlayerToMyTeam:(FFPlayer *)player
-{
-    for (NSMutableDictionary *position in self.myTeam) {
-        if ([position[@"name"] isEqualToString:player.position]) {
-            if ([self isPositionUnique:player.position]) {
-                [position setObject:player forKey:@"player"];
-                break;
-            } else {
-                if ([position[@"player"] isKindOfClass:[NSString class]]) {
-                    if ([position[@"player"] isEqualToString:@""]) {
-                        [position setObject:player forKey:@"player"];
-                        break;
-                    } else {
-                        continue;
-                    }
-                }
-            }
-        }
-    }
-}
-
-- (void)removePlayerFromMyTeam:(FFPlayer *)player
-{
-    for (NSMutableDictionary *position in self.myTeam) {
-        if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
-            FFPlayer *pl = position[@"player"];
-            if ([pl.name isEqualToString:player.name]) {
-                [position setObject:@"" forKey:@"player"];
-            }
-        }
-    }
-}
-
 #pragma mark - private
 
 - (void)showOrHideSubmitIfNeeded
 {
-    BOOL anyPlayer = [self.dataSource currentRoster].players.count > 0;
+    BOOL anyPlayer = self.dataSource.currentRoster.players.count > 0;
     CGFloat submitHeight = 70.f;
     [UIView animateWithDuration:(NSTimeInterval).3f
                      animations:
@@ -267,28 +175,7 @@
      }];
 }
 
-- (NSArray*)positions
-{
-    return [[self.dataSource currentRoster].positions componentsSeparatedByString:@","];
-}
-
-#pragma mark - public
-
-- (NSArray*)uniquePositions
-{
-    NSArray* positions = [self positions];
-    // make unique
-    NSMutableArray* unique = [NSMutableArray arrayWithCapacity:positions.count];
-    NSMutableSet* processed = [NSMutableSet set];
-    for (NSString* position in positions) {
-        if ([processed containsObject:position]) {
-            continue;
-        }
-        [unique addObject:position];
-        [processed addObject:position];
-    }
-    return [unique copy];
-}
+#pragma mark
 
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
@@ -310,10 +197,10 @@
     }
     
     @weakify(self)
-    [[self.dataSource currentRoster] refreshInBackgroundWithBlock:
+    [self.dataSource.currentRoster refreshInBackgroundWithBlock:
      ^(id successObj) {
          @strongify(self)
-         [self.dataSource setupCurrentRoster:successObj];
+         [self.dataSource setCurrentRoster:successObj];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          
@@ -322,11 +209,11 @@
          if (block)
              block();
      }
-                                      failure:
+                                                        failure:
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
-         [self.dataSource setupCurrentRoster:nil];
+         [self.dataSource setCurrentRoster:nil];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          
@@ -334,51 +221,6 @@
              [alert hide];
          if (block)
              block();
-         /* !!!: disable error alerts NBA-659
-          [[[FFAlertView alloc] initWithError:error
-          title:nil
-          cancelButtonTitle:nil
-          okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-          autoHide:YES]
-          showInView:self.navigationController.view];
-          */
-     }];
-}
-
-- (void)submitRoster:(FFRosterSubmitType)rosterType
-{
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Submitting Roster"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    @weakify(self)
-    [[self.dataSource currentRoster] submitContent:rosterType
-                       success:
-     ^(id successObj) {
-         @strongify(self)
-         [alert hide];
-         [[[FFAlertView alloc] initWithTitle:nil
-                                     message:[self.dataSource currentRoster].messageAfterSubmit
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Ok", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-//         [self createRoster];
-     }
-                       failure:
-     ^(NSError * error) {
-         @strongify(self)
-         [self.tableView reloadData];
-         [alert hide];
-         [self showOrHideSubmitIfNeeded];
-         /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-          */
      }];
 }
 
@@ -391,11 +233,11 @@
     cell.marketSelector.dataSource = self;
     cell.marketSelector.delegate = self;
     [cell.marketSelector reloadData];
-    if ([self.dataSource getSelectedMarket] && self.markets) {
+    if (self.dataSource.currentMarket && self.markets) {
         _noGamesAvailable = NO;
         cell.contentView.userInteractionEnabled = YES;
         [cell setNoGamesLabelHidden:YES];
-        NSUInteger selectedMarket = [self.markets indexOfObject:[self.dataSource getSelectedMarket]];
+        NSUInteger selectedMarket = [self.markets indexOfObject:self.dataSource.currentMarket];
         if (selectedMarket != NSNotFound) {
             [cell.marketSelector updateSelectedMarket:selectedMarket
                                              animated:NO] ;
@@ -414,7 +256,7 @@
 {
     FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:kAutoFillCellIdentifier
                                                            forIndexPath:indexPath];
-    cell.autoRemovedBenched.on = [self.dataSource currentRoster].removeBenched.integerValue == 1;
+    cell.autoRemovedBenched.on = self.dataSource.currentRoster.removeBenched.integerValue == 1;
     if (_noGamesAvailable == NO) {
         cell.autoRemovedBenched.enabled = YES;
         [cell.autoRemovedBenched addTarget:self
@@ -500,6 +342,15 @@
     //        }
 }
 
+- (FFTeamCell *)provideTeamCellWithPosition:(NSString *)position forTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
+{
+    FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamCellIdentifier
+                                                       forIndexPath:indexPath];
+    cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", position,
+                            NSLocalizedString(@"Not Selected", nil)];
+    return cell;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -507,17 +358,16 @@
     return self.networkStatus == NotReachable ? 1 : 2;
 }
 
-- (NSInteger)tableView:(UITableView*)tableView
-    numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
         return self.networkStatus == NotReachable ? 1 : 2;
     }
-    return [self positions].count;
+    
+    return [self.dataSource allPositions].count;
 }
 
-- (CGFloat)tableView:(UITableView*)tableView
-    heightForRowAtIndexPath:(NSIndexPath*)indexPath
+- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
@@ -529,8 +379,7 @@
     return 80.f;
 }
 
-- (UITableViewCell*)tableView:(UITableView*)tableView
-        cellForRowAtIndexPath:(NSIndexPath*)indexPath
+- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     switch (indexPath.section) {
         case 0: {
@@ -548,22 +397,20 @@
         }
             
         case 1: {
-            NSString* positionName = [self positions][indexPath.row];
-            NSMutableDictionary *position = self.myTeam[indexPath.row];
+            NSString* positionName = [self.dataSource allPositions][indexPath.row];
+            NSMutableDictionary *position = [[self.dataSource getMyTeam] objectAtIndex:indexPath.row];
+            
             if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
-//                FFPlayer *player = [self.roster playerByName:[(FFPlayer *)position[@"player"] name]];
-                FFPlayer *player = [[self.dataSource currentRoster] playerByName:[(FFPlayer *)position[@"player"] name]];
-                if (!player)
-                    assert(NO);
+                FFPlayer *player = [self.dataSource.currentRoster playerByName:[(FFPlayer *)position[@"player"] name]];
+                
+                if (!player) {
+                    return [self provideTeamCellWithPosition:positionName forTable:tableView atIndexPath:indexPath];
+                }
                 
                 return [self provideTeamTradeCellWithPlayer:player forTable:tableView atIndexPath:indexPath];
             }
             
-            FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamCellIdentifier
-                                                               forIndexPath:indexPath];
-            cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", positionName,
-                                    NSLocalizedString(@"Not Selected", nil)];
-            return cell;
+            return [self provideTeamCellWithPosition:positionName forTable:tableView atIndexPath:indexPath];
         }
             
         default:
@@ -573,32 +420,29 @@
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView*)tableView
-    didSelectRowAtIndexPath:(NSIndexPath*)indexPath
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (_noGamesAvailable || self.networkStatus == NotReachable)
         return;
     
-    NSString* position = [self positions][indexPath.row];
+    NSString* position = [self.dataSource allPositions][indexPath.row];
     [self.delegate showPosition:position];
 }
 
-- (UIView *)tableView:(UITableView*)tableView
-viewForHeaderInSection:(NSInteger)section
+- (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
         FFRosterTableHeader* view = FFRosterTableHeader.new;
         view.titleLabel.text = NSLocalizedString(@"Your Team", nil);
-        view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@([self.dataSource currentRoster].remainingSalary.floatValue)];
-        view.priceLabel.textColor = [self.dataSource currentRoster].remainingSalary.floatValue > 0.f
+        view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.dataSource.currentRoster.remainingSalary.floatValue)];
+        view.priceLabel.textColor = self.dataSource.currentRoster.remainingSalary.floatValue > 0.f
         ? [FFStyle brightGreen] : [FFStyle brightRed];
         return view;
     }
     return nil;
 }
 
-- (CGFloat)tableView:(UITableView*)tableView
-heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
         return 40.f;
@@ -625,29 +469,21 @@ heightForHeaderInSection:(NSInteger)section
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
     @weakify(self)
-    [[self.dataSource currentRoster] toggleRemoveBenchedSuccess:
+    [self.dataSource.currentRoster toggleRemoveBenchedSuccess:
      ^(id successObj) {
          @strongify(self)
-         [self.dataSource setupCurrentRoster:successObj];
+         [self.dataSource setCurrentRoster:successObj];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          [alert hide];
      }
-                         failure:
+                                                      failure:
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
-         [self.dataSource setupCurrentRoster:nil];
+         [self.dataSource setCurrentRoster:nil];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
-         /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-          */
      }];
 }
 
@@ -666,29 +502,21 @@ heightForHeaderInSection:(NSInteger)section
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
     @weakify(self)
-    [[self.dataSource currentRoster] autofillSuccess:
+    [self.dataSource.currentRoster autofillSuccess:
      ^(id successObj) {
          @strongify(self)
-         [self.dataSource setupCurrentRoster:successObj];
+         [self.dataSource setCurrentRoster:successObj];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
          [alert hide];
      }
-                         failure:
+                                           failure:
      ^(NSError *error) {
          @strongify(self)
          [alert hide];
-         [self.dataSource setupCurrentRoster:nil];
+         [self.dataSource setCurrentRoster:nil];
          [self.tableView reloadData];
          [self showOrHideSubmitIfNeeded];
-         /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-          */
      }];
 }
 
@@ -698,33 +526,18 @@ heightForHeaderInSection:(NSInteger)section
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
-    @weakify(self)
-    [[self.dataSource currentRoster] removePlayer:player
-                                          success:
-     ^(id successObj) {
-         @strongify(self)
-         [self showOrHideSubmitIfNeeded];
-         [alert hide];
-         [self removePlayerFromMyTeam:player];
-         [self refreshRosterWithShowingAlert:YES completion:^{
-             [self.tableView reloadData];
-         }];
-         [self.delegate showPosition:player.position];
-     }
-                                          failure:
-     ^(NSError *error) {
-         @strongify(self)
-         [alert hide];
-         [self showOrHideSubmitIfNeeded];
-         /* !!!: disable error alerts NBA-659
-          [[[FFAlertView alloc] initWithError:error
-          title:nil
-          cancelButtonTitle:nil
-          okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-          autoHide:YES]
-          showInView:self.navigationController.view];
-          */
-     }];
+    
+    [self.delegate removePlayer:player completion:^(BOOL success) {
+        [alert hide];
+        [self showOrHideSubmitIfNeeded];
+        if (success) {
+            [self refreshRosterWithShowingAlert:YES completion:^{
+                [self.tableView reloadData];
+            }];
+            
+            [self.delegate showPosition:player.position];
+        }
+    }];
 }
 
 - (void)onSubmit:(FUISegmentedControl*)segments
@@ -732,6 +545,25 @@ heightForHeaderInSection:(NSInteger)section
     FFRosterSubmitType rosterType = (FFRosterSubmitType)segments.selectedSegmentIndex;
     [self submitRoster:rosterType];
     self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
+}
+
+- (void)submitRoster:(FFRosterSubmitType)rosterType
+{
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Submitting Roster"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    [self.dataSource submitRoster:rosterType completion:^(BOOL success) {
+        [alert hide];
+        if (success) {
+            [[[FFAlertView alloc] initWithTitle:nil
+                                        message:self.dataSource.currentRoster.messageAfterSubmit
+                              cancelButtonTitle:nil
+                                okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                                       autoHide:YES]
+             showInView:self.navigationController.view];
+        }
+    }];
 }
 
 #pragma mark - FFMarketSelectorDataSource
@@ -774,21 +606,10 @@ heightForHeaderInSection:(NSInteger)section
 
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
-    [self.dataSource setupSelectedMarket:selectedMarket];
+    [self.dataSource setCurrentMarket:selectedMarket];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
                           withRowAnimation:UITableViewRowAnimationAutomatic];
     self.tryCreateRosterTimes = 3;
-
-//    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-//                                                           messsage:nil
-//                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-//    [alert showInView:self.navigationController.view];
-//    [self.dataSource createRosterWithCompletion:^{
-//        [alert hide];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.tableView reloadData];
-//        });
-//    }];
 }
 
 @end
