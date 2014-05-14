@@ -17,10 +17,15 @@
 @property (nonatomic, strong) FFMarket *currentMarket;
 
 - (NSArray *)availableMarkets;
-- (void)createRosterWithCompletion:(void(^)(void))block;
-
-- (void)submitRoster:(FFRosterSubmitType)rosterType completion:(void(^)(BOOL))block;
+- (NSArray *)team;
 - (NSArray *)allPositions;
-- (NSArray *)getMyTeam;
+
+@end
+
+@protocol FFYourTeamDelegate <NSObject>
+
+- (void)showPosition:(NSString*)position;
+- (void)removePlayer:(FFPlayer*)player completion:(void(^)(BOOL success))block;
+- (void)submitRoster:(FFRosterSubmitType)rosterType completion:(void(^)(BOOL))block;
 
 @end

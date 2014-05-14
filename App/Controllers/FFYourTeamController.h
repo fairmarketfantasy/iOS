@@ -11,13 +11,6 @@
 
 @class FFRoster;
 
-@protocol FFYourTeamProtocol <NSObject>
-
-- (void)showPosition:(NSString*)position;
-- (void)removePlayer:(FFPlayer*)player completion:(void(^)(BOOL success))block;
-
-@end
-
 @class FFMarket;
 @class FFMarketSet;
 @class Reachability;
@@ -27,7 +20,7 @@
     Reachability* internetReachability;
 }
 
-@property(nonatomic, weak) id<FFYourTeamProtocol> delegate;
+@property(nonatomic, weak) id<FFYourTeamDelegate> delegate;
 @property(nonatomic, weak) id<FFYourTeamDataSource> dataSource;
 @property(nonatomic) UITableView* tableView;
 @property(nonatomic, readonly) BOOL noGamesAvailable;

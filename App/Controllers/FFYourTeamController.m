@@ -398,7 +398,7 @@
             
         case 1: {
             NSString* positionName = [self.dataSource allPositions][indexPath.row];
-            NSMutableDictionary *position = [[self.dataSource getMyTeam] objectAtIndex:indexPath.row];
+            NSMutableDictionary *position = [[self.dataSource team] objectAtIndex:indexPath.row];
             
             if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
                 FFPlayer *player = [self.dataSource.currentRoster playerByName:[(FFPlayer *)position[@"player"] name]];
@@ -553,7 +553,7 @@
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
-    [self.dataSource submitRoster:rosterType completion:^(BOOL success) {
+    [self.delegate submitRoster:rosterType completion:^(BOOL success) {
         [alert hide];
         if (success) {
             [[[FFAlertView alloc] initWithTitle:nil
