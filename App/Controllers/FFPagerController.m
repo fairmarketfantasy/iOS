@@ -651,12 +651,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     return self.roster;
 }
 
-- (void)setCurrentRoster:(FFRoster *)roster
-{
-    self.roster = roster;
-}
-
-#pragma mark - FFYourTeamProtocol
+#pragma mark - FFYourTeamDelegate
 
 - (void)showPosition:(NSString*)position
 {
@@ -714,6 +709,65 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              block(NO);
          [self.teamController.tableView reloadData];
      }];
+}
+
+- (void)autoFillWithCompletion:(void(^)(void))block
+{
+    @weakify(self)
+    [self.roster autofillSuccess:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+         if (block)
+             block();
+     }
+                         failure:
+     ^(NSError *error) {
+         @strongify(self)
+         self.roster = nil;
+         if (block)
+             block();
+     }];
+}
+
+- (void)toggleRemoveBenchWithCompletion:(void(^)(void))block
+{
+    @weakify(self)
+    [self.roster toggleRemoveBenchedSuccess:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+         if (block)
+             block();
+     }
+                                    failure:
+     ^(NSError *error) {
+         @strongify(self)
+         self.roster = nil;
+         if (block)
+             block();
+     }];
+}
+
+- (void)refreshRosterWithCompletion:(void(^)(void))block
+{
+    @weakify(self)
+    [self.roster refreshInBackgroundWithBlock:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+
+         if (block)
+             block();
+     }
+                                      failure:
+     ^(NSError *error) {
+         @strongify(self)
+         self.roster = nil;
+         
+         if (block)
+             block();
+      }];
 }
 
 @end

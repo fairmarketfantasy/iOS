@@ -197,31 +197,15 @@
     }
     
     @weakify(self)
-    [self.dataSource.currentRoster refreshInBackgroundWithBlock:
-     ^(id successObj) {
-         @strongify(self)
-         [self.dataSource setCurrentRoster:successObj];
-         [self.tableView reloadData];
-         [self showOrHideSubmitIfNeeded];
-         
-         if (alert)
-             [alert hide];
-         if (block)
-             block();
-     }
-                                                        failure:
-     ^(NSError *error) {
-         @strongify(self)
-         [alert hide];
-         [self.dataSource setCurrentRoster:nil];
-         [self.tableView reloadData];
-         [self showOrHideSubmitIfNeeded];
-         
-         if (alert)
-             [alert hide];
-         if (block)
-             block();
-     }];
+    [self.delegate refreshRosterWithCompletion:^{
+        @strongify(self)
+        [self.tableView reloadData];
+        [self showOrHideSubmitIfNeeded];
+        if (alert)
+            [alert hide];
+        if (block)
+            block();
+    }];
 }
 
 #pragma mark - Cells
@@ -468,23 +452,14 @@
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
+    
     @weakify(self)
-    [self.dataSource.currentRoster toggleRemoveBenchedSuccess:
-     ^(id successObj) {
-         @strongify(self)
-         [self.dataSource setCurrentRoster:successObj];
-         [self.tableView reloadData];
-         [self showOrHideSubmitIfNeeded];
-         [alert hide];
-     }
-                                                      failure:
-     ^(NSError *error) {
-         @strongify(self)
-         [alert hide];
-         [self.dataSource setCurrentRoster:nil];
-         [self.tableView reloadData];
-         [self showOrHideSubmitIfNeeded];
-     }];
+    [self.delegate toggleRemoveBenchWithCompletion:^{
+        @strongify(self)
+        [self.tableView reloadData];
+        [self showOrHideSubmitIfNeeded];
+        [alert hide];
+    }];
 }
 
 - (void)autoFill:(UIButton*)button
@@ -501,23 +476,14 @@
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
+    
     @weakify(self)
-    [self.dataSource.currentRoster autofillSuccess:
-     ^(id successObj) {
-         @strongify(self)
-         [self.dataSource setCurrentRoster:successObj];
-         [self.tableView reloadData];
-         [self showOrHideSubmitIfNeeded];
-         [alert hide];
-     }
-                                           failure:
-     ^(NSError *error) {
-         @strongify(self)
-         [alert hide];
-         [self.dataSource setCurrentRoster:nil];
-         [self.tableView reloadData];
-         [self showOrHideSubmitIfNeeded];
-     }];
+    [self.delegate autoFillWithCompletion:^{
+        @strongify(self)
+        [self.tableView reloadData];
+        [self showOrHideSubmitIfNeeded];
+        [alert hide];
+    }];
 }
 
 - (void)removePlayer:(FFPlayer*)player
@@ -527,9 +493,12 @@
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
     
+    @weakify(self)
     [self.delegate removePlayer:player completion:^(BOOL success) {
+        @strongify(self)
         [alert hide];
         [self showOrHideSubmitIfNeeded];
+        
         if (success) {
             [self refreshRosterWithShowingAlert:YES completion:^{
                 [self.tableView reloadData];

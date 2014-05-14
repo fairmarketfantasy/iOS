@@ -13,7 +13,7 @@
 
 @protocol FFYourTeamDataSource <NSObject>
 
-@property (nonatomic, strong) FFRoster *currentRoster;
+@property (nonatomic, readonly) FFRoster *currentRoster;
 @property (nonatomic, strong) FFMarket *currentMarket;
 
 - (NSArray *)availableMarkets;
@@ -27,5 +27,8 @@
 - (void)showPosition:(NSString*)position;
 - (void)removePlayer:(FFPlayer*)player completion:(void(^)(BOOL success))block;
 - (void)submitRoster:(FFRosterSubmitType)rosterType completion:(void(^)(BOOL))block;
+- (void)refreshRosterWithCompletion:(void(^)(void))block;
+- (void)autoFillWithCompletion:(void(^)(void))block;
+- (void)toggleRemoveBenchWithCompletion:(void(^)(void))block;
 
 @end
