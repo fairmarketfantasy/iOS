@@ -31,7 +31,7 @@
 
 - (void)fetchWithCompletion:(void(^)(void))block
 {
-    [self fetchWithParameters:@{}completion:^{
+    [self fetchWithParameters:@{} completion:^{
         if (block)
             block();
     }];

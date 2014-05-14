@@ -338,10 +338,10 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:sport] forKey:kCurrentSport];
     [self updateMarkets];
     
-    [self setViewControllers:@[self.teamController]
-                   direction:UIPageViewControllerNavigationDirectionReverse
-                    animated:YES
-                  completion:nil];
+//    [self setViewControllers:@[self.teamController]
+//                   direction:UIPageViewControllerNavigationDirectionReverse
+//                    animated:YES
+//                  completion:nil];
 }
 
 - (FFMarketSport)currentMarketSport
@@ -500,8 +500,10 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
 {
-    [self marketsUpdated];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    if (resultSet.count > 0) {
+        [self marketsUpdated];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];        
+    }
 }
 
 #pragma mark - FFYourTeamDataSource
