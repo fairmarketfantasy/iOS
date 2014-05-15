@@ -26,6 +26,6 @@
 @property(nonatomic, readonly) BOOL noGamesAvailable;
 
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
-- (void)showOrHideSubmitIfNeeded;
+- (void)updateUI;
 
 @end

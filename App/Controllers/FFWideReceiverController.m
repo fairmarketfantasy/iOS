@@ -40,11 +40,11 @@
 @property(nonatomic, assign) NSUInteger position;
 @property(nonatomic, assign) NetworkStatus networkStatus;
 
-@property(nonatomic, strong) UIPickerView *picker;
-
 @property(nonatomic) FFMarketSet* marketsSetRegular;
 @property(nonatomic) FFMarketSet* marketsSetSingle;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
+
+@property(nonatomic, strong) UIPickerView *picker;
 
 @end
 
@@ -141,6 +141,12 @@
 
 #pragma mark - public
 
+- (void)updateUI
+{
+    [self.picker reloadAllComponents];
+    [self.tableView reloadData];
+}
+
 - (void)showPosition:(NSString*)position
 {
     if (self.delegate.positions.count == 0) {
@@ -219,14 +225,6 @@
              [alert hide];
          if (block)
              block();
-         /* !!!: disable error alerts NBA-659
-          [[[FFAlertView alloc] initWithError:error
-          title:nil
-          cancelButtonTitle:nil
-          okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-          autoHide:YES]
-          showInView:self.navigationController.view];
-          */
      }];
 }
 

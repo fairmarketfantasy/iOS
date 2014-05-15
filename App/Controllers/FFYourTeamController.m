@@ -127,6 +127,14 @@
     }];
 }
 
+#pragma mark
+
+- (void)updateUI
+{
+    [self showOrHideSubmitIfNeeded];
+    [self.tableView reloadData];
+}
+
 #pragma mark -
 
 - (void)checkNetworkStatus:(NSNotification *)notification
@@ -141,8 +149,7 @@
             (internetStatus == NotReachable && previousStatus != NotReachable)) {
             
             if (internetStatus == NotReachable) {
-                [self showOrHideSubmitIfNeeded];
-                [self.tableView reloadData];
+                [self updateUI];
             } else {
 //                [self updateMarkets];
                 [self refreshRosterWithShowingAlert:YES completion:^{
@@ -199,8 +206,7 @@
     @weakify(self)
     [self.delegate refreshRosterWithCompletion:^{
         @strongify(self)
-        [self.tableView reloadData];
-        [self showOrHideSubmitIfNeeded];
+        [self updateUI];
         if (alert)
             [alert hide];
         if (block)
@@ -456,8 +462,7 @@
     @weakify(self)
     [self.delegate toggleRemoveBenchWithCompletion:^{
         @strongify(self)
-        [self.tableView reloadData];
-        [self showOrHideSubmitIfNeeded];
+        [self updateUI];
         [alert hide];
     }];
 }
@@ -480,8 +485,7 @@
     @weakify(self)
     [self.delegate autoFillWithCompletion:^{
         @strongify(self)
-        [self.tableView reloadData];
-        [self showOrHideSubmitIfNeeded];
+        [self updateUI];
         [alert hide];
     }];
 }

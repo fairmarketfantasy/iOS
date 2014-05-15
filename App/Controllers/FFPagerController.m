@@ -231,6 +231,73 @@ SBDataObjectResultSetDelegate>
     }
 }
 
+#pragma mark - Manage My Team
+
+- (NSMutableDictionary *)emptyPosition
+{
+    return  [NSMutableDictionary dictionaryWithObjectsAndKeys:@"", @"name", @"", @"player", nil];
+}
+
+- (BOOL)isPositionUnique:(NSString *)position
+{
+    NSUInteger counter = 0;
+    for (NSString *pos in [self allPositions]) {
+        if ([position isEqualToString:pos])
+            counter++;
+    }
+    
+    if (counter == 1)
+        return YES;
+    else if (counter > 1)
+        return NO;
+    else
+        assert(NO);
+}
+
+- (NSMutableArray *)newTeamWithPositions:(NSArray *)positions
+{
+    NSMutableArray *newTeam = [NSMutableArray array];
+    for (NSUInteger i = 0; i < positions.count; ++i) {
+        [newTeam addObject:[self emptyPosition]];
+        [newTeam[i] setObject:positions[i] forKey:@"name"];
+    }
+    
+    return newTeam;
+}
+
+- (void)addPlayerToMyTeam:(FFPlayer *)player
+{
+    for (NSMutableDictionary *position in self.myTeam) {
+        if ([position[@"name"] isEqualToString:player.position]) {
+            if ([self isPositionUnique:player.position]) {
+                [position setObject:player forKey:@"player"];
+                break;
+            } else {
+                if ([position[@"player"] isKindOfClass:[NSString class]]) {
+                    if ([position[@"player"] isEqualToString:@""]) {
+                        [position setObject:player forKey:@"player"];
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+            }
+        }
+    }
+}
+
+- (void)removePlayerFromMyTeam:(FFPlayer *)player
+{
+    for (NSMutableDictionary *position in self.myTeam) {
+        if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
+            FFPlayer *pl = position[@"player"];
+            if ([pl.name isEqualToString:player.name]) {
+                [position setObject:@"" forKey:@"player"];
+            }
+        }
+    }
+}
+
 #pragma mark - private
 
 - (void)createRosterWithCompletion:(void(^)(void))block
@@ -377,73 +444,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     // TODO: on desappear
 }
 
-#pragma mark - Manage My Team
-
-- (NSMutableDictionary *)emptyPosition
-{
-    return  [NSMutableDictionary dictionaryWithObjectsAndKeys:@"", @"name", @"", @"player", nil];
-}
-
-- (BOOL)isPositionUnique:(NSString *)position
-{
-    NSUInteger counter = 0;
-    for (NSString *pos in [self allPositions]) {
-        if ([position isEqualToString:pos])
-            counter++;
-    }
-    
-    if (counter == 1)
-        return YES;
-    else if (counter > 1)
-        return NO;
-    else
-        assert(NO);
-}
-
-- (NSMutableArray *)newTeamWithPositions:(NSArray *)positions
-{
-    NSMutableArray *newTeam = [NSMutableArray array];
-    for (NSUInteger i = 0; i < positions.count; ++i) {
-        [newTeam addObject:[self emptyPosition]];
-        [newTeam[i] setObject:positions[i] forKey:@"name"];
-    }
-    
-    return newTeam;
-}
-
-- (void)addPlayerToMyTeam:(FFPlayer *)player
-{
-    for (NSMutableDictionary *position in self.myTeam) {
-        if ([position[@"name"] isEqualToString:player.position]) {
-            if ([self isPositionUnique:player.position]) {
-                [position setObject:player forKey:@"player"];
-                break;
-            } else {
-                if ([position[@"player"] isKindOfClass:[NSString class]]) {
-                    if ([position[@"player"] isEqualToString:@""]) {
-                        [position setObject:player forKey:@"player"];
-                        break;
-                    } else {
-                        continue;
-                    }
-                }
-            }
-        }
-    }
-}
-
-- (void)removePlayerFromMyTeam:(FFPlayer *)player
-{
-    for (NSMutableDictionary *position in self.myTeam) {
-        if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
-            FFPlayer *pl = position[@"player"];
-            if ([pl.name isEqualToString:player.name]) {
-                [position setObject:@"" forKey:@"player"];
-            }
-        }
-    }
-}
-
 #pragma mark - FFMenuViewControllerDelegate
 
 - (void)performMenuSegue:(NSString*)ident
@@ -580,16 +580,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     }
 }
 
-#pragma mark - SBDataObjectResultSetDelegate
-
-- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
-{
-    if (resultSet.count > 0) {
-        [self marketsUpdated];
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];        
-    }
-}
-
 #pragma mark - FFYourTeamDataSource
 
 - (NSArray *)team
@@ -623,10 +613,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     self.selectedMarket = market;
     if (_rosterIsCreating == NO) {
         [self createRosterWithCompletion:^{
-            [self.teamController.tableView reloadData];
-            [self.teamController showOrHideSubmitIfNeeded];
+            [self.teamController updateUI];
             [self.receiverController fetchPlayersWithShowingAlert:NO completion:^{
-                [self.receiverController.tableView reloadData];
+                [self.receiverController updateUI];
             }];
         }];
     }
@@ -698,7 +687,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              block(YES);
          
          [self createRosterWithCompletion:^{
-             [self.teamController.tableView reloadData];
+             [self.teamController updateUI];
              [self.receiverController.tableView reloadData];
          }];
      }
@@ -718,6 +707,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      ^(id successObj) {
          @strongify(self)
          self.roster = successObj;
+         self.myTeam = [self newTeamWithPositions:[self allPositions]];
+         for (FFPlayer *player in self.roster.players) {
+             [self addPlayerToMyTeam:player];
+         }
+         
          if (block)
              block();
      }
@@ -768,6 +762,16 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          if (block)
              block();
       }];
+}
+
+#pragma mark - SBDataObjectResultSetDelegate
+
+- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
+{
+    if (resultSet.count > 0) {
+        [self marketsUpdated];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    }
 }
 
 @end
