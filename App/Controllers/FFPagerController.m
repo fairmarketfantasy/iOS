@@ -478,26 +478,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 #pragma mark - FFPlayersProtocol
 
-- (NSString*)rosterId
-{
-    return self.roster.objId;
-}
-
-- (CGFloat)rosterSalary
-{
-    return self.roster.remainingSalary.floatValue;
-}
-
-- (NSArray*)positions
-{
-    return [self uniquePositions];
-}
-
-- (BOOL)autoRemovedBenched
-{
-    return self.roster.removeBenched.integerValue == 1;
-}
-
 - (void)addPlayer:(FFPlayer*)player
 {
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Buying Player", nil)
@@ -581,6 +561,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 }
 
 #pragma mark - FFYourTeamDataSource
+
+- (NSString*)rosterId
+{
+    return self.roster.objId;
+}
 
 - (NSArray *)team
 {

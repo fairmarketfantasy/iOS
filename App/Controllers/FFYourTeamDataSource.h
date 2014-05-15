@@ -14,11 +14,15 @@
 @protocol FFYourTeamDataSource <NSObject>
 
 @property (nonatomic, readonly) FFRoster *currentRoster;
+@property (nonatomic, readonly) NSString* rosterId;
+@property (nonatomic, readonly) NSDictionary* positionsNames;
+
 @property (nonatomic, strong) FFMarket *currentMarket;
 
 - (NSArray *)availableMarkets;
 - (NSArray *)team;
 - (NSArray *)allPositions;
+- (NSArray *)uniquePositions;
 
 @end
 

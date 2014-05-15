@@ -149,14 +149,14 @@
 
 - (void)showPosition:(NSString*)position
 {
-    if (self.delegate.positions.count == 0) {
+    if ([self.dataSource uniquePositions].count == 0) {
         return;
     }
     
-    for (NSString* positionName in self.delegate.positions) {
+    for (NSString* positionName in [self.dataSource uniquePositions]) {
         if ([positionName isEqualToString:position]) {
-            [self selectPosition:[self.delegate.positions indexOfObject:positionName]];
-            NSUInteger selectedIndex = [self.delegate.positions indexOfObject:positionName];
+            [self selectPosition:[[self.dataSource uniquePositions] indexOfObject:positionName]];
+            NSUInteger selectedIndex = [[self.dataSource uniquePositions] indexOfObject:positionName];
             [self.picker selectRow:selectedIndex inComponent:0 animated:YES];
             break;
         }
@@ -184,7 +184,7 @@
         return;
     }
     
-    if (!self.delegate.rosterId) {
+    if (![self.dataSource.currentRoster objId]) {
         self.players = @[];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                       withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -199,10 +199,12 @@
         [alert showInView:self.navigationController.view];
     }
     
+    __block BOOL shouldRemoveBenched = [[self.dataSource currentRoster] removeBenched].integerValue == 1;
+    
     @weakify(self)
-    [FFPlayer fetchPlayersForRoster:self.delegate.rosterId
-                           position:self.delegate.positions[self.position]
-                     removedBenched:self.delegate.autoRemovedBenched
+    [FFPlayer fetchPlayersForRoster:[self.dataSource rosterId]
+                           position:[self.dataSource uniquePositions][self.position]
+                     removedBenched:shouldRemoveBenched
                             session:self.session
                             success:
      ^(id successObj) {
@@ -237,7 +239,7 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return self.delegate.positions.count;
+    return [self.dataSource uniquePositions].count;
 }
 
 #pragma mark - UIPickerViewDelegate
@@ -259,8 +261,8 @@
         pickerLabel.textColor = [UIColor whiteColor];
     }
     
-    NSString *positionName = self.delegate.positions[row];
-    pickerLabel.text = self.delegate.positionsNames[positionName];
+    NSString *positionName = [self.dataSource uniquePositions][row];
+    pickerLabel.text = self.dataSource.positionsNames[positionName];
     
     return pickerLabel;
 }
@@ -393,7 +395,7 @@
 {
     FFWideReceiverCell* cell = [tableView dequeueReusableCellWithIdentifier:kWideRecieverCellIdentifier
                                                                forIndexPath:indexPath];
-    [cell setItems: self.delegate.positions ? self.delegate.positions : @[]];
+    [cell setItems: [self.dataSource uniquePositions] ? [self.dataSource uniquePositions] : @[]];
     if (cell.segments.numberOfSegments > self.position) {
         cell.segments.selectedSegmentIndex = self.position;
     }
@@ -416,16 +418,16 @@
         FFRosterTableHeader* view = [FFRosterTableHeader new];
         NSString* positionName = @"";
         if (self.delegate && self.networkStatus != NotReachable) {
-            positionName = self.delegate.positions[self.position];
-            NSString* positionFullName = self.delegate.positionsNames[positionName];
+            positionName = [self.dataSource uniquePositions][self.position];
+            NSString* positionFullName = self.dataSource.positionsNames[positionName];
             if (positionFullName) {
                 positionName = positionFullName;
             }
         }
         view.titleLabel.text = NSLocalizedString(positionName, nil);
         view.priceLabel.text = self.delegate ?
-        [[FFStyle priceFormatter] stringFromNumber:@(self.delegate.rosterSalary)] : @"";
-        view.priceLabel.textColor = self.delegate.rosterSalary > 0.f
+        [[FFStyle priceFormatter] stringFromNumber:@([[self.dataSource currentRoster] remainingSalary].floatValue)] : @"";
+        view.priceLabel.textColor = [[self.dataSource currentRoster] remainingSalary].floatValue > 0.f
         ? [FFStyle brightGreen] : [FFStyle brightRed];
         return view;
     }
