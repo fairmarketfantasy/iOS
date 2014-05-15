@@ -290,10 +290,10 @@
 {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            return 60.f;
-        } else {
             //navigation bar height + status bar height = 64
-            return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 76.f;
+            return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
+        } else {
+            return 76.f;
         }
     }
     return 80.f;
