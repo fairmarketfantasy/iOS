@@ -29,7 +29,7 @@
 @property(nonatomic) UITableView* tableView;
 
 - (void)showPosition:(NSString*)position;
-- (void)updateUI;
+- (void)updateUIWithServerError:(BOOL)isError;
 - (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
 
 @end

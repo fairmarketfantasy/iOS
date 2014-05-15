@@ -300,14 +300,14 @@ SBDataObjectResultSetDelegate>
 
 #pragma mark - private
 
-- (void)createRosterWithCompletion:(void(^)(void))block
+- (void)createRosterWithCompletion:(void(^)(BOOL success))block
 {
     _rosterIsCreating = YES;
     
     if (!self.selectedMarket) {
         self.roster = nil;
         if (block) {
-            block();
+            block(NO);
         }
         return;
     }
@@ -328,7 +328,7 @@ SBDataObjectResultSetDelegate>
          
          [alert hide];
          if (block) {
-             block();
+             block(YES);
          }
      }
                                failure:
@@ -339,14 +339,14 @@ SBDataObjectResultSetDelegate>
              [alert hide];
              self.tryCreateRosterTimes--;
              [self createRosterWithCompletion:block];
-             if (block) {
-                 block();
-             }
+//             if (block) {
+//                 block(NO);
+//             }
          } else {
              self.roster = nil;
              [alert hide];
              if (block) {
-                 block();
+                 block(NO);
              }
          }
      }];
@@ -597,11 +597,16 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 {
     self.selectedMarket = market;
     if (_rosterIsCreating == NO) {
-        [self createRosterWithCompletion:^{
-            [self.teamController updateUI];
-            [self.receiverController fetchPlayersWithShowingAlert:NO completion:^{
-                [self.receiverController updateUI];
-            }];
+        [self createRosterWithCompletion:^(BOOL success) {
+            if (success) {
+                [self.teamController updateUIWithServerError:NO];
+                [self.receiverController fetchPlayersWithShowingAlert:NO completion:^{
+                    [self.receiverController updateUIWithServerError:NO];
+                }];
+            } else {
+                [self.teamController updateUIWithServerError:YES];
+                [self.receiverController updateUIWithServerError:YES];
+            }
         }];
     }
 }
@@ -671,9 +676,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          if (block)
              block(YES);
          
-         [self createRosterWithCompletion:^{
-             [self.teamController updateUI];
-             [self.receiverController.tableView reloadData];
+         [self createRosterWithCompletion:^(BOOL success) {
+             [self.teamController updateUIWithServerError:!success];
+             [self.receiverController updateUIWithServerError:!success];
          }];
      }
                        failure:
@@ -685,7 +690,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      }];
 }
 
-- (void)autoFillWithCompletion:(void(^)(void))block
+- (void)autoFillWithCompletion:(void(^)(BOOL success))block
 {
     @weakify(self)
     [self.roster autofillSuccess:
@@ -698,18 +703,18 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          }
          
          if (block)
-             block();
+             block(YES);
      }
                          failure:
      ^(NSError *error) {
          @strongify(self)
          self.roster = nil;
          if (block)
-             block();
+             block(NO);
      }];
 }
 
-- (void)toggleRemoveBenchWithCompletion:(void(^)(void))block
+- (void)toggleRemoveBenchWithCompletion:(void(^)(BOOL success))block
 {
     @weakify(self)
     [self.roster toggleRemoveBenchedSuccess:
@@ -717,18 +722,18 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          @strongify(self)
          self.roster = successObj;
          if (block)
-             block();
+             block(YES);
      }
                                     failure:
      ^(NSError *error) {
          @strongify(self)
          self.roster = nil;
          if (block)
-             block();
+             block(NO);
      }];
 }
 
-- (void)refreshRosterWithCompletion:(void(^)(void))block
+- (void)refreshRosterWithCompletion:(void(^)(BOOL success))block
 {
     @weakify(self)
     [self.roster refreshInBackgroundWithBlock:
@@ -737,7 +742,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          self.roster = successObj;
 
          if (block)
-             block();
+             block(YES);
      }
                                       failure:
      ^(NSError *error) {
@@ -745,7 +750,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          self.roster = nil;
          
          if (block)
-             block();
+             block(NO);
       }];
 }
 

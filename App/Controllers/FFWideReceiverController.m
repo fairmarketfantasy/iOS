@@ -39,6 +39,7 @@
 
 @property(nonatomic, assign) NSUInteger position;
 @property(nonatomic, assign) NetworkStatus networkStatus;
+@property(nonatomic, assign) BOOL isServerError;
 
 @property(nonatomic) FFMarketSet* marketsSetRegular;
 @property(nonatomic) FFMarketSet* marketsSetSingle;
@@ -141,8 +142,9 @@
 
 #pragma mark - public
 
-- (void)updateUI
+- (void)updateUIWithServerError:(BOOL)isError
 {
+    self.isServerError = isError;
     [self.picker reloadAllComponents];
     [self.tableView reloadData];
 }

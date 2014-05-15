@@ -30,9 +30,9 @@
 
 - (void)showPosition:(NSString*)position;
 - (void)removePlayer:(FFPlayer*)player completion:(void(^)(BOOL success))block;
-- (void)submitRoster:(FFRosterSubmitType)rosterType completion:(void(^)(BOOL))block;
-- (void)refreshRosterWithCompletion:(void(^)(void))block;
-- (void)autoFillWithCompletion:(void(^)(void))block;
-- (void)toggleRemoveBenchWithCompletion:(void(^)(void))block;
+- (void)submitRoster:(FFRosterSubmitType)rosterType completion:(void(^)(BOOL success))block;
+- (void)refreshRosterWithCompletion:(void(^)(BOOL success))block;
+- (void)autoFillWithCompletion:(void(^)(BOOL success))block;
+- (void)toggleRemoveBenchWithCompletion:(void(^)(BOOL success))block;
 
 @end

@@ -44,6 +44,7 @@
 @property(nonatomic) FFMarketSet* marketsSetSingle;
 
 @property(nonatomic, assign) NetworkStatus networkStatus;
+@property(nonatomic, assign) BOOL isServerError;
 
 @end
 
@@ -129,8 +130,9 @@
 
 #pragma mark
 
-- (void)updateUI
+- (void)updateUIWithServerError:(BOOL)isError
 {
+    self.isServerError = isError;
     [self showOrHideSubmitIfNeeded];
     [self.tableView reloadData];
 }
@@ -149,7 +151,7 @@
             (internetStatus == NotReachable && previousStatus != NotReachable)) {
             
             if (internetStatus == NotReachable) {
-                [self updateUI];
+                [self updateUIWithServerError:NO];
             } else {
 //                [self updateMarkets];
                 [self refreshRosterWithShowingAlert:YES completion:^{
@@ -204,9 +206,9 @@
     }
     
     @weakify(self)
-    [self.delegate refreshRosterWithCompletion:^{
+    [self.delegate refreshRosterWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self updateUI];
+        [self updateUIWithServerError:!success];
         if (alert)
             [alert hide];
         if (block)
@@ -351,7 +353,7 @@
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return self.networkStatus == NotReachable ? 1 : 2;
+        return (self.networkStatus == NotReachable || self.isServerError) ? 1 : 2;
     }
     
     return [self.dataSource allPositions].count;
@@ -362,7 +364,7 @@
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             //navigation bar height + status bar height = 64
-            return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
+            return (self.networkStatus == NotReachable || self.isServerError) ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
         }
         return 50.f;
     }
@@ -374,7 +376,7 @@
     switch (indexPath.section) {
         case 0: {
             if (indexPath.row == 0) {
-                if (self.networkStatus == NotReachable) {
+                if (self.networkStatus == NotReachable || self.isServerError) {
                     FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                                forIndexPath:indexPath];
                     return cell;
@@ -412,7 +414,7 @@
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if (_noGamesAvailable || self.networkStatus == NotReachable)
+    if (_noGamesAvailable || self.networkStatus == NotReachable || self.isServerError)
         return;
     
     NSString* position = [self.dataSource allPositions][indexPath.row];
@@ -460,9 +462,9 @@
     [alert showInView:self.navigationController.view];
     
     @weakify(self)
-    [self.delegate toggleRemoveBenchWithCompletion:^{
+    [self.delegate toggleRemoveBenchWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self updateUI];
+        [self updateUIWithServerError:!success];
         [alert hide];
     }];
 }
@@ -483,9 +485,9 @@
     [alert showInView:self.navigationController.view];
     
     @weakify(self)
-    [self.delegate autoFillWithCompletion:^{
+    [self.delegate autoFillWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self updateUI];
+        [self updateUIWithServerError:!success];
         [alert hide];
     }];
 }
