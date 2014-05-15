@@ -211,6 +211,7 @@
                             success:
      ^(id successObj) {
          @strongify(self)
+         self.isServerError = NO;
          self.players = successObj;
          //         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
          //                       withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -278,7 +279,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
-    return self.networkStatus == NotReachable ? 1 : 2;
+    return (self.networkStatus == NotReachable || self.isServerError) ? 1 : 2;
 }
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
@@ -287,7 +288,7 @@
         return 2;
     }
     
-    return self.networkStatus == NotReachable ? 1 : self.players.count;
+    return (self.networkStatus == NotReachable || self.isServerError) ? 1 : self.players.count;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
@@ -295,7 +296,7 @@
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             //navigation bar height + status bar height = 64
-            return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
+            return (self.networkStatus == NotReachable || self.isServerError) ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
         } else {
             return 76.f;
         }
@@ -307,7 +308,7 @@
 {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            if (self.networkStatus == NotReachable) {
+            if (self.networkStatus == NotReachable || self.isServerError) {
                 FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                            forIndexPath:indexPath];
                 return cell;
