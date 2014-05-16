@@ -420,9 +420,10 @@
 {
     if ([self isSomethingWrong])
         return;
-    
-    NSString* position = [self.dataSource allPositions][indexPath.row];
-    [self.delegate showPosition:position];
+    if (indexPath.section == 1) {
+        NSString* position = [self.dataSource allPositions][indexPath.row];
+        [self.delegate showPosition:position];        
+    }
 }
 
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
