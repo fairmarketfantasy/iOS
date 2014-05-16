@@ -19,7 +19,6 @@
 {
     [SBModelMeta initDb];
     [FFStyle customizeAppearance];
-    [[Ubertesters shared] initialize];
     return YES;
 }
 
