@@ -9,26 +9,26 @@
 #import "FFNoConnectionCell.h"
 #import "FFStyle.h"
 
-@interface FFNoConnectionCell()
-
-
-
-@end
-
 @implementation FFNoConnectionCell
 
-- (void)drawRect:(CGRect)rect
+- (id)initWithStyle:(UITableViewCellStyle)style
+    reuseIdentifier:(NSString*)reuseIdentifier
 {
-    [super drawRect:rect];
+    self = [super initWithStyle:style
+                reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.contentView.backgroundColor = [UIColor whiteColor];
+        self.message = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 20.f)];
+        self.message.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.height/2 - 20.f);
+        self.message.font = [FFStyle blockFont:20.f];
+        self.message.textColor = [FFStyle lightGrey];
+        self.message.backgroundColor = [UIColor clearColor];
+        self.message.textAlignment = NSTextAlignmentCenter;
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        [self.contentView addSubview:self.message];
+    }
     
-    self.contentView.backgroundColor = [UIColor whiteColor];
-    self.message = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, 200.f, 20.f)];
-    self.message.center = self.center;
-    self.message.font = [FFStyle blockFont:20.f];
-    self.message.textColor = [FFStyle lightGrey];
-    self.message.backgroundColor = [UIColor clearColor];
-    self.message.textAlignment = NSTextAlignmentCenter;
-    [self.contentView addSubview:self.message];
+    return self;
 }
 
 @end

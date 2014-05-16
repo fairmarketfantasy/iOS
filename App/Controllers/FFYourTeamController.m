@@ -209,7 +209,7 @@
         alert = [[FFAlertView alloc] initWithTitle:@""
                                           messsage:nil
                                       loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
+        [alert showInView:self.view];
     }
     
     @weakify(self)
@@ -348,7 +348,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
-    return self.networkStatus == NotReachable ? 1 : 2;
+    return [self isSomethingWrong] ? 1 : 2;
 }
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
@@ -420,6 +420,7 @@
 {
     if ([self isSomethingWrong])
         return;
+    
     if (indexPath.section == 1) {
         NSString* position = [self.dataSource allPositions][indexPath.row];
         [self.delegate showPosition:position];        
