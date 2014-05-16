@@ -495,23 +495,13 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          [alert hide];
          [self addPlayerToMyTeam:player];
          [self.teamController refreshRosterWithShowingAlert:YES completion:nil];
-         @weakify(self)
          [self setViewControllers:@[self.teamController]
                         direction:UIPageViewControllerNavigationDirectionReverse
                          animated:YES
-                       completion:^(BOOL finished) {
-                           @strongify(self)
-                           dispatch_async(dispatch_get_main_queue(), ^{
-                               [self setViewControllers:@[self.teamController]
-                                              direction:UIPageViewControllerNavigationDirectionReverse
-                                               animated:NO
-                                             completion:nil];// bug fix for uipageview controller
-                           });
+                       completion:nil];
                            
-                           
-                           self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
-                                                          self.viewControllers.firstObject];
-                       }];
+         self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+                                        self.viewControllers.firstObject];
          
      }
                    failure:
@@ -664,14 +654,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                   completion:
      ^(BOOL finished) {
          @strongify(self)
-         
-         dispatch_async(dispatch_get_main_queue(), ^{
-             [self setViewControllers:@[self.receiverController]
-                            direction:UIPageViewControllerNavigationDirectionForward
-                             animated:NO
-                           completion:nil];
-         });
-         
          self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
                                         self.viewControllers.firstObject];
          
