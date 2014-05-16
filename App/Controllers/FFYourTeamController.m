@@ -153,8 +153,7 @@
             if (internetStatus == NotReachable) {
                 [self reloadWithServerError:NO];
             } else {
-//                [self updateMarkets];
-                [self refreshRosterWithShowingAlert:YES completion:^{
+                [self refreshRosterWithShowingAlert:NO completion:^{
                     [self.tableView reloadData];
                 }];
             }

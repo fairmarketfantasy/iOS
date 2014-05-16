@@ -191,10 +191,19 @@ SBDataObjectResultSetDelegate>
 - (void)checkNetworkStatus:(NSNotification *)notification
 {
     NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    NetworkStatus previousStatus = self.networkStatus;
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
-    }
+        
+        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
+            (internetStatus == NotReachable && previousStatus != NotReachable)) {
+            if (internetStatus != NotReachable) {
+                [self fetchPositionsNames];
+                [self updateMarkets];
+            }
+        }
+    }    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue

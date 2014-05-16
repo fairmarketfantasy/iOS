@@ -158,8 +158,11 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
             (internetStatus == NotReachable && previousStatus != NotReachable)) {
             
             if (internetStatus == NotReachable) {
+                self.tableView.tableHeaderView = nil;
                 [self.tableView reloadData];
             } else {
+                [self.tableView setPredictionType:FFPredictionsTypeRoster
+                   rosterPredictionType:FFRosterPredictionTypeSubmitted];
                 [self refreshWithShowingAlert:YES completion:^{
                     [self.tableView reloadData];
                 }];
@@ -239,6 +242,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     if (self.networkStatus == NotReachable) {
         FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                    forIndexPath:indexPath];
+        cell.message.text = NSLocalizedString(@"No Internet Connection", nil);
         return cell;
     }
     
