@@ -538,8 +538,21 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)updateMarkets
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason];
-    [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination];
+    __block FFAlertView *alert = nil;
+    
+    if (self.isFirstLaunch) {
+        alert = [[FFAlertView alloc] initWithTitle:@""
+                                          messsage:nil
+                                      loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.navigationController.view];
+    }
+    
+    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason completion:^{
+        [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination completion:^{
+            if (alert)
+                [alert hide];
+        }];
+    }];
 }
 
 - (void)marketsUpdated
