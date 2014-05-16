@@ -436,6 +436,13 @@ SBDataObjectResultSetDelegate>
     }
     self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
                                    self.viewControllers.firstObject];
+    
+    //should update players list after swipe as in bug MLB-156
+    if (self.pager.currentPage == 1) {
+        [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
+            [self.receiverController reloadWithServerError:NO];
+        }];
+    }
 }
 
 - (void)pageViewController:(UIPageViewController*)pageViewController
