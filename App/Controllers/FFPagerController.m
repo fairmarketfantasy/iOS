@@ -454,13 +454,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)didUpdateToNewSport:(FFMarketSport)sport
 {
     self.session.sport = sport;
+    [self.receiverController resetPosition];
     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:sport] forKey:kCurrentSport];
     [self updateMarkets];
-    
-//    [self setViewControllers:@[self.teamController]
-//                   direction:UIPageViewControllerNavigationDirectionReverse
-//                    animated:YES
-//                  completion:nil];
 }
 
 - (FFMarketSport)currentMarketSport
@@ -610,15 +606,17 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 {
     self.selectedMarket = market;
     if (_rosterIsCreating == NO) {
+        
+        __weak FFPagerController *weakSelf = self;
         [self createRosterWithCompletion:^(BOOL success) {
             if (success) {
-                [self.teamController reloadWithServerError:NO];
-                [self.receiverController fetchPlayersWithShowingAlert:NO completion:^{
-                    [self.receiverController reloadWithServerError:NO];
+                [weakSelf.teamController reloadWithServerError:NO];
+                [weakSelf.receiverController fetchPlayersWithShowingAlert:NO completion:^{
+                    [weakSelf.receiverController reloadWithServerError:NO ];
                 }];
             } else {
-                [self.teamController reloadWithServerError:YES];
-                [self.receiverController reloadWithServerError:YES];
+                [weakSelf.teamController reloadWithServerError:YES];
+                [weakSelf.receiverController reloadWithServerError:YES];
             }
         }];
     }

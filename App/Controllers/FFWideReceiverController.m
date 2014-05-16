@@ -142,6 +142,12 @@
 
 #pragma mark - public
 
+- (void)resetPosition
+{
+    self.position = 0;
+    [self.picker selectRow:0 inComponent:0 animated:NO];
+}
+
 - (void)reloadWithServerError:(BOOL)isError
 {
     self.isServerError = isError;
