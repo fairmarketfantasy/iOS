@@ -23,7 +23,6 @@
 @property(nonatomic, weak) id<FFYourTeamDelegate> delegate;
 @property(nonatomic, weak) id<FFYourTeamDataSource> dataSource;
 @property(nonatomic) UITableView* tableView;
-@property(nonatomic, readonly) BOOL noGamesAvailable;
 
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
 - (void)reloadWithServerError:(BOOL)isError;

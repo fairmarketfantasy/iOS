@@ -167,6 +167,13 @@
 
 #pragma mark - private
 
+- (BOOL)isSomethingWrong
+{
+    return (self.networkStatus == NotReachable ||
+            self.isServerError ||
+            self.markets.count == 0);
+}
+
 - (void)selectPosition:(NSUInteger)position
 {
     self.position = position;
@@ -279,7 +286,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
 {
-    return (self.networkStatus == NotReachable || self.isServerError) ? 1 : 2;
+    return [self isSomethingWrong] ? 1 : 2;
 }
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
@@ -288,7 +295,7 @@
         return 2;
     }
     
-    return (self.networkStatus == NotReachable || self.isServerError) ? 1 : self.players.count;
+    return [self isSomethingWrong] ? 1 : self.players.count;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
@@ -296,7 +303,7 @@
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             //navigation bar height + status bar height = 64
-            return (self.networkStatus == NotReachable || self.isServerError) ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
+            return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
         } else {
             return 76.f;
         }
@@ -308,9 +315,11 @@
 {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            if (self.networkStatus == NotReachable || self.isServerError) {
+            if ([self isSomethingWrong]) {
                 FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                            forIndexPath:indexPath];
+                cell.message.text = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
+                                                              NSLocalizedString(@"No Internet Connection", nil);
                 return cell;
             }
             return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
@@ -337,7 +346,6 @@
     cell.marketSelector.delegate = self;
     [cell.marketSelector reloadData];
     if (self.dataSource.currentMarket && self.markets) {
-//        _noGamesAvailable = NO;
         cell.contentView.userInteractionEnabled = YES;
         [cell setNoGamesLabelHidden:YES];
         NSUInteger selectedMarket = [self.markets indexOfObject:self.dataSource.currentMarket];
@@ -479,11 +487,8 @@
                                                                              forIndexPath:indexPath];
     if (self.markets.count > indexPath.item && self.networkStatus != NotReachable) {
         FFMarket* market = self.markets[indexPath.item];
-        [cell showLabels];
         cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
         cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
-    } else if (self.markets.count == 0 || self.networkStatus == NotReachable) {
-        [cell hideLabels];
     }
     
     return cell;

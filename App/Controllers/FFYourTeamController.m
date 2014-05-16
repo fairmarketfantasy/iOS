@@ -164,6 +164,13 @@
 
 #pragma mark - private
 
+- (BOOL)isSomethingWrong
+{
+    return (self.networkStatus == NotReachable ||
+            self.isServerError ||
+            self.markets.count == 0);
+}
+
 - (void)showOrHideSubmitIfNeeded
 {
     BOOL anyPlayer = self.dataSource.currentRoster.players.count > 0;
@@ -226,7 +233,6 @@
     cell.marketSelector.delegate = self;
     [cell.marketSelector reloadData];
     if (self.dataSource.currentMarket && self.markets) {
-        _noGamesAvailable = NO;
         cell.contentView.userInteractionEnabled = YES;
         [cell setNoGamesLabelHidden:YES];
         NSUInteger selectedMarket = [self.markets indexOfObject:self.dataSource.currentMarket];
@@ -249,17 +255,12 @@
     FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:kAutoFillCellIdentifier
                                                            forIndexPath:indexPath];
     cell.autoRemovedBenched.on = self.dataSource.currentRoster.removeBenched.integerValue == 1;
-    if (_noGamesAvailable == NO) {
-        cell.autoRemovedBenched.enabled = YES;
-        [cell.autoRemovedBenched addTarget:self
-                                    action:@selector(autoRemovedBenched:)
-                          forControlEvents:UIControlEventValueChanged];
-        [cell.autoFillButton addTarget:self
-                                action:@selector(autoFill:)
-                      forControlEvents:UIControlEventTouchUpInside];
-    } else {
-        cell.autoRemovedBenched.enabled = NO;
-    }
+    [cell.autoRemovedBenched addTarget:self
+                                action:@selector(autoRemovedBenched:)
+                      forControlEvents:UIControlEventValueChanged];
+    [cell.autoFillButton addTarget:self
+                            action:@selector(autoFill:)
+                  forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
 }
@@ -353,7 +354,7 @@
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return (self.networkStatus == NotReachable || self.isServerError) ? 1 : 2;
+        return [self isSomethingWrong] ? 1 : 2;
     }
     
     return [self.dataSource allPositions].count;
@@ -364,7 +365,7 @@
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             //navigation bar height + status bar height = 64
-            return (self.networkStatus == NotReachable || self.isServerError) ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
+            return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
         }
         return 50.f;
     }
@@ -376,9 +377,12 @@
     switch (indexPath.section) {
         case 0: {
             if (indexPath.row == 0) {
-                if (self.networkStatus == NotReachable || self.isServerError) {
+                if ([self isSomethingWrong]) {
                     FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                                forIndexPath:indexPath];
+                    
+                    cell.message.text = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
+                                                                  NSLocalizedString(@"No Internet Connection", nil);
                     return cell;
                 }
                 
@@ -414,7 +418,7 @@
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if (_noGamesAvailable || self.networkStatus == NotReachable || self.isServerError)
+    if ([self isSomethingWrong])
         return;
     
     NSString* position = [self.dataSource allPositions][indexPath.row];
@@ -475,9 +479,6 @@
         [[FFAlertView noInternetConnectionAlert] showInView:self.view];
         return;
     }
-    
-    if (_noGamesAvailable)
-        return;
     
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Auto Fill Roster"
                                                            messsage:nil
@@ -567,11 +568,8 @@
                                                                              forIndexPath:indexPath];
     if (self.markets.count > indexPath.item && self.networkStatus != NotReachable) {
         FFMarket* market = self.markets[indexPath.item];
-        [cell showLabels];
         cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
         cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
-    } else if (self.markets.count == 0 || self.networkStatus == NotReachable) {
-        [cell hideLabels];
     }
     
     return cell;

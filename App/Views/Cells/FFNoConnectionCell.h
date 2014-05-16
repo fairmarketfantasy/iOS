@@ -12,4 +12,6 @@
 
 @interface FFNoConnectionCell : UITableViewCell
 
+@property (strong, nonatomic) UILabel *message;
+
 @end

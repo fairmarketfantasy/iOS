@@ -11,7 +11,7 @@
 
 @interface FFNoConnectionCell()
 
-@property (strong, nonatomic) UILabel *message;
+
 
 @end
 
@@ -28,7 +28,6 @@
     self.message.textColor = [FFStyle lightGrey];
     self.message.backgroundColor = [UIColor clearColor];
     self.message.textAlignment = NSTextAlignmentCenter;
-    self.message.text = NSLocalizedString(@"No Internet Connection", nil);
     [self.contentView addSubview:self.message];
 }
 

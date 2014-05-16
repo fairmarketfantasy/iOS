@@ -390,10 +390,6 @@ SBDataObjectResultSetDelegate>
 - (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
      viewControllerBeforeViewController:(UIViewController*)viewController
 {
-    if (self.teamController.noGamesAvailable == YES) {
-        return nil;
-    }
-    
     NSUInteger index = [[self getViewControllers] indexOfObject:viewController];
     if (index == NSNotFound) {
         WTFLog;
@@ -408,10 +404,6 @@ SBDataObjectResultSetDelegate>
 - (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
       viewControllerAfterViewController:(UIViewController*)viewController
 {
-    if (self.teamController.noGamesAvailable == YES) {
-        return nil;
-    }
-    
     NSUInteger index = [[self getViewControllers] indexOfObject:viewController];
     if (index == NSNotFound) {
         WTFLog;

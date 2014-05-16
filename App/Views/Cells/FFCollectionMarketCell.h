@@ -13,7 +13,4 @@
 @property(nonatomic, readonly) UILabel* marketLabel;
 @property(nonatomic, readonly) UILabel* timeLabel;
 
-- (void)hideLabels;
-- (void)showLabels;
-
 @end
