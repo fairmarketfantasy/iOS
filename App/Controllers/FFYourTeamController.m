@@ -130,7 +130,7 @@
 
 #pragma mark
 
-- (void)updateUIWithServerError:(BOOL)isError
+- (void)reloadWithServerError:(BOOL)isError
 {
     self.isServerError = isError;
     [self showOrHideSubmitIfNeeded];
@@ -151,7 +151,7 @@
             (internetStatus == NotReachable && previousStatus != NotReachable)) {
             
             if (internetStatus == NotReachable) {
-                [self updateUIWithServerError:NO];
+                [self reloadWithServerError:NO];
             } else {
 //                [self updateMarkets];
                 [self refreshRosterWithShowingAlert:YES completion:^{
@@ -208,7 +208,7 @@
     @weakify(self)
     [self.delegate refreshRosterWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self updateUIWithServerError:!success];
+        [self reloadWithServerError:!success];
         if (alert)
             [alert hide];
         if (block)
@@ -464,7 +464,7 @@
     @weakify(self)
     [self.delegate toggleRemoveBenchWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self updateUIWithServerError:!success];
+        [self reloadWithServerError:!success];
         [alert hide];
     }];
 }
@@ -487,7 +487,7 @@
     @weakify(self)
     [self.delegate autoFillWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self updateUIWithServerError:!success];
+        [self reloadWithServerError:!success];
         [alert hide];
     }];
 }

@@ -142,7 +142,7 @@
 
 #pragma mark - public
 
-- (void)updateUIWithServerError:(BOOL)isError
+- (void)reloadWithServerError:(BOOL)isError
 {
     self.isServerError = isError;
     [self.picker reloadAllComponents];

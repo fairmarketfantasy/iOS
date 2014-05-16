@@ -599,13 +599,13 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     if (_rosterIsCreating == NO) {
         [self createRosterWithCompletion:^(BOOL success) {
             if (success) {
-                [self.teamController updateUIWithServerError:NO];
+                [self.teamController reloadWithServerError:NO];
                 [self.receiverController fetchPlayersWithShowingAlert:NO completion:^{
-                    [self.receiverController updateUIWithServerError:NO];
+                    [self.receiverController reloadWithServerError:NO];
                 }];
             } else {
-                [self.teamController updateUIWithServerError:YES];
-                [self.receiverController updateUIWithServerError:YES];
+                [self.teamController reloadWithServerError:YES];
+                [self.receiverController reloadWithServerError:YES];
             }
         }];
     }
@@ -677,8 +677,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              block(YES);
          
          [self createRosterWithCompletion:^(BOOL success) {
-             [self.teamController updateUIWithServerError:!success];
-             [self.receiverController updateUIWithServerError:!success];
+             [self.teamController reloadWithServerError:!success];
+             [self.receiverController reloadWithServerError:!success];
          }];
      }
                        failure:
