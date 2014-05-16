@@ -1,0 +1,18 @@
+//
+//  FFPTCell.h
+//  FMF Football
+//
+//  Created by Yuriy Pitomets on 3/21/14.
+//  Copyright (c) 2014 FairMarketFantasy. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@class FUISegmentedControl;
+
+@interface FFPTCell : UITableViewCell
+
+@property(nonatomic, readonly) FUISegmentedControl* segments;
+@property(nonatomic, readonly) UILabel* titleLabel;
+
+@end

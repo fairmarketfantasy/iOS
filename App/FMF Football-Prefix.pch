@@ -1,0 +1,28 @@
+//
+// Prefix header for all source files of the 'FMF Football' target in the 'FMF Football' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <libextobjc/EXTScope.h>
+#import "FFStyle.h"
+#define LOG_FMT_STR(format, ...) [NSString stringWithFormat:(@"%s [Line %d] " format), \
+                                                            __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__]
+#define DLog(format, ...) CFShow((__bridge CFStringRef)LOG_FMT_STR(format, ##__VA_ARGS__))
+
+#define WTFLog NSLog(@"How did we even get here?")
+
+#ifdef DEBUG
+#define DebugLog(s, ...) NSLog( @"<%@:(%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
+#else
+#define DebugLog(s, ...)
+#endif
+
+#endif
