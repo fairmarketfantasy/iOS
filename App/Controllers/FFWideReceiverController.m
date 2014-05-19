@@ -324,8 +324,9 @@
             if ([self isSomethingWrong]) {
                 FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                            forIndexPath:indexPath];
-                cell.message.text = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
-                                                              NSLocalizedString(@"No Internet Connection", nil);
+                cell.message.text = (self.networkStatus == NotReachable || self.isServerError) ?
+                                    NSLocalizedString(@"No Internet Connection", nil) :
+                                    NSLocalizedString(@"No Games Scheduled", nil);
                 return cell;
             }
             return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
