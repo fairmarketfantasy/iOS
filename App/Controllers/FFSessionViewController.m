@@ -114,6 +114,7 @@
         [self.tickerDataSource refresh];
         return;
     }
+
     [self.session pollUser];
     [self.session syncPushToken];
     [self performSegueWithIdentifier:@"GoImmediatelyToHome"

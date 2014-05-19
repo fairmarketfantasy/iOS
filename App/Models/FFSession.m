@@ -12,6 +12,8 @@
 #import "FFGame.h"
 #import "FFContestType.h"
 #import "FFRoster.h"
+#import "FFCategory.h"
+#import "FFSport.h"
 
 @interface SBSession (private)
 
@@ -48,6 +50,17 @@
     return [[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentSport] integerValue];
 }
 
+- (void)setupCategoriesWithArray:(NSArray *)categoriesDictionaries
+{
+    NSMutableArray *categories = [NSMutableArray arrayWithCapacity:categoriesDictionaries.count];
+    for (NSDictionary *dict in categoriesDictionaries) {
+        FFCategory *category = [[FFCategory alloc] initWithDictionary:dict];
+        [categories addObject:category];
+    }
+    
+    _categories = [categories copy];
+}
+
 - (void)clearCredentials
 {
     [AFOAuthCredential deleteCredentialWithIdentifier:self.identifier];
@@ -80,6 +93,43 @@
     return JSON;
 }
 
+- (void)loginWithEmail:(NSString *)email password:(NSString *)password success:(SBSuccessBlock)success failure:(SBErrorBlock)failure
+{
+    if (!self.user) {
+        self.user = [[self.userClass alloc] initWithSession:self];
+        self.user.email = email;
+    }
+    [self.sessionData save]; // generate an identifier for this session
+    self.authorizedHttpClient = nil;
+    [self getOAuth:self.user password:password success:^(id _) {
+        // now that we've got oauth, get the user data
+        NSMutableURLRequest *req = [self.authorizedHttpClient requestWithMethod:@"GET" path:[self.user listPath] parameters:@{ }];
+        [req addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        SBJSONRequestOperation *op = [[SBJSONRequestOperation alloc] initWithRequest:req];
+        [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self.user setValuesForKeysWithNetworkDictionary:responseObject];
+            [self.user save];
+            
+            [self setupCategoriesWithArray:[responseObject objectForKey:@"categories"]];
+            [self saveCategories];
+            
+            [self writeCurrentCategoryName:[responseObject objectForKey:@"currentCategory"]];
+            [self writeCurrentSportName:[responseObject objectForKey:@"currentSport"]];
+            
+            self.sessionData.userKey = self.user.key;
+            [self.sessionData save];
+            [self syncPushToken];
+            success(self.user);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"operation: %@", operation.request.allHTTPHeaderFields);
+            failure(error);
+        }];
+        [self.authorizedHttpClient enqueueHTTPRequestOperation:op];
+    } failure:^(NSError *err) {
+        failure(err);
+    }];
+}
+
 - (void)registerAndLoginUsingFBAccessToken:(NSString*)accessToken fbUid:(NSString*)fbuid
                                    success:(SBSuccessBlock)success
                                    failure:(SBErrorBlock)failure
@@ -106,6 +156,9 @@
         [user setValuesForKeysWithNetworkDictionary:responseObject];
         [user save];
         self.user = user;
+        
+        [self setupCategoriesWithArray:[responseObject objectForKey:@"categories"]];
+        
         [self.sessionData save];
         [self getOAuth:user fbAccessToken:accessToken success:^(id successObj)
         {
@@ -227,6 +280,7 @@ failure:
 
 #pragma mark - inheritance
 
+
 // do not save models any more
 - (void)syncUserSuccess:(SBSuccessBlock)success failure:(SBErrorBlock)failure
 {
@@ -257,6 +311,58 @@ failure:
 {
     return [[super unsafeQueryBuilderForClass:modelCls] property:@"sportKey"
                                                        isEqualTo:[FFSportHelper stringFromSport:self.sport]];
+}
+
+#pragma mark
+
+- (void)saveCategories
+{
+    NSMutableArray *categories = [NSMutableArray arrayWithCapacity:self.categories.count];
+    for (FFCategory *category in self.categories) {
+        [categories addObject:[category dictionary]];
+    }
+    
+    if (categories.count > 0) {
+    [[NSUserDefaults standardUserDefaults] setObject:categories forKey:@"Categories"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+}
+
+- (void)readCategories
+{
+    NSMutableArray *categories = [NSMutableArray array];
+    NSArray *savedCategories = [[NSUserDefaults standardUserDefaults] objectForKey:@"Categories"];
+    for (NSDictionary *dict in savedCategories) {
+        FFCategory *category = [[FFCategory alloc] initWithDictionary:dict];
+        [categories addObject:category];
+    }
+    
+    _categories = [categories copy];
+    
+    [self readCurrentCategoryName];
+    [self readCurrentSportName];
+}
+
+- (void)writeCurrentSportName:(NSString *)name
+{
+    _currentSportName = name;
+    [[NSUserDefaults standardUserDefaults] setObject:name forKey:@"currentSportName"];
+}
+
+- (void)readCurrentSportName
+{
+    _currentSportName = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentSportName"];
+}
+
+- (void)writeCurrentCategoryName:(NSString *)name
+{
+    _currentCategoryName = name;
+    [[NSUserDefaults standardUserDefaults] setObject:name forKey:@"currentCategoryName"];
+}
+
+- (void)readCurrentCategoryName
+{
+    _currentCategoryName = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentCategoryName"];
 }
 
 #pragma mark - user retrieving

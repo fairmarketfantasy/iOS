@@ -473,14 +473,23 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                         block();
                 }];
             } else if (self.rosterPredictionType == FFRosterPredictionTypeFinished) {
+//                [self.rosterHistoryPredictions fetchWithParameters:@{ @"historical" : @"true" }
+//                                                        completion:^{
+//                                                            if (alert)
+//                                                                [alert hide];
+//                                                            if (block)
+//                                                                block();
+//                                                        }]; // TODO: should be in one of MODELs
+                
                 [self.rosterHistoryPredictions fetchWithParameters:@{ @"historical" : @"true" }
+                                                           session:self.session
                                                         completion:^{
                                                             if (alert)
                                                                 [alert hide];
                                                             if (block)
                                                                 block();
                                                         }]; // TODO: should be in one of MODELs
-                
+
             }
             
             [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)

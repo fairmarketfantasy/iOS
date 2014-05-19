@@ -152,6 +152,7 @@ SBDataObjectResultSetDelegate>
     // session
     self.teamController.session = self.session;
     self.receiverController.session = self.session;
+    [self.session readCategories];
     
     // get player position names
     [self fetchPositionsNames];
@@ -553,8 +554,15 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         [alert showInView:self.navigationController.view];
     }
     
-    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason completion:^{
-        [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination completion:^{
+//    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason completion:^{
+//        [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination completion:^{
+//            if (alert)
+//                [alert hide];
+//        }];
+//    }];
+    
+    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason forSession:self.session completion:^{
+        [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination  completion:^{
             if (alert)
                 [alert hide];
         }];

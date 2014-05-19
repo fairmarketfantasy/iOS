@@ -59,4 +59,17 @@
     }];
 }
 
+- (void)fetchWithParameters:(NSDictionary*)parameters session:(FFSession *)session completion:(void(^)(void))block
+{
+    NSAssert(self.query, @"Query shouldn't be nil!");
+    NSMutableDictionary* param = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    [param addEntriesFromDictionary:@{
+                                      @"category" : session.currentCategoryName,
+                                      @"sport" : [FFSportHelper stringFromSport:self.session.sport]
+                                      }];
+    [self refreshWithParameters:[param copy] completion:^{
+        block();
+    }];
+}
+
 @end

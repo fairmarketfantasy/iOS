@@ -58,4 +58,29 @@
                      }];
 }
 
+- (void)fetchType:(FFMarketType)type forSession:(FFSession *)session
+{
+    NSAssert(self.query, @"Query shouldn't be nil!");
+    [self refreshWithParameters:@{
+                                  @"category" : session.currentCategoryName,
+                                  @"sport" : [FFSportHelper stringFromSport:self.session.sport],
+                                  @"type" : [FFMarketSet typeKey:type]
+                                  }];
+}
+
+- (void)fetchType:(FFMarketType)type forSession:(FFSession *)session completion:(void(^)(void))block
+{
+    NSAssert(self.query, @"Query shouldn't be nil!");
+    [self refreshWithParameters:@{
+                                  @"category" : session.currentCategoryName,
+                                  @"sport" : [FFSportHelper stringFromSport:self.session.sport],
+                                  @"type" : [FFMarketSet typeKey:type]
+                                  }
+                     completion:^{
+                         if (block)
+                             block();
+                     }];
+}
+
+
 @end
