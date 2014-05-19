@@ -207,7 +207,7 @@
     NSString* path = [[FFRoster bulkPath] stringByAppendingString:@"/new"];
     [session authorizedJSONRequestWithMethod:@"GET"
                                         path:path
-                                   paramters:@{ @"sport" : [FFSport stringFromSport:session.sport] }
+                                   paramters:@{ @"sport" : [FFSportHelper stringFromSport:session.sport] }
                                      success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
      {
          if (success) {

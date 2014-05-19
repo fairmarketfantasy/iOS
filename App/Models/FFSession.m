@@ -250,13 +250,13 @@ failure:
 - (SBModelQueryBuilder *)queryBuilderForClass:(Class)modelCls
 {
     return [[super queryBuilderForClass:modelCls] property:@"sportKey"
-                                                 isEqualTo:[FFSport stringFromSport:self.sport]];
+                                                 isEqualTo:[FFSportHelper stringFromSport:self.sport]];
 }
 
 - (SBModelQueryBuilder *)unsafeQueryBuilderForClass:(Class)modelCls
 {
     return [[super unsafeQueryBuilderForClass:modelCls] property:@"sportKey"
-                                                       isEqualTo:[FFSport stringFromSport:self.sport]];
+                                                       isEqualTo:[FFSportHelper stringFromSport:self.sport]];
 }
 
 #pragma mark - user retrieving

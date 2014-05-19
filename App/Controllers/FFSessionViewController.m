@@ -328,7 +328,7 @@
 - (void)signIn:(id)sender
 {
     // get/compile the regex we'll be using
-    __strong static NSRegularExpression* regex = nil; // ???: rewrite
+    __strong static NSRegularExpression* regex = nil;
     if (regex == nil) {
         NSError* error = nil;
         NSString* emailRe = FF_EMAIL_REGEX;

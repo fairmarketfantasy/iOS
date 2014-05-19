@@ -18,7 +18,7 @@
 #import "FFAlertView.h"
 #import "FFAccountBalance.h"
 #import "FFStyle.h"
-#import "FFSport.h"
+#import "FFSportHelper.h"
 #import "FFAccountHeader.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
@@ -257,7 +257,7 @@
         if (treeNodeInfo.treeDepthLevel > 0) {
             if ([self.delegate respondsToSelector:@selector(currentMarketSport)]
                     &&
-                [[FFSport stringFromSport:[self.delegate currentMarketSport]]
+                [[FFSportHelper stringFromSport:[self.delegate currentMarketSport]]
                     isEqualToString:nodeItem.title]) {
                 accessoryName = @"accessory_check";
             } else {

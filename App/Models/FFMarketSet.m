@@ -40,7 +40,7 @@
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                    @"sport" : [FFSport stringFromSport:self.session.sport],
+                                    @"sport" : [FFSportHelper stringFromSport:self.session.sport],
                                     @"type" : [FFMarketSet typeKey:type]
                                 }];
 }
@@ -49,7 +49,7 @@
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                  @"sport" : [FFSport stringFromSport:self.session.sport],
+                                  @"sport" : [FFSportHelper stringFromSport:self.session.sport],
                                   @"type" : [FFMarketSet typeKey:type]
                                   }
                      completion:^{

@@ -62,7 +62,7 @@
 	<key>SBAPIAllowInvalidSSLCertificate</key>
 	<true/>
 	<key>SBAPIBaseURLSpec</key>
-	<string>https://staging.predictthat.com/</string>
+	<string>http://test.fairmarketfantasy.com/</string>
 	<key>SBAPIVersion</key>
 	<string></string>
 	<key>SBApiClientId</key>

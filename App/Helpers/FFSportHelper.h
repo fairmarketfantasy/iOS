@@ -1,5 +1,5 @@
 //
-//  FFSport.h
+//  FFSportHelper.h
 //  FMF Football
 //
 //  Created by Yuriy Pitomets on 4/3/14.
@@ -12,7 +12,7 @@ typedef NS_ENUM(NSUInteger, FFMarketSport) {
     FFMarketSportMLB
 };
 
-@interface FFSport : NSObject
+@interface FFSportHelper : NSObject
 
 + (NSString*)stringFromSport:(FFMarketSport)sport;
 

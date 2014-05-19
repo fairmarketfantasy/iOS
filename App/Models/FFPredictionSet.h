@@ -7,7 +7,7 @@
 //
 
 #import "FFDataObjectResultSet.h"
-#import "FFSport.h"
+#import "FFSportHelper.h"
 
 @interface FFPredictionSet : FFDataObjectResultSet
 
