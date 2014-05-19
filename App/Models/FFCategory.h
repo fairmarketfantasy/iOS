@@ -8,11 +8,13 @@
 
 #import "FFDataObject.h"
 
-@interface FFCategory : FFDataObject
+@interface FFCategory : NSObject
 
-@property (nonatomic) NSString *categoryID;
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *note;
-@property (nonatomic) NSArray *sports;
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *note;
+@property (nonatomic, readonly) NSArray *sports;//should cantain FFSport objects
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict;
+- (NSDictionary *)dictionary;
 
 @end
