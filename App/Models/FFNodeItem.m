@@ -7,6 +7,8 @@
 //
 
 #import "FFNodeItem.h"
+#import "FFCategory.h"
+#import "FFSport.h"
 
 @implementation FFNodeItem
 
@@ -117,6 +119,28 @@
         }
     }
     return [nodes copy];
+}
+
+/**
+ *  Create node from category object
+ *
+ *  @param category FFCategory.
+ *
+ *  @return FFNodeItem.
+ */
++ (instancetype)nodeFromCategory:(FFCategory *)category
+{
+    if ([category.note isEqual:@"COMMING SOON"]) {
+        return [self nodeWithTitle:category.name children:@[]];
+    }
+    
+    NSMutableArray *children = [NSMutableArray arrayWithCapacity:category.sports.count];
+    for (FFSport *sport in category.sports) {
+        if (sport.commingSoon == NO)
+            [children addObject:sport.name];
+    }
+    
+    return [self nodeWithTitle:category.name children:children];
 }
 
 @end

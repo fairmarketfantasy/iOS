@@ -8,22 +8,23 @@
 
 #import "FFMenuViewController.h"
 #import "FFSessionViewController.h"
-#import <RATreeView.h>
 #import "FFNodeItem.h"
 #import "FFMenuCell.h"
 #import "FFLogo.h"
 #import "TransitionDelegate.h"
 #import "FFNavigationBarItemView.h"
-#import <libextobjc/EXTScope.h>
 #import "FFAlertView.h"
 #import "FFAccountBalance.h"
 #import "FFStyle.h"
-#import "FFSportHelper.h"
+#import "FFSport.h"
 #import "FFAccountHeader.h"
-#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import <libextobjc/EXTScope.h>
+#import <RATreeView.h>
 // model
 #import "FFDate.h"
+#import "FFCategory.h"
 
 @interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate, FFUserProtocol>
 
@@ -55,29 +56,47 @@
             self.modalPresentationStyle = UIModalPresentationCurrentContext;
         }
 
-        _nodes = [FFNodeItem nodesFromStrings:
-                                 @[
-                                     @{
-                                         @"Fantasy Sports" : @[
-                                             /*@"NFL",*/
-                                             @"NBA",
-                                             @"MLB"
-                                         ]
-                                     },
-                                     @{
-                                         @"Enternainment" : @[
-                                         ]
-                                     },
-                                     @{
-                                         @"Politics" : @[
-                                         ]
-                                     },
-                                     @"Predictions",
-                                     @"Rules",
-                                     @"How it works  〉Support",
-                                     @"Settings",
-                                     @"Sign Out"
-                                 ]];
+        [self.session readCategories];
+        NSMutableArray *nodes = [NSMutableArray array];
+        for (FFCategory *category in self.session.categories) {
+            FFNodeItem *node = [FFNodeItem nodeFromCategory:category];
+            [nodes addObject:node];
+        }
+        
+        NSArray *staticNodes = @[
+                                 @"Predictions",
+                                 @"Rules",
+                                 @"How it works  〉Support",
+                                 @"Settings",
+                                 @"Sign Out"
+                                 ];
+        
+        [nodes addObjectsFromArray:staticNodes];
+        _nodes = [NSArray arrayWithArray:nodes];
+        
+//        _nodes = [FFNodeItem nodesFromStrings:
+//                                 @[
+//                                     @{
+//                                         @"Fantasy Sports" : @[
+//                                             /*@"NFL",*/
+//                                             @"NBA",
+//                                             @"MLB"
+//                                         ]
+//                                     },
+//                                     @{
+//                                         @"Enternainment" : @[
+//                                         ]
+//                                     },
+//                                     @{
+//                                         @"Politics" : @[
+//                                         ]
+//                                     },
+//                                     @"Predictions",
+//                                     @"Rules",
+//                                     @"How it works  〉Support",
+//                                     @"Settings",
+//                                     @"Sign Out"
+//                                 ]];
         _segueByTitle = @{
             @"Predictions" : @"GotoPredictions",
             @"Rules" : @"GotoRules",
