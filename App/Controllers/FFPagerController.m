@@ -776,6 +776,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     if (resultSet.count > 0) {
         [self marketsUpdated];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    } else {
+        [self.teamController reloadWithServerError:NO];
+        [self.receiverController reloadWithServerError:NO];
     }
 }
 
