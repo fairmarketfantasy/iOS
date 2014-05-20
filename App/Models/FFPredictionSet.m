@@ -43,7 +43,7 @@
     NSAssert(self.query, @"Query shouldn't be nil!");
     NSMutableDictionary* param = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [param addEntriesFromDictionary:@{
-                                     @"sport" : [FFSportHelper stringFromSport:self.session.sport]
+                                     @"sport" : [FFSessionManager shared].currentSportName
                                      }];
     [self refreshWithParameters:[param copy]];
 }
@@ -53,20 +53,8 @@
     NSAssert(self.query, @"Query shouldn't be nil!");
     NSMutableDictionary* param = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [param addEntriesFromDictionary:@{
-                                      @"sport" : [FFSportHelper stringFromSport:self.session.sport]
-                                      }];
-    [self refreshWithParameters:[param copy] completion:^{
-        block();
-    }];
-}
-
-- (void)fetchWithParameters:(NSDictionary*)parameters session:(FFSession *)session completion:(void(^)(void))block
-{
-    NSAssert(self.query, @"Query shouldn't be nil!");
-    NSMutableDictionary* param = [NSMutableDictionary dictionaryWithDictionary:parameters];
-    [param addEntriesFromDictionary:@{
                                       @"category" : [FFSessionManager shared].currentCategoryName,
-                                      @"sport" : [FFSportHelper stringFromSport:self.session.sport]
+                                      @"sport" : [FFSessionManager shared].currentSportName
                                       }];
     [self refreshWithParameters:[param copy] completion:^{
         block();

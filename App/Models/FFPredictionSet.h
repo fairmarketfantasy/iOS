@@ -17,6 +17,5 @@
 - (void)fetchWithCompletion:(void(^)(void))block;
 - (void)fetchWithParameters:(NSDictionary*)parameters;
 - (void)fetchWithParameters:(NSDictionary*)parameters completion:(void(^)(void))block;
-- (void)fetchWithParameters:(NSDictionary*)parameters session:(FFSession *)session completion:(void(^)(void))block;
 
 @end

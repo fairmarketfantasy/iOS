@@ -41,16 +41,18 @@
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                    @"sport" : [FFSportHelper stringFromSport:self.session.sport],
-                                    @"type" : [FFMarketSet typeKey:type]
-                                }];
+                                  @"category" : [FFSessionManager shared].currentCategoryName,
+                                  @"sport" : [FFSessionManager shared].currentSportName,
+                                  @"type" : [FFMarketSet typeKey:type]
+                                  }];
 }
 
 - (void)fetchType:(FFMarketType)type completion:(void(^)(void))block
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                  @"sport" : [FFSportHelper stringFromSport:self.session.sport],
+                                  @"category" : [FFSessionManager shared].currentCategoryName,
+                                  @"sport" : [FFSessionManager shared].currentSportName,
                                   @"type" : [FFMarketSet typeKey:type]
                                   }
                      completion:^{
@@ -58,30 +60,5 @@
                              block();
                      }];
 }
-
-- (void)fetchType:(FFMarketType)type forSession:(FFSession *)session
-{
-    NSAssert(self.query, @"Query shouldn't be nil!");
-    [self refreshWithParameters:@{
-                                  @"category" : [FFSessionManager shared].currentCategoryName,
-                                  @"sport" : [FFSportHelper stringFromSport:self.session.sport],
-                                  @"type" : [FFMarketSet typeKey:type]
-                                  }];
-}
-
-- (void)fetchType:(FFMarketType)type forSession:(FFSession *)session completion:(void(^)(void))block
-{
-    NSAssert(self.query, @"Query shouldn't be nil!");
-    [self refreshWithParameters:@{
-                                  @"category" : [FFSessionManager shared].currentCategoryName,
-                                  @"sport" : [FFSportHelper stringFromSport:self.session.sport],
-                                  @"type" : [FFMarketSet typeKey:type]
-                                  }
-                     completion:^{
-                         if (block)
-                             block();
-                     }];
-}
-
 
 @end
