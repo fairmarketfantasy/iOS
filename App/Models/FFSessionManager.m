@@ -72,12 +72,12 @@
 
 - (NSString *)readCurrentCategoryName
 {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"CurrentCategory"];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentCategoryKey];
 }
 
 - (NSString *)readCurrentSportName
 {
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"CurrentSport"];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentSportKey];
 }
 
 @end
