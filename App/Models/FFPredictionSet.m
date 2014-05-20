@@ -8,6 +8,7 @@
 
 #import "FFPredictionSet.h"
 #import "FFSession.h"
+#import "FFSessionManager.h"
 
 @implementation FFPredictionSet
 
@@ -64,7 +65,7 @@
     NSAssert(self.query, @"Query shouldn't be nil!");
     NSMutableDictionary* param = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [param addEntriesFromDictionary:@{
-                                      @"category" : session.currentCategoryName,
+                                      @"category" : [FFSessionManager shared].currentCategoryName,
                                       @"sport" : [FFSportHelper stringFromSport:self.session.sport]
                                       }];
     [self refreshWithParameters:[param copy] completion:^{

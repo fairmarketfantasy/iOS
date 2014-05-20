@@ -17,6 +17,7 @@
 #import "FFContestType.h"
 #import "FFMarket.h"
 #import "FFSession.h"
+#import "FFSessionManager.h"
 
 @implementation FFRoster
 
@@ -207,8 +208,8 @@
     NSString* path = [[FFRoster bulkPath] stringByAppendingString:@"/new"];
     [session authorizedJSONRequestWithMethod:@"GET"
                                         path:path
-                                   paramters:@{ @"sport" : session.currentSportName,
-                                                @"category" : session.currentCategoryName }
+                                   paramters:@{ @"sport" : [FFSportHelper stringFromSport:session.sport],
+                                                @"category" : [FFSessionManager shared].currentCategoryName }
                                      success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
      {
          if (success) {

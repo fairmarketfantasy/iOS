@@ -8,6 +8,7 @@
 
 #import "FFMarketSet.h"
 #import "FFSession.h"
+#import "FFSessionManager.h"
 
 @implementation FFMarketSet
 
@@ -62,7 +63,7 @@
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                  @"category" : session.currentCategoryName,
+                                  @"category" : [FFSessionManager shared].currentCategoryName,
                                   @"sport" : [FFSportHelper stringFromSport:self.session.sport],
                                   @"type" : [FFMarketSet typeKey:type]
                                   }];
@@ -72,7 +73,7 @@
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                  @"category" : session.currentCategoryName,
+                                  @"category" : [FFSessionManager shared].currentCategoryName,
                                   @"sport" : [FFSportHelper stringFromSport:self.session.sport],
                                   @"type" : [FFMarketSet typeKey:type]
                                   }

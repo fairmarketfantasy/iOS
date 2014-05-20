@@ -14,6 +14,7 @@
 #import "FFRoster.h"
 #import "FFCategory.h"
 #import "FFSport.h"
+#import "FFSessionManager.h"
 
 @interface SBSession (private)
 
@@ -48,17 +49,6 @@
 - (FFMarketSport)currentSport
 {
     return [[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentSport] integerValue];
-}
-
-- (void)setupCategoriesWithArray:(NSArray *)categoriesDictionaries
-{
-    NSMutableArray *categories = [NSMutableArray arrayWithCapacity:categoriesDictionaries.count];
-    for (NSDictionary *dict in categoriesDictionaries) {
-        FFCategory *category = [[FFCategory alloc] initWithDictionary:dict];
-        [categories addObject:category];
-    }
-    
-    _categories = [categories copy];
 }
 
 - (void)clearCredentials
@@ -110,11 +100,9 @@
             [self.user setValuesForKeysWithNetworkDictionary:responseObject];
             [self.user save];
             
-            [self setupCategoriesWithArray:[responseObject objectForKey:@"categories"]];
-            [self saveCategories];
-            
-            [self writeCurrentCategoryName:[responseObject objectForKey:@"currentCategory"]];
-            [self writeCurrentSportName:[responseObject objectForKey:@"currentSport"]];
+            [[FFSessionManager shared] saveCategoriesFromDictionaries:[responseObject objectForKey:@"categories"]];
+            [[FFSessionManager shared] saveCurrentCategory:[responseObject objectForKey:@"currentCategory"]
+                                                  andSport:[responseObject objectForKey:@"currentSport"]];
             
             self.sessionData.userKey = self.user.key;
             [self.sessionData save];
@@ -157,7 +145,9 @@
         [user save];
         self.user = user;
         
-        [self setupCategoriesWithArray:[responseObject objectForKey:@"categories"]];
+        [[FFSessionManager shared] saveCategoriesFromDictionaries:[responseObject objectForKey:@"categories"]];
+        [[FFSessionManager shared] saveCurrentCategory:[responseObject objectForKey:@"currentCategory"]
+                                              andSport:[responseObject objectForKey:@"currentSport"]];
         
         [self.sessionData save];
         [self getOAuth:user fbAccessToken:accessToken success:^(id successObj)
@@ -311,58 +301,6 @@ failure:
 {
     return [[super unsafeQueryBuilderForClass:modelCls] property:@"sportKey"
                                                        isEqualTo:[FFSportHelper stringFromSport:self.sport]];
-}
-
-#pragma mark
-
-- (void)saveCategories
-{
-    NSMutableArray *categories = [NSMutableArray arrayWithCapacity:self.categories.count];
-    for (FFCategory *category in self.categories) {
-        [categories addObject:[category dictionary]];
-    }
-    
-    if (categories.count > 0) {
-    [[NSUserDefaults standardUserDefaults] setObject:categories forKey:@"Categories"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (void)readCategories
-{
-    NSMutableArray *categories = [NSMutableArray array];
-    NSArray *savedCategories = [[NSUserDefaults standardUserDefaults] objectForKey:@"Categories"];
-    for (NSDictionary *dict in savedCategories) {
-        FFCategory *category = [[FFCategory alloc] initWithDictionary:dict];
-        [categories addObject:category];
-    }
-    
-    _categories = [categories copy];
-    
-    [self readCurrentCategoryName];
-    [self readCurrentSportName];
-}
-
-- (void)writeCurrentSportName:(NSString *)name
-{
-    _currentSportName = name;
-    [[NSUserDefaults standardUserDefaults] setObject:name forKey:@"currentSportName"];
-}
-
-- (void)readCurrentSportName
-{
-    _currentSportName = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentSportName"];
-}
-
-- (void)writeCurrentCategoryName:(NSString *)name
-{
-    _currentCategoryName = name;
-    [[NSUserDefaults standardUserDefaults] setObject:name forKey:@"currentCategoryName"];
-}
-
-- (void)readCurrentCategoryName
-{
-    _currentCategoryName = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentCategoryName"];
 }
 
 #pragma mark - user retrieving

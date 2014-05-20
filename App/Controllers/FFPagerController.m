@@ -152,7 +152,6 @@ SBDataObjectResultSetDelegate>
     // session
     self.teamController.session = self.session;
     self.receiverController.session = self.session;
-    [self.session readCategories];
     
     // get player position names
     [self fetchPositionsNames];

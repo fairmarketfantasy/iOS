@@ -33,9 +33,6 @@
 @interface FFSession : SBSession
 
 @property(nonatomic, readonly) FFUser* user;
-@property(nonatomic, readonly) NSArray *categories;
-@property(nonatomic, readonly) NSString *currentCategoryName;
-@property(nonatomic, readonly) NSString *currentSportName;
 @property(nonatomic, assign) FFMarketSport sport;
 @property(nonatomic, readonly) SBSessionData* sessionData;
 @property(nonatomic, weak) id <FFUserProtocol> delegate;
@@ -45,7 +42,6 @@
                                    success:(SBSuccessBlock)success
                                    failure:(SBErrorBlock)failure;
 - (void)clearCredentials;
-- (void)readCategories;
 
 #pragma mark -
 
