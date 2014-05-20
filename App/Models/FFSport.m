@@ -15,9 +15,9 @@
 {
     self = [super init];
     if (self) {
-        _commingSoon = [[dictionary objectForKey:@"commingSoon"] boolValue];
-        _isActive = [[dictionary objectForKey:@"isActive"] boolValue];
-        _isPlayoffsOn = [[dictionary objectForKey:@"isPlayoffsOn"] boolValue];
+        _commingSoon = [[dictionary objectForKey:@"coming_soon"] boolValue];
+        _isActive = [[dictionary objectForKey:@"is_active"] boolValue];
+        _isPlayoffsOn = [[dictionary objectForKey:@"playoffs_on"] boolValue];
         _name = [dictionary objectForKey:@"name"];
     }
     
@@ -32,6 +32,21 @@
              @"isPlayoffsOn" : [NSNumber numberWithBool:_isPlayoffsOn],
              @"name" : _name
              };
+}
+
+- (NSString*)descriptionWithLocale:(NSDictionary*)locale indent:(NSUInteger)indent
+{
+	NSMutableString* result = [NSMutableString stringWithFormat:@"Sport: %@\n", _name];
+	[result appendFormat:@"commingSoon: %d\n", _commingSoon];
+	[result appendFormat:@"isActive: %d\n", _isActive];
+    [result appendFormat:@"isPlayoffsOn: %d\n", _isPlayoffsOn];
+    
+	return result;
+}
+
+- (NSString *)description
+{
+    return [self descriptionWithLocale:nil indent:0];
 }
 
 @end

@@ -17,4 +17,6 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 - (NSDictionary *)dictionary;
 
++ (NSArray *)categoriesFromDictionaries:(NSArray *)categoriesDictionaries;
+
 @end

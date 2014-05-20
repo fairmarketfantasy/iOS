@@ -44,4 +44,31 @@
     return self;
 }
 
++ (NSArray *)categoriesFromDictionaries:(NSArray *)categoriesDicts
+{
+    NSMutableArray *categories = [NSMutableArray arrayWithCapacity:categoriesDicts.count];
+    for (NSDictionary *categoryDict in categoriesDicts) {
+        [categories addObject:[[FFCategory alloc] initWithDictionary:categoryDict]];
+    }
+
+    return [categories copy];
+}
+
+- (NSString*)descriptionWithLocale:(NSDictionary*)locale indent:(NSUInteger)indent
+{
+	NSMutableString* result = [NSMutableString stringWithFormat:@"Category: %@\n", _name];
+	[result appendFormat:@"note: %@\n\n", _note];
+    for (FFSport *sport in _sports) {
+        [result appendFormat:@"%@\n", sport.description];
+    }
+
+    [result appendString:@"*********\n"];
+	return result;
+}
+
+- (NSString *)description
+{
+    return [self descriptionWithLocale:nil indent:0];
+}
+
 @end
