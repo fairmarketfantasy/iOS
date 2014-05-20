@@ -130,14 +130,16 @@
  */
 + (instancetype)nodeFromCategory:(FFCategory *)category
 {
-    if ([category.note isEqual:@"COMMING SOON"]) {
+    if ([category.note isEqualToString:@"COMING SOON"]) {
         return [self nodeWithTitle:category.name children:@[]];
     }
     
     NSMutableArray *children = [NSMutableArray arrayWithCapacity:category.sports.count];
     for (FFSport *sport in category.sports) {
-        if (sport.commingSoon == NO)
-            [children addObject:sport.name];
+        if (sport.isActive == YES) {
+            FFNodeItem *childNode = [FFNodeItem nodeWithTitle:sport.name children:@[] type:FFNodeItemTypeLeaf];
+            [children addObject:childNode];
+        }
     }
     
     return [self nodeWithTitle:category.name children:children];

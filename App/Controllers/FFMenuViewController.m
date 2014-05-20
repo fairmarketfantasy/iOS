@@ -25,6 +25,7 @@
 // model
 #import "FFDate.h"
 #import "FFCategory.h"
+#import "FFSessionManager.h"
 
 @interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate, FFUserProtocol>
 
@@ -55,48 +56,25 @@
         } else {
             self.modalPresentationStyle = UIModalPresentationCurrentContext;
         }
-
-        [self.session readCategories];
+        
         NSMutableArray *nodes = [NSMutableArray array];
-        for (FFCategory *category in self.session.categories) {
+        for (FFCategory *category in [FFSessionManager shared].categories) {
             FFNodeItem *node = [FFNodeItem nodeFromCategory:category];
             [nodes addObject:node];
         }
         
-        NSArray *staticNodes = @[
+        NSArray *staticNodes = [FFNodeItem nodesFromStrings:
+                                @[
                                  @"Predictions",
                                  @"Rules",
                                  @"How it works  〉Support",
                                  @"Settings",
                                  @"Sign Out"
-                                 ];
+                                 ]];
         
         [nodes addObjectsFromArray:staticNodes];
         _nodes = [NSArray arrayWithArray:nodes];
         
-//        _nodes = [FFNodeItem nodesFromStrings:
-//                                 @[
-//                                     @{
-//                                         @"Fantasy Sports" : @[
-//                                             /*@"NFL",*/
-//                                             @"NBA",
-//                                             @"MLB"
-//                                         ]
-//                                     },
-//                                     @{
-//                                         @"Enternainment" : @[
-//                                         ]
-//                                     },
-//                                     @{
-//                                         @"Politics" : @[
-//                                         ]
-//                                     },
-//                                     @"Predictions",
-//                                     @"Rules",
-//                                     @"How it works  〉Support",
-//                                     @"Settings",
-//                                     @"Sign Out"
-//                                 ]];
         _segueByTitle = @{
             @"Predictions" : @"GotoPredictions",
             @"Rules" : @"GotoRules",

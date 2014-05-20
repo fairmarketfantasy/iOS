@@ -27,4 +27,5 @@ typedef NS_ENUM(NSInteger, FFNodeItemType) {
 + (FFNodeItem*)nodeWithTitle:(NSString*)title;
 + (NSArray*)nodesFromStrings:(NSArray*)strings;
 + (instancetype)nodeFromCategory:(FFCategory *)category;
+
 @end
