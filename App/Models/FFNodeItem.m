@@ -164,10 +164,6 @@
  */
 + (instancetype)nodeFromCategory:(FFCategory *)category
 {
-    if ([category.note isEqualToString:@"COMING SOON"]) {
-        return [self nodeWithTitle:category.name children:@[] comingSoon:YES];
-    }
-    
     NSMutableArray *children = [NSMutableArray arrayWithCapacity:category.sports.count];
     for (FFSport *sport in category.sports) {
         if (sport.isActive == YES) {

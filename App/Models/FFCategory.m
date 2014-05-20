@@ -30,7 +30,7 @@
     self = [super init];
     if (self) {
         _note = [dict objectForKey:@"note"];
-        _name = [dict objectForKey:@"name"];
+        _name = [self stringWithoutUnderscore:[dict objectForKey:@"name"]];
         
         NSMutableArray *sports = [NSMutableArray array];
         for (NSDictionary *sportDict in [dict objectForKey:@"sports"]) {
@@ -52,6 +52,11 @@
     }
 
     return [categories copy];
+}
+
+- (NSString *)stringWithoutUnderscore:(NSString *)string
+{
+    return [string stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 }
 
 - (NSString*)descriptionWithLocale:(NSDictionary*)locale indent:(NSUInteger)indent

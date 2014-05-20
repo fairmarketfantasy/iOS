@@ -59,7 +59,7 @@
 {
     if ([_currentCategoryName isEqualToString:category] == NO) {
         [[NSUserDefaults standardUserDefaults] setObject:category forKey:kCurrentCategoryKey];
-        _currentCategoryName = category;
+        _currentCategoryName = [category stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     }
     
     if ([_currentSportName isEqualToString:sport] == NO) {
