@@ -57,12 +57,17 @@
 
 - (void)saveCurrentCategory:(NSString *)category andSport:(NSString *)sport
 {
-    [[NSUserDefaults standardUserDefaults] setObject:category forKey:kCurrentCategoryKey];
-    [[NSUserDefaults standardUserDefaults] setObject:sport forKey:kCurrentSportKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    if ([_currentCategoryName isEqualToString:category] == NO) {
+        [[NSUserDefaults standardUserDefaults] setObject:category forKey:kCurrentCategoryKey];
+        _currentCategoryName = category;
+    }
     
-    _currentCategoryName = category;
-    _currentSportName = sport;
+    if ([_currentSportName isEqualToString:sport] == NO) {
+        [[NSUserDefaults standardUserDefaults] setObject:sport forKey:kCurrentSportKey];
+        _currentSportName = sport;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSString *)readCurrentCategoryName
