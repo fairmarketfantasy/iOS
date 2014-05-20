@@ -57,23 +57,8 @@
             self.modalPresentationStyle = UIModalPresentationCurrentContext;
         }
         
-        NSMutableArray *nodes = [NSMutableArray array];
-        for (FFCategory *category in [FFSessionManager shared].categories) {
-            FFNodeItem *node = [FFNodeItem nodeFromCategory:category];
-            [nodes addObject:node];
-        }
-        
-        NSArray *staticNodes = [FFNodeItem nodesFromStrings:
-                                @[
-                                 @"Predictions",
-                                 @"Rules",
-                                 @"How it works  〉Support",
-                                 @"Settings",
-                                 @"Sign Out"
-                                 ]];
-        
-        [nodes addObjectsFromArray:staticNodes];
-        _nodes = [NSArray arrayWithArray:nodes];
+        //setup nodes those determine cell titles and actions
+        [self setupNodes];
         
         _segueByTitle = @{
             @"Predictions" : @"GotoPredictions",
@@ -190,6 +175,28 @@
     }
 }
 
+#pragma mark 
+
+- (void)setupNodes
+{
+    NSMutableArray *nodes = [NSMutableArray array];
+    for (FFCategory *category in [FFSessionManager shared].categories) {
+        [nodes addObject:[FFNodeItem nodeFromCategory:category]];
+    }
+    
+    NSArray *staticNodes = [FFNodeItem nodesFromStrings:
+                            @[
+                              @"Predictions",
+                              @"Rules",
+                              @"How it works  〉Support",
+                              @"Settings",
+                              @"Sign Out"
+                              ]];
+    
+    [nodes addObjectsFromArray:staticNodes];
+    _nodes = [NSArray arrayWithArray:nodes];
+}
+
 #pragma mark - RATreeViewDataSource
 
 - (NSInteger)treeView:(RATreeView*)treeView
@@ -252,10 +259,9 @@
         }
     } else {
         if (treeNodeInfo.treeDepthLevel > 0) {
-            if ([self.delegate respondsToSelector:@selector(currentMarketSport)]
-                    &&
-                [[FFSportHelper stringFromSport:[self.delegate currentMarketSport]]
-                    isEqualToString:nodeItem.title]) {
+//            if ([self.delegate respondsToSelector:@selector(currentMarketSport)] && [[FFSportHelper stringFromSport:[self.delegate currentMarketSport]] isEqualToString:nodeItem.title]) {
+            if ([nodeItem.categoryTitle isEqualToString:[FFSessionManager shared].currentCategoryName] &&
+                [nodeItem.title isEqualToString:[FFSessionManager shared].currentSportName]) {
                 accessoryName = @"accessory_check";
             } else {
                 accessoryName = @"accessory_uncheck";
@@ -361,18 +367,26 @@
 
 #pragma mark - private
 
+- (void)showComingSoonAlert
+{
+    [[[FFAlertView alloc] initWithTitle:nil
+                                message:NSLocalizedString(@"Coming soon!", nil)
+                      cancelButtonTitle:nil
+                        okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                               autoHide:YES] showInView:self.view];
+}
+
 - (void)updateHeader
 {
-//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     FFAccountHeader* header = (FFAccountHeader*)self.treeView.treeHeaderView;
     if (![header isKindOfClass:[FFAccountHeader class]]) {
         return;
     }
     
     NSString *imageName = nil;
-    if (self.session.sport == FFMarketSportNBA) {
+    if ([[FFSessionManager shared].currentSportName isEqualToString:@"NBA"]) {
         imageName = @"loginbg";
-    } else if (self.session.sport == FFMarketSportMLB) {
+    } else if ([[FFSessionManager shared].currentSportName isEqualToString:@"MLB"]) {
         imageName = @"loginmlb";
     }
     
@@ -427,41 +441,25 @@
 {
     NSParameterAssert([item isKindOfClass:[FFNodeItem class]]);
     @weakify(self)
-    if (item.type != FFNodeItemTypeLeaf || item.action) {
-        if ([item.title isEqualToString:@"Enternainment"] ||
-            [item.title isEqualToString:@"Politics"]) {
-            item.action = ^{
-                @strongify(self)
-                [[[FFAlertView alloc] initWithTitle:nil
-                                            message:NSLocalizedString(@"Coming soon!", nil)
-                                  cancelButtonTitle:nil
-                                    okayButtonTitle:NSLocalizedString(@"Ok", nil)
-                                           autoHide:YES] showInView:self.view];
-            };
-        }
+    if (item.comingSoon == YES) {
+        item.action = ^{
+            @strongify(self)
+            [self showComingSoonAlert];
+        };
         return;
     }
-    if ([item.title isEqualToString:@"NBA"]) {
+    
+    if (item.type == FFNodeItemTypeParent) {
+        return;
+    }
+    
+    @weakify(item)
+    if (item.type == FFNodeItemTypeLeaf) {
         item.action = ^{
             @strongify(self)
-            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-                [self.delegate didUpdateToNewSport:FFMarketSportNBA];
-            }
-            [self dismissViewControllerAnimated:YES completion:nil];
-        };
-    } else if ([item.title isEqualToString:@"NFL"]) {
-        item.action = ^{
-            @strongify(self)
-            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-                [self.delegate didUpdateToNewSport:FFMarketSportNFL];
-            }
-            [self dismissViewControllerAnimated:YES completion:nil];
-        };
-    } else if ([item.title isEqualToString:@"MLB"]) {
-        item.action = ^{
-            @strongify(self)
-            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-                [self.delegate didUpdateToNewSport:FFMarketSportMLB];
+            @strongify(item)
+            if ([self.delegate respondsToSelector:@selector(didUpdateToCategory:sport:)]) {
+                [self.delegate didUpdateToCategory:item.categoryTitle sport:item.title];
             }
             [self dismissViewControllerAnimated:YES completion:nil];
         };
@@ -485,6 +483,65 @@
             }];
         };
     }
+
+//    if (item.type != FFNodeItemTypeLeaf || item.action) {
+//        if ([item.title isEqualToString:@"Enternainment"] ||
+//            [item.title isEqualToString:@"Politics"]) {
+//            item.action = ^{
+//                @strongify(self)
+//                [[[FFAlertView alloc] initWithTitle:nil
+//                                            message:NSLocalizedString(@"Coming soon!", nil)
+//                                  cancelButtonTitle:nil
+//                                    okayButtonTitle:NSLocalizedString(@"Ok", nil)
+//                                           autoHide:YES] showInView:self.view];
+//            };
+//        }
+//        return;
+//    }
+//    if ([item.title isEqualToString:@"NBA"]) {
+//        item.action = ^{
+//            @strongify(self)
+//            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
+//                [self.delegate didUpdateToNewSport:FFMarketSportNBA];
+//            }
+//            [self dismissViewControllerAnimated:YES completion:nil];
+//        };
+//    } else if ([item.title isEqualToString:@"NFL"]) {
+//        item.action = ^{
+//            @strongify(self)
+//            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
+//                [self.delegate didUpdateToNewSport:FFMarketSportNFL];
+//            }
+//            [self dismissViewControllerAnimated:YES completion:nil];
+//        };
+//    } else if ([item.title isEqualToString:@"MLB"]) {
+//        item.action = ^{
+//            @strongify(self)
+//            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
+//                [self.delegate didUpdateToNewSport:FFMarketSportMLB];
+//            }
+//            [self dismissViewControllerAnimated:YES completion:nil];
+//        };
+//    } else if ([item.title isEqualToString:@"Sign Out"]) {
+//        item.action = ^{
+//            @strongify(self)
+//            [self dismissViewControllerAnimated:YES completion:^{
+//                if ([self.delegate respondsToSelector:@selector(logout)]) {
+//                    [self.delegate logout];
+//                }
+//            }];
+//        };
+//    } else {
+//        __block FFNodeItem* blockItem = item;
+//        item.action = ^{
+//            @strongify(self)
+//            [self dismissViewControllerAnimated:YES completion:^{
+//                if (self.delegate) {
+//                    [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
+//                }
+//            }];
+//        };
+//    }
 }
 
 #pragma mark - button actions

@@ -28,6 +28,7 @@
 #import "FFContestType.h"
 #import "FFRoster.h"
 #import "FFPlayer.h"
+#import "FFSessionManager.h"
 #import <SBData/SBTypes.h>
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
@@ -460,11 +461,10 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                               sender:nil];
 }
 
-- (void)didUpdateToNewSport:(FFMarketSport)sport
+- (void)didUpdateToCategory:(NSString *)category sport:(NSString *)sport
 {
-    self.session.sport = sport;
+    [[FFSessionManager shared] saveCurrentCategory:category andSport:sport];
     [self.receiverController resetPosition];
-    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:sport] forKey:kCurrentSport];
     [self updateMarkets];
 }
 
@@ -553,15 +553,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         [alert showInView:self.navigationController.view];
     }
     
-//    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason completion:^{
-//        [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination completion:^{
-//            if (alert)
-//                [alert hide];
-//        }];
-//    }];
-    
-    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason forSession:self.session completion:^{
-        [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination  completion:^{
+    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason completion:^{
+        [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination completion:^{
             if (alert)
                 [alert hide];
         }];
