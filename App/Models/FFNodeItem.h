@@ -19,12 +19,11 @@ typedef NS_ENUM(NSInteger, FFNodeItemType) {
 
 @property(nonatomic, assign) FFNodeItemType type;
 @property(nonatomic, copy) NSString* title;
+@property(nonatomic, copy) NSString* categoryTitle;
+@property(nonatomic, readonly) BOOL comingSoon;
 @property(nonatomic) NSArray* children;
 @property(nonatomic, copy) void (^action)();
 
-+ (FFNodeItem*)nodeWithTitle:(NSString*)title
-                    children:(NSArray*)children;
-+ (FFNodeItem*)nodeWithTitle:(NSString*)title;
 + (NSArray*)nodesFromStrings:(NSArray*)strings;
 + (instancetype)nodeFromCategory:(FFCategory *)category;
 

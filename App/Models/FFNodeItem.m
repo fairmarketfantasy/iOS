@@ -27,6 +27,14 @@
                           type:FFNodeItemTypeParent];
 }
 
++ (FFNodeItem*)nodeWithTitle:(NSString*)title children:(NSArray*)children comingSoon:(BOOL)commingSoon
+{
+    return [self nodeWithTitle:title
+                      children:children
+                          type:FFNodeItemTypeParent
+                    comingSoon:commingSoon];
+}
+
 + (NSArray*)nodesFromStrings:(NSArray*)strings
 {
     NSArray* nodes = [self nodesFromItems:strings];
@@ -53,6 +61,17 @@
                                         type:type];
 }
 
++ (FFNodeItem*)nodeWithTitle:(NSString*)title
+                    children:(NSArray*)children
+                        type:(FFNodeItemType)type
+                  comingSoon:(BOOL)comingSoon
+{
+    return [[FFNodeItem alloc] initWithTitle:title
+                                    children:children
+                                        type:type
+                                  comingSoon:comingSoon];
+}
+
 - (id)initWithTitle:(NSString*)title
            children:(NSArray*)children
                type:(FFNodeItemType)type
@@ -62,6 +81,21 @@
         self.title = title;
         self.children = children;
         self.type = type;
+    }
+    return self;
+}
+
+- (id)initWithTitle:(NSString*)title
+           children:(NSArray*)children
+               type:(FFNodeItemType)type
+         comingSoon:(BOOL)comingSoon
+{
+    self = [super init];
+    if (self) {
+        self.title = title;
+        self.children = children;
+        self.type = type;
+        _comingSoon = comingSoon;
     }
     return self;
 }
@@ -131,13 +165,17 @@
 + (instancetype)nodeFromCategory:(FFCategory *)category
 {
     if ([category.note isEqualToString:@"COMING SOON"]) {
-        return [self nodeWithTitle:category.name children:@[]];
+        return [self nodeWithTitle:category.name children:@[] comingSoon:YES];
     }
     
     NSMutableArray *children = [NSMutableArray arrayWithCapacity:category.sports.count];
     for (FFSport *sport in category.sports) {
         if (sport.isActive == YES) {
-            FFNodeItem *childNode = [FFNodeItem nodeWithTitle:sport.name children:@[] type:FFNodeItemTypeLeaf];
+            FFNodeItem *childNode = [FFNodeItem nodeWithTitle:sport.name
+                                                     children:@[]
+                                                         type:FFNodeItemTypeLeaf
+                                                   comingSoon:sport.commingSoon];
+            childNode.categoryTitle = [category.name copy];
             [children addObject:childNode];
         }
     }
