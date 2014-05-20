@@ -15,7 +15,6 @@
 - (void)performMenuSegue:(NSString*)ident;
 @optional
 - (void)didUpdateToCategory:(NSString *)category sport:(NSString *)sport;
-- (FFMarketSport)currentMarketSport;
 - (void)logout;
 
 @end

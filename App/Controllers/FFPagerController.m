@@ -232,7 +232,7 @@ SBDataObjectResultSetDelegate>
         NSString* baseUrl = [[NSBundle mainBundle] objectForInfoDictionaryKey:SBApiBaseURLKey];
         if ([segue.identifier isEqualToString:@"GotoRules"]) {
             FFWebViewController* vc = [segue.destinationViewController viewControllers].firstObject;
-            NSString* sport = [FFSportHelper stringFromSport:self.session.sport];
+            NSString* sport = [FFSessionManager shared].currentSportName;
             vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingFormat:@"/pages/mobile/rules?sport=%@", sport]];
         } else if ([segue.identifier isEqualToString:@"GotoSupport"]) {
             FFWebViewController* vc = [segue.destinationViewController viewControllers].firstObject;
@@ -468,11 +468,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [self updateMarkets];
 }
 
-- (FFMarketSport)currentMarketSport
-{
-    return self.session.sport;
-}
-
 - (void)logout
 {
     [self.session logout];
@@ -485,8 +480,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)addPlayer:(FFPlayer*)player
 {
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Buying Player", nil)
-                                                   messsage:nil
-                                               loadingStyle:FFAlertViewLoadingStylePlain];
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
     @weakify(self)
     [self.roster addPlayer:player

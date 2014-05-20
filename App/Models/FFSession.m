@@ -41,14 +41,9 @@
     self = [super initWithIdentifier:identifier
                            userClass:userClass];
     if (self) {
-        self.sport = [self currentSport];
+
     }
     return self;
-}
-
-- (FFMarketSport)currentSport
-{
-    return [[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentSport] integerValue];
 }
 
 - (void)clearCredentials
@@ -294,13 +289,13 @@ failure:
 - (SBModelQueryBuilder *)queryBuilderForClass:(Class)modelCls
 {
     return [[super queryBuilderForClass:modelCls] property:@"sportKey"
-                                                 isEqualTo:[FFSportHelper stringFromSport:self.sport]];
+                                                 isEqualTo:[FFSessionManager shared].currentSportName];
 }
 
 - (SBModelQueryBuilder *)unsafeQueryBuilderForClass:(Class)modelCls
 {
     return [[super unsafeQueryBuilderForClass:modelCls] property:@"sportKey"
-                                                       isEqualTo:[FFSportHelper stringFromSport:self.sport]];
+                                                       isEqualTo:[FFSessionManager shared].currentSportName];
 }
 
 #pragma mark - user retrieving

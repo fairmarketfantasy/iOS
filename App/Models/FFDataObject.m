@@ -11,7 +11,7 @@
 #import <SBDataObjectTypes.h>
 #import <SBModel_SBModelPrivate.h>
 #import "FFDate.h"
-#import "FFSportHelper.h"
+#import "FFSessionManager.h"
 
 @interface FFSBISO8601DateConverter : NSObject <SBNetworkFieldConverting>
 @end
@@ -27,7 +27,7 @@
 {
     [super willSave];
     if (!self.sportKey) {
-        self.sportKey = [FFSportHelper stringFromSport:self.session.sport];
+        self.sportKey = [FFSessionManager shared].currentSportName;
     }
 }
 
