@@ -193,6 +193,7 @@
 		89F6D15C18F56A4C001DE023 /* FFDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F6D15B18F56A4C001DE023 /* FFDate.m */; };
 		F90A3355192A102C0095FAD4 /* FFCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A3354192A102C0095FAD4 /* FFCategory.m */; };
 		F90A335B192A13800095FAD4 /* FFSport.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A335A192A13800095FAD4 /* FFSport.m */; };
+		F96F0C40192B5609003AA3BA /* FFSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C3F192B5609003AA3BA /* FFSessionManager.m */; };
 		F9A981DE192623B900E8743C /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A981DC192623B900E8743C /* UbertestersSDK.framework */; };
 		F9A981DF192623BA00E8743C /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */; };
 		F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */; };
@@ -493,6 +494,8 @@
 		F90A3354192A102C0095FAD4 /* FFCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFCategory.m; sourceTree = "<group>"; };
 		F90A3359192A13800095FAD4 /* FFSport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFSport.h; sourceTree = "<group>"; };
 		F90A335A192A13800095FAD4 /* FFSport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSport.m; sourceTree = "<group>"; };
+		F96F0C3E192B5609003AA3BA /* FFSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFSessionManager.h; sourceTree = "<group>"; };
+		F96F0C3F192B5609003AA3BA /* FFSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSessionManager.m; sourceTree = "<group>"; };
 		F9A27E8A192260B400BCE2AE /* FFYourTeamDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFYourTeamDataSource.h; sourceTree = "<group>"; };
 		F9A981DC192623B900E8743C /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
 		F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
@@ -834,6 +837,8 @@
 				F90A3354192A102C0095FAD4 /* FFCategory.m */,
 				F90A3359192A13800095FAD4 /* FFSport.h */,
 				F90A335A192A13800095FAD4 /* FFSport.m */,
+				F96F0C3E192B5609003AA3BA /* FFSessionManager.h */,
+				F96F0C3F192B5609003AA3BA /* FFSessionManager.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1206,6 +1211,7 @@
 				896ACCCB18B664F5001E9C64 /* FFTickerMaximizedDrawerViewController.m in Sources */,
 				8972767D18D93FBE008D995C /* FFWideReceiverController.m in Sources */,
 				896ACCEB18B664F5001E9C64 /* FFMarket.m in Sources */,
+				F96F0C40192B5609003AA3BA /* FFSessionManager.m in Sources */,
 				896ACCC318B664F5001E9C64 /* FFOptionSelectController.m in Sources */,
 				89F1A09518DC81C4001369E3 /* FFPathImageView.m in Sources */,
 				896ACCDF18B664F5001E9C64 /* NSDate+ISO8601.m in Sources */,
