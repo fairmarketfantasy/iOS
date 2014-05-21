@@ -28,6 +28,7 @@
 #import "FFContestType.h"
 #import "FFRoster.h"
 #import "FFPlayer.h"
+#import "FFNonFantasyGame.h"
 #import "FFSessionManager.h"
 #import <SBData/SBTypes.h>
 
@@ -56,6 +57,8 @@ SBDataObjectResultSetDelegate>
 @property(nonatomic, strong) NSMutableArray *myTeam;
 @property(nonatomic, strong) FFRoster* roster;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
+
+@property(nonatomic, strong) NSArray *games;
 
 @end
 
@@ -155,16 +158,22 @@ SBDataObjectResultSetDelegate>
     self.receiverController.session = self.session;
     
     // get player position names
-    [self fetchPositionsNames];
+    if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:FANTASY_SPORTS]) {
+        [self fetchPositionsNames];        
+    }
     
     if (self.isFirstLaunch) {
-        self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-                                                                      session:self.session authorized:YES];
-        self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-                                                                     session:self.session authorized:YES];
-        self.marketsSetRegular.delegate = self;
-        self.marketsSetSingle.delegate = self;
-        [self updateMarkets];
+        if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:FANTASY_SPORTS]) {
+            self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                          session:self.session authorized:YES];
+            self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                         session:self.session authorized:YES];
+            self.marketsSetRegular.delegate = self;
+            self.marketsSetSingle.delegate = self;
+            [self updateMarkets];
+        } else if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:@"sports"]) {
+            [self updateGames];
+        }
         
         [self setViewControllers:@[[self getViewControllers].firstObject]
                        direction:UIPageViewControllerNavigationDirectionForward
@@ -464,8 +473,12 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)didUpdateToCategory:(NSString *)category sport:(NSString *)sport
 {
     [[FFSessionManager shared] saveCurrentCategory:category andSport:sport];
-    [self.receiverController resetPosition];
-    [self updateMarkets];
+    if ([category isEqualToString:FANTASY_SPORTS]) {
+        [self.receiverController resetPosition];
+        [self updateMarkets];
+    } else if ([category isEqualToString:@"sports"]) {
+        [self updateGames];
+    }
 }
 
 - (void)logout
@@ -535,6 +548,16 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 }
 
 #pragma mark -
+
+- (void)updateGames
+{
+    [FFNonFantasyGame fetchGamesSession:self.session
+                                success:^(id successObj) {
+                                    NSLog(@"Success object: %@", successObj);
+                                } failure:^(NSError *error) {
+                                    NSLog(@"Error: %@", error);
+                                }];
+}
 
 - (void)updateMarkets
 {

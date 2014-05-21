@@ -14,6 +14,7 @@
 #import "FFTeamCell.h"
 #import "FFTeamTradeCell.h"
 #import "FFNoConnectionCell.h"
+#import "FFNonFantasyTeamCell.h"
 #import "FFSubmitView.h"
 #import "FFAlertView.h"
 #import "FFRosterTableHeader.h"
@@ -21,6 +22,7 @@
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
 #import "FFMarketSelector.h"
+#import "FFSessionManager.h"
 #import "FFCollectionMarketCell.h"
 #import <libextobjc/EXTScope.h>
 #import <FlatUIKit.h>
@@ -165,9 +167,15 @@
 
 - (BOOL)isSomethingWrong
 {
-    return (self.networkStatus == NotReachable ||
-            self.isServerError ||
-            self.markets.count == 0);
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS])
+    {
+        return (self.networkStatus == NotReachable ||
+                self.isServerError ||
+                self.markets.count == 0);
+    } else {
+        return (self.networkStatus == NotReachable ||
+                self.isServerError);
+    }
 }
 
 - (void)showOrHideSubmitIfNeeded
@@ -253,10 +261,12 @@
 {
     FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:kAutoFillCellIdentifier
                                                            forIndexPath:indexPath];
-    cell.autoRemovedBenched.on = self.dataSource.currentRoster.removeBenched.integerValue == 1;
-    [cell.autoRemovedBenched addTarget:self
-                                action:@selector(autoRemovedBenched:)
-                      forControlEvents:UIControlEventValueChanged];
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        cell.autoRemovedBenched.on = self.dataSource.currentRoster.removeBenched.integerValue == 1;
+        [cell.autoRemovedBenched addTarget:self
+                                    action:@selector(autoRemovedBenched:)
+                          forControlEvents:UIControlEventValueChanged];
+    }
     [cell.autoFillButton addTarget:self
                             action:@selector(autoFill:)
                   forControlEvents:UIControlEventTouchUpInside];
@@ -343,6 +353,15 @@
     return cell;
 }
 
+- (FFNonFantasyTeamCell *)provideNonFantasyTeamCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
+{
+    FFNonFantasyTeamCell *cell = [tableView dequeueReusableCellWithIdentifier:kNonFantasyTeamCellIdentifier
+                                                                 forIndexPath:indexPath];
+    
+    cell.titleLabel.text = [NSString stringWithFormat:@"%@", NSLocalizedString(@"Team Not Selected", nil)];
+    return cell;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -353,21 +372,34 @@
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return [self isSomethingWrong] ? 1 : 2;
+        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+            return [self isSomethingWrong] ? 1 : 2;
+        } else {
+            return 1;
+        }
     }
     
-    return [self.dataSource allPositions].count;
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        return [self.dataSource allPositions].count;
+    } else {
+        return 5;
+    }
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            //navigation bar height + status bar height = 64
-            return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
+            if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+                //navigation bar height + status bar height = 64
+                return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
+            } else {
+                return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 50.f;
+            }
         }
         return 50.f;
     }
+    
     return 80.f;
 }
 
@@ -386,27 +418,31 @@
                     return cell;
                 }
                 
-                return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
+                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+                    return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
+                }
             }
             
             return [self provideAutoFillCellForTable:tableView atIndexPath:indexPath];
         }
             
         case 1: {
-            NSString* positionName = [self.dataSource allPositions][indexPath.row];
-            NSMutableDictionary *position = [[self.dataSource team] objectAtIndex:indexPath.row];
-            
-            if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
-                FFPlayer *player = [self.dataSource.currentRoster playerByName:[(FFPlayer *)position[@"player"] name]];
+            if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+                NSString* positionName = [self.dataSource allPositions][indexPath.row];
+                NSMutableDictionary *position = [[self.dataSource team] objectAtIndex:indexPath.row];
                 
-                if (!player) {
-                    return [self provideTeamCellWithPosition:positionName forTable:tableView atIndexPath:indexPath];
+                if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
+                    FFPlayer *player = [self.dataSource.currentRoster playerByName:[(FFPlayer *)position[@"player"] name]];
+                    
+                    if (!player) {
+                        return [self provideTeamCellWithPosition:positionName forTable:tableView atIndexPath:indexPath];
+                    }
+                    
+                    return [self provideTeamTradeCellWithPlayer:player forTable:tableView atIndexPath:indexPath];
                 }
-                
-                return [self provideTeamTradeCellWithPlayer:player forTable:tableView atIndexPath:indexPath];
+            } else {
+                return [self provideNonFantasyTeamCellForTable:tableView atIndexPath:indexPath];
             }
-            
-            return [self provideTeamCellWithPosition:positionName forTable:tableView atIndexPath:indexPath];
         }
             
         default:
@@ -430,11 +466,19 @@
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
-        FFRosterTableHeader* view = FFRosterTableHeader.new;
-        view.titleLabel.text = NSLocalizedString(@"Your Team", nil);
-        view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.dataSource.currentRoster.remainingSalary.floatValue)];
-        view.priceLabel.textColor = self.dataSource.currentRoster.remainingSalary.floatValue > 0.f
-        ? [FFStyle brightGreen] : [FFStyle brightRed];
+        FFRosterTableHeader* view = [FFRosterTableHeader new];
+        NSString *title = nil;
+        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+            title = NSLocalizedString(@"Your Team", nil);
+        } else {
+            title = NSLocalizedString(@"Your choices", nil);
+        }
+        view.titleLabel.text = title;
+        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+            view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.dataSource.currentRoster.remainingSalary.floatValue)];
+            view.priceLabel.textColor = self.dataSource.currentRoster.remainingSalary.floatValue > 0.f
+            ? [FFStyle brightGreen] : [FFStyle brightRed];            
+        }
         return view;
     }
     return nil;

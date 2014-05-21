@@ -26,4 +26,7 @@
 //    }
 //#
 #define WTFLog NSLog(@"How did we even get here?")
+
+#define FANTASY_SPORTS @"fantasy sports"
+
 #endif

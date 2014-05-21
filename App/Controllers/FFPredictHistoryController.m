@@ -25,7 +25,7 @@
 #import "FFIndividualPrediction.h"
 #import "FFRosterPrediction.h"
 #import "FFMarket.h"
-#import "FFGame.h"
+#import "FFFantasyGame.h"
 #import "FFContestType.h"
 #import "FFDate.h"
 
@@ -309,7 +309,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 cell.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
                                                       prediction.score.integerValue]
                 :  NSLocalizedString(@"N/A", nil);
-                FFGame* firstGame = prediction.market.games.firstObject;
+                FFFantasyGame* firstGame = prediction.market.games.firstObject;
                 NSDateFormatter* formatter = FFStyle.timeFormatter;
                 cell.gameTimeLabel.text = firstGame ? [formatter stringFromDate:firstGame.gameTime]
                 : NSLocalizedString(@"N/A", nil);

@@ -9,7 +9,6 @@
 #import "FFSession.h"
 #import <AFNetworking/AFHTTPClient.h>
 #import "FFMarket.h"
-#import "FFGame.h"
 #import "FFContestType.h"
 #import "FFRoster.h"
 #import "FFCategory.h"

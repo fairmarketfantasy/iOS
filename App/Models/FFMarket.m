@@ -11,7 +11,7 @@
 #import "FFDate.h"
 #import "NSDate+ISO8601.h"
 #import "FFMarketSet.h"
-#import "FFGame.h"
+#import "FFFantasyGame.h"
 #import "FFSession.h"
 
 @implementation FFMarket
@@ -75,7 +75,7 @@
     NSArray* gamesDictionaries = keyedValues[@"games"];
     NSMutableArray* games = [NSMutableArray arrayWithCapacity:gamesDictionaries.count];
     for (NSDictionary* gameDictionary in gamesDictionaries) {
-        [games addObject:[FFGame fromNetworkRepresentation:gameDictionary
+        [games addObject:[FFFantasyGame fromNetworkRepresentation:gameDictionary
                                                    session:self.session
                                                       save:NO]]; // should we save markets to DB? NO! =)
     }
