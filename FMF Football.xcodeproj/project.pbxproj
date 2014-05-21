@@ -198,6 +198,10 @@
 		F96F0C48192C91AD003AA3BA /* FFNonFantasyGame.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C47192C91AD003AA3BA /* FFNonFantasyGame.m */; };
 		F96F0C4E192CB27E003AA3BA /* FFNonFantasyTeamCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C4D192CB27E003AA3BA /* FFNonFantasyTeamCell.m */; };
 		F96F0C51192CBB4B003AA3BA /* FFNonFantasyGameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C50192CBB4B003AA3BA /* FFNonFantasyGameCell.m */; };
+		F96F0C56192CE0EF003AA3BA /* delete-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C52192CE0EF003AA3BA /* delete-btn.png */; };
+		F96F0C57192CE0EF003AA3BA /* empty-team.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C53192CE0EF003AA3BA /* empty-team.png */; };
+		F96F0C58192CE0EF003AA3BA /* plus-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C54192CE0EF003AA3BA /* plus-btn.png */; };
+		F96F0C59192CE0EF003AA3BA /* pt-nonfantasy.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C55192CE0EF003AA3BA /* pt-nonfantasy.png */; };
 		F9A981DE192623B900E8743C /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A981DC192623B900E8743C /* UbertestersSDK.framework */; };
 		F9A981DF192623BA00E8743C /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */; };
 		F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */; };
@@ -508,6 +512,10 @@
 		F96F0C4D192CB27E003AA3BA /* FFNonFantasyTeamCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNonFantasyTeamCell.m; sourceTree = "<group>"; };
 		F96F0C4F192CBB4B003AA3BA /* FFNonFantasyGameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FFNonFantasyGameCell.h; path = ../../Controllers/FFNonFantasyGameCell.h; sourceTree = "<group>"; };
 		F96F0C50192CBB4B003AA3BA /* FFNonFantasyGameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FFNonFantasyGameCell.m; path = ../../Controllers/FFNonFantasyGameCell.m; sourceTree = "<group>"; };
+		F96F0C52192CE0EF003AA3BA /* delete-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete-btn.png"; sourceTree = "<group>"; };
+		F96F0C53192CE0EF003AA3BA /* empty-team.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "empty-team.png"; sourceTree = "<group>"; };
+		F96F0C54192CE0EF003AA3BA /* plus-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-btn.png"; sourceTree = "<group>"; };
+		F96F0C55192CE0EF003AA3BA /* pt-nonfantasy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pt-nonfantasy.png"; sourceTree = "<group>"; };
 		F9A27E8A192260B400BCE2AE /* FFYourTeamDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFYourTeamDataSource.h; sourceTree = "<group>"; };
 		F9A981DC192623B900E8743C /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
 		F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
@@ -669,6 +677,10 @@
 		896ACBCA18B664F5001E9C64 /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+				F96F0C52192CE0EF003AA3BA /* delete-btn.png */,
+				F96F0C53192CE0EF003AA3BA /* empty-team.png */,
+				F96F0C54192CE0EF003AA3BA /* plus-btn.png */,
+				F96F0C55192CE0EF003AA3BA /* pt-nonfantasy.png */,
 				3AB3F5B9191BA4A0005BA1DB /* loginmlb-586h.png */,
 				3AB3F5BA191BA4A0005BA1DB /* loginmlb.png */,
 				3AB3F5BB191BA4A0005BA1DB /* loginmlb@2x.png */,
@@ -1091,6 +1103,8 @@
 				89BED92D18C77348003E9E68 /* Prohibition-Bold.ttf in Resources */,
 				896ACD0D18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard in Resources */,
 				896ACC6318B664F5001E9C64 /* FMF-Small-50@2x.png in Resources */,
+				F96F0C56192CE0EF003AA3BA /* delete-btn.png in Resources */,
+				F96F0C58192CE0EF003AA3BA /* plus-btn.png in Resources */,
 				896ACC5F18B664F5001E9C64 /* FMF-80.png in Resources */,
 				89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */,
 				89C985B618E48B3300ABB652 /* accessory_disclosure.png in Resources */,
@@ -1130,6 +1144,7 @@
 				89C985B418E48B3300ABB652 /* accessory_check.png in Resources */,
 				89F1A08F18DC7CAB001369E3 /* active@2x.png in Resources */,
 				896ACC9D18B664F5001E9C64 /* loginbg@2x.png in Resources */,
+				F96F0C57192CE0EF003AA3BA /* empty-team.png in Resources */,
 				89F1A08B18DC7C03001369E3 /* rosterslotempty.png in Resources */,
 				896ACC6918B664F5001E9C64 /* FMF.png in Resources */,
 				3AB3F5BE191BA4A0005BA1DB /* loginmlb@2x.png in Resources */,
@@ -1139,6 +1154,7 @@
 				3AB3F5BC191BA4A0005BA1DB /* loginmlb-586h.png in Resources */,
 				896ACC5718B664F5001E9C64 /* FMF-120.png in Resources */,
 				89F2E70418BE249A00B23A99 /* accessory_disclosure@2x.png in Resources */,
+				F96F0C59192CE0EF003AA3BA /* pt-nonfantasy.png in Resources */,
 				896ACC5D18B664F5001E9C64 /* FMF-72@2x.png in Resources */,
 				89F1A09018DC7CAB001369E3 /* passive@2x.png in Resources */,
 			);
