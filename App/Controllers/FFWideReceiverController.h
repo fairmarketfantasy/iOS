@@ -10,10 +10,12 @@
 #import "FFYourTeamDataSource.h"
 
 @class FFPlayer;
+@class FFTeam;
 
 @protocol FFPlayersProtocol <NSObject>
 
 - (void)addPlayer:(FFPlayer*)player;
+- (void)addTeam:(FFTeam *)team;
 
 @end
 

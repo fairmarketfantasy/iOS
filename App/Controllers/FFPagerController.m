@@ -59,6 +59,7 @@ SBDataObjectResultSetDelegate>
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
 @property(nonatomic, strong) NSArray *games;
+@property(nonatomic, strong) NSMutableArray *selectedTeams;
 
 @end
 
@@ -71,6 +72,7 @@ SBDataObjectResultSetDelegate>
     self = [super initWithCoder:aDecoder];
     if (self) {
         self.positionsNames = @{};
+        self.selectedTeams = [NSMutableArray array];
         self.view.backgroundColor = [FFStyle darkGreen];
         self.dataSource = self;
         self.delegate = self;
@@ -540,6 +542,17 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      }];
 }
 
+- (void)addTeam:(FFTeam *)team
+{
+    [self.selectedTeams addObject:team];
+    [self.teamController reloadWithServerError:NO];
+    
+    [self setViewControllers:@[self.teamController]
+                   direction:UIPageViewControllerNavigationDirectionReverse
+                    animated:YES
+                  completion:nil];
+}
+
 #pragma mark - FFEventsProtocol
 
 - (NSString*)marketId
@@ -673,6 +686,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (NSArray *)availableGames
 {
     return self.games;
+}
+
+- (NSArray *)teams
+{
+    return self.selectedTeams;
 }
 
 #pragma mark - FFYourTeamDelegate

@@ -36,6 +36,8 @@
 #import "FFUser.h"
 #import "FFRoster.h"
 #import "FFPlayer.h"
+#import "FFTeam.h"
+#import "FFNonFantasyGame.h"
 #import "FFSessionManager.h"
 
 @interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
@@ -386,9 +388,32 @@
 {
     FFNonFantasyGameCell *cell = [tableView dequeueReusableCellWithIdentifier:kNonFantasyGameCellIdentifier
                                                                  forIndexPath:indexPath];
-    
     [cell setupWithGame:game];
+    
+    __weak FFWideReceiverController *weakSelf = self;
+    [cell.addHomeTeamBtn setAction:kUIButtonBlockTouchUpInside
+                         withBlock:^{
+                             FFNonFantasyGame *game = [weakSelf.dataSource availableGames][indexPath.row];
+                             [weakSelf.delegate addTeam:[game homeTeam]];
+                         }];
+    
+    [cell.addAwayTeamBtn setAction:kUIButtonBlockTouchUpInside
+                         withBlock:^{
+                             FFNonFantasyGame *game = [weakSelf.dataSource availableGames][indexPath.row];
+                             [weakSelf.delegate addTeam:[game awayTeam]];
+                         }];
+    
     return cell;
+}
+
+- (void)addHomeTeamToRoster
+{
+//    FFNonFantasyGame *game = [self.dataSource availableGames][on]
+}
+
+- (void)addAwayTeamToRoster
+{
+    
 }
 
 - (FFAutoFillCell *)provideAutoFillCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath

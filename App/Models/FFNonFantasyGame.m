@@ -8,6 +8,8 @@
 
 #import "FFNonFantasyGame.h"
 #import "FFSessionManager.h"
+#import "FFTeam.h"
+#import "FFDate.h"
 #import <SBData/NSDictionary+Convenience.h>
 
 @implementation FFNonFantasyGame
@@ -82,6 +84,26 @@
                                              failure(error);
                                          }
                                      }];
+}
+
+- (FFTeam *)homeTeam
+{
+    FFTeam *team = [FFTeam new];
+    team.name = self.homeTeamName;
+    team.gameDate = [[FFDate prettyDateFormatter] stringFromDate:self.gameTime];
+    team.gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
+    team.logoURL = self.homeTeamLogoURL;
+    return team;
+}
+
+- (FFTeam *)awayTeam
+{
+    FFTeam *team = [FFTeam new];
+    team.name = self.awayTeamName;
+    team.gameDate = [[FFDate prettyDateFormatter] stringFromDate:self.gameTime];
+    team.gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
+    team.logoURL = self.awayTeamLogoURL;
+    return team;
 }
 
 @end

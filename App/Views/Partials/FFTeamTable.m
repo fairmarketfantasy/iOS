@@ -13,6 +13,7 @@
 #import "FFAutoFillCell.h"
 #import "FFNoConnectionCell.h"
 #import "FFNonFantasyTeamCell.h"
+#import "FFNonFantasyTeamTradeCell.h"
 #import "FFStyle.h"
 
 @implementation FFTeamTable
@@ -37,6 +38,8 @@
      forCellReuseIdentifier:kNoConnectionCellIdentifier];
         [self registerClass:[FFNonFantasyTeamCell class]
      forCellReuseIdentifier:kNonFantasyTeamCellIdentifier];
+        [self registerClass:[FFNonFantasyTeamTradeCell class]
+     forCellReuseIdentifier:kNonFantasyTeamTradeCellIdentifier];
     }
     return self;
 }

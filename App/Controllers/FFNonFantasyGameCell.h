@@ -11,11 +11,12 @@
 #define kNonFantasyGameCellIdentifier @"FFNonFantasyGameCell"
 
 @class FFNonFantasyGame;
+@class FFStyle;
 
 @interface FFNonFantasyGameCell : UITableViewCell
 
-@property (nonatomic, readonly) UIButton *addHomeTeamBtn;
-@property (nonatomic, readonly) UIButton *addAwayTeamBtn;
+@property (nonatomic, readonly) FFCustomButton *addHomeTeamBtn;
+@property (nonatomic, readonly) FFCustomButton *addAwayTeamBtn;
 
 - (void)setupWithGame:(FFNonFantasyGame *)game;
 

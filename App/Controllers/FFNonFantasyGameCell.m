@@ -63,7 +63,7 @@
         [self.awayTeamAvatar draw];
         
         // buttons
-        _addHomeTeamBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _addHomeTeamBtn = [FFCustomButton buttonWithType:UIButtonTypeCustom];
         _addHomeTeamBtn.frame = CGRectMake(0.f, 0.f, 40.f, 100.f);
         _addHomeTeamBtn.backgroundColor = [UIColor clearColor];
         
@@ -72,7 +72,7 @@
         [_addHomeTeamBtn addSubview:homePlusView];
         [self.contentView addSubview:_addHomeTeamBtn];
         
-        _addAwayTeamBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _addAwayTeamBtn = [FFCustomButton buttonWithType:UIButtonTypeCustom];
         _addAwayTeamBtn.frame = CGRectMake(280.f, 0.f, 40.f, 100.f);
         _addAwayTeamBtn.backgroundColor = [UIColor clearColor];
         

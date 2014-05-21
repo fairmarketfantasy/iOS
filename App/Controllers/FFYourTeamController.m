@@ -15,6 +15,7 @@
 #import "FFTeamTradeCell.h"
 #import "FFNoConnectionCell.h"
 #import "FFNonFantasyTeamCell.h"
+#import "FFNonFantasyTeamTradeCell.h"
 #import "FFSubmitView.h"
 #import "FFAlertView.h"
 #import "FFRosterTableHeader.h"
@@ -362,6 +363,17 @@
     return cell;
 }
 
+- (FFNonFantasyTeamTradeCell *)provideNonFantasyTeamTradeCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
+{
+    FFNonFantasyTeamTradeCell *cell = [tableView dequeueReusableCellWithIdentifier:kNonFantasyTeamTradeCellIdentifier
+                                                                      forIndexPath:indexPath];
+    
+    FFTeam *team = [self.dataSource teams][indexPath.row];
+    [cell setupWithGame:team];
+    
+    return cell;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -441,6 +453,10 @@
                     return [self provideTeamTradeCellWithPlayer:player forTable:tableView atIndexPath:indexPath];
                 }
             } else {
+                if ([self.dataSource teams].count > 0 && [self.dataSource teams].count >= indexPath.row + 1) {
+                    return [self provideNonFantasyTeamTradeCellForTable:tableView atIndexPath:indexPath];
+                }
+                
                 return [self provideNonFantasyTeamCellForTable:tableView atIndexPath:indexPath];
             }
         }
