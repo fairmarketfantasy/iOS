@@ -20,7 +20,7 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         // avatar
         _avatar = [[FFPathImageView alloc] initWithFrame:CGRectMake(15.f, 10.f, 60.f, 60.f)
-                                                   image:[UIImage imageNamed:@"rosterslotempty"]
+                                                   image:[UIImage imageNamed:@"empty-team"]
                                                 pathType:FFPathImageViewTypeCircle
                                                pathColor:[UIColor clearColor]
                                              borderColor:[UIColor clearColor]

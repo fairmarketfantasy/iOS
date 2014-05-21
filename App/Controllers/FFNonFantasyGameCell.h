@@ -14,6 +14,9 @@
 
 @interface FFNonFantasyGameCell : UITableViewCell
 
+@property (nonatomic, readonly) UIButton *addHomeTeamBtn;
+@property (nonatomic, readonly) UIButton *addAwayTeamBtn;
+
 - (void)setupWithGame:(FFNonFantasyGame *)game;
 
 @end
