@@ -554,6 +554,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [FFNonFantasyGame fetchGamesSession:self.session
                                 success:^(id successObj) {
                                     NSLog(@"Success object: %@", successObj);
+                                    self.games = [NSArray arrayWithArray:successObj];
+                                    [self.receiverController reloadWithServerError:NO];
                                 } failure:^(NSError *error) {
                                     NSLog(@"Error: %@", error);
                                 }];
@@ -666,6 +668,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (FFRoster *)currentRoster
 {
     return self.roster;
+}
+
+- (NSArray *)availableGames
+{
+    return self.games;
 }
 
 #pragma mark - FFYourTeamDelegate

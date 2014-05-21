@@ -10,8 +10,6 @@
 #import "FFDataObject.h"
 #import <SBData/SBTypes.h>
 
-@class FFDate;
-
 @interface FFFantasyGame : FFGame
 
 @property (nonatomic) NSString*  awayTeam;

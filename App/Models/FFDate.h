@@ -12,5 +12,6 @@
 @interface FFDate : SBDate
 
 + (NSDateFormatter*)dateFormatter;
++ (NSDateFormatter *)prettyDateFormatter;
 
 @end

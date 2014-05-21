@@ -23,6 +23,7 @@
 - (NSArray *)team;
 - (NSArray *)allPositions;
 - (NSArray *)uniquePositions;
+- (NSArray *)availableGames;
 
 @end
 
