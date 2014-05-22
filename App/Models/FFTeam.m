@@ -10,4 +10,16 @@
 
 @implementation FFTeam
 
+- (instancetype)initWithDictionary:(NSDictionary *)dict
+{
+    self = [super init];
+    if (self) {
+        _name = [dict objectForKey:@"name"];
+        _logoURL = [dict objectForKey:@"logoURL"];
+        _gameName = [dict objectForKey:@"gameName"];
+        _gameDate = [dict objectForKey:@"gameDate"];
+    }
+    return self;
+}
+
 @end

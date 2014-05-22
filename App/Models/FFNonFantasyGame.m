@@ -88,21 +88,25 @@
 
 - (FFTeam *)homeTeam
 {
-    FFTeam *team = [FFTeam new];
-    team.name = self.homeTeamName;
-    team.gameDate = [[FFDate prettyDateFormatter] stringFromDate:self.gameTime];
-    team.gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
-    team.logoURL = self.homeTeamLogoURL;
+    NSString *gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
+    FFTeam *team = [[FFTeam alloc] initWithDictionary:@{
+                                                        @"name" : self.homeTeamName,
+                                                        @"logoURL" : self.homeTeamLogoURL,
+                                                        @"gameDate" : self.gameTime,
+                                                        @"gameName" : gameName
+                                                        }];
     return team;
 }
 
 - (FFTeam *)awayTeam
 {
-    FFTeam *team = [FFTeam new];
-    team.name = self.awayTeamName;
-    team.gameDate = [[FFDate prettyDateFormatter] stringFromDate:self.gameTime];
-    team.gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
-    team.logoURL = self.awayTeamLogoURL;
+    NSString *gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
+    FFTeam *team = [[FFTeam alloc] initWithDictionary:@{
+                                                        @"name" : self.awayTeamName,
+                                                        @"logoURL" : self.awayTeamLogoURL,
+                                                        @"gameDate" : self.gameTime,
+                                                        @"gameName" : gameName
+                                                        }];
     return team;
 }
 

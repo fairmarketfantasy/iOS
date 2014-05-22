@@ -10,9 +10,11 @@
 
 @interface FFTeam : NSObject
 
-@property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) NSString *gameDate;
-@property (nonatomic, strong) NSString *gameName;
-@property (nonatomic, strong) NSString *logoURL;
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *gameDate;
+@property (nonatomic, readonly) NSString *gameName;
+@property (nonatomic, readonly) NSString *logoURL;
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict;
 
 @end
