@@ -26,5 +26,6 @@
 @property (nonatomic, readonly) FFTeam *awayTeam;
 
 + (void)fetchGamesSession:(SBSession*)session success:(SBSuccessBlock)success failure:(SBErrorBlock)failure;
+- (void)setupTeams;
 
 @end

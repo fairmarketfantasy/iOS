@@ -28,6 +28,7 @@
 #import "FFContestType.h"
 #import "FFRoster.h"
 #import "FFPlayer.h"
+#import "FFTeam.h"
 #import "FFNonFantasyGame.h"
 #import "FFSessionManager.h"
 #import <SBData/SBTypes.h>
@@ -58,7 +59,7 @@ SBDataObjectResultSetDelegate>
 @property(nonatomic, strong) FFRoster* roster;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
-@property(nonatomic, strong) NSArray *games;
+@property(nonatomic, strong) NSMutableArray *games;
 @property(nonatomic, strong) NSMutableArray *selectedTeams;
 
 @end
@@ -321,6 +322,17 @@ SBDataObjectResultSetDelegate>
 
 #pragma mark - private
 
+- (void)setTeam:(FFTeam *)team selected:(BOOL)selected
+{
+    for (FFNonFantasyGame *game in self.games) {
+        if ([game.homeTeam.name isEqualToString:team.name]) {
+            game.homeTeam.selected = selected;
+        } else if ([game.awayTeam.name isEqualToString:team.name]) {
+            game.awayTeam.selected = selected;
+        }
+    }
+}
+
 - (void)createRosterWithCompletion:(void(^)(BOOL success))block
 {
     _rosterIsCreating = YES;
@@ -450,11 +462,13 @@ SBDataObjectResultSetDelegate>
     self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
                                    self.viewControllers.firstObject];
     
-    //should update players list after swipe as in bug MLB-156
-    if (self.pager.currentPage == 1) {
-        [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
-            [self.receiverController reloadWithServerError:NO];
-        }];
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        //should update players list after swipe as in bug MLB-156
+        if (self.pager.currentPage == 1) {
+            [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
+                [self.receiverController reloadWithServerError:NO];
+            }];
+        }
     }
 }
 
@@ -542,9 +556,37 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      }];
 }
 
-- (void)addTeam:(FFTeam *)team
+- (void)addTeam:(FFTeam *)newTeam
 {
-    [self.selectedTeams addObject:team];
+    if (self.selectedTeams.count == 5) {
+        FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
+                                                        message:@"Roster is full"
+                                              cancelButtonTitle:nil
+                                                okayButtonTitle:@"OK"
+                                                       autoHide:YES];
+        [alert showInView:self.view];
+        return;
+    }
+    
+    BOOL alreadySelected = NO;
+    for (FFTeam *team in self.selectedTeams) {
+        if ([team.name isEqualToString:newTeam.name]) {
+            alreadySelected = YES;
+        }
+    }
+    
+    if (alreadySelected) {
+        FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
+                                                        message:@"This team is already selected"
+                                              cancelButtonTitle:nil
+                                                okayButtonTitle:@"OK"
+                                                       autoHide:YES];
+        [alert showInView:self.view];
+        return;
+    }
+    
+    [self setTeam:newTeam selected:YES];
+    [self.selectedTeams addObject:newTeam];
     [self.teamController reloadWithServerError:NO];
     
     [self setViewControllers:@[self.teamController]
@@ -567,7 +609,12 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [FFNonFantasyGame fetchGamesSession:self.session
                                 success:^(id successObj) {
                                     NSLog(@"Success object: %@", successObj);
-                                    self.games = [NSArray arrayWithArray:successObj];
+                                    NSMutableArray *games = [NSMutableArray array];
+                                    for (FFNonFantasyGame *game in successObj) {
+                                        [game setupTeams];
+                                        [games addObject:game];
+                                    }
+                                    self.games = [NSMutableArray arrayWithArray:games];
                                     [self.receiverController reloadWithServerError:NO];
                                 } failure:^(NSError *error) {
                                     NSLog(@"Error: %@", error);
@@ -815,6 +862,33 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          if (block)
              block(NO);
       }];
+}
+
+- (void)showAvailableGames
+{
+    [self setViewControllers:@[self.receiverController]
+                   direction:UIPageViewControllerNavigationDirectionForward
+                    animated:YES
+                  completion:nil];
+}
+
+- (void)removeTeam:(FFTeam *)removedTeam
+{
+    [self setTeam:removedTeam selected:NO];
+    for (FFTeam *team in self.selectedTeams) {
+        if ([team.name isEqualToString:removedTeam.name]){
+            [self.selectedTeams removeObject:team];
+            break;
+        }
+    }
+    
+    [self.teamController.tableView reloadData];
+    [self.receiverController.tableView reloadData];
+    
+    [self setViewControllers:@[self.receiverController]
+                   direction:UIPageViewControllerNavigationDirectionForward
+                    animated:YES
+                  completion:nil];
 }
 
 #pragma mark - SBDataObjectResultSetDelegate

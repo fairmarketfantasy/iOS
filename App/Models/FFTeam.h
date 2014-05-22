@@ -17,6 +17,7 @@
 @property (nonatomic, readonly) NSString *gameName;
 @property (nonatomic, readonly) NSString *logoURL;
 @property (nonatomic, readonly) NSNumber *pt;
+@property (nonatomic, assign, getter = isSelected) BOOL selected;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 

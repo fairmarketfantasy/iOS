@@ -99,10 +99,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self.picker reloadAllComponents];
-    
+        
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        [self.picker reloadAllComponents];
         if (self.players.count == 0) {
             [self fetchPlayersWithShowingAlert:NO completion:^{
                 [self.tableView reloadData];
@@ -110,6 +109,8 @@
         } else {
             [self.tableView reloadData];
         }
+    } else {
+        [self.tableView reloadData];
     }
 }
 
@@ -404,16 +405,6 @@
                          }];
     
     return cell;
-}
-
-- (void)addHomeTeamToRoster
-{
-//    FFNonFantasyGame *game = [self.dataSource availableGames][on]
-}
-
-- (void)addAwayTeamToRoster
-{
-    
 }
 
 - (FFAutoFillCell *)provideAutoFillCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath

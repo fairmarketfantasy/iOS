@@ -10,6 +10,7 @@
 #import "FFPathImageView.h"
 #import "FFStyle.h"
 #import "FFNonFantasyGame.h"
+#import "FFTeam.h"
 #import "FFDate.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 
@@ -22,6 +23,9 @@
 @property (nonatomic, strong) UILabel *datelabel;
 @property (nonatomic, strong) UILabel *homePTLabel;
 @property (nonatomic, strong) UILabel *awayPTLabel;
+
+@property (nonatomic, strong) UIImageView *homePlusView;
+@property (nonatomic, strong) UIImageView *awayPlusView;
 
 @end
 
@@ -67,18 +71,18 @@
         _addHomeTeamBtn.frame = CGRectMake(0.f, 0.f, 40.f, 100.f);
         _addHomeTeamBtn.backgroundColor = [UIColor clearColor];
         
-        UIImageView *homePlusView = [[UIImageView alloc] initWithFrame:CGRectMake(10.f, 42.5f, 15.f, 15.f)];
-        homePlusView.image = [UIImage imageNamed:@"plus-btn"];
-        [_addHomeTeamBtn addSubview:homePlusView];
+        self.homePlusView = [[UIImageView alloc] initWithFrame:CGRectMake(10.f, 42.5f, 15.f, 15.f)];
+        self.homePlusView.image = [UIImage imageNamed:@"plus-btn"];
+        [_addHomeTeamBtn addSubview:self.homePlusView];
         [self.contentView addSubview:_addHomeTeamBtn];
         
         _addAwayTeamBtn = [FFCustomButton buttonWithType:UIButtonTypeCustom];
         _addAwayTeamBtn.frame = CGRectMake(280.f, 0.f, 40.f, 100.f);
         _addAwayTeamBtn.backgroundColor = [UIColor clearColor];
         
-        UIImageView *awayPlusView = [[UIImageView alloc] initWithFrame:CGRectMake(15.f, 42.5f, 15.f, 15.f)];
-        awayPlusView.image = [UIImage imageNamed:@"plus-btn"];
-        [_addAwayTeamBtn addSubview:awayPlusView];
+        self.awayPlusView = [[UIImageView alloc] initWithFrame:CGRectMake(15.f, 42.5f, 15.f, 15.f)];
+        self.awayPlusView.image = [UIImage imageNamed:@"plus-btn"];
+        [_addAwayTeamBtn addSubview:self.awayPlusView];
         [self.contentView addSubview:_addAwayTeamBtn];
         
         // teams' names
@@ -164,6 +168,12 @@
     self.homeTeamName.text = game.homeTeamName;
     self.awayTeamName.text = game.awayTeamName;
     self.datelabel.text = [[FFDate prettyDateFormatter] stringFromDate:game.gameTime];
+    
+    self.addAwayTeamBtn.enabled = !game.awayTeam.selected;
+    self.addHomeTeamBtn.enabled = !game.homeTeam.selected;
+    
+    self.awayPlusView.image = game.awayTeam.selected ? [UIImage imageNamed:@"backbtn"] : [UIImage imageNamed:@"plus-btn"];
+    self.homePlusView.image = game.homeTeam.selected ? [UIImage imageNamed:@"backbtn"] : [UIImage imageNamed:@"plus-btn"];
 }
 
 @end

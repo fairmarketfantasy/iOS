@@ -370,7 +370,10 @@
     
     FFTeam *team = [self.dataSource teams][indexPath.row];
     [cell setupWithGame:team];
-    
+    [cell.deleteBtn setAction:kUIButtonBlockTouchUpInside
+                    withBlock:^{
+                        [self.delegate removeTeam:team];
+                    }];
     return cell;
 }
 
@@ -474,8 +477,12 @@
         return;
     
     if (indexPath.section == 1) {
-        NSString* position = [self.dataSource allPositions][indexPath.row];
-        [self.delegate showPosition:position];        
+        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+            NSString* position = [self.dataSource allPositions][indexPath.row];
+            [self.delegate showPosition:position];
+        } else {
+            [self.delegate showAvailableGames];
+        }
     }
 }
 

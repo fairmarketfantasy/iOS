@@ -86,7 +86,13 @@
                                      }];
 }
 
-- (FFTeam *)homeTeam
+- (void)setupTeams
+{
+    _homeTeam = [self getHomeTeam];
+    _awayTeam = [self getAwayTeam];
+}
+
+- (FFTeam *)getHomeTeam
 {
     NSString *gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
     FFTeam *team = [[FFTeam alloc] initWithDictionary:@{
@@ -99,7 +105,7 @@
     return team;
 }
 
-- (FFTeam *)awayTeam
+- (FFTeam *)getAwayTeam
 {
     NSString *gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
     FFTeam *team = [[FFTeam alloc] initWithDictionary:@{

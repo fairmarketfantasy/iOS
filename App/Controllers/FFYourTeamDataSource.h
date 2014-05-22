@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 
 @class FFMarket;
+@class FFTeam;
 
 @protocol FFYourTeamDataSource <NSObject>
 
@@ -36,5 +37,8 @@
 - (void)refreshRosterWithCompletion:(void(^)(BOOL success))block;
 - (void)autoFillWithCompletion:(void(^)(BOOL success))block;
 - (void)toggleRemoveBenchWithCompletion:(void(^)(BOOL success))block;
+
+- (void)showAvailableGames;
+- (void)removeTeam:(FFTeam *)removedTeam;
 
 @end
