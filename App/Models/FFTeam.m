@@ -18,6 +18,7 @@
         _logoURL = [dict objectForKey:@"logoURL"];
         _gameName = [dict objectForKey:@"gameName"];
         _gameDate = [dict objectForKey:@"gameDate"];
+        _pt = [dict objectForKey:@"pt"];
     }
     return self;
 }

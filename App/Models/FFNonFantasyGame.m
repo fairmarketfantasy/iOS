@@ -93,7 +93,8 @@
                                                         @"name" : self.homeTeamName,
                                                         @"logoURL" : self.homeTeamLogoURL,
                                                         @"gameDate" : self.gameTime,
-                                                        @"gameName" : gameName
+                                                        @"gameName" : gameName,
+                                                        @"pt" : self.homeTeamPT
                                                         }];
     return team;
 }
@@ -105,7 +106,8 @@
                                                         @"name" : self.awayTeamName,
                                                         @"logoURL" : self.awayTeamLogoURL,
                                                         @"gameDate" : self.gameTime,
-                                                        @"gameName" : gameName
+                                                        @"gameName" : gameName,
+                                                        @"pt" : self.awayTeamPT
                                                         }];
     return team;
 }

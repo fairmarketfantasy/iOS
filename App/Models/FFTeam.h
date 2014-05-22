@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+@class FFDate;
+
 @interface FFTeam : NSObject
 
 @property (nonatomic, readonly) NSString *name;
-@property (nonatomic, readonly) NSString *gameDate;
+@property (nonatomic, readonly) FFDate *gameDate;
 @property (nonatomic, readonly) NSString *gameName;
 @property (nonatomic, readonly) NSString *logoURL;
+@property (nonatomic, readonly) NSNumber *pt;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 

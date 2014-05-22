@@ -18,8 +18,8 @@
 @property (nonatomic) NSString *awayTeamName;
 @property (nonatomic) NSString *homeTeamLogoURL;
 @property (nonatomic) NSString *awayTeamLogoURL;
-@property (nonatomic) NSString *homeTeamPT;
-@property (nonatomic) NSString *awayTeamPT;
+@property (nonatomic) NSNumber *homeTeamPT;
+@property (nonatomic) NSNumber *awayTeamPT;
 @property (nonatomic) NSString *gameStatsId;
 
 @property (nonatomic, readonly) FFTeam *homeTeam;

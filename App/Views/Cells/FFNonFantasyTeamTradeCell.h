@@ -8,10 +8,13 @@
 
 #import "FFNonFantasyTeamCell.h"
 #import "FFTeam.h"
+#import "FFStyle.h"
 
 #define kNonFantasyTeamTradeCellIdentifier @"NonFantasyTeamTradeCell"
 
 @interface FFNonFantasyTeamTradeCell : FFNonFantasyTeamCell
+
+@property (nonatomic, readonly) FFCustomButton *deleteBtn;
 
 - (void)setupWithGame:(FFTeam *)team;
 
