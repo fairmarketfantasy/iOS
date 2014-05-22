@@ -45,6 +45,7 @@
 
 @property(nonatomic, assign) NetworkStatus networkStatus;
 @property(nonatomic, assign) BOOL isServerError;
+@property(nonatomic, assign) BOOL unpaid;
 
 @end
 
@@ -130,8 +131,9 @@
 
 #pragma mark
 
-- (void)reloadWithServerError:(BOOL)isError
+- (void)reloadWithServerError:(BOOL)isError unpaid:(BOOL)unpaid
 {
+    self.unpaid = unpaid;
     self.isServerError = isError;
     [self showOrHideSubmitIfNeeded];
     [self.tableView reloadData];
@@ -151,7 +153,7 @@
             (internetStatus == NotReachable && previousStatus != NotReachable)) {
             
             if (internetStatus == NotReachable) {
-                [self reloadWithServerError:NO];
+                [self reloadWithServerError:NO unpaid:self.unpaid];
             } else {
                 [self refreshRosterWithShowingAlert:NO completion:^{
                     [self.tableView reloadData];
@@ -167,7 +169,8 @@
 {
     return (self.networkStatus == NotReachable ||
             self.isServerError ||
-            self.markets.count == 0);
+            self.markets.count == 0 ||
+            self.unpaid);
 }
 
 - (void)showOrHideSubmitIfNeeded
@@ -194,11 +197,12 @@
 
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
-    if (self.networkStatus == NotReachable) {
-        if (shouldShow) {
-            [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+    if ([self isSomethingWrong] == YES) {
+        if (self.networkStatus == NotReachable) {
+            if (shouldShow) {
+                [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+            }
         }
-        
         block();
         return;
     }
@@ -214,7 +218,7 @@
     @weakify(self)
     [self.delegate refreshRosterWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self reloadWithServerError:!success];
+        [self reloadWithServerError:!success unpaid:self.unpaid];
         if (alert)
             [alert hide];
         if (block)
@@ -380,8 +384,15 @@
                     FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                                forIndexPath:indexPath];
                     
-                    cell.message.text = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
-                                                                  NSLocalizedString(@"No Internet Connection", nil);
+                    NSString *message = nil;
+                    if (self.unpaid) {
+                        message = NSLocalizedString(@"Unpaid subscription", nil);
+                    } else {
+                        message = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
+                        NSLocalizedString(@"No Internet Connection", nil);
+                    }
+                    
+                    cell.message.text = message;
                     return cell;
                 }
                 
@@ -469,7 +480,7 @@
     @weakify(self)
     [self.delegate toggleRemoveBenchWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self reloadWithServerError:!success];
+        [self reloadWithServerError:!success unpaid:self.unpaid];
         [alert hide];
     }];
 }
@@ -489,7 +500,7 @@
     @weakify(self)
     [self.delegate autoFillWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self reloadWithServerError:!success];
+        [self reloadWithServerError:!success unpaid:self.unpaid];
         [alert hide];
     }];
 }

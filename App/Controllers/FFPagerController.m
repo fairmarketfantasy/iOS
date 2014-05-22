@@ -56,6 +56,8 @@ SBDataObjectResultSetDelegate>
 @property(nonatomic, strong) FFRoster* roster;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
+@property(nonatomic, assign) BOOL unpaid;
+
 @end
 
 @implementation FFPagerController
@@ -309,14 +311,14 @@ SBDataObjectResultSetDelegate>
 
 #pragma mark - private
 
-- (void)createRosterWithCompletion:(void(^)(BOOL success))block
+- (void)createRosterWithCompletion:(void(^)(BOOL success, BOOL unpaid))block
 {
     _rosterIsCreating = YES;
     
     if (!self.selectedMarket) {
         self.roster = nil;
         if (block) {
-            block(NO);
+            block(NO, NO);
         }
         return;
     }
@@ -331,19 +333,30 @@ SBDataObjectResultSetDelegate>
      ^(id successObj) {
          @strongify(self)
          _rosterIsCreating = NO;
+         self.unpaid = NO;
          self.roster = successObj;
          
          self.myTeam = [self newTeamWithPositions:[self allPositions]];
          
          [alert hide];
          if (block) {
-             block(YES);
+             block(YES, NO);
          }
      }
                                failure:
      ^(NSError * error) {
          @strongify(self)
          _rosterIsCreating = NO;
+         if ([[[error userInfo] objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Unpaid subscription!"]) {
+             self.roster = nil;
+             [alert hide];
+             self.unpaid = YES;
+             if (block) {
+                 block(NO, YES);
+             }
+             return;
+         }
+         
          if (self.tryCreateRosterTimes > 0) {
              [alert hide];
              self.tryCreateRosterTimes--;
@@ -355,7 +368,7 @@ SBDataObjectResultSetDelegate>
              self.roster = nil;
              [alert hide];
              if (block) {
-                 block(NO);
+                 block(NO, NO);
              }
          }
      }];
@@ -441,7 +454,7 @@ SBDataObjectResultSetDelegate>
     //should update players list after swipe as in bug MLB-156
     if (self.pager.currentPage == 1) {
         [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
-            [self.receiverController reloadWithServerError:NO];
+            [self.receiverController reloadWithServerError:NO unpaid:self.unpaid];
         }];
     }
 }
@@ -617,15 +630,15 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     if (_rosterIsCreating == NO) {
         
         __weak FFPagerController *weakSelf = self;
-        [self createRosterWithCompletion:^(BOOL success) {
+        [self createRosterWithCompletion:^(BOOL success, BOOL unpaid) {
             if (success) {
-                [weakSelf.teamController reloadWithServerError:NO];
+                [weakSelf.teamController reloadWithServerError:NO unpaid:self.unpaid];
                 [weakSelf.receiverController fetchPlayersWithShowingAlert:NO completion:^{
-                    [weakSelf.receiverController reloadWithServerError:NO ];
+                    [weakSelf.receiverController reloadWithServerError:NO unpaid:self.unpaid];
                 }];
             } else {
-                [weakSelf.teamController reloadWithServerError:YES];
-                [weakSelf.receiverController reloadWithServerError:YES];
+                [weakSelf.teamController reloadWithServerError:YES unpaid:self.unpaid];
+                [weakSelf.receiverController reloadWithServerError:YES unpaid:self.unpaid];
             }
         }];
     }
@@ -696,9 +709,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          if (block)
              block(YES);
          
-         [self createRosterWithCompletion:^(BOOL success) {
-             [self.teamController reloadWithServerError:!success];
-             [self.receiverController reloadWithServerError:!success];
+         [self createRosterWithCompletion:^(BOOL success, BOOL unpaid) {
+             [self.teamController reloadWithServerError:!success unpaid:self.unpaid];
+             [self.receiverController reloadWithServerError:!success unpaid:self.unpaid];
          }];
      }
                        failure:
@@ -781,6 +794,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     if (resultSet.count > 0) {
         [self marketsUpdated];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    } else {
+        [self.teamController reloadWithServerError:NO unpaid:self.unpaid];
+        [self.receiverController reloadWithServerError:NO unpaid:self.unpaid];
     }
 }
 

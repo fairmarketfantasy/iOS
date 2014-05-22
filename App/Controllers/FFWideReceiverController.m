@@ -40,6 +40,7 @@
 @property(nonatomic, assign) NSUInteger position;
 @property(nonatomic, assign) NetworkStatus networkStatus;
 @property(nonatomic, assign) BOOL isServerError;
+@property(nonatomic, assign) BOOL unpaid;
 
 @property(nonatomic) FFMarketSet* marketsSetRegular;
 @property(nonatomic) FFMarketSet* marketsSetSingle;
@@ -148,8 +149,9 @@
     [self.picker selectRow:0 inComponent:0 animated:NO];
 }
 
-- (void)reloadWithServerError:(BOOL)isError
+- (void)reloadWithServerError:(BOOL)isError unpaid:(BOOL)unpaid
 {
+    self.unpaid = unpaid;
     self.isServerError = isError;
     [self.picker reloadAllComponents];
     [self.tableView reloadData];
@@ -177,7 +179,8 @@
 {
     return (self.networkStatus == NotReachable ||
             self.isServerError ||
-            self.markets.count == 0);
+            self.markets.count == 0 ||
+            self.unpaid);
 }
 
 - (void)selectPosition:(NSUInteger)position
@@ -190,19 +193,22 @@
 
 - (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
-    if (self.networkStatus == NotReachable) {
-        if (shouldShow) {
-            [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+    if ([self isSomethingWrong] == YES) {
+        if (self.networkStatus == NotReachable) {
+            if (shouldShow) {
+                [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+            }
         }
-        
         block();
         return;
     }
     
     if (![self.dataSource.currentRoster objId]) {
         self.players = @[];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
+        if ([self isSomethingWrong] == NO) {
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                          withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
         return;
     }
     
@@ -298,10 +304,10 @@
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 2;
+        return [self isSomethingWrong] ? 1 : 2;
     }
     
-    return [self isSomethingWrong] ? 1 : self.players.count;
+    return self.players.count;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
@@ -324,8 +330,15 @@
             if ([self isSomethingWrong]) {
                 FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                            forIndexPath:indexPath];
-                cell.message.text = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
-                                                              NSLocalizedString(@"No Internet Connection", nil);
+                NSString *message = nil;
+                if (self.unpaid) {
+                    message = NSLocalizedString(@"Unpaid subscription", nil);
+                } else {
+                    message = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
+                    NSLocalizedString(@"No Internet Connection", nil);
+                }
+                
+                cell.message.text = message;
                 return cell;
             }
             return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];

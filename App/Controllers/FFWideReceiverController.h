@@ -30,7 +30,7 @@
 
 - (void)showPosition:(NSString*)position;
 - (void)resetPosition;
-- (void)reloadWithServerError:(BOOL)isError;
+- (void)reloadWithServerError:(BOOL)isError unpaid:(BOOL)unpaid;
 - (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
 
 @end
