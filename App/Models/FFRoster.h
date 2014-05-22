@@ -93,4 +93,9 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 
 - (FFPlayer *)playerByName:(NSString *)name;
 
++ (void)submitNonFantasyRosterWithTeams:(NSArray *)teams
+                                session:(FFSession *)session
+                                success:(SBSuccessBlock)success
+                                failure:(SBErrorBlock)failure;
+
 @end

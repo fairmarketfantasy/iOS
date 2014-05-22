@@ -19,6 +19,8 @@
         _gameName = [dict objectForKey:@"gameName"];
         _gameDate = [dict objectForKey:@"gameDate"];
         _pt = [dict objectForKey:@"pt"];
+        _statsId = [dict objectForKey:@"teamStatsId"];
+        _gameStatsId = [dict objectForKey:@"gameStatsId"];
     }
     return self;
 }

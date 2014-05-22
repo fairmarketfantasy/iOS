@@ -16,7 +16,6 @@
 
 - (void)addPlayer:(FFPlayer*)player;
 - (void)addTeam:(FFTeam *)team;
-- (BOOL)isTeamSelected:(FFTeam *)team;
 
 @end
 

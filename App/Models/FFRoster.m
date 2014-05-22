@@ -56,7 +56,7 @@
 
 + (NSString*)bulkPath
 {
-    return @"/rosters";
+    return [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? @"/rosters" : @"/game_rosters";
 }
 
 + (NSDictionary*)propertyToNetworkKeyMapping
@@ -375,18 +375,39 @@ failure:
                                              path:path
                                         paramters:@{ @"contest_type" : contestType }
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
-    {
-        NSString *message = [[httpResponse allHeaderFields] objectForKey:@"X-CLIENT-FLASH"];
-        _messageAfterSubmit = (message != nil && message.length > 0) ? message : NSLocalizedString(@"Roster submitted successfully!", nil);
-        [self updateWithNetworkRepresentation:JSON
-                                      success:success
-                                      failure:failure];
-    }
-failure:
-    ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
-    {
-        failure(error);
-    }];
+     {
+         NSString *message = [[httpResponse allHeaderFields] objectForKey:@"X-CLIENT-FLASH"];
+         _messageAfterSubmit = (message != nil && message.length > 0) ? message : NSLocalizedString(@"Roster submitted successfully!", nil);
+         [self updateWithNetworkRepresentation:JSON
+                                       success:success
+                                       failure:failure];
+     }
+                                          failure:
+     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
+     {
+         failure(error);
+     }];
+}
+
++ (void)submitNonFantasyRosterWithTeams:(NSArray *)teams
+                                session:(FFSession *)session
+                                success:(SBSuccessBlock)success
+                                failure:(SBErrorBlock)failure
+{
+    NSDictionary *params = @{@"teams": teams};
+    [session authorizedJSONRequestWithMethod:@"POST"
+                                        path:[self bulkPath]
+                                   paramters:params
+                                     success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+                                         NSLog(@"Submit NonFantasy Roster: %@", JSON);
+                                         if (success) {
+                                             success(JSON);
+                                         }
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+                                         NSLog(@"JSON: %@", JSON);
+                                         if (failure)
+                                             failure(error);
+                                     }];
 }
 
 - (void)setValuesForKeysWithNetworkDictionary:(NSDictionary*)keyedValues

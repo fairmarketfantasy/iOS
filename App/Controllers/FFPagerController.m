@@ -778,26 +778,50 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)submitRoster:(FFRosterSubmitType)rosterType completion:(void (^)(BOOL))block
 {
-    @weakify(self)
-    [self.roster submitContent:rosterType
-                       success:
-     ^(id successObj) {
-         @strongify(self)
-         if (block)
-             block(YES);
-         
-         [self createRosterWithCompletion:^(BOOL success) {
-             [self.teamController reloadWithServerError:!success];
-             [self.receiverController reloadWithServerError:!success];
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        @weakify(self)
+        [self.roster submitContent:rosterType
+                           success:
+         ^(id successObj) {
+             @strongify(self)
+             if (block)
+                 block(YES);
+             
+             [self createRosterWithCompletion:^(BOOL success) {
+                 [self.teamController reloadWithServerError:!success];
+                 [self.receiverController reloadWithServerError:!success];
+             }];
+         }
+                           failure:
+         ^(NSError * error) {
+             @strongify(self)
+             if (block)
+                 block(NO);
+             [self.teamController.tableView reloadData];
          }];
-     }
-                       failure:
-     ^(NSError * error) {
-         @strongify(self)
-         if (block)
-             block(NO);
-         [self.teamController.tableView reloadData];
-     }];
+    } else {
+        NSMutableArray *teamsDicts = [NSMutableArray arrayWithCapacity:self.selectedTeams.count];
+        for (FFTeam *team in self.selectedTeams) {
+            NSDictionary * dict = @{
+                                    @"game_stats_id" : team.gameStatsId,
+                                    @"team_stats_id" : team.statsId,
+                                    @"position_index": [NSNumber numberWithInteger:[self.selectedTeams indexOfObject:team]]
+                                    };
+            [teamsDicts addObject:dict];
+        }
+        
+        [FFRoster submitNonFantasyRosterWithTeams:teamsDicts
+                                          session:self.session
+                                          success:^(id successObj) {
+                                              [self.selectedTeams removeAllObjects];
+                                              if (block)
+                                                  block(YES);
+                                          } failure:^(NSError *error) {
+                                              NSLog(@"Error: %@", error);
+                                              if (block)
+                                                  block(NO);
+                                          }];
+    }
 }
 
 - (void)autoFillWithCompletion:(void(^)(BOOL success))block

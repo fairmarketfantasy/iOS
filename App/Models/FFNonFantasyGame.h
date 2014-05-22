@@ -12,15 +12,15 @@
 
 @interface FFNonFantasyGame : FFGame
 
-@property (nonatomic) NSString *homeTeamStatsId;
-@property (nonatomic) NSString *awayTeamStatsId;
 @property (nonatomic) NSString *homeTeamName;
 @property (nonatomic) NSString *awayTeamName;
 @property (nonatomic) NSString *homeTeamLogoURL;
 @property (nonatomic) NSString *awayTeamLogoURL;
+@property (nonatomic) NSString *homeTeamStatsId;
+@property (nonatomic) NSString *awayTeamStatsId;
+@property (nonatomic) NSString *gameStatsId;
 @property (nonatomic) NSNumber *homeTeamPT;
 @property (nonatomic) NSNumber *awayTeamPT;
-@property (nonatomic) NSString *gameStatsId;
 
 @property (nonatomic, readonly) FFTeam *homeTeam;
 @property (nonatomic, readonly) FFTeam *awayTeam;

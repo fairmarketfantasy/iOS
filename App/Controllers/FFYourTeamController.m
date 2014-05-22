@@ -62,6 +62,13 @@
     [self.submitView.segments addTarget:self
                                  action:@selector(onSubmit:)
                        forControlEvents:UIControlEventValueChanged];
+    [self.submitView.submitButton addTarget:self
+                                     action:@selector(onSubmit:)
+                           forControlEvents:UIControlEventTouchUpInside];
+    
+    FFSubmitViewType type = [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? FFSubmitViewTypeFantasy : FFSubmitViewTypeNonFantasy;
+    [self.submitView setupWithType:type];
+    
     [self.view addSubview:self.submitView];
 
     // table view
@@ -181,20 +188,26 @@
 
 - (void)showOrHideSubmitIfNeeded
 {
-    BOOL anyPlayer = self.dataSource.currentRoster.players.count > 0;
+    BOOL anyObject = NO;
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        anyObject = self.dataSource.currentRoster.players.count > 0;
+    } else {
+        anyObject = [self.dataSource teams].count > 0;
+    }
+
     CGFloat submitHeight = 70.f;
     [UIView animateWithDuration:(NSTimeInterval).3f
                      animations:
      ^{
          self.submitView.frame = CGRectMake(0.f,
-                                            anyPlayer ? self.view.bounds.size.height - submitHeight
+                                            anyObject ? self.view.bounds.size.height - submitHeight
                                             : self.view.bounds.size.height,
                                             self.view.bounds.size.width,
                                             submitHeight);
-         self.submitView.alpha = (anyPlayer && self.networkStatus != NotReachable) ? 1.f : 0.f;
-         self.submitView.userInteractionEnabled = anyPlayer;
+         self.submitView.alpha = (anyObject && self.networkStatus != NotReachable) ? 1.f : 0.f;
+         self.submitView.userInteractionEnabled = anyObject;
          UIEdgeInsets tableInsets = self.tableView.contentInset;
-         tableInsets.bottom = anyPlayer ? submitHeight : 0.f;
+         tableInsets.bottom = anyObject ? submitHeight : 0.f;
          self.tableView.contentInset = tableInsets;
      }];
 }
@@ -587,9 +600,14 @@
 
 - (void)onSubmit:(FUISegmentedControl*)segments
 {
-    FFRosterSubmitType rosterType = (FFRosterSubmitType)segments.selectedSegmentIndex;
-    [self submitRoster:rosterType];
-    self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        FFRosterSubmitType rosterType = (FFRosterSubmitType)segments.selectedSegmentIndex;
+        [self submitRoster:rosterType];
+        self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
+    } else {
+        [self submitRoster:0];
+    }
+    
 }
 
 - (void)submitRoster:(FFRosterSubmitType)rosterType
