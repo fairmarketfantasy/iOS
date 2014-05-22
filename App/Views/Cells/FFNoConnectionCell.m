@@ -18,8 +18,10 @@
                 reuseIdentifier:reuseIdentifier];
     if (self) {
         self.contentView.backgroundColor = [UIColor whiteColor];
-        self.message = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 20.f)];
+        self.message = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, 250.f, 100.f)];
         self.message.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, [UIScreen mainScreen].bounds.size.height/2 - 20.f);
+        self.message.lineBreakMode = NSLineBreakByWordWrapping;
+        self.message.numberOfLines = 5;
         self.message.font = [FFStyle blockFont:20.f];
         self.message.textColor = [FFStyle lightGrey];
         self.message.backgroundColor = [UIColor clearColor];

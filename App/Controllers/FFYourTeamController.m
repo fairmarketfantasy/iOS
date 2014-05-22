@@ -386,7 +386,7 @@
                     
                     NSString *message = nil;
                     if (self.unpaid) {
-                        message = NSLocalizedString(@"Unpaid subscription", nil);
+                        message = NSLocalizedString(@"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com", nil);
                     } else {
                         message = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
                         NSLocalizedString(@"No Internet Connection", nil);
