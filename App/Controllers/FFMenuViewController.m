@@ -259,7 +259,6 @@
         }
     } else {
         if (treeNodeInfo.treeDepthLevel > 0) {
-//            if ([self.delegate respondsToSelector:@selector(currentMarketSport)] && [[FFSportHelper stringFromSport:[self.delegate currentMarketSport]] isEqualToString:nodeItem.title]) {
             if ([nodeItem.categoryTitle isEqualToString:[FFSessionManager shared].currentCategoryName] &&
                 [nodeItem.title isEqualToString:[FFSessionManager shared].currentSportName]) {
                 accessoryName = @"accessory_check";

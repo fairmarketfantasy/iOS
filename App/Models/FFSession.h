@@ -8,7 +8,6 @@
 
 #import <SBSession.h>
 #import "FFUser.h"
-#import "FFSportHelper.h"
 
 @protocol FFUserProtocol <NSObject>
 

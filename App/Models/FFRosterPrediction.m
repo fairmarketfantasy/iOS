@@ -9,7 +9,6 @@
 #import "FFRosterPrediction.h"
 #import <SBData/NSDictionary+Convenience.h>
 // model
-#import "FFSportHelper.h"
 #import "FFPlayer.h"
 #import "FFContestType.h"
 #import "FFMarket.h"

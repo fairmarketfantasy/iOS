@@ -7,7 +7,6 @@
 //
 
 #import "FFDataObjectResultSet.h"
-#import "FFSportHelper.h"
 
 @class FFSession;
 
