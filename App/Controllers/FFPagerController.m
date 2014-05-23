@@ -333,6 +333,7 @@ SBDataObjectResultSetDelegate>
      ^(id successObj) {
          @strongify(self)
          _rosterIsCreating = NO;
+         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
          self.unpaid = NO;
          self.roster = successObj;
          
@@ -348,6 +349,7 @@ SBDataObjectResultSetDelegate>
          @strongify(self)
          _rosterIsCreating = NO;
          if ([[[error userInfo] objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Unpaid subscription!"]) {
+             [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
              self.roster = nil;
              [alert hide];
              self.unpaid = YES;
