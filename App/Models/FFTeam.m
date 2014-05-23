@@ -7,6 +7,7 @@
 //
 
 #import "FFTeam.h"
+#import "FFDate.h"
 
 @implementation FFTeam
 
@@ -14,13 +15,27 @@
 {
     self = [super init];
     if (self) {
-        _name = [dict objectForKey:@"name"];
-        _logoURL = [dict objectForKey:@"logoURL"];
-        _gameName = [dict objectForKey:@"gameName"];
-        _gameDate = [dict objectForKey:@"gameDate"];
-        _pt = [dict objectForKey:@"pt"];
-        _statsId = [dict objectForKey:@"teamStatsId"];
-        _gameStatsId = [dict objectForKey:@"gameStatsId"];
+        _name = [dict objectForKey:@"team_name"];
+        _logoURL = [dict objectForKey:@"team_logo"];
+        _gameName = [dict objectForKey:@"market_name"];
+        
+        //this bull shit was made case in different responses from server fields come in different types - wtf
+        if ([[dict objectForKey:@"game_time"] isKindOfClass:[NSString class]]) {
+            FFDate *date = (FFDate *)[[FFDate dateFormatter] dateFromString:[dict objectForKey:@"game_time"]];
+            _gameDate = date;
+        } else {
+            _gameDate = [dict objectForKey:@"game_time"];
+        }
+        
+        if ([[dict objectForKey:@"pt"] isKindOfClass:[NSString class]]) {
+            NSNumberFormatter *formatter = [NSNumberFormatter new];
+            formatter.numberStyle = NSNumberFormatterDecimalStyle;
+            _pt = [formatter numberFromString:[dict objectForKey:@"pt"]];
+        } else {
+            _pt = [dict objectForKey:@"pt"];
+        }
+        _statsId = [dict objectForKey:@"team_stats_id"];
+        _gameStatsId = [dict objectForKey:@"game_stats_id"];
     }
     return self;
 }

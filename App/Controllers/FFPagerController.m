@@ -826,26 +826,38 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)autoFillWithCompletion:(void(^)(BOOL success))block
 {
-    @weakify(self)
-    [self.roster autofillSuccess:
-     ^(id successObj) {
-         @strongify(self)
-         self.roster = successObj;
-         self.myTeam = [self newTeamWithPositions:[self allPositions]];
-         for (FFPlayer *player in self.roster.players) {
-             [self addPlayerToMyTeam:player];
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        @weakify(self)
+        [self.roster autofillSuccess:
+         ^(id successObj) {
+             @strongify(self)
+             self.roster = successObj;
+             self.myTeam = [self newTeamWithPositions:[self allPositions]];
+             for (FFPlayer *player in self.roster.players) {
+                 [self addPlayerToMyTeam:player];
+             }
+             
+             if (block)
+                 block(YES);
          }
-         
-         if (block)
-             block(YES);
-     }
-                         failure:
-     ^(NSError *error) {
-         @strongify(self)
-         self.roster = nil;
-         if (block)
-             block(NO);
-     }];
+                             failure:
+         ^(NSError *error) {
+             @strongify(self)
+             self.roster = nil;
+             if (block)
+                 block(NO);
+         }];
+    } else {
+        [FFRoster autofillForSession:self.session
+                             success:^(id successObj) {
+                                 self.selectedTeams = [NSMutableArray arrayWithArray:successObj];
+                                 if (block)
+                                     block(YES);
+                             } failure:^(NSError *error) {
+                                 if (block)
+                                     block(NO);
+                             }];
+    }
 }
 
 - (void)toggleRemoveBenchWithCompletion:(void(^)(BOOL success))block

@@ -96,13 +96,13 @@
 {
     NSString *gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
     FFTeam *team = [[FFTeam alloc] initWithDictionary:@{
-                                                        @"name" : self.homeTeamName,
-                                                        @"logoURL" : self.homeTeamLogoURL,
-                                                        @"gameDate" : self.gameTime,
-                                                        @"gameName" : gameName,
+                                                        @"team_name" : self.homeTeamName,
+                                                        @"team_logo" : self.homeTeamLogoURL,
+                                                        @"game_time" : self.gameTime,
+                                                        @"market_name" : gameName,
                                                         @"pt" : self.homeTeamPT,
-                                                        @"teamStatsId" : self.homeTeamStatsId,
-                                                        @"gameStatsId" : self.gameStatsId
+                                                        @"team_stats_id" : self.homeTeamStatsId,
+                                                        @"game_stats_id" : self.gameStatsId
                                                         }];
     return team;
 }
@@ -111,13 +111,13 @@
 {
     NSString *gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
     FFTeam *team = [[FFTeam alloc] initWithDictionary:@{
-                                                        @"name" : self.awayTeamName,
-                                                        @"logoURL" : self.awayTeamLogoURL,
-                                                        @"gameDate" : self.gameTime,
-                                                        @"gameName" : gameName,
+                                                        @"team_name" : self.awayTeamName,
+                                                        @"team_logo" : self.awayTeamLogoURL,
+                                                        @"game_time" : self.gameTime,
+                                                        @"market_name" : gameName,
                                                         @"pt" : self.awayTeamPT,
-                                                        @"teamStatsId" : self.awayTeamStatsId,
-                                                        @"gameStatsId" : self.gameStatsId
+                                                        @"team_stats_id" : self.awayTeamStatsId,
+                                                        @"game_stats_id" : self.gameStatsId
                                                         }];
     return team;
 }

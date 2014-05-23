@@ -17,6 +17,7 @@
 #import "FFContestType.h"
 #import "FFMarket.h"
 #import "FFSession.h"
+#import "FFTeam.h"
 #import "FFSessionManager.h"
 
 @implementation FFRoster
@@ -351,6 +352,36 @@ failure:
      {
          failure(error);
      }];
+}
+
++ (void)autofillForSession:(FFSession *)session
+                   success:(SBSuccessBlock)success
+                   failure:(SBErrorBlock)failure
+{
+    NSString* path = [[FFRoster bulkPath] stringByAppendingFormat:@"/autofill"];
+    [session authorizedJSONRequestWithMethod:@"POST"
+                                        path:path
+                                   paramters:@{ @"sport" : [FFSessionManager shared].currentSportName }
+                                     success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+                                         NSLog(@"JSON : %@", JSON);
+                                         if ([[JSON objectForKey:@"predictions"] isKindOfClass:[NSArray class]] == NO) {
+                                             NSLog(@"Incompatible type of response");
+                                             assert(NO);
+                                         }
+                                         NSArray *teams = [JSON objectForKey:@"predictions"];
+                                         NSMutableArray *result = [NSMutableArray arrayWithCapacity:teams.count];
+                                         for (NSDictionary *teamDict in teams) {
+                                             FFTeam *team = [[FFTeam alloc] initWithDictionary:teamDict];
+                                             [result addObject:team];
+                                         }
+                                         
+                                         if (success) {
+                                             success(result);
+                                         }
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+                                         if (failure)
+                                             failure(error);
+                                     }];
 }
 
 #pragma mark -
