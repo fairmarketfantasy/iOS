@@ -587,12 +587,13 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     
     [self setTeam:newTeam selected:YES];
     [self.selectedTeams addObject:newTeam];
-    [self.teamController reloadWithServerError:NO];
     
     [self setViewControllers:@[self.teamController]
                    direction:UIPageViewControllerNavigationDirectionReverse
                     animated:YES
                   completion:nil];
+    
+    [self.teamController reloadWithServerError:NO];
 }
 
 #pragma mark - FFEventsProtocol
@@ -606,6 +607,10 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)updateGames
 {
+    __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
+                                                           messsage:@""
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
     [FFNonFantasyGame fetchGamesSession:self.session
                                 success:^(id successObj) {
                                     NSLog(@"Success object: %@", successObj);
@@ -616,7 +621,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                     }
                                     self.games = [NSMutableArray arrayWithArray:games];
                                     [self.receiverController reloadWithServerError:NO];
+                                    [alert hide];
                                 } failure:^(NSError *error) {
+                                    [alert hide];
                                     NSLog(@"Error: %@", error);
                                 }];
 }

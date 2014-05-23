@@ -57,7 +57,7 @@
     [super viewDidLoad];
     
     self.session = [FFSession lastUsedSessionWithUserClass:[FFUser class]];
-    self.availableSports = @[[NSNumber numberWithInteger:FFMarketSportNBA], [NSNumber numberWithInteger:FFMarketSportMLB]];
+    self.availableSports = @[@"NBA", @"MLB"];
     self.indexShowingSport = 0;
     self.signInView = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, self.view.frame.size.height)];
     [self setupSignInView];
@@ -175,19 +175,12 @@
     NSString *smallImageName = nil;
     NSString *bigImageName = nil;
     
-    switch ([self.availableSports[self.indexShowingSport] integerValue]) {
-        case FFMarketSportMLB:
-            smallImageName = @"loginmlb";
-            bigImageName = @"loginmlb-586h";
-            break;
-            
-        case FFMarketSportNBA:
-            smallImageName = @"loginbg";
-            bigImageName = @"loginbg-586h";
-            break;
-            
-        default:
-            break;
+    if ([self.availableSports[self.indexShowingSport] isEqualToString:@"MLB"]) {
+        smallImageName = @"loginmlb";
+        bigImageName = @"loginmlb-586h";
+    } else {
+        smallImageName = @"loginbg";
+        bigImageName = @"loginbg-586h";
     }
     
     if (self.indexShowingSport == self.availableSports.count - 1)

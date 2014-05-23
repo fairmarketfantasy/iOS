@@ -330,7 +330,7 @@
                 //navigation bar height + status bar height = 64
                 return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
             } else {
-                return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 50.f;
+                return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 70.f;
             }
         } else {
             return 76.f;

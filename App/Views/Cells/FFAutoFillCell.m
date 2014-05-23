@@ -75,6 +75,11 @@
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
+    
+    CGPoint center = self.autoFillButton.center;
+    center.y = self.center.y;
+    self.autoFillButton.center = center;
+    
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
         // FIX label vertical centered with custom font
         self.autoRemovedBenched.onLabel.frame = CGRectOffset(self.autoRemovedBenched.onLabel.frame, 0.f,
