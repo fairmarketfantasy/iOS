@@ -20,11 +20,18 @@
                      session:(SBSession*)session
                      success:(SBSuccessBlock)success
                      failure:(SBErrorBlock)failure;
+
 - (void)individualPredictionsForMarket:(NSString*)marketId
                                 player:(NSString*)statId
                                 roster:(NSString*)rosterId
                                   diff:(NSString*)diff
                                success:(SBSuccessBlock)success
                                failure:(SBErrorBlock)failure;
+
++ (void)fetchEventsForTeam:(NSString *)teamId
+                    inGame:(NSString *)gameId
+                   session:(SBSession*)session
+                   success:(SBSuccessBlock)success
+                   failure:(SBErrorBlock)failure;
 
 @end

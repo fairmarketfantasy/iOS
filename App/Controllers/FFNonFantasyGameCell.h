@@ -17,6 +17,8 @@
 
 @property (nonatomic, readonly) FFCustomButton *addHomeTeamBtn;
 @property (nonatomic, readonly) FFCustomButton *addAwayTeamBtn;
+@property (nonatomic, readonly) FFCustomButton *homePTButton;
+@property (nonatomic, readonly) FFCustomButton *awayPTButton;
 
 - (void)setupWithGame:(FFNonFantasyGame *)game;
 

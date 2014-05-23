@@ -21,8 +21,6 @@
 @property (nonatomic, strong) UILabel *homeTeamName;
 @property (nonatomic, strong) UILabel *awayTeamName;
 @property (nonatomic, strong) UILabel *datelabel;
-@property (nonatomic, strong) UILabel *homePTLabel;
-@property (nonatomic, strong) UILabel *awayPTLabel;
 
 @property (nonatomic, strong) UIImageView *homePlusView;
 @property (nonatomic, strong) UIImageView *awayPlusView;
@@ -116,22 +114,20 @@
         ptBackground.image = [UIImage imageNamed:@"pt-nonfantasy"];
         [self.contentView addSubview:ptBackground];
         
-        // pt labels
-        self.homePTLabel = [[UILabel alloc] initWithFrame:CGRectMake(120.f, 25.f, 35.f, 25.f)];
-        self.homePTLabel.textAlignment = NSTextAlignmentCenter;
-        self.homePTLabel.backgroundColor = [UIColor clearColor];
-        self.homePTLabel.font = [FFStyle blockFont:17.f];
-        self.homePTLabel.textColor = [FFStyle brightBlue];
-        self.homePTLabel.adjustsFontSizeToFitWidth = YES;
-        [self.contentView addSubview:self.homePTLabel];
+        // pt buttons
+        _homePTButton = [FFCustomButton buttonWithType:UIButtonTypeCustom];
+        self.homePTButton.frame = CGRectMake(120.f, 25.f, 35.f, 25.f);
+        self.homePTButton.backgroundColor = [UIColor clearColor];
+        self.homePTButton.titleLabel.font = [FFStyle blockFont:17.f];
+        [self.homePTButton setTitleColor:[FFStyle brightBlue] forState:UIControlStateNormal];
+        [self.contentView addSubview:self.homePTButton];
         
-        self.awayPTLabel = [[UILabel alloc] initWithFrame:CGRectMake(166.f, 25.f, 35.f, 25.f)];
-        self.awayPTLabel.textAlignment = NSTextAlignmentCenter;
-        self.awayPTLabel.backgroundColor = [UIColor clearColor];
-        self.awayPTLabel.font = [FFStyle blockFont:17.f];
-        self.awayPTLabel.textColor = [FFStyle brightBlue];
-        self.awayPTLabel.adjustsFontSizeToFitWidth = YES;
-        [self.contentView addSubview:self.awayPTLabel];
+        _awayPTButton = [FFCustomButton buttonWithType:UIButtonTypeCustom];
+        self.awayPTButton.frame = CGRectMake(166.f, 25.f, 35.f, 25.f);
+        self.awayPTButton.backgroundColor = [UIColor clearColor];
+        self.awayPTButton.titleLabel.font = [FFStyle blockFont:17.f];
+        [self.awayPTButton setTitleColor:[FFStyle brightBlue] forState:UIControlStateNormal];
+        [self.contentView addSubview:self.awayPTButton];
 
         // separator
         UIView* separator = [[UIView alloc] initWithFrame:CGRectMake(7.f, 98.f, 306.f, 1.f)];
@@ -162,8 +158,10 @@
     
     [self.awayTeamAvatar draw];
     
-    self.homePTLabel.text = [NSString stringWithFormat:@"%@%@", NSLocalizedString(@"PT", nil), game.homeTeamPT];
-    self.awayPTLabel.text = [NSString stringWithFormat:@"%@%@", NSLocalizedString(@"PT", nil), game.awayTeamPT];
+    [self.homePTButton setTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"PT", nil), game.homeTeamPT]
+                       forState:UIControlStateNormal];
+    [self.awayPTButton setTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"PT", nil), game.awayTeamPT]
+                       forState:UIControlStateNormal];
     
     self.homeTeamName.text = game.homeTeamName;
     self.awayTeamName.text = game.awayTeamName;

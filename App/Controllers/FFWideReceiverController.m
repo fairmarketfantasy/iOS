@@ -410,6 +410,16 @@
                              [weakSelf.delegate addTeam:[game awayTeam]];
                          }];
     
+    [cell.homePTButton setAction:kUIButtonBlockTouchUpInside
+                       withBlock:^{
+                           [self.delegate showIndividualPredictionsForTeam:game.homeTeam];
+                       }];
+    
+    [cell.awayPTButton setAction:kUIButtonBlockTouchUpInside
+                       withBlock:^{
+                           [self.delegate showIndividualPredictionsForTeam:game.awayTeam];
+                       }];
+    
     return cell;
 }
 

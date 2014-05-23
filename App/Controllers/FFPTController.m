@@ -11,14 +11,16 @@
 #import "FFPTCell.h"
 #import "FFPTHeader.h"
 #import "FFAlertView.h"
-#import <FlatUIKit.h>
 #import "FFAlertView.h"
-#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import <FlatUIKit.h>
 // model
 #import "FFEvent.h"
 #import "FFPlayer.h"
 #import "FFStyle.h"
+
+#import "FFSessionManager.h"
 
 @interface FFPTController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -49,7 +51,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self fetchEvents];
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        [self fetchEvents];
+    } else {
+        [self fetchNonFantasyEvents];
+    }
     [self.tableView reloadData];
 }
 
@@ -92,6 +98,23 @@
           showInView:self.navigationController.view];
           */
      }];
+}
+
+- (void)fetchNonFantasyEvents
+{
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self);
+    [FFEvent fetchEventsForTeam:[self.delegate teamStatsId]
+                         inGame:[self.delegate gameStatsId]
+                        session:self.session
+                        success:^(id successObj) {
+                            @strongify(self)
+                        } failure:^(NSError *error) {
+                            @strongify(self)
+                        }];
 }
 
 #pragma mark - UITableViewDelegate

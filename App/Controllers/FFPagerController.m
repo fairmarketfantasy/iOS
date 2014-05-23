@@ -61,6 +61,7 @@ SBDataObjectResultSetDelegate>
 
 @property(nonatomic, strong) NSMutableArray *games;
 @property(nonatomic, strong) NSMutableArray *selectedTeams;
+@property(nonatomic, strong) FFTeam *teamForIndividualPredictions;
 
 @end
 
@@ -640,11 +641,27 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                 }];
 }
 
+- (void)showIndividualPredictionsForTeam:(FFTeam *)team
+{
+    self.teamForIndividualPredictions = team;
+    [self performSegueWithIdentifier:@"GotoPT" sender:nil];
+}
+
 #pragma mark - FFEventsProtocol
 
 - (NSString*)marketId
 {
     return self.selectedMarket.objId;
+}
+
+- (NSString *)gameStatsId
+{
+    return self.teamForIndividualPredictions.gameStatsId;
+}
+
+- (NSString *)teamStatsId
+{
+    return self.teamForIndividualPredictions.statsId;
 }
 
 #pragma mark -
