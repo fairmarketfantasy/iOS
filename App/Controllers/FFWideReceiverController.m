@@ -118,10 +118,16 @@
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    [self fetchPlayersWithShowingAlert:NO completion:^{
-        [self.tableView reloadData];
-        [refreshControl endRefreshing];
-    }];
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        [self fetchPlayersWithShowingAlert:NO completion:^{
+            [self.tableView reloadData];
+            [refreshControl endRefreshing];
+        }];
+    } else {
+        [self.delegate fetchGamesWithCompletion:^{
+            [refreshControl endRefreshing];
+        }];
+    }
 }
 
 #pragma mark -

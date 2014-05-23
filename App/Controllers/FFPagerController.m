@@ -322,13 +322,29 @@ SBDataObjectResultSetDelegate>
 
 #pragma mark - private
 
+- (void)updateSelectedGames
+{
+    for (FFTeam *team in self.selectedTeams) {
+        [self setTeam:team selected:YES];
+    }
+}
+
+- (void)deselectAllTeams
+{
+    for (FFTeam *team in self.selectedTeams) {
+        [self setTeam:team selected:NO];
+    }
+}
+
 - (void)setTeam:(FFTeam *)team selected:(BOOL)selected
 {
     for (FFNonFantasyGame *game in self.games) {
-        if ([game.homeTeam.name isEqualToString:team.name]) {
-            game.homeTeam.selected = selected;
-        } else if ([game.awayTeam.name isEqualToString:team.name]) {
-            game.awayTeam.selected = selected;
+        if ([team.gameStatsId isEqualToString:game.gameStatsId]) {
+            if ([game.homeTeam.name isEqualToString:team.name]) {
+                game.homeTeam.selected = selected;
+            } else if ([game.awayTeam.name isEqualToString:team.name]) {
+                game.awayTeam.selected = selected;
+            }
         }
     }
 }
@@ -596,16 +612,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [self.teamController reloadWithServerError:NO];
 }
 
-#pragma mark - FFEventsProtocol
-
-- (NSString*)marketId
-{
-    return self.selectedMarket.objId;
-}
-
-#pragma mark -
-
-- (void)updateGames
+- (void)fetchGamesWithCompletion:(void (^)(void))block
 {
     __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
                                                            messsage:@""
@@ -620,12 +627,31 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                         [games addObject:game];
                                     }
                                     self.games = [NSMutableArray arrayWithArray:games];
+                                    [self updateSelectedGames];
                                     [self.receiverController reloadWithServerError:NO];
                                     [alert hide];
+                                    if (block)
+                                        block();
                                 } failure:^(NSError *error) {
-                                    [alert hide];
                                     NSLog(@"Error: %@", error);
+                                    [alert hide];
+                                    if (block)
+                                        block();
                                 }];
+}
+
+#pragma mark - FFEventsProtocol
+
+- (NSString*)marketId
+{
+    return self.selectedMarket.objId;
+}
+
+#pragma mark -
+
+- (void)updateGames
+{
+    [self fetchGamesWithCompletion:nil];
 }
 
 - (void)updateMarkets
@@ -855,9 +881,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                  block(NO);
          }];
     } else {
+        [self deselectAllTeams];
         [FFRoster autofillForSession:self.session
                              success:^(id successObj) {
                                  self.selectedTeams = [NSMutableArray arrayWithArray:successObj];
+                                 [self updateSelectedGames];
                                  if (block)
                                      block(YES);
                              } failure:^(NSError *error) {
@@ -925,13 +953,16 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         }
     }
     
-    [self.teamController.tableView reloadData];
     [self.receiverController.tableView reloadData];
     
+    __weak FFPagerController *weakSelf = self;
     [self setViewControllers:@[self.receiverController]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:YES
-                  completion:nil];
+                  completion:^(BOOL finished) {
+                      if (finished)
+                          [weakSelf.teamController.tableView reloadData];
+                  }];
 }
 
 #pragma mark - SBDataObjectResultSetDelegate
