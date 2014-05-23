@@ -348,10 +348,10 @@ SBDataObjectResultSetDelegate>
      ^(NSError * error) {
          @strongify(self)
          _rosterIsCreating = NO;
+         [alert hide];
          if ([[[error userInfo] objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Unpaid subscription!"]) {
              [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
              self.roster = nil;
-             [alert hide];
              self.unpaid = YES;
              if (block) {
                  block(NO, YES);
@@ -360,7 +360,6 @@ SBDataObjectResultSetDelegate>
          }
          
          if (self.tryCreateRosterTimes > 0) {
-             [alert hide];
              self.tryCreateRosterTimes--;
              [self createRosterWithCompletion:block];
 //             if (block) {
@@ -368,7 +367,6 @@ SBDataObjectResultSetDelegate>
 //             }
          } else {
              self.roster = nil;
-             [alert hide];
              if (block) {
                  block(NO, NO);
              }
@@ -456,7 +454,7 @@ SBDataObjectResultSetDelegate>
     //should update players list after swipe as in bug MLB-156
     if (self.pager.currentPage == 1) {
         [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
-            [self.receiverController reloadWithServerError:NO unpaid:self.unpaid];
+            [self.receiverController reloadWithServerError:NO];
         }];
     }
 }
@@ -508,13 +506,16 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                    success:
      ^(id successObj) {
          @strongify(self)
-         //         [self.teamController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-         //                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+//         [self.teamController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+//                                      withRowAnimation:UITableViewRowAnimationAutomatic];
          //         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
          //                                          withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
          [self addPlayerToMyTeam:player];
-         [self.teamController refreshRosterWithShowingAlert:YES completion:nil];
+         [self.teamController refreshRosterWithShowingAlert:YES completion:^{
+             [self.teamController reloadWithServerError:NO];
+         }];
+         
          [self setViewControllers:@[self.teamController]
                         direction:UIPageViewControllerNavigationDirectionReverse
                          animated:YES
@@ -581,7 +582,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [self.teamController.tableView reloadData];
     NSArray *markets = [self availableMarkets];
     if (markets.count > 0) {
-        
         if ([self.teamController respondsToSelector:@selector(marketSelected:)]) {
             [self.teamController performSelector:@selector(marketSelected:) withObject:markets.firstObject];
         }
@@ -629,18 +629,26 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)setCurrentMarket:(FFMarket *)market
 {
     self.selectedMarket = market;
+    [self.teamController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                               inSection:0]]
+                                         withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.teamController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                               inSection:0]]
+                                         withRowAnimation:UITableViewRowAnimationAutomatic];
     if (_rosterIsCreating == NO) {
         
         __weak FFPagerController *weakSelf = self;
         [self createRosterWithCompletion:^(BOOL success, BOOL unpaid) {
             if (success) {
-                [weakSelf.teamController reloadWithServerError:NO unpaid:self.unpaid];
+                [weakSelf.teamController reloadWithServerError:NO];
                 [weakSelf.receiverController fetchPlayersWithShowingAlert:NO completion:^{
-                    [weakSelf.receiverController reloadWithServerError:NO unpaid:self.unpaid];
+                    [weakSelf.receiverController reloadWithServerError:NO];
                 }];
             } else {
-                [weakSelf.teamController reloadWithServerError:YES unpaid:self.unpaid];
-                [weakSelf.receiverController reloadWithServerError:YES unpaid:self.unpaid];
+                [weakSelf.teamController.tableView reloadData];
+                [weakSelf.receiverController.tableView reloadData];
+//                [weakSelf.teamController reloadWithServerError:YES unpaid:self.unpaid];
+//                [weakSelf.receiverController reloadWithServerError:YES unpaid:self.unpaid];
             }
         }];
     }
@@ -663,6 +671,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (FFRoster *)currentRoster
 {
     return self.roster;
+}
+
+- (BOOL)unpaidSubscription
+{
+    return self.unpaid;
 }
 
 #pragma mark - FFYourTeamDelegate
@@ -712,8 +725,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              block(YES);
          
          [self createRosterWithCompletion:^(BOOL success, BOOL unpaid) {
-             [self.teamController reloadWithServerError:!success unpaid:self.unpaid];
-             [self.receiverController reloadWithServerError:!success unpaid:self.unpaid];
+             [self.teamController reloadWithServerError:!success];
+             [self.receiverController reloadWithServerError:!success];
          }];
      }
                        failure:
@@ -797,8 +810,12 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         [self marketsUpdated];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     } else {
-        [self.teamController reloadWithServerError:NO unpaid:self.unpaid];
-        [self.receiverController reloadWithServerError:NO unpaid:self.unpaid];
+        if (self.availableMarkets.count == 0) {
+            self.roster = nil;
+            [self.teamController showOrHideSubmitIfNeeded];
+            [self.teamController.tableView reloadData];
+            [self.receiverController.tableView reloadData];
+        }
     }
 }
 

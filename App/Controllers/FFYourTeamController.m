@@ -45,7 +45,6 @@
 
 @property(nonatomic, assign) NetworkStatus networkStatus;
 @property(nonatomic, assign) BOOL isServerError;
-@property(nonatomic, assign) BOOL unpaid;
 
 @end
 
@@ -131,12 +130,12 @@
 
 #pragma mark
 
-- (void)reloadWithServerError:(BOOL)isError unpaid:(BOOL)unpaid
+- (void)reloadWithServerError:(BOOL)isError
 {
-    self.unpaid = unpaid;
     self.isServerError = isError;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self showOrHideSubmitIfNeeded];
-    [self.tableView reloadData];
+//    [self.tableView reloadData];
 }
 
 #pragma mark -
@@ -153,11 +152,8 @@
             (internetStatus == NotReachable && previousStatus != NotReachable)) {
             
             if (internetStatus == NotReachable) {
-                [self reloadWithServerError:NO unpaid:self.unpaid];
-            } else {
-                [self refreshRosterWithShowingAlert:NO completion:^{
-                    [self.tableView reloadData];
-                }];
+                [self showOrHideSubmitIfNeeded];
+                [self.tableView reloadData];
             }
         }
     }
@@ -170,12 +166,12 @@
     return (self.networkStatus == NotReachable ||
             self.isServerError ||
             self.markets.count == 0 ||
-            self.unpaid);
+            [self.dataSource unpaidSubscription]);
 }
 
 - (void)showOrHideSubmitIfNeeded
 {
-    BOOL anyPlayer = self.dataSource.currentRoster.players.count > 0;
+    BOOL anyPlayer = (self.dataSource.currentRoster.players.count > 0 && self.networkStatus != NotReachable);
     CGFloat submitHeight = 70.f;
     [UIView animateWithDuration:(NSTimeInterval).3f
                      animations:
@@ -215,10 +211,8 @@
         [alert showInView:self.view];
     }
     
-    @weakify(self)
     [self.delegate refreshRosterWithCompletion:^(BOOL success) {
-        @strongify(self)
-        [self reloadWithServerError:!success unpaid:self.unpaid];
+        [self reloadWithServerError:!success];
         if (alert)
             [alert hide];
         if (block)
@@ -385,11 +379,12 @@
                                                                                forIndexPath:indexPath];
                     
                     NSString *message = nil;
-                    if (self.unpaid) {
+                    if (self.networkStatus == NotReachable) {
+                        message = NSLocalizedString(@"No Internet Connection", nil);
+                    } else if ([self.dataSource unpaidSubscription]) {
                         message = NSLocalizedString(@"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com", nil);
-                    } else {
-                        message = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
-                        NSLocalizedString(@"No Internet Connection", nil);
+                    } else if (self.markets.count == 0) {
+                        message = NSLocalizedString(@"No Games Scheduled", nil);
                     }
                     
                     cell.message.text = message;
@@ -480,7 +475,7 @@
     @weakify(self)
     [self.delegate toggleRemoveBenchWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self reloadWithServerError:!success unpaid:self.unpaid];
+        [self reloadWithServerError:!success];
         [alert hide];
     }];
 }
@@ -500,7 +495,7 @@
     @weakify(self)
     [self.delegate autoFillWithCompletion:^(BOOL success) {
         @strongify(self)
-        [self reloadWithServerError:!success unpaid:self.unpaid];
+        [self reloadWithServerError:!success];
         [alert hide];
     }];
 }
@@ -592,8 +587,6 @@
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
     [self.dataSource setCurrentMarket:selectedMarket];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
     self.tryCreateRosterTimes = 3;
 }
 

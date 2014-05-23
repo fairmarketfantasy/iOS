@@ -40,7 +40,6 @@
 @property(nonatomic, assign) NSUInteger position;
 @property(nonatomic, assign) NetworkStatus networkStatus;
 @property(nonatomic, assign) BOOL isServerError;
-@property(nonatomic, assign) BOOL unpaid;
 
 @property(nonatomic) FFMarketSet* marketsSetRegular;
 @property(nonatomic) FFMarketSet* marketsSetSingle;
@@ -149,9 +148,8 @@
     [self.picker selectRow:0 inComponent:0 animated:NO];
 }
 
-- (void)reloadWithServerError:(BOOL)isError unpaid:(BOOL)unpaid
+- (void)reloadWithServerError:(BOOL)isError
 {
-    self.unpaid = unpaid;
     self.isServerError = isError;
     [self.picker reloadAllComponents];
     [self.tableView reloadData];
@@ -180,7 +178,7 @@
     return (self.networkStatus == NotReachable ||
             self.isServerError ||
             self.markets.count == 0 ||
-            self.unpaid);
+            [self.dataSource unpaidSubscription]);
 }
 
 - (void)selectPosition:(NSUInteger)position
@@ -194,11 +192,6 @@
 - (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
     if ([self isSomethingWrong] == YES) {
-        if (self.networkStatus == NotReachable) {
-            if (shouldShow) {
-                [[FFAlertView noInternetConnectionAlert] showInView:self.view];
-            }
-        }
         block();
         return;
     }
@@ -331,11 +324,12 @@
                 FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                            forIndexPath:indexPath];
                 NSString *message = nil;
-                if (self.unpaid) {
+                if (self.networkStatus == NotReachable) {
+                    message = NSLocalizedString(@"No Internet Connection", nil);
+                } else if ([self.dataSource unpaidSubscription]) {
                     message = NSLocalizedString(@"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com", nil);
-                } else {
-                    message = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
-                    NSLocalizedString(@"No Internet Connection", nil);
+                } else if (self.markets.count == 0) {
+                    message = NSLocalizedString(@"No Games Scheduled", nil);
                 }
                 
                 cell.message.text = message;
@@ -518,9 +512,6 @@
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
     [self.dataSource setCurrentMarket:selectedMarket];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
-                                                                inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
     self.tryCreateRosterTimes = 3;
 }
 

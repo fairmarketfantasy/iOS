@@ -25,6 +25,8 @@
 @property(nonatomic) UITableView* tableView;
 
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
-- (void)reloadWithServerError:(BOOL)isError unpaid:(BOOL)unpaid;
+- (void)reloadWithServerError:(BOOL)isError;
+
+- (void)showOrHideSubmitIfNeeded;
 
 @end
