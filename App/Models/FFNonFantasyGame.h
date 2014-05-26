@@ -19,6 +19,8 @@
 @property (nonatomic) NSString *homeTeamStatsId;
 @property (nonatomic) NSString *awayTeamStatsId;
 @property (nonatomic) NSString *gameStatsId;
+@property (nonatomic) NSNumber *homeTeamDisablePt;
+@property (nonatomic) NSNumber *awayTeamDisablePt;
 @property (nonatomic) NSNumber *homeTeamPT;
 @property (nonatomic) NSNumber *awayTeamPT;
 

@@ -73,6 +73,8 @@
                                              FFNonFantasyGame *game = [self fromNetworkRepresentation:dict
                                                                                               session:session
                                                                                                  save:NO];
+                                             game.homeTeamDisablePt = [dict objectForKey:@"disable_pt_home_team"];
+                                             game.awayTeamDisablePt = [dict objectForKey:@"disable_pt_away_team"];
                                              [gamesObjects addObject:game];
                                          }
                                          
@@ -102,7 +104,8 @@
                                                         @"market_name" : gameName,
                                                         @"pt" : self.homeTeamPT,
                                                         @"team_stats_id" : self.homeTeamStatsId,
-                                                        @"game_stats_id" : self.gameStatsId
+                                                        @"game_stats_id" : self.gameStatsId,
+                                                        @"disable_pt" : self.homeTeamDisablePt
                                                         }];
     return team;
 }
@@ -117,7 +120,8 @@
                                                         @"market_name" : gameName,
                                                         @"pt" : self.awayTeamPT,
                                                         @"team_stats_id" : self.awayTeamStatsId,
-                                                        @"game_stats_id" : self.gameStatsId
+                                                        @"game_stats_id" : self.gameStatsId,
+                                                        @"disable_pt" : self.awayTeamDisablePt
                                                         }];
     return team;
 }

@@ -19,6 +19,7 @@
 @property (nonatomic, readonly) NSNumber *pt;
 @property (nonatomic, readonly) NSString *statsId;
 @property (nonatomic, readonly) NSString *gameStatsId;
+@property (nonatomic, readonly) BOOL disablePt;
 
 @property (nonatomic, assign, getter = isSelected) BOOL selected;
 

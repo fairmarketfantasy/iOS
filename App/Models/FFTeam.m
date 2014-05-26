@@ -28,6 +28,7 @@
         
         _statsId = [dict objectForKey:@"team_stats_id"];
         _gameStatsId = [dict objectForKey:@"game_stats_id"];
+        _disablePt = [[dict objectForKey:@"disable_pt"] boolValue];
     }
     return self;
 }
