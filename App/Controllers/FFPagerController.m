@@ -613,12 +613,16 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [self.teamController reloadWithServerError:NO];
 }
 
-- (void)fetchGamesWithCompletion:(void (^)(void))block
+- (void)fetchGamesShowAlert:(BOOL)shouldShow withCompletion:(void (^)(void))block
 {
-    __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
-                                                           messsage:@""
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
+    __block FFAlertView *alert = nil;
+    if (shouldShow){
+        alert = [[FFAlertView alloc] initWithTitle:nil
+                                          messsage:@""
+                                      loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.navigationController.view];
+    }
+   
     [FFNonFantasyGame fetchGamesSession:self.session
                                 success:^(id successObj) {
                                     NSLog(@"Success object: %@", successObj);
@@ -629,13 +633,16 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                     }
                                     self.games = [NSMutableArray arrayWithArray:games];
                                     [self updateSelectedGames];
-                                    [self.receiverController reloadWithServerError:NO];
-                                    [alert hide];
+                                    [self.teamController reloadWithServerError:NO];
+                                    if (alert)
+                                        [alert hide];
                                     if (block)
                                         block();
                                 } failure:^(NSError *error) {
                                     NSLog(@"Error: %@", error);
-                                    [alert hide];
+                                    [self.teamController reloadWithServerError:YES];
+                                    if (alert)
+                                        [alert hide];
                                     if (block)
                                         block();
                                 }];
@@ -668,7 +675,12 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)updateGames
 {
-    [self fetchGamesWithCompletion:nil];
+    self.games = [NSMutableArray array];
+    [self fetchGamesShowAlert:YES withCompletion:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.receiverController.tableView reloadData];
+        });
+    }];
 }
 
 - (void)updateMarkets
@@ -681,6 +693,18 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                           messsage:nil
                                       loadingStyle:FFAlertViewLoadingStylePlain];
         [alert showInView:self.navigationController.view];
+    }
+    
+    if (!self.marketsSetSingle) {
+        self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                     session:self.session authorized:YES];
+        
+        self.marketsSetSingle.delegate = self;
+    }
+    if (!self.marketsSetRegular) {
+        self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                      session:self.session authorized:YES];
+        self.marketsSetRegular.delegate = self;        
     }
     
     [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason completion:^{
