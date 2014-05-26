@@ -627,12 +627,16 @@
     [self.delegate submitRoster:rosterType completion:^(BOOL success) {
         [alert hide];
         if (success) {
-            [[[FFAlertView alloc] initWithTitle:nil
-                                        message:self.dataSource.currentRoster.messageAfterSubmit
-                              cancelButtonTitle:nil
-                                okayButtonTitle:NSLocalizedString(@"Ok", nil)
-                                       autoHide:YES]
-             showInView:self.navigationController.view];
+            if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+                [[[FFAlertView alloc] initWithTitle:nil
+                                            message:self.dataSource.currentRoster.messageAfterSubmit
+                                  cancelButtonTitle:nil
+                                    okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                                           autoHide:YES]
+                 showInView:self.navigationController.view];
+            } else {
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];                
+            }
         }
     }];
 }

@@ -335,6 +335,8 @@ SBDataObjectResultSetDelegate>
     for (FFTeam *team in self.selectedTeams) {
         [self setTeam:team selected:NO];
     }
+    
+    [self.selectedTeams removeAllObjects];
 }
 
 - (void)setTeam:(FFTeam *)team selected:(BOOL)selected
@@ -887,7 +889,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         [FFRoster submitNonFantasyRosterWithTeams:teamsDicts
                                           session:self.session
                                           success:^(id successObj) {
-                                              [self.selectedTeams removeAllObjects];
+                                              [self deselectAllTeams];
                                               if (block)
                                                   block(YES);
                                           } failure:^(NSError *error) {
