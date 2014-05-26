@@ -467,6 +467,8 @@
                     }
                     
                     return [self provideTeamTradeCellWithPlayer:player forTable:tableView atIndexPath:indexPath];
+                } else {
+                    return [self provideTeamCellWithPosition:positionName forTable:tableView atIndexPath:indexPath];
                 }
             } else {
                 if ([self.dataSource teams].count > 0 && [self.dataSource teams].count >= indexPath.row + 1) {
