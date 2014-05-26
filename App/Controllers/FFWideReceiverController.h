@@ -17,7 +17,7 @@
 - (void)addPlayer:(FFPlayer*)player;
 - (void)addTeam:(FFTeam *)team;
 - (void)fetchGamesShowAlert:(BOOL)shouldShow withCompletion:(void(^)(void))block;
-- (void)showIndividualPredictionsForTeam:(FFTeam *)team;
+- (void)makeIndividualPredictionOnTeam:(FFTeam *)team;
 
 @end
 

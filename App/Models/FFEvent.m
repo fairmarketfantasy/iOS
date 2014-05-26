@@ -106,9 +106,11 @@
                                         path:[self bulkPath]
                                    paramters:params
                                      success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
-                                         NSLog(@"JSON : %@", JSON);
+                                         if(success)
+                                             success(JSON);
                                      } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
-                                         NSLog(@"Error: %@", error);
+                                         if (failure)
+                                             failure(error);
                                      }];
 }
 

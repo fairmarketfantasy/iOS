@@ -20,8 +20,6 @@
 #import "FFPlayer.h"
 #import "FFStyle.h"
 
-#import "FFSessionManager.h"
-
 @interface FFPTController () <UITableViewDelegate, UITableViewDataSource>
 
 @property(nonatomic) NSArray* events; // should contain FFEvent*
@@ -51,11 +49,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        [self fetchEvents];
-    } else {
-        [self fetchNonFantasyEvents];
-    }
+    [self fetchEvents];
     [self.tableView reloadData];
 }
 
@@ -98,23 +92,6 @@
           showInView:self.navigationController.view];
           */
      }];
-}
-
-- (void)fetchNonFantasyEvents
-{
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    @weakify(self);
-    [FFEvent fetchEventsForTeam:[self.delegate teamStatsId]
-                         inGame:[self.delegate gameStatsId]
-                        session:self.session
-                        success:^(id successObj) {
-                            @strongify(self)
-                        } failure:^(NSError *error) {
-                            @strongify(self)
-                        }];
 }
 
 #pragma mark - UITableViewDelegate

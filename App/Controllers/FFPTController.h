@@ -15,9 +15,6 @@
 @property(nonatomic, readonly) NSString* rosterId;
 @property(nonatomic, readonly) NSString* marketId;
 
-@property(nonatomic, readonly) NSString *gameStatsId;
-@property(nonatomic, readonly) NSString *teamStatsId;
-
 @end
 
 @interface FFPTController : FFBaseViewController

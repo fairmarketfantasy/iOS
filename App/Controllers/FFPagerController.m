@@ -23,6 +23,7 @@
 #import "FFYourTeamDataSource.h"
 #import "FFMarketSet.h"
 #import "FFMarket.h"
+#import "FFEvent.h"
 #import "FFSessionViewController.h"
 #import "FFMarketSelector.h"
 #import "FFContestType.h"
@@ -61,7 +62,6 @@ SBDataObjectResultSetDelegate>
 
 @property(nonatomic, strong) NSMutableArray *games;
 @property(nonatomic, strong) NSMutableArray *selectedTeams;
-@property(nonatomic, strong) FFTeam *teamForIndividualPredictions;
 
 @end
 
@@ -650,10 +650,21 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                 }];
 }
 
-- (void)showIndividualPredictionsForTeam:(FFTeam *)team
+- (void)makeIndividualPredictionOnTeam:(FFTeam *)team
 {
-    self.teamForIndividualPredictions = team;
-    [self performSegueWithIdentifier:@"GotoPT" sender:nil];
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    
+    [FFEvent fetchEventsForTeam:team.statsId
+                         inGame:team.gameStatsId
+                        session:self.session
+                        success:^(id successObj) {
+                            [alert hide];
+                        } failure:^(NSError *error) {
+                            [alert hide];
+                        }];
 }
 
 #pragma mark - FFEventsProtocol
@@ -661,16 +672,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (NSString*)marketId
 {
     return self.selectedMarket.objId;
-}
-
-- (NSString *)gameStatsId
-{
-    return self.teamForIndividualPredictions.gameStatsId;
-}
-
-- (NSString *)teamStatsId
-{
-    return self.teamForIndividualPredictions.statsId;
 }
 
 #pragma mark -
