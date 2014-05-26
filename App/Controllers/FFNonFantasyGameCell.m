@@ -158,9 +158,9 @@
     
     [self.awayTeamAvatar draw];
     
-    [self.homePTButton setTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"PT", nil), game.homeTeamPT]
+    [self.homePTButton setTitle:[NSString stringWithFormat:@"%@%i", NSLocalizedString(@"PT", nil), [game.homeTeamPT integerValue]]
                        forState:UIControlStateNormal];
-    [self.awayPTButton setTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedString(@"PT", nil), game.awayTeamPT]
+    [self.awayPTButton setTitle:[NSString stringWithFormat:@"%@%i", NSLocalizedString(@"PT", nil), [game.awayTeamPT integerValue]]
                        forState:UIControlStateNormal];
     
     self.homeTeamName.text = game.homeTeamName;
