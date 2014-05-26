@@ -124,7 +124,8 @@
             [refreshControl endRefreshing];
         }];
     } else {
-        [self.delegate fetchGamesWithCompletion:^{
+        [self.delegate fetchGamesShowAlert:NO withCompletion:^{
+            [self.tableView reloadData];
             [refreshControl endRefreshing];
         }];
     }

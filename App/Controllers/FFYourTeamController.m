@@ -132,10 +132,14 @@
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    [self refreshRosterWithShowingAlert:NO completion:^{
-        [self.tableView reloadData];
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        [self refreshRosterWithShowingAlert:NO completion:^{
+            [self.tableView reloadData];
+            [refreshControl endRefreshing];
+        }];
+    } else {
         [refreshControl endRefreshing];
-    }];
+    }
 }
 
 #pragma mark
@@ -448,6 +452,8 @@
                 
                 if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
                     return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
+                } else {
+                    return [self provideAutoFillCellForTable:tableView atIndexPath:indexPath];
                 }
             }
             
