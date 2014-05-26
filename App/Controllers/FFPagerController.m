@@ -506,15 +506,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                    success:
      ^(id successObj) {
          @strongify(self)
-//         [self.teamController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-//                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-         //         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-         //                                          withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
          [self addPlayerToMyTeam:player];
-         [self.teamController refreshRosterWithShowingAlert:YES completion:^{
-             [self.teamController reloadWithServerError:NO];
-         }];
+         [self.teamController refreshRosterWithShowingAlert:YES completion:nil];
          
          [self setViewControllers:@[self.teamController]
                         direction:UIPageViewControllerNavigationDirectionReverse
@@ -647,8 +641,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
             } else {
                 [weakSelf.teamController.tableView reloadData];
                 [weakSelf.receiverController.tableView reloadData];
-//                [weakSelf.teamController reloadWithServerError:YES unpaid:self.unpaid];
-//                [weakSelf.receiverController reloadWithServerError:YES unpaid:self.unpaid];
             }
         }];
     }

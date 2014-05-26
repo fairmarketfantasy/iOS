@@ -135,7 +135,6 @@
     self.isServerError = isError;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self showOrHideSubmitIfNeeded];
-//    [self.tableView reloadData];
 }
 
 #pragma mark -
