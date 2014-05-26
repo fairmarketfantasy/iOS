@@ -561,6 +561,11 @@
     [self selectPosition:segments.selectedSegmentIndex];
 }
 
+- (void)autoFill:(id)sender
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Autofill" object:nil];
+}
+
 #pragma mark - FFMarketSelectorDataSource
 
 - (NSArray*)markets

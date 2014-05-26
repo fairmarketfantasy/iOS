@@ -925,6 +925,14 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          }];
     } else {
         [self deselectAllTeams];
+        
+        if (self.pager.currentPage == 1) {
+            [self setViewControllers:@[self.teamController]
+                           direction:UIPageViewControllerNavigationDirectionReverse
+                            animated:YES
+                          completion:nil];
+        }
+        
         [FFRoster autofillForSession:self.session
                              success:^(id successObj) {
                                  self.selectedTeams = [NSMutableArray arrayWithArray:successObj];
