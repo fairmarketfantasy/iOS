@@ -192,6 +192,11 @@
 		89F6D15C18F56A4C001DE023 /* FFDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F6D15B18F56A4C001DE023 /* FFDate.m */; };
 		F90A3355192A102C0095FAD4 /* FFCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A3354192A102C0095FAD4 /* FFCategory.m */; };
 		F90A335B192A13800095FAD4 /* FFSport.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A335A192A13800095FAD4 /* FFSport.m */; };
+		F9227E2D1934976A009DD1D1 /* plus-btn-disable.png in Resources */ = {isa = PBXBuildFile; fileRef = F9227E281934976A009DD1D1 /* plus-btn-disable.png */; };
+		F9227E2E1934976A009DD1D1 /* pt_disable_both.png in Resources */ = {isa = PBXBuildFile; fileRef = F9227E291934976A009DD1D1 /* pt_disable_both.png */; };
+		F9227E2F1934976A009DD1D1 /* pt_disable_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F9227E2A1934976A009DD1D1 /* pt_disable_left.png */; };
+		F9227E301934976A009DD1D1 /* pt_disable_right.png in Resources */ = {isa = PBXBuildFile; fileRef = F9227E2B1934976A009DD1D1 /* pt_disable_right.png */; };
+		F9227E311934976A009DD1D1 /* pt_enable_both.png in Resources */ = {isa = PBXBuildFile; fileRef = F9227E2C1934976A009DD1D1 /* pt_enable_both.png */; };
 		F96F0C40192B5609003AA3BA /* FFSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C3F192B5609003AA3BA /* FFSessionManager.m */; };
 		F96F0C45192C9100003AA3BA /* FFFantasyGame.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C44192C9100003AA3BA /* FFFantasyGame.m */; };
 		F96F0C48192C91AD003AA3BA /* FFNonFantasyGame.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C47192C91AD003AA3BA /* FFNonFantasyGame.m */; };
@@ -200,7 +205,6 @@
 		F96F0C56192CE0EF003AA3BA /* delete-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C52192CE0EF003AA3BA /* delete-btn.png */; };
 		F96F0C57192CE0EF003AA3BA /* empty-team.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C53192CE0EF003AA3BA /* empty-team.png */; };
 		F96F0C58192CE0EF003AA3BA /* plus-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C54192CE0EF003AA3BA /* plus-btn.png */; };
-		F96F0C59192CE0EF003AA3BA /* pt-nonfantasy.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C55192CE0EF003AA3BA /* pt-nonfantasy.png */; };
 		F96F0C5C192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C5B192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m */; };
 		F96F0C62192CFE86003AA3BA /* FFTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C61192CFE86003AA3BA /* FFTeam.m */; };
 		F9A981DE192623B900E8743C /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A981DC192623B900E8743C /* UbertestersSDK.framework */; };
@@ -501,6 +505,11 @@
 		F90A3354192A102C0095FAD4 /* FFCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFCategory.m; sourceTree = "<group>"; };
 		F90A3359192A13800095FAD4 /* FFSport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFSport.h; sourceTree = "<group>"; };
 		F90A335A192A13800095FAD4 /* FFSport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSport.m; sourceTree = "<group>"; };
+		F9227E281934976A009DD1D1 /* plus-btn-disable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-btn-disable.png"; sourceTree = "<group>"; };
+		F9227E291934976A009DD1D1 /* pt_disable_both.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pt_disable_both.png; sourceTree = "<group>"; };
+		F9227E2A1934976A009DD1D1 /* pt_disable_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pt_disable_left.png; sourceTree = "<group>"; };
+		F9227E2B1934976A009DD1D1 /* pt_disable_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pt_disable_right.png; sourceTree = "<group>"; };
+		F9227E2C1934976A009DD1D1 /* pt_enable_both.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pt_enable_both.png; sourceTree = "<group>"; };
 		F96F0C3E192B5609003AA3BA /* FFSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFSessionManager.h; sourceTree = "<group>"; };
 		F96F0C3F192B5609003AA3BA /* FFSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSessionManager.m; sourceTree = "<group>"; };
 		F96F0C43192C9100003AA3BA /* FFFantasyGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFFantasyGame.h; sourceTree = "<group>"; };
@@ -514,7 +523,6 @@
 		F96F0C52192CE0EF003AA3BA /* delete-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete-btn.png"; sourceTree = "<group>"; };
 		F96F0C53192CE0EF003AA3BA /* empty-team.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "empty-team.png"; sourceTree = "<group>"; };
 		F96F0C54192CE0EF003AA3BA /* plus-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-btn.png"; sourceTree = "<group>"; };
-		F96F0C55192CE0EF003AA3BA /* pt-nonfantasy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pt-nonfantasy.png"; sourceTree = "<group>"; };
 		F96F0C5A192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNonFantasyTeamTradeCell.h; sourceTree = "<group>"; };
 		F96F0C5B192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNonFantasyTeamTradeCell.m; sourceTree = "<group>"; };
 		F96F0C60192CFE86003AA3BA /* FFTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFTeam.h; sourceTree = "<group>"; };
@@ -680,10 +688,14 @@
 		896ACBCA18B664F5001E9C64 /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+				F9227E281934976A009DD1D1 /* plus-btn-disable.png */,
+				F9227E291934976A009DD1D1 /* pt_disable_both.png */,
+				F9227E2A1934976A009DD1D1 /* pt_disable_left.png */,
+				F9227E2B1934976A009DD1D1 /* pt_disable_right.png */,
+				F9227E2C1934976A009DD1D1 /* pt_enable_both.png */,
 				F96F0C52192CE0EF003AA3BA /* delete-btn.png */,
 				F96F0C53192CE0EF003AA3BA /* empty-team.png */,
 				F96F0C54192CE0EF003AA3BA /* plus-btn.png */,
-				F96F0C55192CE0EF003AA3BA /* pt-nonfantasy.png */,
 				3AB3F5B9191BA4A0005BA1DB /* loginmlb-586h.png */,
 				3AB3F5BA191BA4A0005BA1DB /* loginmlb.png */,
 				3AB3F5BB191BA4A0005BA1DB /* loginmlb@2x.png */,
@@ -1099,13 +1111,16 @@
 				89F2E70318BE249A00B23A99 /* accessory_collapse@2x.png in Resources */,
 				896ACC9B18B664F5001E9C64 /* leftshuttle@2x.png in Resources */,
 				896ACCA718B664F5001E9C64 /* rosterslotempty@2x.png in Resources */,
+				F9227E2D1934976A009DD1D1 /* plus-btn-disable.png in Resources */,
 				896ACC7D18B664F5001E9C64 /* checkmark@2x.png in Resources */,
 				89F1A08A18DC7C03001369E3 /* passive.png in Resources */,
 				896ACC5318B664F5001E9C64 /* Default.png in Resources */,
 				896ACCA918B664F5001E9C64 /* sectionback@2x.png in Resources */,
+				F9227E301934976A009DD1D1 /* pt_disable_right.png in Resources */,
 				8972768918D9774A008D995C /* close@2x.png in Resources */,
 				89C985BC18E48B8000ABB652 /* accessory_disclosure_dark@2x.png in Resources */,
 				89BED92D18C77348003E9E68 /* Prohibition-Bold.ttf in Resources */,
+				F9227E2F1934976A009DD1D1 /* pt_disable_left.png in Resources */,
 				896ACD0D18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard in Resources */,
 				896ACC6318B664F5001E9C64 /* FMF-Small-50@2x.png in Resources */,
 				F96F0C56192CE0EF003AA3BA /* delete-btn.png in Resources */,
@@ -1137,6 +1152,7 @@
 				89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */,
 				896ACC7118B664F5001E9C64 /* button_normal.png in Resources */,
 				896ACC9118B664F5001E9C64 /* globalmenu@2x.png in Resources */,
+				F9227E2E1934976A009DD1D1 /* pt_disable_both.png in Resources */,
 				896ACC6F18B664F5001E9C64 /* iTunesArtwork@2x.png in Resources */,
 				896ACC7F18B664F5001E9C64 /* contestcircle@2x.png in Resources */,
 				893D690C18E5C1F9005E305B /* show@2x.png in Resources */,
@@ -1154,12 +1170,12 @@
 				896ACC6918B664F5001E9C64 /* FMF.png in Resources */,
 				3AB3F5BE191BA4A0005BA1DB /* loginmlb@2x.png in Resources */,
 				89F1A09918DC87CB001369E3 /* loginbg.png in Resources */,
+				F9227E311934976A009DD1D1 /* pt_enable_both.png in Resources */,
 				896ACC6718B664F5001E9C64 /* FMF-Small@2x.png in Resources */,
 				89F1A08818DC7C03001369E3 /* active.png in Resources */,
 				3AB3F5BC191BA4A0005BA1DB /* loginmlb-586h.png in Resources */,
 				896ACC5718B664F5001E9C64 /* FMF-120.png in Resources */,
 				89F2E70418BE249A00B23A99 /* accessory_disclosure@2x.png in Resources */,
-				F96F0C59192CE0EF003AA3BA /* pt-nonfantasy.png in Resources */,
 				896ACC5D18B664F5001E9C64 /* FMF-72@2x.png in Resources */,
 				89F1A09018DC7CAB001369E3 /* passive@2x.png in Resources */,
 			);
