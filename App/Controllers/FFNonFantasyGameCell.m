@@ -25,6 +25,8 @@
 @property (nonatomic, strong) UIImageView *homePlusView;
 @property (nonatomic, strong) UIImageView *awayPlusView;
 
+@property (nonatomic, strong) UIImageView *ptBackground;
+
 @end
 
 @implementation FFNonFantasyGameCell
@@ -110,23 +112,20 @@
         [self.contentView addSubview:self.datelabel];
         
         // pt background
-        UIImageView *ptBackground = [[UIImageView alloc] initWithFrame:CGRectMake(115.f, 20.f, 89.f, 36.f)];
-        ptBackground.image = [UIImage imageNamed:@"pt-nonfantasy"];
-        [self.contentView addSubview:ptBackground];
+        self.ptBackground = [[UIImageView alloc] initWithFrame:CGRectMake(115.f, 20.f, 89.f, 36.f)];
+        [self.contentView addSubview:self.ptBackground];
         
         // pt buttons
         _homePTButton = [FFCustomButton buttonWithType:UIButtonTypeCustom];
         self.homePTButton.frame = CGRectMake(120.f, 25.f, 35.f, 25.f);
         self.homePTButton.backgroundColor = [UIColor clearColor];
         self.homePTButton.titleLabel.font = [FFStyle blockFont:17.f];
-        [self.homePTButton setTitleColor:[FFStyle brightBlue] forState:UIControlStateNormal];
         [self.contentView addSubview:self.homePTButton];
         
         _awayPTButton = [FFCustomButton buttonWithType:UIButtonTypeCustom];
         self.awayPTButton.frame = CGRectMake(166.f, 25.f, 35.f, 25.f);
         self.awayPTButton.backgroundColor = [UIColor clearColor];
         self.awayPTButton.titleLabel.font = [FFStyle blockFont:17.f];
-        [self.awayPTButton setTitleColor:[FFStyle brightBlue] forState:UIControlStateNormal];
         [self.contentView addSubview:self.awayPTButton];
 
         // separator
@@ -158,6 +157,26 @@
     
     [self.awayTeamAvatar draw];
     
+    NSString *imageName = nil;
+    if ([game.homeTeamDisablePt boolValue] && [game.awayTeamDisablePt boolValue]) {
+        imageName = @"pt_disable_both";
+    } else if (![game.homeTeamDisablePt boolValue] && [game.awayTeamDisablePt boolValue]) {
+        imageName = @"pt_disable_right";
+    } else if ([game.homeTeamDisablePt boolValue] && ![game.awayTeamDisablePt boolValue]) {
+        imageName = @"pt_disable_left";
+    } else {
+        imageName = @"pt_enable_both";
+    }
+    self.ptBackground.image = [UIImage imageNamed:imageName];
+    
+    self.homePTButton.enabled = ![game.homeTeamDisablePt boolValue];
+    self.awayPTButton.enabled = ![game.awayTeamDisablePt boolValue];
+    
+    UIColor *homePTColor = [game.homeTeamDisablePt boolValue] ? [FFStyle lightGrey] : [FFStyle brightBlue];
+    UIColor *awayPTColor = [game.awayTeamDisablePt boolValue] ? [FFStyle lightGrey] : [FFStyle brightBlue];
+    [self.homePTButton setTitleColor:homePTColor forState:UIControlStateNormal];
+    [self.awayPTButton setTitleColor:awayPTColor forState:UIControlStateNormal];
+    
     [self.homePTButton setTitle:[NSString stringWithFormat:@"%@%i", NSLocalizedString(@"PT", nil), [game.homeTeamPT integerValue]]
                        forState:UIControlStateNormal];
     [self.awayPTButton setTitle:[NSString stringWithFormat:@"%@%i", NSLocalizedString(@"PT", nil), [game.awayTeamPT integerValue]]
@@ -169,9 +188,8 @@
     
     self.addAwayTeamBtn.enabled = !game.awayTeam.selected;
     self.addHomeTeamBtn.enabled = !game.homeTeam.selected;
-    
-    self.awayPlusView.image = game.awayTeam.selected ? [UIImage imageNamed:@"backbtn"] : [UIImage imageNamed:@"plus-btn"];
-    self.homePlusView.image = game.homeTeam.selected ? [UIImage imageNamed:@"backbtn"] : [UIImage imageNamed:@"plus-btn"];
+    self.awayPlusView.image = game.awayTeam.selected ? [UIImage imageNamed:@"plus-btn-disable"] : [UIImage imageNamed:@"plus-btn"];
+    self.homePlusView.image = game.homeTeam.selected ? [UIImage imageNamed:@"plus-btn-disable"] : [UIImage imageNamed:@"plus-btn"];
 }
 
 @end
