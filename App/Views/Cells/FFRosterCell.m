@@ -60,13 +60,13 @@
         self.rankCaptionLabel.backgroundColor = [UIColor clearColor];
         self.rankCaptionLabel.font = [FFStyle regularFont:14.f];
         self.rankCaptionLabel.textColor = [FFStyle darkerColorForColor:[FFStyle lightGrey]];
-        self.rankCaptionLabel.text = NSLocalizedString(@"Rank:", nil);
+        self.rankCaptionLabel.text = @"Rank:";
         [self.contentView addSubview:self.rankCaptionLabel];
 
         UILabel* scoreLabel = [[UILabel alloc] initWithFrame:CGRectMake(165.f, 32.f, 50.f, 20.f)];
         scoreLabel.backgroundColor = [UIColor clearColor];
         scoreLabel.font = [FFStyle regularFont:14.f];
-        scoreLabel.text = NSLocalizedString(@"Score:", nil);
+        scoreLabel.text = @"Score:";
         scoreLabel.textColor = [FFStyle darkerColorForColor:[FFStyle lightGrey]];
         [self.contentView addSubview:scoreLabel];
 

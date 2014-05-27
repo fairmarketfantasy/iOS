@@ -36,7 +36,7 @@
         self.costLabel.textColor = [FFStyle darkGreyTextColor];
         self.costLabel.adjustsFontSizeToFitWidth = YES;
         [self.contentView addSubview:self.costLabel];
-        _PTButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"PT", nil)
+        _PTButton = [FFStyle coloredButtonWithText:@"PT"
                                              color:self.contentView.backgroundColor
                                        borderColor:[FFStyle brightBlue]];
         self.PTButton.frame = CGRectMake(222.f,
@@ -51,7 +51,7 @@
                                                          3.f : 5.5f,
                                                          0.f, 0.f, 0.f);
         [self.contentView addSubview:self.PTButton];
-        _addButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"Add", nil)
+        _addButton = [FFStyle coloredButtonWithText:@"Add"
                                              color:[FFStyle brightGreen]
                                        borderColor:[FFStyle white]];
         self.addButton.frame = CGRectMake(267.f,

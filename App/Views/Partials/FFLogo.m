@@ -18,13 +18,13 @@
         self.textAlignment = NSTextAlignmentLeft;
 
         NSMutableAttributedString* attributedTitle = [[NSMutableAttributedString alloc]
-            initWithString:
-                NSLocalizedString(@"Predict That",
-                                  @"Session controller title")
-                attributes:@{
-                               NSFontAttributeName : [FFStyle blockFont:19.f],
-                               NSForegroundColorAttributeName : [FFStyle white]
-                           }];
+                                                      initWithString:
+                                                      NSLocalizedString(@"Predict That",
+                                                                        @"Session controller title")
+                                                      attributes:@{
+                                                                   NSFontAttributeName : [FFStyle blockFont:19.f],
+                                                                   NSForegroundColorAttributeName : [FFStyle white]
+                                                                   }];
         NSRange lastWord = [attributedTitle.string rangeOfString:@" "
                                                          options:NSBackwardsSearch];
         lastWord.location++;

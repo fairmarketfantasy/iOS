@@ -40,7 +40,7 @@
         self.noGamesLabel.textColor = [FFStyle lightGrey];
         self.noGamesLabel.backgroundColor = [UIColor clearColor];
         self.noGamesLabel.textAlignment = NSTextAlignmentCenter;
-        self.noGamesLabel.text = NSLocalizedString(@"NO GAMES SCHEDULED", nil);
+        self.noGamesLabel.text = @"NO GAMES SCHEDULED";
         [self.contentView addSubview:self.noGamesLabel];
         self.noGamesLabel.hidden = YES;
     }

@@ -78,6 +78,7 @@
     self.picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 162.f)];
     self.picker.delegate = self;
     self.picker.dataSource = self;
+    self.picker.showsSelectionIndicator = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? NO : YES;
     
     CGAffineTransform t0 = CGAffineTransformMakeTranslation(self.picker.bounds.size.width/2, self.picker.bounds.size.height/2);
 	CGAffineTransform s0 = CGAffineTransformMakeScale(1.0, 0.47);
@@ -271,9 +272,9 @@
     if (pickerLabel == nil) {
         pickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 54.f)];
         pickerLabel.textAlignment = NSTextAlignmentCenter;
-        pickerLabel.textColor = [UIColor clearColor];
+        pickerLabel.textColor = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? [UIColor clearColor] : [FFStyle darkGrey];
         pickerLabel.font = [FFStyle blockFont:30.0f];
-        pickerLabel.textColor = [UIColor whiteColor];
+        pickerLabel.textColor = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? [UIColor whiteColor] : [UIColor blackColor];
     }
     
     NSString *positionName = [self.dataSource uniquePositions][row];
@@ -325,11 +326,11 @@
                                                                            forIndexPath:indexPath];
                 NSString *message = nil;
                 if (self.networkStatus == NotReachable) {
-                    message = NSLocalizedString(@"No Internet Connection", nil);
+                    message = @"No Internet Connection";
                 } else if ([self.dataSource unpaidSubscription]) {
-                    message = NSLocalizedString(@"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com", nil);
+                    message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
                 } else if (self.markets.count == 0) {
-                    message = NSLocalizedString(@"No Games Scheduled", nil);
+                    message = @"No Games Scheduled";
                 }
                 
                 cell.message.text = message;
@@ -448,7 +449,7 @@
                 positionName = positionFullName;
             }
         }
-        view.titleLabel.text = NSLocalizedString(positionName, nil);
+        view.titleLabel.text = positionName;
         view.priceLabel.text = self.delegate ?
         [[FFStyle priceFormatter] stringFromNumber:@([[self.dataSource currentRoster] remainingSalary].floatValue)] : @"";
         view.priceLabel.textColor = [[self.dataSource currentRoster] remainingSalary].floatValue > 0.f
@@ -500,7 +501,7 @@
                                                                              forIndexPath:indexPath];
     if (self.markets.count > indexPath.item && self.networkStatus != NotReachable) {
         FFMarket* market = self.markets[indexPath.item];
-        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
+        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : @"Market";
         cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
     }
     

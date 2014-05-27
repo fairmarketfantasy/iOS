@@ -336,7 +336,7 @@
     FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamCellIdentifier
                                                        forIndexPath:indexPath];
     cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", position,
-                            NSLocalizedString(@"Not Selected", nil)];
+                            @"Not Selected"];
     return cell;
 }
 
@@ -379,11 +379,11 @@
                     
                     NSString *message = nil;
                     if (self.networkStatus == NotReachable) {
-                        message = NSLocalizedString(@"No Internet Connection", nil);
+                        message = @"No Internet Connection";
                     } else if ([self.dataSource unpaidSubscription]) {
-                        message = NSLocalizedString(@"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com", nil);
+                        message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
                     } else if (self.markets.count == 0) {
-                        message = NSLocalizedString(@"No Games Scheduled", nil);
+                        message = @"No Games Scheduled";
                     }
                     
                     cell.message.text = message;
@@ -435,7 +435,7 @@
 {
     if (section == 1) {
         FFRosterTableHeader* view = FFRosterTableHeader.new;
-        view.titleLabel.text = NSLocalizedString(@"Your Team", nil);
+        view.titleLabel.text = @"Your Team";
         view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.dataSource.currentRoster.remainingSalary.floatValue)];
         view.priceLabel.textColor = self.dataSource.currentRoster.remainingSalary.floatValue > 0.f
         ? [FFStyle brightGreen] : [FFStyle brightRed];
@@ -501,7 +501,7 @@
 
 - (void)removePlayer:(FFPlayer*)player
 {
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Removing Player", nil)
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Removing Player"
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
@@ -541,7 +541,7 @@
             [[[FFAlertView alloc] initWithTitle:nil
                                         message:self.dataSource.currentRoster.messageAfterSubmit
                               cancelButtonTitle:nil
-                                okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                                okayButtonTitle:@"Ok"
                                        autoHide:YES]
              showInView:self.navigationController.view];
         }
@@ -574,7 +574,7 @@
                                                                              forIndexPath:indexPath];
     if (self.markets.count > indexPath.item && self.networkStatus != NotReachable) {
         FFMarket* market = self.markets[indexPath.item];
-        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
+        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : @"Market";
         cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
     }
     

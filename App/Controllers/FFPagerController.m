@@ -497,7 +497,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)addPlayer:(FFPlayer*)player
 {
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Buying Player", nil)
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Buying Player"
                                                    messsage:nil
                                                loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
@@ -534,7 +534,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
                                                              message:localizedDescription
                                                    cancelButtonTitle:nil
-                                                     okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                                     okayButtonTitle:@"Dismiss"
                                                             autoHide:YES];
              
              [alert showInView:self.navigationController.view];

@@ -34,7 +34,7 @@
 
         _create = [UIButton buttonWithType:UIButtonTypeCustom];
         _create.titleLabel.font = [FFStyle blockFont:19.f];
-        [_create setTitle:NSLocalizedString(@"Create Game", nil)
+        [_create setTitle:@"Create Game"
                  forState:UIControlStateNormal];
         _create.frame = CGRectMake(12, 0, frame.size.width / 2 - 12, frame.size.height - 5);
         [_create setTitleColor:[FFStyle white]
@@ -48,7 +48,7 @@
 
         _enter = [UIButton buttonWithType:UIButtonTypeCustom];
         _enter.titleLabel.font = [FFStyle blockFont:19.f];
-        [_enter setTitle:NSLocalizedString(@"My Games", nil)
+        [_enter setTitle:@"My Games"
                 forState:UIControlStateNormal];
         _enter.frame = CGRectMake(frame.size.width / 2, 0, frame.size.width / 2 - 12, frame.size.height - 5);
         [_enter setTitleColor:[FFStyle white]

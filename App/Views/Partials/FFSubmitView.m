@@ -18,8 +18,8 @@
     if (self) {
         self.backgroundColor = [FFStyle darkGrey];
         // segments
-        _segments = [FUISegmentedControl.alloc initWithItems:@[NSLocalizedString(@"Submit 100FB", nil),
-                                                               NSLocalizedString(@"Submit HTH 27FB", nil)]];
+        _segments = [FUISegmentedControl.alloc initWithItems:@[@"Submit 100FB",
+                                                               @"Submit HTH 27FB"]];
         self.segments.frame = CGRectMake(15.f, 10.f, 290.f, 30.f);
         self.segments.cornerRadius = 3.f;
         self.segments.dividerColor = [FFStyle white];
