@@ -164,12 +164,9 @@ failure:
                                       success:(void (^)(NSURLRequest*, NSHTTPURLResponse*, id))success
                                       failure:(void (^)(NSURLRequest*, NSHTTPURLResponse*, NSError*, id))failure
 {
-    // wrap all authorized requests so we can log the error to Ubertesters.
     [super authorizedJSONRequestWithRequestBlock:requestBlock success:success failure:
      ^void (NSURLRequest *req, NSHTTPURLResponse *resp, NSError *err, id res)
     {
-        [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"AuthorizedRequestError: %@", err]
-                          withLevel:UTLogLevelError];
         failure(req, resp, err, res);
     }];
 }
@@ -180,12 +177,9 @@ failure:
                                success:(void (^)(NSURLRequest*, NSHTTPURLResponse*, id))success
                                failure:(void (^)(NSURLRequest*, NSHTTPURLResponse*, NSError*, id))failure
 {
-    // wrap all anonymous requests so we can log the error to Ubertesters.
     [super anonymousJSONRequestWithMethod:method path:path parameters:params success:success failure:
      ^void (NSURLRequest *req, NSHTTPURLResponse *resp, NSError *err, id ret)
     {
-        [[Ubertesters shared] UTLog:[NSString stringWithFormat:@"AnonymousRequestError: %@", err]
-                          withLevel:UTLogLevelError];
         failure(req, resp, err, ret);
     }];
 }
