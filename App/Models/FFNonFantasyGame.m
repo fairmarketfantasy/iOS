@@ -100,12 +100,11 @@
     FFTeam *team = [[FFTeam alloc] initWithDictionary:@{
                                                         @"team_name" : self.homeTeamName,
                                                         @"team_logo" : self.homeTeamLogoURL,
-                                                        @"game_time" : [NSString stringWithFormat:@"%@", self.gameTime],
+                                                        @"game_time" : self.gameTime,
                                                         @"market_name" : gameName,
                                                         @"pt" : self.homeTeamPT,
                                                         @"team_stats_id" : self.homeTeamStatsId,
                                                         @"game_stats_id" : self.gameStatsId,
-                                                        @"disable_pt" : self.homeTeamDisablePt
                                                         }];
     return team;
 }
@@ -116,12 +115,11 @@
     FFTeam *team = [[FFTeam alloc] initWithDictionary:@{
                                                         @"team_name" : self.awayTeamName,
                                                         @"team_logo" : self.awayTeamLogoURL,
-                                                        @"game_time" : [NSString stringWithFormat:@"%@", self.gameTime],
+                                                        @"game_time" : self.gameTime,
                                                         @"market_name" : gameName,
                                                         @"pt" : self.awayTeamPT,
                                                         @"team_stats_id" : self.awayTeamStatsId,
                                                         @"game_stats_id" : self.gameStatsId,
-                                                        @"disable_pt" : self.awayTeamDisablePt
                                                         }];
     return team;
 }

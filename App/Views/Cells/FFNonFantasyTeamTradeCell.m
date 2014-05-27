@@ -33,7 +33,7 @@
         self.teamNameLabel.adjustsFontSizeToFitWidth = YES;
         [self.contentView addSubview:self.teamNameLabel];
        
-        self.gameNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(82.f, 50.f, 200.f, 16.f)];
+        self.gameNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(82.f, 50.f, 133.f, 16.f)];
         self.gameNameLabel.backgroundColor = [UIColor clearColor];
         self.gameNameLabel.font = [FFStyle regularFont:14.f];
         self.gameNameLabel.textColor = [FFStyle darkGreyTextColor];

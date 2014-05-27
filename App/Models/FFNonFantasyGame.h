@@ -12,17 +12,17 @@
 
 @interface FFNonFantasyGame : FFGame
 
-@property (nonatomic) NSString *homeTeamName;
-@property (nonatomic) NSString *awayTeamName;
-@property (nonatomic) NSString *homeTeamLogoURL;
-@property (nonatomic) NSString *awayTeamLogoURL;
-@property (nonatomic) NSString *homeTeamStatsId;
-@property (nonatomic) NSString *awayTeamStatsId;
-@property (nonatomic) NSString *gameStatsId;
-@property (nonatomic) NSNumber *homeTeamDisablePt;
-@property (nonatomic) NSNumber *awayTeamDisablePt;
-@property (nonatomic) NSNumber *homeTeamPT;
-@property (nonatomic) NSNumber *awayTeamPT;
+@property (nonatomic, readonly) NSString *homeTeamName;
+@property (nonatomic, readonly) NSString *awayTeamName;
+@property (nonatomic, readonly) NSString *homeTeamLogoURL;
+@property (nonatomic, readonly) NSString *awayTeamLogoURL;
+@property (nonatomic, readonly) NSString *homeTeamStatsId;
+@property (nonatomic, readonly) NSString *awayTeamStatsId;
+@property (nonatomic, readonly) NSString *gameStatsId;
+@property (nonatomic, readonly) NSNumber *homeTeamPT;
+@property (nonatomic, readonly) NSNumber *awayTeamPT;
+@property (nonatomic, assign) NSNumber *homeTeamDisablePt;
+@property (nonatomic, assign) NSNumber *awayTeamDisablePt;
 
 @property (nonatomic, readonly) FFTeam *homeTeam;
 @property (nonatomic, readonly) FFTeam *awayTeam;

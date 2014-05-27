@@ -352,6 +352,19 @@ SBDataObjectResultSetDelegate>
     }
 }
 
+- (void)disablePTForTeam:(FFTeam *)team
+{
+    for (FFNonFantasyGame *game in self.games) {
+        if ([game.gameStatsId isEqualToString:team.gameStatsId]) {
+            if ([game.homeTeam.statsId isEqualToString:team.statsId]) {
+                game.homeTeamDisablePt = @(YES);
+            } else {
+                game.awayTeamDisablePt = @(YES);
+            }
+        }
+    }
+}
+
 - (void)createRosterWithCompletion:(void(^)(BOOL success))block
 {
     _rosterIsCreating = YES;
@@ -661,6 +674,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                          inGame:team.gameStatsId
                         session:self.session
                         success:^(id successObj) {
+                            [self disablePTForTeam:team];
+                            [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                                                             withRowAnimation:UITableViewRowAnimationAutomatic];
                             [alert hide];
                         } failure:^(NSError *error) {
                             [alert hide];
