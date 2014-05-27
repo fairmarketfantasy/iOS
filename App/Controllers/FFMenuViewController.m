@@ -454,14 +454,26 @@
     
     @weakify(item)
     if (item.type == FFNodeItemTypeLeaf) {
-        item.action = ^{
-            @strongify(self)
-            @strongify(item)
-            if ([self.delegate respondsToSelector:@selector(didUpdateToCategory:sport:)]) {
-                [self.delegate didUpdateToCategory:item.categoryTitle sport:item.title];
-            }
-            [self dismissViewControllerAnimated:YES completion:nil];
-        };
+        if (item.categoryTitle == nil) {
+            __block FFNodeItem* blockItem = item;
+            item.action = ^{
+                @strongify(self)
+                [self dismissViewControllerAnimated:YES completion:^{
+                    if (self.delegate) {
+                        [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
+                    }
+                }];
+            };
+        } else {
+            item.action = ^{
+                @strongify(self)
+                @strongify(item)
+                if ([self.delegate respondsToSelector:@selector(didUpdateToCategory:sport:)]) {
+                    [self.delegate didUpdateToCategory:item.categoryTitle sport:item.title];
+                }
+                [self dismissViewControllerAnimated:YES completion:nil];
+            };
+        }
     } else if ([item.title isEqualToString:@"Sign Out"]) {
         item.action = ^{
             @strongify(self)
@@ -471,18 +483,7 @@
                 }
             }];
         };
-    } else {
-        __block FFNodeItem* blockItem = item;
-        item.action = ^{
-            @strongify(self)
-            [self dismissViewControllerAnimated:YES completion:^{
-                if (self.delegate) {
-                    [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
-                }
-            }];
-        };
-    }
-
+    } 
 //    if (item.type != FFNodeItemTypeLeaf || item.action) {
 //        if ([item.title isEqualToString:@"Enternainment"] ||
 //            [item.title isEqualToString:@"Politics"]) {
