@@ -455,15 +455,26 @@
     @weakify(item)
     if (item.type == FFNodeItemTypeLeaf) {
         if (item.categoryTitle == nil) {
-            __block FFNodeItem* blockItem = item;
-            item.action = ^{
-                @strongify(self)
-                [self dismissViewControllerAnimated:YES completion:^{
-                    if (self.delegate) {
-                        [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
-                    }
-                }];
-            };
+            if ([item.title isEqualToString:@"Sign Out"]) {
+                item.action = ^{
+                    @strongify(self)
+                    [self dismissViewControllerAnimated:YES completion:^{
+                        if ([self.delegate respondsToSelector:@selector(logout)]) {
+                            [self.delegate logout];
+                        }
+                    }];
+                };
+            } else {
+                __block FFNodeItem* blockItem = item;
+                item.action = ^{
+                    @strongify(self)
+                    [self dismissViewControllerAnimated:YES completion:^{
+                        if (self.delegate) {
+                            [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
+                        }
+                    }];
+                };
+            }
         } else {
             item.action = ^{
                 @strongify(self)
@@ -474,74 +485,7 @@
                 [self dismissViewControllerAnimated:YES completion:nil];
             };
         }
-    } else if ([item.title isEqualToString:@"Sign Out"]) {
-        item.action = ^{
-            @strongify(self)
-            [self dismissViewControllerAnimated:YES completion:^{
-                if ([self.delegate respondsToSelector:@selector(logout)]) {
-                    [self.delegate logout];
-                }
-            }];
-        };
-    } 
-//    if (item.type != FFNodeItemTypeLeaf || item.action) {
-//        if ([item.title isEqualToString:@"Enternainment"] ||
-//            [item.title isEqualToString:@"Politics"]) {
-//            item.action = ^{
-//                @strongify(self)
-//                [[[FFAlertView alloc] initWithTitle:nil
-//                                            message:NSLocalizedString(@"Coming soon!", nil)
-//                                  cancelButtonTitle:nil
-//                                    okayButtonTitle:NSLocalizedString(@"Ok", nil)
-//                                           autoHide:YES] showInView:self.view];
-//            };
-//        }
-//        return;
-//    }
-//    if ([item.title isEqualToString:@"NBA"]) {
-//        item.action = ^{
-//            @strongify(self)
-//            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-//                [self.delegate didUpdateToNewSport:FFMarketSportNBA];
-//            }
-//            [self dismissViewControllerAnimated:YES completion:nil];
-//        };
-//    } else if ([item.title isEqualToString:@"NFL"]) {
-//        item.action = ^{
-//            @strongify(self)
-//            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-//                [self.delegate didUpdateToNewSport:FFMarketSportNFL];
-//            }
-//            [self dismissViewControllerAnimated:YES completion:nil];
-//        };
-//    } else if ([item.title isEqualToString:@"MLB"]) {
-//        item.action = ^{
-//            @strongify(self)
-//            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-//                [self.delegate didUpdateToNewSport:FFMarketSportMLB];
-//            }
-//            [self dismissViewControllerAnimated:YES completion:nil];
-//        };
-//    } else if ([item.title isEqualToString:@"Sign Out"]) {
-//        item.action = ^{
-//            @strongify(self)
-//            [self dismissViewControllerAnimated:YES completion:^{
-//                if ([self.delegate respondsToSelector:@selector(logout)]) {
-//                    [self.delegate logout];
-//                }
-//            }];
-//        };
-//    } else {
-//        __block FFNodeItem* blockItem = item;
-//        item.action = ^{
-//            @strongify(self)
-//            [self dismissViewControllerAnimated:YES completion:^{
-//                if (self.delegate) {
-//                    [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
-//                }
-//            }];
-//        };
-//    }
+    }
 }
 
 #pragma mark - button actions
