@@ -27,7 +27,7 @@
     if (self) {
         self.contentView.backgroundColor = [FFStyle white];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        _autoFillButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"Auto Fill", nil)
+        _autoFillButton = [FFStyle coloredButtonWithText:@"Auto Fill"
                                                    color:[FFStyle brightBlue]
                                              borderColor:[UIColor clearColor]];
         self.autoFillButton.frame = CGRectMake(15.f, 10.f, 100.f, 30.f);
@@ -69,7 +69,7 @@
         self.switchLabel.numberOfLines = 2;
         self.switchLabel.font = [FFStyle regularFont:12.f];
         self.switchLabel.textColor = [FFStyle lightGrey];
-        self.switchLabel.text = NSLocalizedString(@"Auto-remove benched players", nil);
+        self.switchLabel.text = @"Auto-remove benched players";
         [self addSubview:self.switchLabel];
     }
     return self;

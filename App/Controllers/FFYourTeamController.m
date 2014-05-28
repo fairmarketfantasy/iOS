@@ -369,7 +369,7 @@
     FFTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamCellIdentifier
                                                        forIndexPath:indexPath];
     cell.titleLabel.text = [NSString stringWithFormat:@"%@ %@", position,
-                            NSLocalizedString(@"Not Selected", nil)];
+                            @"Not Selected"];
     return cell;
 }
 
@@ -378,7 +378,7 @@
     FFNonFantasyTeamCell *cell = [tableView dequeueReusableCellWithIdentifier:kNonFantasyTeamCellIdentifier
                                                                  forIndexPath:indexPath];
     
-    cell.titleLabel.text = [NSString stringWithFormat:@"%@", NSLocalizedString(@"Team Not Selected", nil)];
+    cell.titleLabel.text = [NSString stringWithFormat:@"%@", @"Team Not Selected"];
     return cell;
 }
 
@@ -447,8 +447,8 @@
                                                                                forIndexPath:indexPath];
                     
                     cell.message.text = (self.networkStatus == NotReachable || self.isServerError) ?
-                                        NSLocalizedString(@"No Internet Connection", nil) :
-                                        NSLocalizedString(@"No Games Scheduled", nil);
+                                        @"No Internet Connection" :
+                                        @"No Games Scheduled";
                     return cell;
                 }
                 
@@ -515,9 +515,9 @@
         FFRosterTableHeader* view = [FFRosterTableHeader new];
         NSString *title = nil;
         if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-            title = NSLocalizedString(@"Your Team", nil);
+            title = @"Your Team";
         } else {
-            title = NSLocalizedString(@"Your choices", nil);
+            title = @"Your choices";
         }
         view.titleLabel.text = title;
         if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
@@ -587,7 +587,7 @@
 
 - (void)removePlayer:(FFPlayer*)player
 {
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Removing Player", nil)
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Removing Player"
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
@@ -633,7 +633,7 @@
                 [[[FFAlertView alloc] initWithTitle:nil
                                             message:self.dataSource.currentRoster.messageAfterSubmit
                                   cancelButtonTitle:nil
-                                    okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                                    okayButtonTitle:@"Ok"
                                            autoHide:YES]
                  showInView:self.navigationController.view];
             } else {
@@ -669,7 +669,7 @@
                                                                              forIndexPath:indexPath];
     if (self.markets.count > indexPath.item && self.networkStatus != NotReachable) {
         FFMarket* market = self.markets[indexPath.item];
-        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
+        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : @"Market";
         cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
     }
     

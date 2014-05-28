@@ -44,7 +44,7 @@
         self.noConnectionLabel.textColor = [FFStyle lightGrey];
         self.noConnectionLabel.backgroundColor = [UIColor clearColor];
         self.noConnectionLabel.textAlignment = NSTextAlignmentCenter;
-        self.noConnectionLabel.text = NSLocalizedString(@"NO INTERNET CONNECTION", nil);
+        self.noConnectionLabel.text = @"NO INTERNET CONNECTION";
         [self.contentView addSubview:self.noConnectionLabel];
         self.noConnectionLabel.hidden = YES;
     }

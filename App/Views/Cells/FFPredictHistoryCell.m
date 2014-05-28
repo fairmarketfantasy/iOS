@@ -31,7 +31,7 @@
                                                        alpha:.5f];
         [self.contentView addSubview:separator2];
         // button
-        _rosterButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"Roster", nil)
+        _rosterButton = [FFStyle coloredButtonWithText:@"Roster"
                                                  color:[FFStyle brightBlue]
                                            borderColor:[UIColor clearColor]];
         self.rosterButton.frame = CGRectMake(205.f, 10.f, 100.f, 30.f);
@@ -96,42 +96,42 @@
         UILabel* captionDayLabel = [[UILabel alloc] initWithFrame:
                                     CGRectMake(10.f, 60.f, 60.f, 20.f)];
         captionDayLabel.backgroundColor = [UIColor clearColor];
-        captionDayLabel.text = NSLocalizedString(@"○ Day", nil);
+        captionDayLabel.text = @"○ Day";
         captionDayLabel.font = [FFStyle regularFont:12.f];
         captionDayLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionDayLabel];
         UILabel* captionStateLabel = [[UILabel alloc] initWithFrame:
                                       CGRectMake(10.f, 90.f, 60.f, 20.f)];
         captionStateLabel.backgroundColor = [UIColor clearColor];
-        captionStateLabel.text = NSLocalizedString(@"○ State", nil);
+        captionStateLabel.text = @"○ State";
         captionStateLabel.font = [FFStyle regularFont:12.f];
         captionStateLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionStateLabel];
         UILabel* captionPointsLabel = [[UILabel alloc] initWithFrame:
                                        CGRectMake(10.f, 120.f, 60.f, 20.f)];
         captionPointsLabel.backgroundColor = [UIColor clearColor];
-        captionPointsLabel.text = NSLocalizedString(@"○ Points", nil);
+        captionPointsLabel.text = @"○ Points";
         captionPointsLabel.font = [FFStyle regularFont:12.f];
         captionPointsLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionPointsLabel];
         UILabel* captionGameTimeLabel = [[UILabel alloc] initWithFrame:
                                          CGRectMake(150.f, 60.f, 80.f, 20.f)];
         captionGameTimeLabel.backgroundColor = [UIColor clearColor];
-        captionGameTimeLabel.text = NSLocalizedString(@"○ Game Time", nil);
+        captionGameTimeLabel.text = @"○ Game Time";
         captionGameTimeLabel.font = [FFStyle regularFont:12.f];
         captionGameTimeLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionGameTimeLabel];
         UILabel* captionRankLabel = [[UILabel alloc] initWithFrame:
                                      CGRectMake(150.f, 90.f, 80.f, 20.f)];
         captionRankLabel.backgroundColor = [UIColor clearColor];
-        captionRankLabel.text = NSLocalizedString(@"○ Rank", nil);
+        captionRankLabel.text = @"○ Rank";
         captionRankLabel.font = [FFStyle regularFont:12.f];
         captionRankLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionRankLabel];
         UILabel* captionAwardLabel = [[UILabel alloc] initWithFrame:
                                       CGRectMake(150.f, 120.f, 80.f, 20.f)];
         captionAwardLabel.backgroundColor = [UIColor clearColor];
-        captionAwardLabel.text = NSLocalizedString(@"○ Award", nil);
+        captionAwardLabel.text = @"○ Award";
         captionAwardLabel.font = [FFStyle regularFont:12.f];
         captionAwardLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionAwardLabel];

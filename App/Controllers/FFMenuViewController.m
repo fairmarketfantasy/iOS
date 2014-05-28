@@ -369,9 +369,9 @@
 - (void)showComingSoonAlert
 {
     [[[FFAlertView alloc] initWithTitle:nil
-                                message:NSLocalizedString(@"Coming soon!", nil)
+                                message:@"Coming soon!"
                       cancelButtonTitle:nil
-                        okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                        okayButtonTitle:@"Ok"
                                autoHide:YES] showInView:self.view];
 }
 
@@ -428,7 +428,7 @@
                                    message:nil
                                 customView:accountBalance
                          cancelButtonTitle:nil
-                           okayButtonTitle:NSLocalizedString(@"Close", nil)
+                           okayButtonTitle:@"Close"
                                   autoHide:YES]
           showInView:self.view];
      }];

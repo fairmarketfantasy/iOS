@@ -36,7 +36,7 @@
         captionBalanceLabel.backgroundColor = [UIColor clearColor];
         captionBalanceLabel.textColor = [FFStyle darkGreyTextColor];
         captionBalanceLabel.font = [FFStyle blockFont:17.f];
-        captionBalanceLabel.text = NSLocalizedString(@"Account Balance", nil);
+        captionBalanceLabel.text = @"Account Balance";
         [self addSubview:captionBalanceLabel];
 
         // separator
@@ -52,7 +52,7 @@
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.textColor = [FFStyle darkGreyTextColor];
         titleLabel.font = [FFStyle blockFont:14.f];
-        titleLabel.text = NSLocalizedString(@"Your account this month", nil);
+        titleLabel.text = @"Your account this month";
         [self addSubview:titleLabel];
 
         // fan bucks
@@ -68,7 +68,7 @@
         captionFanBucksLabel.backgroundColor = [UIColor clearColor];
         captionFanBucksLabel.textColor = [FFStyle greyTextColor];
         captionFanBucksLabel.font = [FFStyle regularFont:12.f];
-        captionFanBucksLabel.text = NSLocalizedString(@"○ FanBuks", nil);
+        captionFanBucksLabel.text = @"○ FanBuks";
         [self addSubview:captionFanBucksLabel];
 
         // awards
@@ -84,7 +84,7 @@
         captionAwardsLabel.backgroundColor = [UIColor clearColor];
         captionAwardsLabel.textColor = [FFStyle greyTextColor];
         captionAwardsLabel.font = [FFStyle regularFont:12.f];
-        captionAwardsLabel.text = NSLocalizedString(@"○ Awards", nil);
+        captionAwardsLabel.text = @"○ Awards";
         [self addSubview:captionAwardsLabel];
 
         // predictions
@@ -100,7 +100,7 @@
         captionPredictionsLabel.backgroundColor = [UIColor clearColor];
         captionPredictionsLabel.textColor = [FFStyle greyTextColor];
         captionPredictionsLabel.font = [FFStyle regularFont:12.f];
-        captionPredictionsLabel.text = NSLocalizedString(@"○ Predictions", nil);
+        captionPredictionsLabel.text = @"○ Predictions";
         [self addSubview:captionPredictionsLabel];
 
         // winnings multiplier
@@ -116,7 +116,7 @@
         captionWinningsMultiplierLabel.backgroundColor = [UIColor clearColor];
         captionWinningsMultiplierLabel.textColor = [FFStyle greyTextColor];
         captionWinningsMultiplierLabel.font = [FFStyle regularFont:12.f];
-        captionWinningsMultiplierLabel.text = NSLocalizedString(@"○ Winnings Multiplier", nil);
+        captionWinningsMultiplierLabel.text = @"○ Winnings Multiplier";
         [self addSubview:captionWinningsMultiplierLabel];
     }
     return self;

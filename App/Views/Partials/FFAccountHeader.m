@@ -73,7 +73,7 @@
         fanBucksCaptionLabel.backgroundColor = [UIColor clearColor];
         fanBucksCaptionLabel.font = [FFStyle regularFont:14.f];
         fanBucksCaptionLabel.textColor = [FFStyle black];
-        fanBucksCaptionLabel.text = NSLocalizedString(@"FanBucks  〉", nil);
+        fanBucksCaptionLabel.text = @"FanBucks  〉";
         [self.fanBucksButton addSubview:fanBucksCaptionLabel];
 
         _fanBucksLabel = [UILabel.alloc  initWithFrame:CGRectMake(10.f, 25.f, 84.f, 20.f)];
@@ -92,7 +92,7 @@
         prestigeCaptionLabel.backgroundColor = [UIColor clearColor];
         prestigeCaptionLabel.font = [FFStyle regularFont:14.f];
         prestigeCaptionLabel.textColor = [FFStyle black];
-        prestigeCaptionLabel.text = NSLocalizedString(@"PresTige", nil);
+        prestigeCaptionLabel.text = @"PresTige";
         [prestige addSubview:prestigeCaptionLabel];
 
         _prestigeLabel = [UILabel.alloc  initWithFrame:CGRectMake(10.f, 25.f, 84.f, 20.f)];
@@ -111,7 +111,7 @@
         winsCaptionLabel.backgroundColor = [UIColor clearColor];
         winsCaptionLabel.font = [FFStyle regularFont:14.f];
         winsCaptionLabel.textColor = [FFStyle black];
-        winsCaptionLabel.text = NSLocalizedString(@"Wins", nil);
+        winsCaptionLabel.text = @"Wins";
         [wins addSubview:winsCaptionLabel];
 
         _winsLabel = [UILabel.alloc  initWithFrame:CGRectMake(10.f, 25.f, 84.f, 20.f)];

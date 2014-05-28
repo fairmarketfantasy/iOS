@@ -31,12 +31,11 @@
 {
     [super viewWillAppear:animated];
     if (self.delegate.roster) {
-        NSString* leaderString = [NSString stringWithFormat:NSLocalizedString(@"You took %ist place", nil),
+        NSString* leaderString = [NSString stringWithFormat:@"You took %ist place",
                                   self.delegate.roster.contestRank.integerValue];
         NSString* subTitle = self.delegate.roster.amountPaid.integerValue == 0
-        ? NSLocalizedString(@"Didn't win this time", nil)
-        : [NSString stringWithFormat:NSLocalizedString(@"And won %i", nil),
-           self.delegate.roster.amountPaid.integerValue];
+        ? @"Didn't win this time"
+        : [NSString stringWithFormat:@"And won %i", self.delegate.roster.amountPaid.integerValue];
         self.scoreView.scoreLabel.text = [NSString stringWithFormat:@"%@\n%@", leaderString, subTitle];
     } else {
         self.scoreView.scoreLabel.text = @"";

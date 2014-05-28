@@ -70,7 +70,7 @@
         vc.value = user.name;
         vc.name = segue.identifier;
         vc.delegate = self;
-        vc.sectionTitle = NSLocalizedString(@"Set Name", nil);
+        vc.sectionTitle = @"Set Name";
     } else if ([segue.identifier isEqualToString:@"GotoEmail"]) {
         FFValueEntryController* vc = segue.destinationViewController;
         vc.keyboardType = UIKeyboardTypeEmailAddress;
@@ -78,7 +78,7 @@
         vc.value = user.email;
         vc.name = segue.identifier;
         vc.delegate = self;
-        vc.sectionTitle = NSLocalizedString(@"Set Email", nil);
+        vc.sectionTitle = @"Set Email";
     } else if ([segue.identifier isEqualToString:@"GotoPassword"]) {
         FFPasswordController* vc = segue.destinationViewController;
         vc.delegate = self;
@@ -139,7 +139,7 @@
         if (user.name != nil && user.name.length) {
             label.text = user.name;
         } else {
-            label.text = NSLocalizedString(@"No Name Set", nil);
+            label.text = @"No Name Set";
         }
     } else if (indexPath.section == 3) {
         UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, 320,
@@ -158,7 +158,7 @@
         [cell.contentView addSubview:label];
 
         if (indexPath.row == 0) {
-            label.text = NSLocalizedString(@"Change...", nil);
+            label.text = @"Change...";
         }
     }
     return cell;
@@ -195,7 +195,7 @@ heightForHeaderInSection:(NSInteger)section
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.font = [FFStyle lightFont:26.f];
         titleLabel.textColor = [FFStyle tableViewSectionHeaderColor];
-        titleLabel.text = NSLocalizedString(@"Settings", nil);
+        titleLabel.text = @"Settings";
         [header addSubview:titleLabel];
         return header;
     } else {
@@ -212,13 +212,13 @@ heightForHeaderInSection:(NSInteger)section
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.textColor = [FFStyle darkGreyTextColor];
         if (section == 1) {
-            titleLabel.text = NSLocalizedString(@"Avatar", nil);
+            titleLabel.text = @"Avatar";
         } else if (section == 2) {
-            titleLabel.text = NSLocalizedString(@"Name", nil);
+            titleLabel.text = @"Name";
         } else if (section == 3) {
-            titleLabel.text = NSLocalizedString(@"Email", nil);
+            titleLabel.text = @"Email";
         } else if (section == 4) {
-            titleLabel.text = NSLocalizedString(@"Password", nil);
+            titleLabel.text = @"Password";
         }
         [header addSubview:titleLabel];
         return header;
@@ -231,7 +231,7 @@ heightForHeaderInSection:(NSInteger)section
     [tableView deselectRowAtIndexPath:indexPath
                              animated:YES];
     if (indexPath.section == 1) {
-        UIButton* camera = [FFAlertView blueButtonTitled:NSLocalizedString(@"Take Photo", nil)];
+        UIButton* camera = [FFAlertView blueButtonTitled:@"Take Photo"];
         [camera addTarget:self
                       action:@selector(takePhoto:)
             forControlEvents:UIControlEventTouchUpInside];
@@ -240,12 +240,12 @@ heightForHeaderInSection:(NSInteger)section
             camera.alpha = .3;
         }
 
-        UIButton* roll = [FFAlertView blueButtonTitled:NSLocalizedString(@"Choose Photo", nil)];
+        UIButton* roll = [FFAlertView blueButtonTitled:@"Choose Photo"];
         [roll addTarget:self
                       action:@selector(choosePhoto:)
             forControlEvents:UIControlEventTouchUpInside];
 
-        UIButton* cancel = [FFAlertView greyButtonTitled:NSLocalizedString(@"Cancel", nil)];
+        UIButton* cancel = [FFAlertView greyButtonTitled:@"Cancel"];
         [cancel addTarget:self
                       action:@selector(cancelPhoto:)
             forControlEvents:UIControlEventTouchUpInside];
@@ -413,7 +413,7 @@ didFinishPickingMediaWithInfo:(NSDictionary*)info
 
 - (FFAlertView*)showAlert
 {
-    FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Saving", nil)
+    FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Saving"
                                                    messsage:nil
                                                loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
@@ -425,7 +425,7 @@ didFinishPickingMediaWithInfo:(NSDictionary*)info
     FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
                                                        title:nil
                                            cancelButtonTitle:nil
-                                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                             okayButtonTitle:@"Dismiss"
                                                     autoHide:YES];
     [ealert showInView:self.navigationController.view];
 }

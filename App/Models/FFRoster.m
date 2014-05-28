@@ -411,7 +411,7 @@ failure:
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
      {
          NSString *message = [[httpResponse allHeaderFields] objectForKey:@"X-CLIENT-FLASH"];
-         _messageAfterSubmit = (message != nil && message.length > 0) ? message : NSLocalizedString(@"Roster submitted successfully!", nil);
+         _messageAfterSubmit = (message != nil && message.length > 0) ? message : @"Roster submitted successfully!";
          [self updateWithNetworkRepresentation:JSON
                                        success:success
                                        failure:failure];

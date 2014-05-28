@@ -177,9 +177,9 @@
     [self.homePTButton setTitleColor:homePTColor forState:UIControlStateNormal];
     [self.awayPTButton setTitleColor:awayPTColor forState:UIControlStateNormal];
     
-    [self.homePTButton setTitle:[NSString stringWithFormat:@"%@%i", NSLocalizedString(@"PT", nil), [game.homeTeamPT integerValue]]
+    [self.homePTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", [game.homeTeamPT integerValue]]
                        forState:UIControlStateNormal];
-    [self.awayPTButton setTitle:[NSString stringWithFormat:@"%@%i", NSLocalizedString(@"PT", nil), [game.awayTeamPT integerValue]]
+    [self.awayPTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", [game.awayTeamPT integerValue]]
                        forState:UIControlStateNormal];
     
     self.homeTeamName.text = game.homeTeamName;

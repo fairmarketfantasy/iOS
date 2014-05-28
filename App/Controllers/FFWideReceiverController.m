@@ -359,8 +359,8 @@
                 FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                            forIndexPath:indexPath];
                 cell.message.text = (self.networkStatus == NotReachable || self.isServerError) ?
-                                    NSLocalizedString(@"No Internet Connection", nil) :
-                                    NSLocalizedString(@"No Games Scheduled", nil);
+                                    @"No Internet Connection" :
+                                    @"No Games Scheduled";
                 return cell;
             }
             
@@ -525,7 +525,7 @@
     if (section == 1) {
         FFRosterTableHeader* view = [FFRosterTableHeader new];
         if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] == NO) {
-            view.titleLabel.text = NSLocalizedString(@"Games for today", nil);
+            view.titleLabel.text = @"Games for today";
             return view;
         }
         NSString* positionName = @"";
@@ -536,7 +536,7 @@
                 positionName = positionFullName;
             }
         }
-        view.titleLabel.text = NSLocalizedString(positionName, nil);
+        view.titleLabel.text = positionName;
         view.priceLabel.text = self.delegate ?
         [[FFStyle priceFormatter] stringFromNumber:@([[self.dataSource currentRoster] remainingSalary].floatValue)] : @"";
         view.priceLabel.textColor = [[self.dataSource currentRoster] remainingSalary].floatValue > 0.f
@@ -593,7 +593,7 @@
                                                                              forIndexPath:indexPath];
     if (self.markets.count > indexPath.item && self.networkStatus != NotReachable) {
         FFMarket* market = self.markets[indexPath.item];
-        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
+        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : @"Market";
         cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
     }
     

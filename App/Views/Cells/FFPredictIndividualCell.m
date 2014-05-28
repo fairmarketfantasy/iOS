@@ -86,42 +86,42 @@
         UILabel* captionDayLabel = [[UILabel alloc] initWithFrame:
                                     CGRectMake(10.f, 60.f, 70.f, 20.f)];
         captionDayLabel.backgroundColor = [UIColor clearColor];
-        captionDayLabel.text = NSLocalizedString(@"○ Day", nil);
+        captionDayLabel.text = @"○ Day";
         captionDayLabel.font = [FFStyle regularFont:12.f];
         captionDayLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionDayLabel];
         UILabel* captionPTLabel = [[UILabel alloc] initWithFrame:
                                    CGRectMake(10.f, 90.f, 70.f, 20.f)];
         captionPTLabel.backgroundColor = [UIColor clearColor];
-        captionPTLabel.text = NSLocalizedString(@"○ PT", nil);
+        captionPTLabel.text = @"○ PT";
         captionPTLabel.font = [FFStyle regularFont:12.f];
         captionPTLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionPTLabel];
         UILabel* captionPredictLabel = [[UILabel alloc] initWithFrame:
                                         CGRectMake(10.f, 120.f, 70.f, 20.f)];
         captionPredictLabel.backgroundColor = [UIColor clearColor];
-        captionPredictLabel.text = NSLocalizedString(@"○ Prediction", nil);
+        captionPredictLabel.text = @"○ Prediction";
         captionPredictLabel.font = [FFStyle regularFont:12.f];
         captionPredictLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionPredictLabel];
         UILabel* captionTimeLabel = [[UILabel alloc] initWithFrame:
                                      CGRectMake(180.f, 60.f, 80.f, 20.f)];
         captionTimeLabel.backgroundColor = [UIColor clearColor];
-        captionTimeLabel.text = NSLocalizedString(@"○ Game Time", nil);
+        captionTimeLabel.text = @"○ Game Time";
         captionTimeLabel.font = [FFStyle regularFont:12.f];
         captionTimeLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionTimeLabel];
         UILabel* captionAwaidLabel = [[UILabel alloc] initWithFrame:
                                       CGRectMake(180.f, 90.f, 80.f, 20.f)];
         captionAwaidLabel.backgroundColor = [UIColor clearColor];
-        captionAwaidLabel.text = NSLocalizedString(@"○ Award", nil);
+        captionAwaidLabel.text = @"○ Award";
         captionAwaidLabel.font = [FFStyle regularFont:12.f];
         captionAwaidLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionAwaidLabel];
         UILabel* captionResultLabel = [[UILabel alloc] initWithFrame:
                                       CGRectMake(180.f, 120.f, 80.f, 20.f)];
         captionResultLabel.backgroundColor = [UIColor clearColor];
-        captionResultLabel.text = NSLocalizedString(@"○ Result", nil);
+        captionResultLabel.text = @"○ Result";
         captionResultLabel.font = [FFStyle regularFont:12.f];
         captionResultLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionResultLabel];

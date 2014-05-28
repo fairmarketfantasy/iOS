@@ -30,8 +30,8 @@
         [self.contentView addSubview:separator2];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         // segments
-        _segments = [FUISegmentedControl.alloc initWithItems:@[NSLocalizedString(@"Less", nil),
-                                                               NSLocalizedString(@"More", nil)]];
+        _segments = [FUISegmentedControl.alloc initWithItems:@[@"Less",
+                                                               @"More"]];
         self.segments.frame = CGRectMake(30.f, 50.f, 260.f, 40.f);
         self.segments.cornerRadius = 3.f;
         self.segments.dividerColor = [FFStyle white];

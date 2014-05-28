@@ -463,9 +463,9 @@
 + (FFAlertView *)noInternetConnectionAlert
 {
     return [[FFAlertView alloc] initWithTitle:nil
-                                      message:NSLocalizedString(@"No Internet Connection", nil)
+                                      message:@"No Internet Connection"
                             cancelButtonTitle:nil
-                              okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                              okayButtonTitle:@"Ok"
                                      autoHide:YES];
 }
 

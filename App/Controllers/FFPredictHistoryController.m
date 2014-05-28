@@ -242,7 +242,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     if (self.networkStatus == NotReachable) {
         FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                    forIndexPath:indexPath];
-        cell.message.text = NSLocalizedString(@"No Internet Connection", nil);
+        cell.message.text = @"No Internet Connection";
         return cell;
     }
     
@@ -270,8 +270,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 cell.timeLabel.text = [FFStyle.timeFormatter stringFromDate:prediction.gameTime];
                 cell.awaidLabel.text = prediction.award;
                 cell.resultLabel.text = [prediction.state isEqualToString:@"cancelled"]
-                ? NSLocalizedString(@"Didn't play", nil)
-                : (prediction.gameResult ? prediction.gameResult : NSLocalizedString(@"N/A", nil));
+                ? @"Didn't play"
+                : (prediction.gameResult ? prediction.gameResult : @"N/A");
             }
             return cell;
         }
@@ -308,18 +308,18 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 cell.stateLabel.text = prediction.state;
                 cell.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
                                                       prediction.score.integerValue]
-                :  NSLocalizedString(@"N/A", nil);
+                : @"N/A";
                 FFFantasyGame* firstGame = prediction.market.games.firstObject;
                 NSDateFormatter* formatter = FFStyle.timeFormatter;
                 cell.gameTimeLabel.text = firstGame ? [formatter stringFromDate:firstGame.gameTime]
-                : NSLocalizedString(@"N/A", nil);
+                : @"N/A";
                 cell.rankLabel.text = isFinished ? [NSString stringWithFormat:@"%i of %i",
                                                     prediction.contestRank.integerValue,
                                                     prediction.contestType.maxEntries.integerValue]
-                : NSLocalizedString(@"Not started yet", nil);
+                : @"Not started yet";
                 cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
                                                      prediction.contestRankPayout.integerValue / 100]
-                : NSLocalizedString(@"N/A", nil);
+                : @"N/A";
             }
             return cell;
         }
@@ -350,10 +350,10 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     header.titleLabel.text = @"";
     switch (self.predictionType) {
         case FFPredictionsTypeIndividual:
-            header.titleLabel.text = NSLocalizedString(@"Individual predictions", nil);
+            header.titleLabel.text = @"Individual predictions";
             break;
         case FFPredictionsTypeRoster:
-            header.titleLabel.text = NSLocalizedString(@"Roster predictions", nil);
+            header.titleLabel.text = @"Roster predictions";
             break;
         default:
             break;
@@ -442,7 +442,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     
     __block FFAlertView* alert = nil;
     if (shouldShow) {
-        alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
+        alert = [[FFAlertView alloc] initWithTitle:@"Loading"
                                           messsage:nil
                                       loadingStyle:FFAlertViewLoadingStylePlain];
         [alert showInView:self.navigationController.view];
@@ -459,7 +459,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 if (block)
                     block();
             }];
-            [self.typeButton setTitle:NSLocalizedString(@"Individual", nil)
+            [self.typeButton setTitle:@"Individual"
                              forState:UIControlStateNormal];
         }
             break;
@@ -482,7 +482,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                                         }]; // TODO: should be in one of MODELs                
             }
             
-            [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
+            [self.typeButton setTitle:@"Roster"
                              forState:UIControlStateNormal];
         }
             break;

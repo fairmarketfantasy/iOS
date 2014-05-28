@@ -76,7 +76,7 @@
         _emptyPosition.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:_emptyPosition];
 
-        _select = [FFStyle coloredButtonWithText:NSLocalizedString(@"Select", nil)
+        _select = [FFStyle coloredButtonWithText:@"Select"
                                            color:[FFStyle brightGreen]
                                      borderColor:[FFStyle white]];
         _select.frame = CGRectMake(224, 21, 80, 38);
@@ -85,7 +85,7 @@
             forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_select];
 
-        _trade = [FFStyle coloredButtonWithText:NSLocalizedString(@"Trade", nil)
+        _trade = [FFStyle coloredButtonWithText:@"Trade"
                                           color:[FFStyle brightRed]
                                     borderColor:[FFStyle white]];
         _trade.frame = CGRectMake(224, 21, 80, 38);

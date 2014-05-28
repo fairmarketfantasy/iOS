@@ -130,7 +130,7 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 viewForHeaderInSection:(NSInteger)section
 {
     FFRosterTableHeader* header = FFRosterTableHeader.new;
-    header.titleLabel.text = NSLocalizedString(@"Your Team", nil);
+    header.titleLabel.text = @"Your Team";
     header.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.delegate.rosterSalary)];
     header.priceLabel.textColor = self.delegate.rosterSalary > 0.f
     ? [FFStyle brightGreen] : [FFStyle brightRed];

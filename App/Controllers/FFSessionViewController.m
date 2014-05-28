@@ -226,7 +226,7 @@
 
     UILabel* signInLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.f, 90.f, 290.f, 60.f)];
     signInLabel.font = [FFStyle lightFont:30.f];
-    signInLabel.text = NSLocalizedString(@"Sign In", nil);
+    signInLabel.text = @"Sign In";
     signInLabel.backgroundColor = [UIColor clearColor];
     signInLabel.textColor = [FFStyle white];
     [self.container addSubview:signInLabel];
@@ -238,7 +238,7 @@
     mailField.layer.borderColor = [FFStyle greyBorder].CGColor;
     mailField.backgroundColor = [FFStyle white];
     mailField.delegate = self;
-    mailField.placeholder = NSLocalizedString(@"email", nil);
+    mailField.placeholder = @"email";
     mailField.returnKeyType = UIReturnKeyNext;
     mailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     mailField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -254,13 +254,13 @@
     passwordField.delegate = self;
     passwordField.frame = CGRectMake(15.f, 210.f, 290.f, 44.f);
     passwordField.secureTextEntry = YES;
-    passwordField.placeholder = NSLocalizedString(@"password", nil);
+    passwordField.placeholder = @"password";
     passwordField.returnKeyType = UIReturnKeyGo;
     [self.container addSubview:passwordField];
     self.passwordSigninField = passwordField;
 
     // sign in button
-    UIButton* signInButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"Sign In", nil)
+    UIButton* signInButton = [FFStyle coloredButtonWithText:@"Sign In"
                                                       color:[FFStyle brightGreen]
                                                 borderColor:[FFStyle white]];
     signInButton.frame = CGRectMake(15.f, 265.f, 290.f, 38.f);
@@ -290,7 +290,7 @@
 
     // forgot password button
     UIButton* forgotButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [forgotButton setTitle:NSLocalizedString(@"Forgot Your Password?", nil)
+    [forgotButton setTitle:@"Forgot Your Password?"
                   forState:UIControlStateNormal];
     forgotButton.frame = CGRectMake(15.f, 365.f, 290.f, 50.f);
     forgotButton.titleLabel.font = [FFStyle regularFont:14.f];
@@ -345,16 +345,16 @@
     NSString* errorTitle = nil;
 
     if (!self.usernameSigninField.text.length) {
-        errorTitle = NSLocalizedString(@"Please provide your email address", nil);
+        errorTitle = @"Please provide your email address";
     } else {
         NSString* email = self.usernameSigninField.text;
         NSTextCheckingResult* result = [regex firstMatchInString:email
                                                          options:0
                                                            range:NSMakeRange(0, email.length)];
         if (!result.range.length) {
-            errorTitle = NSLocalizedString(@"Please provide a valid email address", nil);
+            errorTitle = @"Please provide a valid email address";
         } else if (self.passwordSigninField.text.length < 6) {
-            errorTitle = NSLocalizedString(@"Please provide a password at least 6 characters long", nil);
+            errorTitle = @"Please provide a password at least 6 characters long";
         }
     }
 
@@ -362,7 +362,7 @@
         [[[FFAlertView alloc] initWithTitle:nil
                                     message:errorTitle
                           cancelButtonTitle:nil
-                            okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                            okayButtonTitle:@"Ok"
                                    autoHide:YES] showInView:self.view];
         return;
     }
@@ -417,8 +417,8 @@ failure:
     FFAlertView* forgotAlert = [[FFAlertView alloc] initWithTitle:nil
                                                           message:nil
                                                        customView:view
-                                                cancelButtonTitle:NSLocalizedString(@"Close", nil)
-                                                  okayButtonTitle:NSLocalizedString(@"Send Instructions", nil)
+                                                cancelButtonTitle:@"Close"
+                                                  okayButtonTitle:@"Send Instructions"
                                                          autoHide:NO
                                                  usingAutolayouts:NO];
     
@@ -471,12 +471,12 @@ failure:
                                                      options:0
                                                        range:NSMakeRange(0, email.length)];
     if (!result.range.length) {
-        errorTitle = NSLocalizedString(@"Please provide a valid email address", nil);
+        errorTitle = @"Please provide a valid email address";
         
         [[[FFAlertView alloc] initWithTitle:nil
                                     message:errorTitle
                           cancelButtonTitle:nil
-                            okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                            okayButtonTitle:@"Ok"
                                    autoHide:YES] showInView:self.navigationController.view];
         if (block) {
             block(NO);
@@ -503,7 +503,7 @@ failure:
          [[[FFAlertView alloc] initWithError:error
                                        title:error ? nil : @"Unexpected Error"
                            cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                             okayButtonTitle:@"Dismiss"
                                     autoHide:YES]
           showInView:self.navigationController.view];
      }];
@@ -577,7 +577,7 @@ failure:
             FFAlertView* ealert = [[FFAlertView alloc] initWithError:error
                                                                title:nil
                                                    cancelButtonTitle:nil
-                                                     okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                                     okayButtonTitle:@"Dismiss"
                                                             autoHide:YES];
             [ealert showInView:self.view];
             return;
@@ -587,10 +587,10 @@ failure:
             [alert hide];
             [[Ubertesters shared] UTLog:@"FBNoEmailError: There was no email for a provided account"
                               withLevel:UTLogLevelError];
-            FFAlertView* ealert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Error", nil)
-                                                             message:NSLocalizedString(@"The provided Facebook account does not have a verified email address associated with it. It could be a new account, to which Facebook does not yet give us access to the email. For now, you'll have to use a regular username and password to create an account.", nil)
+            FFAlertView* ealert = [[FFAlertView alloc] initWithTitle:@"Error"
+                                                             message:@"The provided Facebook account does not have a verified email address associated with it. It could be a new account, to which Facebook does not yet give us access to the email. For now, you'll have to use a regular username and password to create an account."
                                                    cancelButtonTitle:nil
-                                                     okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                                     okayButtonTitle:@"Dismiss"
                                                             autoHide:YES];
             [ealert showInView:self.view];
             return;
@@ -623,15 +623,15 @@ failure:
             FFAlertView *alert = nil;
             if ([localizedDescription rangeOfString:@"500"].location != NSNotFound) {
                 alert = [[FFAlertView alloc] initWithTitle:nil
-                                                   message:NSLocalizedString(@"Facebook sign ining is unavailable now", nil)
+                                                   message:@"Facebook sign ining is unavailable now"
                                          cancelButtonTitle:nil
-                                           okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                           okayButtonTitle:@"Dismiss"
                                                   autoHide:YES];
             } else {
                 alert = [[FFAlertView alloc] initWithError:error
                                                      title:nil
                                          cancelButtonTitle:nil
-                                           okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                           okayButtonTitle:@"Dismiss"
                                                   autoHide:YES];
             }
             

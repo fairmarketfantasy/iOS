@@ -222,7 +222,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)removePlayer:(FFPlayer*)player
 {
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Removing Player", nil)
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Removing Player"
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
@@ -238,14 +238,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      ^(NSError *error) {
 //         @strongify(self)
          [alert hide];
-         /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-          */
      }];
 }
 
