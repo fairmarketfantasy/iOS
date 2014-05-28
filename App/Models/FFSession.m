@@ -53,6 +53,10 @@
 
 - (id)deserializeJSON:(id)JSON
 {
+    if ([JSON isKindOfClass:[NSArray class]]) {
+        return JSON;
+    }
+    
     if (JSON[@"data"] && [JSON[@"data"] isKindOfClass:[NSArray class]]) {
         // it's JSONH
         NSArray* lst = JSON[@"data"];
