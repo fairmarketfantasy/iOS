@@ -13,6 +13,8 @@
 @interface FFTeam : NSObject
 
 @property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *opponentName;
+@property (nonatomic, readonly) BOOL isHomeTeam;
 @property (nonatomic, readonly) FFDate *gameDate;
 @property (nonatomic, readonly) NSString *gameName;
 @property (nonatomic, readonly) NSString *logoURL;

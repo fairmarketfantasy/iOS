@@ -40,13 +40,8 @@
         self.gameNameLabel.adjustsFontSizeToFitWidth = YES;
         [self.contentView addSubview:self.gameNameLabel];
         
-        UIView *ptBackground = [[UIView alloc] initWithFrame:CGRectMake(217.f, 23.f, 37.f, 37.f)];
-        ptBackground.layer.cornerRadius = 3;
-        ptBackground.backgroundColor = [UIColor colorWithWhite:.9f alpha:1.f];
-        [self.contentView addSubview:ptBackground];
-        
         self.ptLabel = [[UILabel alloc] initWithFrame:CGRectMake(217.f, 23.f, 37.f, 37.f)];
-        self.ptLabel.backgroundColor = [UIColor clearColor];
+        self.ptLabel.backgroundColor = [UIColor colorWithWhite:.9f alpha:1.f];
         self.ptLabel.font = [FFStyle blockFont:17.f];
         self.ptLabel.textColor = [FFStyle brightBlue];
         self.ptLabel.textAlignment = NSTextAlignmentCenter;
@@ -74,7 +69,15 @@
     
     self.ptLabel.text = [NSString stringWithFormat:@"%i", [team.pt integerValue]];
     self.teamNameLabel.text = team.name;
-    self.gameNameLabel.text = team.gameName;
+    if (team.gameName) {
+        self.gameNameLabel.text = team.gameName;
+    } else {
+        self.gameNameLabel.text = team.isHomeTeam ?
+        [NSString stringWithFormat:@"%@ @ %@", team.name, team.opponentName] :
+        [NSString stringWithFormat:@"%@ @ %@", team.opponentName, team.name];
+        self.ptLabel.hidden = YES;
+        self.deleteBtn.hidden = YES;
+    }
 }
 
 @end

@@ -57,7 +57,6 @@
 
 + (NSString*)bulkPath
 {
-//    return [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? @"/rosters" : @"/game_rosters";
     return @"/rosters";
 }
 
@@ -473,6 +472,14 @@ failure:
                                                           save:YES]];
     }
     self.players = [players copy];
+    
+    NSArray* teamsDictionaries = keyedValues[@"game_predictions"];
+    NSMutableArray* teams = [NSMutableArray arrayWithCapacity:playerDictionaries.count];
+    for (NSDictionary* teamDictionary in teamsDictionaries) {
+        FFTeam *team = [[FFTeam alloc] initWithDictionary:teamDictionary];
+        [teams addObject:team];
+    }
+    self.teams = [teams copy];
 }
 
 - (FFContestType*)contestType

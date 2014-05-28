@@ -16,6 +16,8 @@
     self = [super init];
     if (self) {
         _name = [dict objectForKey:@"team_name"];
+        _opponentName = [dict objectForKey:@"opposite_team"];
+        _isHomeTeam = [[dict objectForKey:@"home_team"] boolValue];
         _logoURL = [dict objectForKey:@"team_logo"];
         _gameName = [dict objectForKey:@"market_name"];
         

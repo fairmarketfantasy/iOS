@@ -9,6 +9,7 @@
 #import "FFPredictRosterTeamTable.h"
 #import "FFPredictRosterTeamCell.h"
 #import "FFTeamTradeCell.h"
+#import "FFNonFantasyTeamTradeCell.h"
 
 @implementation FFPredictRosterTeamTable
 
@@ -24,6 +25,8 @@
      forCellReuseIdentifier:@"TeamTradeCell"];
         [self registerClass:[FFPredictRosterTeamCell class]
      forCellReuseIdentifier:@"PredictRosterTeamCell"];
+        [self registerClass:[FFNonFantasyTeamTradeCell class]
+     forCellReuseIdentifier:kNonFantasyTeamTradeCellIdentifier];
     }
     return self;
 }
