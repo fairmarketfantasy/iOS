@@ -57,7 +57,8 @@
 
 + (NSString*)bulkPath
 {
-    return [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? @"/rosters" : @"/game_rosters";
+//    return [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? @"/rosters" : @"/game_rosters";
+    return @"/rosters";
 }
 
 + (NSDictionary*)propertyToNetworkKeyMapping
@@ -358,7 +359,9 @@ failure:
                    success:(SBSuccessBlock)success
                    failure:(SBErrorBlock)failure
 {
-    NSString* path = [[FFRoster bulkPath] stringByAppendingFormat:@"/autofill"];
+    NSString *path = [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ?
+    [[FFRoster bulkPath] stringByAppendingFormat:@"/autofill"] : @"/game_rosters/autofill";
+//    NSString* path = [[FFRoster bulkPath] stringByAppendingFormat:@"/autofill"];
     [session authorizedJSONRequestWithMethod:@"POST"
                                         path:path
                                    paramters:@{ @"sport" : [FFSessionManager shared].currentSportName }
