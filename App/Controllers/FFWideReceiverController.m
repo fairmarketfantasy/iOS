@@ -147,9 +147,11 @@
             if (internetStatus == NotReachable) {
                 [self.tableView reloadData];
             } else {
-                [self fetchPlayersWithShowingAlert:YES completion:^{
-                    [self.tableView reloadData];
-                }];
+                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+                    [self fetchPlayersWithShowingAlert:YES completion:^{
+                        [self.tableView reloadData];
+                    }];
+                }
             }
         }
     }
@@ -319,6 +321,10 @@
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
+        if ([self isSomethingWrong]) {
+            return 1;
+        }
+        
         return [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? 2 : 1;
     }
     

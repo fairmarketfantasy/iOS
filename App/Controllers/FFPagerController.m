@@ -94,6 +94,7 @@ SBDataObjectResultSetDelegate>
         _rosterIsCreating = NO;
         
         self.myTeam = [NSMutableArray array];
+        self.games = [NSMutableArray array];
     }
     
     return self;
@@ -213,10 +214,15 @@ SBDataObjectResultSetDelegate>
         if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
             (internetStatus == NotReachable && previousStatus != NotReachable)) {
             if (internetStatus != NotReachable) {
-                [self fetchPositionsNames];
-                [self updateMarkets];
+                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+                    [self fetchPositionsNames];
+                    [self updateMarkets];
+                } else {
+                    [self updateGames];
+                }
             } else {
                 [self.myTeam removeAllObjects];
+                [self.games removeAllObjects];
             }
         }
     }    
@@ -655,6 +661,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                     self.games = [NSMutableArray arrayWithArray:games];
                                     [self updateSelectedGames];
                                     [self.teamController reloadWithServerError:NO];
+                                    [self.receiverController reloadWithServerError:NO];
                                     if (alert)
                                         [alert hide];
                                     if (block)
@@ -662,6 +669,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                 } failure:^(NSError *error) {
                                     NSLog(@"Error: %@", error);
                                     [self.teamController reloadWithServerError:YES];
+                                    [self.receiverController reloadWithServerError:YES];
                                     if (alert)
                                         [alert hide];
                                     if (block)
@@ -702,9 +710,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 {
     self.games = [NSMutableArray array];
     [self fetchGamesShowAlert:YES withCompletion:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.receiverController.tableView reloadData];
-        });
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.receiverController.tableView reloadData];
+//        });
     }];
 }
 
