@@ -907,6 +907,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                           session:self.session
                                           success:^(id successObj) {
                                               [self deselectAllTeams];
+                                              [self.teamController showOrHideSubmitIfNeeded];
                                               if (block)
                                                   block(YES);
                                           } failure:^(NSError *error) {

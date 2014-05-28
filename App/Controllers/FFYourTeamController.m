@@ -66,9 +66,6 @@
                                      action:@selector(onSubmit:)
                            forControlEvents:UIControlEventTouchUpInside];
     
-    FFSubmitViewType type = [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? FFSubmitViewTypeFantasy : FFSubmitViewTypeNonFantasy;
-    [self.submitView setupWithType:type];
-    
     [self.view addSubview:self.submitView];
 
     // table view
@@ -118,6 +115,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+ 
+    FFSubmitViewType type = [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? FFSubmitViewTypeFantasy : FFSubmitViewTypeNonFantasy;
+    [self.submitView setupWithType:type];
     
     if (self.networkStatus == NotReachable) {
         [self.tableView reloadData];
