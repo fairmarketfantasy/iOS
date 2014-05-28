@@ -529,7 +529,7 @@
             return view;
         }
         NSString* positionName = @"";
-        if (self.delegate && self.networkStatus != NotReachable) {
+        if (self.delegate && self.networkStatus != NotReachable && [self.dataSource uniquePositions].count > 0) {
             positionName = [self.dataSource uniquePositions][self.position];
             NSString* positionFullName = self.dataSource.positionsNames[positionName];
             if (positionFullName) {
