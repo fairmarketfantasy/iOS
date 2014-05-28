@@ -215,6 +215,8 @@ SBDataObjectResultSetDelegate>
             if (internetStatus != NotReachable) {
                 [self fetchPositionsNames];
                 [self updateMarkets];
+            } else {
+                [self.myTeam removeAllObjects];
             }
         }
     }    
@@ -400,16 +402,20 @@ SBDataObjectResultSetDelegate>
      ^(NSError * error) {
          @strongify(self)
          _rosterIsCreating = NO;
+         [alert hide];
+         if ([[[error userInfo] objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Unpaid subscription!"]) {
+             self.roster = nil;
+             if (block) {
+                 block(NO);
+             }
+             return;
+         }
+         
          if (self.tryCreateRosterTimes > 0) {
-             [alert hide];
              self.tryCreateRosterTimes--;
              [self createRosterWithCompletion:block];
-//             if (block) {
-//                 block(NO);
-//             }
          } else {
              self.roster = nil;
-             [alert hide];
              if (block) {
                  block(NO);
              }
@@ -787,8 +793,14 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)setCurrentMarket:(FFMarket *)market
 {
     self.selectedMarket = market;
+    [self.teamController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                               inSection:0]]
+                                         withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.teamController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                               inSection:0]]
+                                         withRowAnimation:UITableViewRowAnimationAutomatic];
+    
     if (_rosterIsCreating == NO) {
-        
         __weak FFPagerController *weakSelf = self;
         [self createRosterWithCompletion:^(BOOL success) {
             if (success) {
@@ -797,8 +809,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                     [weakSelf.receiverController reloadWithServerError:NO ];
                 }];
             } else {
-                [weakSelf.teamController reloadWithServerError:YES];
-                [weakSelf.receiverController reloadWithServerError:YES];
+                [weakSelf.teamController.tableView reloadData];
+                [weakSelf.receiverController.tableView reloadData];
             }
         }];
     }
@@ -985,23 +997,30 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)refreshRosterWithCompletion:(void(^)(BOOL success))block
 {
-    @weakify(self)
-    [self.roster refreshInBackgroundWithBlock:
-     ^(id successObj) {
-         @strongify(self)
-         self.roster = successObj;
-
-         if (block)
-             block(YES);
-     }
-                                      failure:
-     ^(NSError *error) {
-         @strongify(self)
-         self.roster = nil;
-         
-         if (block)
-             block(NO);
-      }];
+    if (self.roster) {
+        @weakify(self)
+        [self.roster refreshInBackgroundWithBlock:
+         ^(id successObj) {
+             @strongify(self)
+             self.roster = successObj;
+             
+             if (block)
+                 block(YES);
+         }
+                                          failure:
+         ^(NSError *error) {
+             @strongify(self)
+             self.roster = nil;
+             
+             if (block)
+                 block(NO);
+         }];
+    } else {
+        [self createRosterWithCompletion:^(BOOL success) {
+            if (block)
+                block(success);
+        }];
+    }
 }
 
 - (void)showAvailableGames
@@ -1042,8 +1061,12 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         [self marketsUpdated];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     } else {
-        [self.teamController reloadWithServerError:NO];
-        [self.receiverController reloadWithServerError:NO];
+        if (self.availableMarkets.count == 0) {
+            self.roster = nil;
+            [self.teamController showOrHideSubmitIfNeeded];
+            [self.teamController.tableView reloadData];
+            [self.receiverController.tableView reloadData];
+        }
     }
 }
 

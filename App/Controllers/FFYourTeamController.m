@@ -69,7 +69,7 @@
     [self.view addSubview:self.submitView];
 
     // table view
-    self.tableView = [FFTeamTable.alloc initWithFrame:self.view.bounds];
+    self.tableView = [[FFTeamTable alloc] initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
@@ -149,8 +149,12 @@
 - (void)reloadWithServerError:(BOOL)isError
 {
     self.isServerError = isError;
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+    } else {
+        [self.tableView reloadData];
+    }
     [self showOrHideSubmitIfNeeded];
-    [self.tableView reloadData];
 }
 
 #pragma mark -
@@ -167,12 +171,15 @@
             (internetStatus == NotReachable && previousStatus != NotReachable)) {
             
             if (internetStatus == NotReachable) {
-                [self reloadWithServerError:NO];
-            } else {
+                [self showOrHideSubmitIfNeeded];
+                [self.tableView reloadData];
+
+            } /*else {
                 [self refreshRosterWithShowingAlert:NO completion:^{
+                    [self hideErrorView];
                     [self.tableView reloadData];
                 }];
-            }
+            }*/
         }
     }
 }
@@ -196,9 +203,9 @@
 {
     BOOL anyObject = NO;
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        anyObject = self.dataSource.currentRoster.players.count > 0;
+        anyObject = self.dataSource.currentRoster.players.count > 0 && self.networkStatus != NotReachable;
     } else {
-        anyObject = [self.dataSource teams].count > 0;
+        anyObject = [self.dataSource teams].count > 0 && self.networkStatus != NotReachable;
     }
 
     CGFloat submitHeight = 70.f;
@@ -681,8 +688,6 @@
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
     [self.dataSource setCurrentMarket:selectedMarket];
-//    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
-//                          withRowAnimation:UITableViewRowAnimationAutomatic];
     self.tryCreateRosterTimes = 3;
 }
 
