@@ -429,8 +429,9 @@ failure:
                                 failure:(SBErrorBlock)failure
 {
     NSDictionary *params = @{@"teams": teams};
+    NSString *path = @"/game_rosters";
     [session authorizedJSONRequestWithMethod:@"POST"
-                                        path:[self bulkPath]
+                                        path:path
                                    paramters:params
                                      success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
                                          NSLog(@"Submit NonFantasy Roster: %@", JSON);
