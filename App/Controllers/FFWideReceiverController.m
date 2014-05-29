@@ -83,6 +83,7 @@
     self.picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 162.f)];
     self.picker.delegate = self;
     self.picker.dataSource = self;
+    self.picker.showsSelectionIndicator = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? NO : YES;
     
     CGAffineTransform t0 = CGAffineTransformMakeTranslation(self.picker.bounds.size.width/2, self.picker.bounds.size.height/2);
 	CGAffineTransform s0 = CGAffineTransformMakeScale(1.0, 0.47);
@@ -291,9 +292,9 @@
     if (pickerLabel == nil) {
         pickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 54.f)];
         pickerLabel.textAlignment = NSTextAlignmentCenter;
-        pickerLabel.textColor = [UIColor clearColor];
+        pickerLabel.textColor = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? [UIColor clearColor] : [FFStyle darkGrey];
         pickerLabel.font = [FFStyle blockFont:30.0f];
-        pickerLabel.textColor = [UIColor whiteColor];
+        pickerLabel.textColor = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? [UIColor whiteColor] : [UIColor blackColor];
     }
     
     NSString *positionName = [self.dataSource uniquePositions][row];

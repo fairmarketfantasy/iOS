@@ -324,7 +324,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                                     (long)prediction.contestRank.integerValue,
                                                     (long)prediction.contestType.maxEntries.integerValue]
                 : @"Not started yet";
-                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%li",
+                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
                                                      prediction.contestRankPayout.integerValue / 100]
                 : @"N/A";
             }
