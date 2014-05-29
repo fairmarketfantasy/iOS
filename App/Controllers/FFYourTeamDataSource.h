@@ -17,6 +17,7 @@
 @property (nonatomic, readonly) FFRoster *currentRoster;
 @property (nonatomic, readonly) NSString* rosterId;
 @property (nonatomic, readonly) NSDictionary* positionsNames;
+@property (nonatomic, readonly) BOOL unpaidSubscription;
 
 @property (nonatomic, strong) FFMarket *currentMarket;
 

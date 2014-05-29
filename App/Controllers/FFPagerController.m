@@ -63,6 +63,8 @@ SBDataObjectResultSetDelegate>
 @property(nonatomic, strong) NSMutableArray *games;
 @property(nonatomic, strong) NSMutableArray *selectedTeams;
 
+@property(nonatomic, assign) BOOL unpaid;
+
 @end
 
 @implementation FFPagerController
@@ -395,6 +397,8 @@ SBDataObjectResultSetDelegate>
      ^(id successObj) {
          @strongify(self)
          _rosterIsCreating = NO;
+         self.unpaid = NO;
+         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
          self.roster = successObj;
          
          self.myTeam = [self newTeamWithPositions:[self allPositions]];
@@ -410,7 +414,9 @@ SBDataObjectResultSetDelegate>
          _rosterIsCreating = NO;
          [alert hide];
          if ([[[error userInfo] objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Unpaid subscription!"]) {
+             self.unpaid = YES;
              self.roster = nil;
+             [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
              if (block) {
                  block(NO);
              }
@@ -841,6 +847,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (FFRoster *)currentRoster
 {
     return self.roster;
+}
+
+- (BOOL)unpaidSubscription
+{
+    return self.unpaid;
 }
 
 - (NSArray *)availableGames

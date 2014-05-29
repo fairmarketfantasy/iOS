@@ -188,14 +188,14 @@
 
 - (BOOL)isSomethingWrong
 {
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS])
-    {
-        return (self.networkStatus == NotReachable ||
-                self.isServerError ||
-                self.markets.count == 0);
+    return (self.networkStatus == NotReachable ||
+            self.isServerError ||
+            self.dataSource.unpaidSubscription == YES);
+    
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        return self.markets.count == 0;
     } else {
-        return (self.networkStatus == NotReachable ||
-                self.isServerError);
+        return [self.dataSource availableGames].count == 0;
     }
 }
 
@@ -453,9 +453,17 @@
                     FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                                forIndexPath:indexPath];
                     
-                    cell.message.text = (self.networkStatus == NotReachable || self.isServerError) ?
-                                        @"No Internet Connection" :
-                                        @"No Games Scheduled";
+                    NSString *message = nil;
+                    if (self.networkStatus == NotReachable) {
+                        message = @"No Internet Connection";
+                    } else if ([self.dataSource unpaidSubscription]) {
+                        message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
+                    } else if (([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] && self.markets.count == 0) ||
+                        ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] == NO && [self.dataSource availableGames].count == 0)) {
+                        message = @"No Games Scheduled";
+                    }
+                      
+                    cell.message.text = message;
                     return cell;
                 }
                 

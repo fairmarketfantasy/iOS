@@ -43,6 +43,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 @property(nonatomic) FFPredictionSet* rosterHistoryPredictions;
 
 @property(nonatomic, assign) NetworkStatus networkStatus;
+@property(nonatomic, assign) BOOL unpaid;
 
 @end
 
@@ -120,6 +121,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 {
     [super viewWillAppear:animated];
     [self hideTypeSelector];
+    
+    self.unpaid = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Unpaidsubscription"] boolValue];
     
     if (self.networkStatus != NotReachable) {
         [self refreshWithShowingAlert:NO completion:^{
@@ -214,7 +217,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.networkStatus == NotReachable) {
+    if (self.networkStatus == NotReachable || self.unpaid) {
         return 1;
     } else {
         switch (self.predictionType) {
@@ -239,10 +242,14 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if (self.networkStatus == NotReachable) {
+    if (self.networkStatus == NotReachable || self.unpaid) {
         FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                    forIndexPath:indexPath];
-        cell.message.text = @"No Internet Connection";
+        NSString *message = self.networkStatus == NotReachable ? @"No Internet Connection" :
+        @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
+        
+        cell.message.text = message;
+
         return cell;
     }
     
@@ -306,18 +313,18 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 cell.teamLabel.text = prediction.contestType.name;
                 cell.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.startedAt];
                 cell.stateLabel.text = prediction.state;
-                cell.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
-                                                      prediction.score.integerValue]
+                cell.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%li",
+                                                      (long)prediction.score.integerValue]
                 : @"N/A";
                 FFFantasyGame* firstGame = prediction.market.games.firstObject;
                 NSDateFormatter* formatter = FFStyle.timeFormatter;
                 cell.gameTimeLabel.text = firstGame ? [formatter stringFromDate:firstGame.gameTime]
                 : @"N/A";
-                cell.rankLabel.text = isFinished ? [NSString stringWithFormat:@"%i of %i",
-                                                    prediction.contestRank.integerValue,
-                                                    prediction.contestType.maxEntries.integerValue]
+                cell.rankLabel.text = isFinished ? [NSString stringWithFormat:@"%li of %li",
+                                                    (long)prediction.contestRank.integerValue,
+                                                    (long)prediction.contestType.maxEntries.integerValue]
                 : @"Not started yet";
-                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
+                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%li",
                                                      prediction.contestRankPayout.integerValue / 100]
                 : @"N/A";
             }
@@ -333,17 +340,17 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 160.f;
+    return (self.networkStatus == NotReachable || self.unpaid) ? [UIScreen mainScreen].bounds.size.height - 64.f : 160.f;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return self.networkStatus == NotReachable ? 0.f : 40.f;
+    return (self.networkStatus == NotReachable || self.unpaid) ? 0.f : 40.f;
 }
 
 - (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (self.networkStatus == NotReachable)
+    if (self.networkStatus == NotReachable || self.unpaid)
         return nil;
     
     FFRosterTableHeader* header = FFRosterTableHeader.new;

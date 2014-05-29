@@ -38,7 +38,8 @@
 - (void)setPredictionType:(FFPredictionsType)type
      rosterPredictionType:(FFRosterPredictionType)rosterType
 {
-    if ([self networkStatus] == NotReachable) {
+    if ([self networkStatus] == NotReachable ||
+        [[[NSUserDefaults standardUserDefaults] objectForKey:@"Unpaidsubscription"] boolValue] == YES) {
         self.tableHeaderView = nil;
         return;
     }
