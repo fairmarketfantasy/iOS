@@ -316,6 +316,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 cell.timeLabel.text = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
                 cell.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
                 NSString *resultString = nil;
+                //TODO:field gameResult in fantasy and anon-fantasy has different type
                 if ([prediction.state isEqualToString:@"cancelled"]) {
                     resultString = @"Didn't play";
                 } else if ([prediction.gameResult isKindOfClass:[NSNumber class]]) {
@@ -365,20 +366,20 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 cell.teamLabel.text = prediction.contestType.name;
                 cell.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.startedAt];
                 cell.stateLabel.text = prediction.state;
-                cell.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%li",
-                                                      (long)prediction.score.integerValue]
-                : @"N/A";
-                FFFantasyGame* firstGame = prediction.market.games.firstObject;
-                NSDateFormatter* formatter = FFStyle.timeFormatter;
-                cell.gameTimeLabel.text = firstGame ? [formatter stringFromDate:firstGame.gameTime]
-                : @"N/A";
-                cell.rankLabel.text = isFinished ? [NSString stringWithFormat:@"%li of %li",
-                                                    (long)prediction.contestRank.integerValue,
-                                                    (long)prediction.contestType.maxEntries.integerValue]
+                cell.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%li", (long)prediction.score.integerValue] : @"N/A";
+                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%li", (long)prediction.contestRankPayout.integerValue / 100] : @"N/A";
+                NSDateFormatter* formatter = [FFStyle timeFormatter];
+                
+                cell.rankLabel.text = isFinished ?
+                [NSString stringWithFormat:@"%li of %li", (long)prediction.contestRank.integerValue, (long)prediction.contestType.maxEntries.integerValue]
                 : @"Not started yet";
-                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%li",
-                                                     prediction.contestRankPayout.integerValue / 100]
-                : @"N/A";
+                
+                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+                    FFFantasyGame* firstGame = prediction.market.games.firstObject;
+                    cell.gameTimeLabel.text = firstGame ? [formatter stringFromDate:firstGame.gameTime] : @"N/A";
+                } else {
+                    cell.gameTimeLabel.text = prediction.startedAt ? [formatter stringFromDate:prediction.startedAt] : @"N/A";
+                }
             }
             return cell;
         }
