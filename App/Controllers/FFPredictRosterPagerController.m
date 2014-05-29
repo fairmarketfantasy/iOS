@@ -65,15 +65,13 @@ FFControllerProtocol, FFPredictionPlayersProtocol, FFEventsProtocol, FFPredictRo
     self.pager.thumbImage = [UIImage imageNamed:@"passive"];
     self.pager.selectedThumbImage = [UIImage imageNamed:@"active"];
     self.pager.userInteractionEnabled = NO;
-    if ([self.roster.state isEqualToString:@"finished"]) {
-        [self.view addSubview:self.pager];
-        [self.view bringSubviewToFront:self.pager];
-    }
+    [self.view addSubview:self.pager];
+    [self.view bringSubviewToFront:self.pager];
+
     // navigation bar
     self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
     self.navigationItem.leftBarButtonItems = [FFStyle backBarItemsForController:self];
 }
-
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue
                  sender:(id)sender
@@ -97,7 +95,6 @@ FFControllerProtocol, FFPredictionPlayersProtocol, FFEventsProtocol, FFPredictRo
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.pager.numberOfPages = (int)[self getViewControllers].count;
     self.teamController.session = self.session;
     self.scoreController.session = self.session;
     [self setViewControllers:@[[self getViewControllers].firstObject]
@@ -177,6 +174,10 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      ^(id successObj) {
          @strongify(self)
          self.roster = successObj;
+         self.pager.numberOfPages = (int)[self getViewControllers].count;
+         if ([self.roster.state isEqualToString:@"finished"] == NO) {
+             [self.pager removeFromSuperview];
+         }
          [self.teamController.tableView reloadData];
          [alert hide];
      }
