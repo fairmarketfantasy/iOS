@@ -662,6 +662,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [FFNonFantasyGame fetchGamesSession:self.session
                                 success:^(id successObj) {
                                     NSLog(@"Success object: %@", successObj);
+                                    self.unpaid = NO;
+                                    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
                                     NSMutableArray *games = [NSMutableArray array];
                                     for (FFNonFantasyGame *game in successObj) {
                                         [game setupTeams];
@@ -677,6 +679,15 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                         block();
                                 } failure:^(NSError *error) {
                                     NSLog(@"Error: %@", error);
+                                    if ([[[error userInfo] objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Unpaid subscription!"]) {
+                                        self.unpaid = YES;
+                                        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
+                                        if (block) {
+                                            block();
+                                        }
+                                        return;
+                                    }
+
                                     [self.teamController reloadWithServerError:YES];
                                     [self.receiverController reloadWithServerError:YES];
                                     if (alert)
