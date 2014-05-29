@@ -22,6 +22,6 @@
 @property(nonatomic) NSString* state;
 @property(nonatomic) FFDate* gameTime;
 @property(nonatomic) FFDate* gameDay;
-@property(nonatomic) NSString* gameResult;
+@property(nonatomic) NSNumber* gameResult;
 
 @end

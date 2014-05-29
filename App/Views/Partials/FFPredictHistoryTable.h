@@ -14,6 +14,11 @@ typedef NS_ENUM(NSUInteger, FFRosterPredictionType) {
     FFRosterPredictionTypeFinished
 };
 
+typedef NS_ENUM(NSUInteger, FFPredictionState) {
+    FFPredictionStateSubmitted,
+    FFPredictionStateFinished
+};
+
 @class FUISegmentedControl;
 
 @protocol FFPredictHistoryProtocol <NSObject>
@@ -25,7 +30,7 @@ typedef NS_ENUM(NSUInteger, FFRosterPredictionType) {
 @interface FFPredictHistoryTable : UITableView
 
 @property(nonatomic, weak) id<FFPredictHistoryProtocol> historyDelegate;
-- (void)setPredictionType:(FFPredictionsType)type
-     rosterPredictionType:(FFRosterPredictionType)rosterType;
+
+- (void)setPredictionState:(FFPredictionState)state;
 
 @end

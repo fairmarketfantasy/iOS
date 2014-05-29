@@ -29,8 +29,7 @@
         [self registerClass:[FFNoConnectionCell class] forCellReuseIdentifier:kNoConnectionCellIdentifier];
 
         // header
-        [self setPredictionType:FFPredictionsTypeRoster
-           rosterPredictionType:FFRosterPredictionTypeSubmitted];
+        [self setPredictionState:FFPredictionStateSubmitted];
     }
     return self;
 }
@@ -71,6 +70,34 @@
         default:
             break;
     }
+}
+
+- (void)setPredictionState:(FFPredictionState)state
+{
+    if ([self networkStatus] == NotReachable ||
+        [[[NSUserDefaults standardUserDefaults] objectForKey:@"Unpaidsubscription"] boolValue] == YES) {
+        self.tableHeaderView = nil;
+        return;
+    }
+    
+    FFPredictHeader* header = [[FFPredictHeader alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 60.f)];
+    switch (state) {
+        case FFPredictionStateSubmitted:
+            header.segments.selectedSegmentIndex = 0;
+            break;
+            
+        case FFPredictionStateFinished:
+            header.segments.selectedSegmentIndex = 1;
+            break;
+            
+        default:
+            break;
+    }
+    
+    self.tableHeaderView = header;
+    [header.segments addTarget:self
+                        action:@selector(segments:)
+              forControlEvents:UIControlEventValueChanged];
 }
 
 #pragma mark - button actions

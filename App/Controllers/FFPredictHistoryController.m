@@ -34,12 +34,13 @@
 FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 @property(nonatomic, assign) FFPredictionsType predictionType;
-@property(nonatomic, assign) FFRosterPredictionType rosterPredictionType;
+@property(nonatomic, assign) FFPredictionState predictionState;
 @property(nonatomic) UIButton* typeButton;
 @property(nonatomic) FFPredictHistoryTable* tableView;
 @property(nonatomic) FFPredictionsSelector* typeSelector;
 // model
-@property(nonatomic) FFPredictionSet* individualPredictions;
+@property(nonatomic) FFPredictionSet* individualActivePredictions;
+@property(nonatomic) FFPredictionSet* individualHistoryPredictions;
 @property(nonatomic) FFPredictionSet* rosterActivePredictions;
 @property(nonatomic) FFPredictionSet* rosterHistoryPredictions;
 
@@ -55,7 +56,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     [super viewDidLoad];
 
     self.predictionType = FFPredictionsTypeRoster;
-    self.rosterPredictionType = FFRosterPredictionTypeSubmitted;
+    self.predictionState = FFPredictionStateSubmitted;
     self.typeSelector = FFPredictionsSelector.new;
     self.typeSelector.delegate = self;
     [self.view addSubview:self.typeSelector];
@@ -107,9 +108,14 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (void)willMoveToParentViewController:(UIViewController *)parent
 {
-    self.individualPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFIndividualPrediction class]
+    self.individualActivePredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFIndividualPrediction class]
                                                                         session:self.session authorized:YES];
-    self.individualPredictions.delegate = self;
+    self.individualActivePredictions.delegate = self;
+    
+    self.individualHistoryPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFIndividualPrediction class]
+                                                                              session:self.session authorized:YES];
+    self.individualHistoryPredictions.delegate = self;
+    
     self.rosterActivePredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFRosterPrediction class]
                                                                     session:self.session authorized:YES];
     self.rosterActivePredictions.delegate = self;
@@ -165,8 +171,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 self.tableView.tableHeaderView = nil;
                 [self.tableView reloadData];
             } else {
-                [self.tableView setPredictionType:FFPredictionsTypeRoster
-                   rosterPredictionType:FFRosterPredictionTypeSubmitted];
+                [self.tableView setPredictionState:FFPredictionStateSubmitted];
+                
                 [self refreshWithShowingAlert:YES completion:^{
                     [self.tableView reloadData];
                 }];
@@ -223,18 +229,29 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     } else {
         switch (self.predictionType) {
             case FFPredictionsTypeIndividual:
-                return self.individualPredictions.allObjects.count;
+            {
+                switch (self.predictionState) {
+                    case FFPredictionStateSubmitted:
+                        return self.individualActivePredictions.allObjects.count;
+                    case FFPredictionStateFinished:
+                        return self.individualHistoryPredictions.allObjects.count;
+                    default:
+                        return 0;
+                }
+            }
+                
             case FFPredictionsTypeRoster:
             {
-                switch (self.rosterPredictionType) {
-                    case FFRosterPredictionTypeSubmitted:
+                switch (self.predictionState) {
+                    case FFPredictionStateSubmitted:
                         return self.rosterActivePredictions.allObjects.count;
-                    case FFRosterPredictionTypeFinished:
+                    case FFPredictionStateFinished:
                         return self.rosterHistoryPredictions.allObjects.count;
                     default:
                         return 0;
                 }
             }
+                
             default:
                 return 0;
         }
@@ -259,8 +276,22 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         {
             FFPredictIndividualCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictIndividualCell"
                                                                             forIndexPath:indexPath];
-            if (self.individualPredictions.allObjects.count > indexPath.row) {
-                FFIndividualPrediction* prediction = self.individualPredictions.allObjects[indexPath.row];
+            
+            NSArray* predictions = nil;
+            switch (self.predictionState) {
+                case FFPredictionStateSubmitted:
+                    predictions = self.individualActivePredictions.allObjects;
+                    break;
+                case FFPredictionStateFinished:
+                    predictions = self.individualHistoryPredictions.allObjects;
+                    break;
+                default:
+                    predictions = @[];
+                    break;
+            }
+            
+            if (predictions.count > indexPath.row) {
+                __block FFIndividualPrediction* prediction = predictions[indexPath.row];
                 cell.choiceLabel.text = prediction.playerName;
                 cell.eventLabel.text = prediction.marketName;
                 NSString *dayString = nil;
@@ -287,11 +318,18 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 NSString *resultString = nil;
                 if ([prediction.state isEqualToString:@"cancelled"]) {
                     resultString = @"Didn't play";
-                } else if (prediction.gameResult && [prediction.gameResult isEqualToString:@""] == NO) {
-                    resultString = prediction.gameResult;
+                } else if ([prediction.gameResult isKindOfClass:[NSNumber class]]) {
+                    if (prediction.gameResult)
+                        resultString = [prediction.gameResult stringValue];
+                    else
+                        resultString = @"N/A";
+                } else if ([prediction.gameResult isKindOfClass:[NSString class]]) {
+                    resultString = ((NSString *)prediction.gameResult && [(NSString *)prediction.gameResult isEqualToString:@""] == NO) ?
+                    (NSString *)prediction.gameResult : @"N/A";
                 } else {
                     resultString = @"N/A";
                 }
+                
                 cell.resultLabel.text = resultString;
             }
             return cell;
@@ -302,11 +340,11 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
             FFPredictHistoryCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictCell"
                                                                          forIndexPath:indexPath];
             NSArray* predictions = nil;
-            switch (self.rosterPredictionType) {
-                case FFRosterPredictionTypeSubmitted:
+            switch (self.predictionState) {
+                case FFPredictionStateSubmitted:
                     predictions = self.rosterActivePredictions.allObjects;
                     break;
-                case FFRosterPredictionTypeFinished:
+                case FFPredictionStateFinished:
                     predictions = self.rosterHistoryPredictions.allObjects;
                     break;
                 default:
@@ -338,7 +376,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                                     (long)prediction.contestRank.integerValue,
                                                     (long)prediction.contestType.maxEntries.integerValue]
                 : @"Not started yet";
-                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%i",
+                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%li",
                                                      prediction.contestRankPayout.integerValue / 100]
                 : @"N/A";
             }
@@ -405,7 +443,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 - (void)changeHistory:(FUISegmentedControl*)segments
 {
     BOOL isHistory = segments.selectedSegmentIndex == 1;
-    self.rosterPredictionType = isHistory ? FFRosterPredictionTypeFinished : FFRosterPredictionTypeSubmitted;
+    self.predictionState = isHistory ? FFPredictionStateFinished : FFPredictionStateSubmitted;
     [self refreshWithShowingAlert:YES completion:^{
         [self.tableView reloadData];
     }];
@@ -450,8 +488,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 - (void)refreshWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
     if (self.networkStatus == NotReachable) {
-        [self.tableView setPredictionType:self.predictionType
-                     rosterPredictionType:self.rosterPredictionType];
+        [self.tableView setPredictionState:self.predictionState];
         
         if (shouldShow) {
             [[FFAlertView noInternetConnectionAlert] showInView:self.view];
@@ -469,31 +506,44 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         [alert showInView:self.navigationController.view];
     }
     
-    [self.tableView setPredictionType:self.predictionType
-                 rosterPredictionType:self.rosterPredictionType];
+    [self.tableView setPredictionState:self.predictionState];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     switch (self.predictionType) {
         case FFPredictionsTypeIndividual: {
-            [self.individualPredictions fetchWithCompletion:^{
-                if (alert)
-                    [alert hide];
-                if (block)
-                    block();
-            }];
+            if (self.predictionState == FFPredictionStateSubmitted) {
+                [self.individualActivePredictions fetchWithCompletion:^{
+                    if (alert)
+                        [alert hide];
+                    if (block)
+                        block();
+                }];
+            } else {
+                [self.individualHistoryPredictions fetchWithParameters:@{ @"historical" : @"true",
+                                                                          @"all" : @(YES),
+                                                                          @"page" : @(1)
+                                                                          }
+                                                            completion:^{
+                                                                if (alert)
+                                                                    [alert hide];
+                                                                if (block)
+                                                                    block();
+                                                            }];
+            }
+            
             [self.typeButton setTitle:@"Individual"
                              forState:UIControlStateNormal];
         }
             break;
             
         case FFPredictionsTypeRoster: {
-            if (self.rosterPredictionType == FFRosterPredictionTypeSubmitted) {
+            if (self.predictionState == FFPredictionStateSubmitted) {
                 [self.rosterActivePredictions fetchWithCompletion:^{
                     if (alert)
                         [alert hide];
                     if (block)
                         block();
                 }];
-            } else if (self.rosterPredictionType == FFRosterPredictionTypeFinished) {
+            } else if (self.predictionState == FFPredictionStateFinished) {
                 [self.rosterHistoryPredictions fetchWithParameters:@{ @"historical" : @"true" }
                                                         completion:^{
                                                             if (alert)
