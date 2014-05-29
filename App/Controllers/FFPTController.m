@@ -68,7 +68,7 @@
     [alert showInView:self.navigationController.view];
     @weakify(self)
     [FFEvent fetchEventsForMarket:self.delegate.marketId
-                           player:self.player.statsId
+                           player:self.player
                           session:self.session
                           success:
      ^(id successObj) {

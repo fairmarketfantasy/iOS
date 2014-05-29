@@ -8,6 +8,8 @@
 
 #import "FFDataObject.h"
 
+@class FFPlayer;
+
 @interface FFEvent : FFDataObject
 
 @property(nonatomic) SBInteger* bidMore;
@@ -16,7 +18,7 @@
 @property(nonatomic) NSString* name;
 
 + (void)fetchEventsForMarket:(NSString*)marketId
-                      player:(NSString*)statId
+                      player:(FFPlayer*)player
                      session:(SBSession*)session
                      success:(SBSuccessBlock)success
                      failure:(SBErrorBlock)failure;

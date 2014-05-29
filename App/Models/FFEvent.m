@@ -8,6 +8,7 @@
 
 #import "FFEvent.h"
 #import "FFSession.h"
+#import "FFPlayer.h"
 #import "FFSessionManager.h"
 #import <SBData/NSDictionary+Convenience.h>
 
@@ -47,14 +48,15 @@
 #pragma mark -
 
 + (void)fetchEventsForMarket:(NSString*)marketId
-                     player:(NSString*)statId
+                      player:(FFPlayer*)player
                       session:(SBSession*)session
                       success:(SBSuccessBlock)success
                       failure:(SBErrorBlock)failure
 {
     // TODO: use FFDataObjectResultSet
     NSDictionary* params = @{
-                             @"player_ids" : statId,
+                             @"player_ids" : player.statsId,
+                             @"position" : player.position,
                              @"average" : @"true", // for this request only, API specific
                              @"market_id" : marketId,
                              };
