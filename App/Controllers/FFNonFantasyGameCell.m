@@ -117,13 +117,13 @@
         
         // pt buttons
         _homePTButton = [FFCustomButton buttonWithType:UIButtonTypeCustom];
-        self.homePTButton.frame = CGRectMake(120.f, 25.f, 35.f, 25.f);
+        self.homePTButton.frame = CGRectMake(120.f, 26.f, 35.f, 25.f);
         self.homePTButton.backgroundColor = [UIColor clearColor];
         self.homePTButton.titleLabel.font = [FFStyle blockFont:17.f];
         [self.contentView addSubview:self.homePTButton];
         
         _awayPTButton = [FFCustomButton buttonWithType:UIButtonTypeCustom];
-        self.awayPTButton.frame = CGRectMake(166.f, 25.f, 35.f, 25.f);
+        self.awayPTButton.frame = CGRectMake(165.f, 26.f, 35.f, 25.f);
         self.awayPTButton.backgroundColor = [UIColor clearColor];
         self.awayPTButton.titleLabel.font = [FFStyle blockFont:17.f];
         [self.contentView addSubview:self.awayPTButton];
