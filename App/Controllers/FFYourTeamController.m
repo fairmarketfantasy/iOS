@@ -188,14 +188,16 @@
 
 - (BOOL)isSomethingWrong
 {
-    return (self.networkStatus == NotReachable ||
-            self.isServerError ||
-            self.dataSource.unpaidSubscription == YES);
-    
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        return self.markets.count == 0;
+        return (self.networkStatus == NotReachable ||
+                self.isServerError ||
+                self.dataSource.unpaidSubscription == YES ||
+                self.markets.count == 0);
     } else {
-        return [self.dataSource availableGames].count == 0;
+        return (self.networkStatus == NotReachable ||
+                self.isServerError ||
+                self.dataSource.unpaidSubscription == YES ||
+                [self.dataSource availableGames].count == 0);
     }
 }
 
