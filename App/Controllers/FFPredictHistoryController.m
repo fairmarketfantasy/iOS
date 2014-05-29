@@ -20,6 +20,7 @@
 #import "FFPredictRosterPagerController.h"
 #import "FFAlertView.h"
 #import "Reachability.h"
+#import "FFSessionManager.h"
 // model
 #import "FFPredictionSet.h"
 #import "FFIndividualPrediction.h"
@@ -262,7 +263,13 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 FFIndividualPrediction* prediction = self.individualPredictions.allObjects[indexPath.row];
                 cell.choiceLabel.text = prediction.playerName;
                 cell.eventLabel.text = prediction.marketName;
-                cell.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.gameDay];
+                NSString *dayString = nil;
+                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+                    dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
+                } else {
+                    dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameTime];
+                }
+                cell.dayLabel.text = dayString;
                 cell.ptLabel.text = prediction.predictThat;
                 if (prediction.eventPredictions.count > 0) {
                     NSDictionary* eventPrediction = prediction.eventPredictions.firstObject;
@@ -274,11 +281,18 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                                   eventPrediction[@"event_type"]];
                     }
                 }
-                cell.timeLabel.text = [FFStyle.timeFormatter stringFromDate:prediction.gameTime];
-                cell.awaidLabel.text = prediction.award;
-                cell.resultLabel.text = [prediction.state isEqualToString:@"cancelled"]
-                ? @"Didn't play"
-                : (prediction.gameResult ? prediction.gameResult : @"N/A");
+                
+                cell.timeLabel.text = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
+                cell.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
+                NSString *resultString = nil;
+                if ([prediction.state isEqualToString:@"cancelled"]) {
+                    resultString = @"Didn't play";
+                } else if (prediction.gameResult && [prediction.gameResult isEqualToString:@""] == NO) {
+                    resultString = prediction.gameResult;
+                } else {
+                    resultString = @"N/A";
+                }
+                cell.resultLabel.text = resultString;
             }
             return cell;
         }
