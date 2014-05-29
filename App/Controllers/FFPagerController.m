@@ -643,6 +643,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                     animated:YES
                   completion:nil];
     
+    self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+                                   self.viewControllers.firstObject];
+    
     [self.teamController reloadWithServerError:NO];
 }
 
@@ -980,6 +983,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                            direction:UIPageViewControllerNavigationDirectionReverse
                             animated:YES
                           completion:nil];
+            self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+                                           self.viewControllers.firstObject];
         }
         
         [FFRoster autofillForSession:self.session
@@ -1048,6 +1053,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:YES
                   completion:nil];
+    
+    self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+                                   self.viewControllers.firstObject];
 }
 
 - (void)removeTeam:(FFTeam *)removedTeam
@@ -1068,6 +1076,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                     animated:YES
                   completion:^(BOOL finished) {
                       if (finished)
+                          weakSelf.pager.currentPage = (int)[[weakSelf getViewControllers] indexOfObject:
+                                                         weakSelf.viewControllers.firstObject];
                           [weakSelf.teamController.tableView reloadData];
                   }];
 }
