@@ -72,6 +72,17 @@
                                   comingSoon:comingSoon];
 }
 
++ (FFNodeItem*)nodeWithSport:(FFSport*)sport
+                  comingSoon:(BOOL)comingSoon
+{
+    
+    return [[FFNodeItem alloc] initWithTitle:sport.title
+                                  sportName:sport.name
+                                    children:@[]
+                                  comingSoon:comingSoon];
+}
+
+
 - (id)initWithTitle:(NSString*)title
            children:(NSArray*)children
                type:(FFNodeItemType)type
@@ -96,6 +107,23 @@
         self.children = children;
         self.type = type;
         _comingSoon = comingSoon;
+    }
+    return self;
+}
+
+- (id)initWithTitle:(NSString*)title
+         sportName:(NSString*)key
+           children:(NSArray*)children
+         comingSoon:(BOOL)comingSoon
+{
+    self = [super init];
+    if (self) {
+        self.title = title;
+        self.children = children;
+        self.type = FFNodeItemTypeLeaf;
+        _comingSoon = comingSoon;
+        _sportName = key;
+        _sportTitle = title;
     }
     return self;
 }
@@ -167,11 +195,11 @@
     NSMutableArray *children = [NSMutableArray arrayWithCapacity:category.sports.count];
     for (FFSport *sport in category.sports) {
         if (sport.isActive == YES) {
-            FFNodeItem *childNode = [FFNodeItem nodeWithTitle:sport.name
-                                                     children:@[]
-                                                         type:FFNodeItemTypeLeaf
+            FFNodeItem *childNode = [FFNodeItem nodeWithSport:sport
                                                    comingSoon:sport.commingSoon];
-            childNode.categoryTitle = [category.name copy];
+            
+            childNode.categoryTitle = category.title;
+            childNode.categoryName = category.name;
             [children addObject:childNode];
         }
     }

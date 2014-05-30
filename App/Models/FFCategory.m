@@ -21,6 +21,7 @@
     
     return @{@"note" : _note,
              @"name" : _name,
+             @"title" : _title,
              @"sports" : sports
              };
 }
@@ -30,6 +31,7 @@
     self = [super init];
     if (self) {
         _note = [dict objectForKey:@"note"];
+        _title = [dict objectForKey:@"title"];
         _name = [self stringWithoutUnderscore:[dict objectForKey:@"name"]];
         
         NSMutableArray *sports = [NSMutableArray array];
@@ -62,6 +64,7 @@
 - (NSString*)descriptionWithLocale:(NSDictionary*)locale indent:(NSUInteger)indent
 {
 	NSMutableString* result = [NSMutableString stringWithFormat:@"Category: %@\n", _name];
+    [result appendFormat:@"title in menu: %@\n", _title];
 	[result appendFormat:@"note: %@\n\n", _note];
     for (FFSport *sport in _sports) {
         [result appendFormat:@"%@\n", sport.description];

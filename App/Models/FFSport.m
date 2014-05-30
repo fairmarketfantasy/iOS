@@ -19,6 +19,7 @@
         _isActive = [[dictionary objectForKey:@"is_active"] boolValue];
         _isPlayoffsOn = [[dictionary objectForKey:@"playoffs_on"] boolValue];
         _name = [dictionary objectForKey:@"name"];
+        _title = [dictionary objectForKey:@"title"];
     }
     
     return self;
@@ -30,13 +31,15 @@
              @"commingSoon" : [NSNumber numberWithBool:_commingSoon],
              @"isActive" : [NSNumber numberWithBool:_isActive],
              @"isPlayoffsOn" : [NSNumber numberWithBool:_isPlayoffsOn],
-             @"name" : _name
+             @"name" : _name,
+             @"title" : _title
              };
 }
 
 - (NSString*)descriptionWithLocale:(NSDictionary*)locale indent:(NSUInteger)indent
 {
 	NSMutableString* result = [NSMutableString stringWithFormat:@"Sport: %@\n", _name];
+    [result appendFormat:@"title in menu: %@\n", _title];
 	[result appendFormat:@"commingSoon: %d\n", _commingSoon];
 	[result appendFormat:@"isActive: %d\n", _isActive];
     [result appendFormat:@"isPlayoffsOn: %d\n", _isPlayoffsOn];

@@ -260,7 +260,7 @@
     } else {
         if (treeNodeInfo.treeDepthLevel > 0) {
             if ([nodeItem.categoryTitle isEqualToString:[FFSessionManager shared].currentCategoryName] &&
-                [nodeItem.title isEqualToString:[FFSessionManager shared].currentSportName]) {
+                [nodeItem.sportName isEqualToString:[FFSessionManager shared].currentSportName]) {
                 accessoryName = @"accessory_check";
             } else {
                 accessoryName = @"accessory_uncheck";
@@ -480,7 +480,7 @@
                 @strongify(self)
                 @strongify(item)
                 if ([self.delegate respondsToSelector:@selector(didUpdateToCategory:sport:)]) {
-                    [self.delegate didUpdateToCategory:item.categoryTitle sport:item.title];
+                    [self.delegate didUpdateToCategory:item.categoryName sport:item.sportName];
                 }
                 [self dismissViewControllerAnimated:YES completion:nil];
             };

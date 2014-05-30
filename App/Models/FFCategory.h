@@ -11,6 +11,7 @@
 @interface FFCategory : NSObject
 
 @property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *title;//for showing in menu
 @property (nonatomic, readonly) NSString *note;
 @property (nonatomic, readonly) NSArray *sports;//should cantain FFSport objects
 
