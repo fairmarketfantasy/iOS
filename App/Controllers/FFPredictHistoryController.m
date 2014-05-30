@@ -47,6 +47,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 @property(nonatomic, assign) NetworkStatus networkStatus;
 @property(nonatomic, assign) BOOL unpaid;
 
+//pagination stuff
 @property(nonatomic, strong) NSMutableArray *predictions;
 @property(nonatomic, assign) NSUInteger pageNumber;
 
@@ -146,6 +147,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [self.predictions removeAllObjects];
+    self.pageNumber = 1;
     [super viewWillDisappear:animated];
     [self hideTypeSelector];
 }
@@ -209,11 +212,11 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     }
     self.predictionType = type;
 
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]
+                          atScrollPosition:UITableViewScrollPositionBottom
+                                  animated:YES];
     [self refreshWithShowingAlert:YES completion:^{
         [self.tableView reloadData];
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]
-                              atScrollPosition:UITableViewScrollPositionBottom
-                                      animated:YES];
     }];
     
     [self showOrHideTypeSelectorIfNeeded];
@@ -243,34 +246,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         return 1;
     } else {
         return self.predictions.count;
-//        switch (self.predictionType) {
-//            case FFPredictionsTypeIndividual:
-//            {
-//                switch (self.predictionState) {
-//                    case FFPredictionStateSubmitted:
-//                        return self.individualActivePredictions.allObjects.count;
-//                    case FFPredictionStateFinished:
-//                        return self.individualHistoryPredictions.allObjects.count;
-//                    default:
-//                        return 0;
-//                }
-//            }
-//                
-//            case FFPredictionsTypeRoster:
-//            {
-//                switch (self.predictionState) {
-//                    case FFPredictionStateSubmitted:
-//                        return self.rosterActivePredictions.allObjects.count;
-//                    case FFPredictionStateFinished:
-//                        return self.rosterHistoryPredictions.allObjects.count;
-//                    default:
-//                        return 0;
-//                }
-//            }
-//                
-//            default:
-//                return 0;
-//        }
     }
 }
 
@@ -292,7 +267,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         [self refreshWithShowingAlert:YES completion:^{
             [self.tableView reloadData];
         }];
-//        return nil;
     }
     
     switch (self.predictionType) {
@@ -300,19 +274,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         {
             FFPredictIndividualCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictIndividualCell"
                                                                             forIndexPath:indexPath];
-            
-//            NSArray* predictions = nil;
-//            switch (self.predictionState) {
-//                case FFPredictionStateSubmitted:
-//                    predictions = self.individualActivePredictions.allObjects;
-//                    break;
-//                case FFPredictionStateFinished:
-//                    predictions = self.individualHistoryPredictions.allObjects;
-//                    break;
-//                default:
-//                    predictions = @[];
-//                    break;
-//            }
             
             if (self.predictions.count > indexPath.row) {
                 __block FFIndividualPrediction* prediction = self.predictions[indexPath.row];
@@ -364,18 +325,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         {
             FFPredictHistoryCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictCell"
                                                                          forIndexPath:indexPath];
-//            NSArray* predictions = nil;
-//            switch (self.predictionState) {
-//                case FFPredictionStateSubmitted:
-//                    predictions = self.rosterActivePredictions.allObjects;
-//                    break;
-//                case FFPredictionStateFinished:
-//                    predictions = self.rosterHistoryPredictions.allObjects;
-//                    break;
-//                default:
-//                    predictions = @[];
-//                    break;
-//            }
             if (self.predictions.count > indexPath.row) {
                 __block FFRosterPrediction* prediction = self.predictions[indexPath.row];
                 @weakify(self)
@@ -552,12 +501,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     switch (self.predictionType) {
         case FFPredictionsTypeIndividual: {
             if (self.predictionState == FFPredictionStateSubmitted) {
-//                [self.individualActivePredictions fetchWithCompletion:^{
-//                    if (alert)
-//                        [alert hide];
-//                    if (block)
-//                        block();
-//                }];
                 [self.individualActivePredictions fetchWithParameters:@{
                                                                         @"all" : @(YES),
                                                                         @"page" : @(self.pageNumber)
@@ -588,12 +531,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
             
         case FFPredictionsTypeRoster: {
             if (self.predictionState == FFPredictionStateSubmitted) {
-//                [self.rosterActivePredictions fetchWithCompletion:^{
-//                    if (alert)
-//                        [alert hide];
-//                    if (block)
-//                        block();
-//                }];
                 [self.rosterActivePredictions fetchWithParameters:@{
                                                                     @"all" : @(YES),
                                                                     @"page" : @(self.pageNumber)
