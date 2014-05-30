@@ -58,8 +58,8 @@
 - (void)saveCurrentCategory:(NSString *)category andSport:(NSString *)sport
 {
     if ([_currentCategoryName isEqualToString:category] == NO) {
-        [[NSUserDefaults standardUserDefaults] setObject:category forKey:kCurrentCategoryKey];
         _currentCategoryName = [category stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        [[NSUserDefaults standardUserDefaults] setObject:_currentCategoryName forKey:kCurrentCategoryKey];
     }
     
     if ([_currentSportName isEqualToString:sport] == NO) {
