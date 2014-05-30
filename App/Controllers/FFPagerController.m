@@ -223,7 +223,6 @@ SBDataObjectResultSetDelegate>
                     [self updateGames];
                 }
             } else {
-                [self.myTeam removeAllObjects];
                 [self.games removeAllObjects];
             }
         }
@@ -824,9 +823,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [self.teamController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
                                                                                inSection:0]]
                                          withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.teamController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
-                                                                               inSection:0]]
-                                         withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.receiverController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                                   inSection:0]]
+                                             withRowAnimation:UITableViewRowAnimationAutomatic];
     
     if (_rosterIsCreating == NO) {
         __weak FFPagerController *weakSelf = self;
