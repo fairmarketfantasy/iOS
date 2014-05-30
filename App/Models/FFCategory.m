@@ -30,8 +30,7 @@
     self = [super init];
     if (self) {
         _note = [dict objectForKey:@"note"];
-//        _name = [self stringWithoutUnderscore:[dict objectForKey:@"name"]];
-        _name = [dict objectForKey:@"name"];
+        _name = [self stringWithoutUnderscore:[dict objectForKey:@"name"]];
         
         NSMutableArray *sports = [NSMutableArray array];
         for (NSDictionary *sportDict in [dict objectForKey:@"sports"]) {

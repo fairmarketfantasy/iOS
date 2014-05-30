@@ -41,7 +41,7 @@
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                  @"category" : [FFSessionManager shared].currentCategoryName,
+                                  @"category" : [FFSessionManager shared].categoryNameForNetwork,
                                   @"sport" : [FFSessionManager shared].currentSportName,
                                   @"type" : [FFMarketSet typeKey:type]
                                   }];
@@ -51,7 +51,7 @@
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                  @"category" : [FFSessionManager shared].currentCategoryName,
+                                  @"category" : [FFSessionManager shared].categoryNameForNetwork,
                                   @"sport" : [FFSessionManager shared].currentSportName,
                                   @"type" : [FFMarketSet typeKey:type]
                                   }

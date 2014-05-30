@@ -59,8 +59,7 @@
 {
     if ([_currentCategoryName isEqualToString:category] == NO) {
         [[NSUserDefaults standardUserDefaults] setObject:category forKey:kCurrentCategoryKey];
-//        _currentCategoryName = [category stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-        _currentCategoryName = category;
+        _currentCategoryName = [category stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     }
     
     if ([_currentSportName isEqualToString:sport] == NO) {
@@ -79,6 +78,15 @@
 - (NSString *)readCurrentSportName
 {
     return [[NSUserDefaults standardUserDefaults] objectForKey:kCurrentSportKey];
+}
+
+- (NSString *)categoryNameForNetwork
+{
+    if ([self.currentCategoryName rangeOfString:@" "].location != NSNotFound) {
+        return [self.currentCategoryName stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    }
+    
+    return self.currentCategoryName;
 }
 
 @end

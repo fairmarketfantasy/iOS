@@ -53,7 +53,7 @@
     NSAssert(self.query, @"Query shouldn't be nil!");
     NSMutableDictionary* param = [NSMutableDictionary dictionaryWithDictionary:parameters];
     [param addEntriesFromDictionary:@{
-                                      @"category" : [FFSessionManager shared].currentCategoryName,
+                                      @"category" : [FFSessionManager shared].categoryNameForNetwork,
                                       @"sport" : [FFSessionManager shared].currentSportName
                                       }];
     [self refreshWithParameters:[param copy] completion:^{

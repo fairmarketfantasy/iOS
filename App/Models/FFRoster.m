@@ -210,7 +210,7 @@
     [session authorizedJSONRequestWithMethod:@"GET"
                                         path:path
                                    paramters:@{
-                                               @"category" : [FFSessionManager shared].currentCategoryName,
+                                               @"category" : [FFSessionManager shared].categoryNameForNetwork,
                                                @"sport" : [FFSessionManager shared].currentSportName
                                                }
                                      success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)

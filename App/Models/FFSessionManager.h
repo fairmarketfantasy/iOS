@@ -13,6 +13,7 @@
 @property (nonatomic, readonly) NSArray *categories;
 @property (nonatomic, readonly) NSString *currentCategoryName;
 @property (nonatomic, readonly) NSString *currentSportName;
+@property (nonatomic, readonly) NSString *categoryNameForNetwork;
 
 + (FFSessionManager*)shared;
 
