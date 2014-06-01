@@ -7,16 +7,18 @@
 //
 
 #import "FFPagerController.h"
-#import "FFStyle.h"
+#import "FFMenuViewController.h"
 #import "FFYourTeamController.h"
 #import "FFWideReceiverController.h"
 #import "FFPTController.h"
+#import "FFWCController.h"
+#import "FFStyle.h"
 #import "StyledPageControl.h"
 #import "FFNavigationBarItemView.h"
 #import "FFLogo.h"
 #import "FFWebViewController.h"
 #import "FFAlertView.h"
-#import "FFMenuViewController.h"
+
 #import "Reachability.h"
 // model
 #import "FFControllerProtocol.h"
@@ -32,6 +34,7 @@
 #import "FFTeam.h"
 #import "FFNonFantasyGame.h"
 #import "FFSessionManager.h"
+#import "FFWCManager.h"
 #import <SBData/SBTypes.h>
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
@@ -44,6 +47,12 @@ SBDataObjectResultSetDelegate>
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFYourTeamController* teamController;
 @property(nonatomic) FFWideReceiverController* receiverController;
+
+@property(nonatomic) FFWCController* dailyWinsController;
+@property(nonatomic) FFWCController* mvpController;
+@property(nonatomic) FFWCController* cupWinnerController;
+@property(nonatomic) FFWCController* groupWinnerController;
+
 @property(nonatomic) UIButton* globalMenuButton;
 @property(nonatomic) NSDictionary* positionsNames;
 
@@ -91,6 +100,11 @@ SBDataObjectResultSetDelegate>
         self.teamController.dataSource = self;
         self.receiverController.delegate = self;
         self.receiverController.dataSource = self;
+        
+        self.groupWinnerController = [[FFWCController alloc] init];
+        self.mvpController = [[FFWCController alloc] init];
+        self.cupWinnerController = [[FFWCController alloc] init];
+        self.dailyWinsController = [[FFWCController alloc] init];
         
         self.isFirstLaunch = YES;
         _rosterIsCreating = NO;
@@ -179,7 +193,11 @@ SBDataObjectResultSetDelegate>
             self.marketsSetSingle.delegate = self;
             [self updateMarkets];
         } else if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:@"sports"]) {
-            [self updateGames];
+            if ([[[FFSessionManager shared] currentSportName] isEqualToString:@"FWC"]) {
+                [self getWorldCupData];
+            } else {
+                [self updateGames];
+            }
         }
         
         [self setViewControllers:@[[self getViewControllers].firstObject]
@@ -436,10 +454,19 @@ SBDataObjectResultSetDelegate>
 
 - (NSArray*)getViewControllers
 {
-    return @[
-             self.teamController,
-             self.receiverController
-             ];
+    if ([[FFSessionManager shared].currentSportName isEqualToString:@"FWC"]) {
+        return @[
+                 self.cupWinnerController,
+                 self.groupWinnerController,
+                 self.dailyWinsController,
+                 self.mvpController
+                 ];
+    } else {
+        return @[
+                 self.teamController,
+                 self.receiverController
+                 ];
+    }
 }
 
 - (void)fetchPositionsNames
@@ -542,7 +569,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         [self.receiverController resetPosition];
         [self updateMarkets];
     } else if ([category isEqualToString:@"sports"]) {
-        [self updateGames];
+        if ([sport isEqual:@"FWC"]) {
+            [self getWorldCupData];
+        } else {
+            [self updateGames];
+        }
     }
 }
 
@@ -724,6 +755,31 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 }
 
 #pragma mark -
+
+- (void)getWorldCupData
+{
+    [[FFWCManager shared] fetchDataForSession:self.session
+                           dataWithCompletion:^(BOOL success) {
+                               if (success) {
+                                   self.cupWinnerController.category = FFWCCupWinner;
+                                   self.cupWinnerController.elements = [NSArray arrayWithArray:[FFWCManager shared].cupWinners];
+                                   [self.cupWinnerController.tableView reloadData];
+                                   
+                                   self.groupWinnerController.category = FFWCGroupWinners;
+                                   self.groupWinnerController.elements = [NSArray arrayWithArray:[FFWCManager shared].groupWinners];
+                                   self.groupWinnerController.selectedCroupIndex = 0;
+                                   [self.groupWinnerController.tableView reloadData];
+                                   
+                                   self.dailyWinsController.category = FFWCDailyWins;
+                                   self.dailyWinsController.elements = [NSArray arrayWithArray:[FFWCManager shared].dailyWins];
+                                   [self.dailyWinsController.tableView reloadData];
+                                   
+                                   self.mvpController.category = FFWCMvp;
+                                   self.mvpController.elements = [NSArray arrayWithArray:[FFWCManager shared].mvpCandidates];
+                                   [self.mvpController.tableView reloadData];
+                               }
+                           }];
+}
 
 - (void)updateGames
 {
