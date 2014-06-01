@@ -19,6 +19,7 @@
 		15CD295617F7804A0027DFEC /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295417F7804A0027DFEC /* AddressBookUI.framework */; };
 		3A9B09AB193B3ABF00C81CA7 /* FFWCController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B09AA193B3ABF00C81CA7 /* FFWCController.m */; };
 		3A9B09AE193B486E00C81CA7 /* FFWCCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B09AD193B486E00C81CA7 /* FFWCCell.m */; };
+		3A9B09B1193B6D2600C81CA7 /* FFWCGameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B09B0193B6D2600C81CA7 /* FFWCGameCell.m */; };
 		3AA7EDD61939EE770087C08E /* FFWCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7EDD51939EE770087C08E /* FFWCManager.m */; };
 		3AA7EDD91939FF080087C08E /* FFWCGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7EDD81939FF080087C08E /* FFWCGame.m */; };
 		3AA7EDDC1939FF5B0087C08E /* FFWCTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7EDDB1939FF5B0087C08E /* FFWCTeam.m */; };
@@ -237,6 +238,8 @@
 		3A9B09AA193B3ABF00C81CA7 /* FFWCController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCController.m; sourceTree = "<group>"; };
 		3A9B09AC193B486E00C81CA7 /* FFWCCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCCell.h; sourceTree = "<group>"; };
 		3A9B09AD193B486E00C81CA7 /* FFWCCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCCell.m; sourceTree = "<group>"; };
+		3A9B09AF193B6D2600C81CA7 /* FFWCGameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCGameCell.h; sourceTree = "<group>"; };
+		3A9B09B0193B6D2600C81CA7 /* FFWCGameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCGameCell.m; sourceTree = "<group>"; };
 		3AA7EDD41939EE770087C08E /* FFWCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCManager.h; sourceTree = "<group>"; };
 		3AA7EDD51939EE770087C08E /* FFWCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCManager.m; sourceTree = "<group>"; };
 		3AA7EDD71939FF080087C08E /* FFWCGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCGame.h; sourceTree = "<group>"; };
@@ -994,6 +997,8 @@
 				F96F0C50192CBB4B003AA3BA /* FFNonFantasyGameCell.m */,
 				3A9B09AC193B486E00C81CA7 /* FFWCCell.h */,
 				3A9B09AD193B486E00C81CA7 /* FFWCCell.m */,
+				3A9B09AF193B6D2600C81CA7 /* FFWCGameCell.h */,
+				3A9B09B0193B6D2600C81CA7 /* FFWCGameCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1325,6 +1330,7 @@
 				896ACCF318B664F5001E9C64 /* FFContest2UpTabelViewCell.m in Sources */,
 				89F1A09C18DCC951001369E3 /* FFPTController.m in Sources */,
 				89923EFF18EE3C7300F74FEB /* FFPredictRosterTeamController.m in Sources */,
+				3A9B09B1193B6D2600C81CA7 /* FFWCGameCell.m in Sources */,
 				8972768318D9559D008D995C /* FFWideReceiverCell.m in Sources */,
 				890504DF18DA0C3A006CD2EA /* FFAutoFillCell.m in Sources */,
 				89CE186E18EE7E0D00A73C72 /* FFScoreView.m in Sources */,

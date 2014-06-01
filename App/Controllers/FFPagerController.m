@@ -758,6 +758,13 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)getWorldCupData
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
+    __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:@""
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    
     [[FFWCManager shared] fetchDataForSession:self.session
                            dataWithCompletion:^(BOOL success) {
                                if (success) {
@@ -778,6 +785,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                    self.mvpController.elements = [NSArray arrayWithArray:[FFWCManager shared].mvpCandidates];
                                    [self.mvpController.tableView reloadData];
                                }
+                               
+                               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+                               [alert hide];
                            }];
 }
 

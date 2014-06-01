@@ -8,6 +8,7 @@
 
 #import "FFWCGame.h"
 #import "FFWCTeam.h"
+#import "FFDate.h"
 
 @implementation FFWCGame
 
@@ -17,7 +18,7 @@
     if (self) {
         _homeTeam = [[FFWCTeam alloc] initWithDictionary:dict[@"get_home_team"]];
         _guestTeam = [[FFWCTeam alloc] initWithDictionary:dict[@"get_away_team"]];
-        _date = dict[@"game_time"];
+        _date = (FFDate *)[[FFDate dateFormatter] dateFromString:dict[@"game_time"]];
     }
     return self;
 }

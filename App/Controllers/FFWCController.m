@@ -9,6 +9,7 @@
 #import "FFWCController.h"
 #import "FFWCManager.h"
 #import "FFWCCell.h"
+#import "FFWCGameCell.h"
 #import "FFPathImageView.h"
 #import "FFRosterTableHeader.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
@@ -30,7 +31,7 @@
 {
     [super viewDidLoad];
     
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
+    _tableView = [[UITableView alloc] initWithFrame:self.view.bounds];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.tableView.backgroundColor = [FFStyle darkGrey];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -82,6 +83,8 @@
 {
     if (self.category == FFWCGroupWinners) {
         return indexPath.section == 0 ? 76.f : 80.f;
+    } else if (self.category == FFWCDailyWins) {
+        return 100.f;
     } else {
         return 80.f;
     }
@@ -95,11 +98,16 @@
                 FFWCTeam *team = (FFWCTeam *)[self.elements objectAtIndex:indexPath.row];
                 
                 FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
-                [cell.flag setImageWithURL: [NSURL URLWithString:team.flagURL]
-                            placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
-                 usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+                [cell.flag setImageWithURL:[NSURL URLWithString:team.flagURL]
+                          placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
+               usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
                 
                 cell.titleLabel.text = team.name;
+                
+                [cell.PTButton setAction:kUIButtonBlockTouchUpInside
+                               withBlock:^{
+                                   
+                               }];
                 return cell;
             }
                 
@@ -110,7 +118,18 @@
             }
              
             case FFWCDailyWins: {
-                UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
+                FFWCGameCell *cell = [[FFWCGameCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCGameCell"];
+                [cell setupWithGame:[self.elements objectAtIndex:indexPath.row]];
+                
+                [cell.homePTButton setAction:kUIButtonBlockTouchUpInside
+                                   withBlock:^{
+                                       
+                                   }];
+                [cell.guestPTButton setAction:kUIButtonBlockTouchUpInside
+                                    withBlock:^{
+                                        
+                                    }];
+                
                 return cell;
             }
                 
@@ -123,6 +142,11 @@
                usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
                 
                 cell.titleLabel.text = player.name;
+                
+                [cell.PTButton setAction:kUIButtonBlockTouchUpInside
+                               withBlock:^{
+                                   
+                               }];
                 return cell;
             }
                 
@@ -139,6 +163,11 @@
        usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         
         cell.titleLabel.text = team.name;
+        
+        [cell.PTButton setAction:kUIButtonBlockTouchUpInside
+                       withBlock:^{
+                           
+                       }];
         return cell;
     }
 }
