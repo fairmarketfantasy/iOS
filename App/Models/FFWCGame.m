@@ -19,6 +19,7 @@
         _homeTeam = [[FFWCTeam alloc] initWithDictionary:dict[@"get_home_team"]];
         _guestTeam = [[FFWCTeam alloc] initWithDictionary:dict[@"get_away_team"]];
         _date = (FFDate *)[[FFDate dateFormatter] dateFromString:dict[@"game_time"]];
+        _statsId = [dict objectForKey:@"stats_id"];
     }
     return self;
 }

@@ -13,6 +13,7 @@
 
 @interface FFWCGame : NSObject
 
+@property (nonatomic, readonly) NSString *statsId;
 @property (nonatomic, readonly) FFWCTeam *homeTeam;
 @property (nonatomic, readonly) FFWCTeam *guestTeam;
 @property (nonatomic, readonly) FFDate *date;

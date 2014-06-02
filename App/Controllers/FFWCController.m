@@ -11,12 +11,14 @@
 #import "FFWCCell.h"
 #import "FFWCGameCell.h"
 #import "FFPathImageView.h"
+#import "FFAlertView.h"
 #import "FFRosterTableHeader.h"
-#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "FFIndividualPrediction.h"
 #import "FFWCGame.h"
 #import "FFWCTeam.h"
 #import "FFWCGroup.h"
 #import "FFWCPlayer.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 
 @interface FFWCController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
@@ -95,13 +97,14 @@
     if (indexPath.section == 0) {
         switch (self.category) {
             case FFWCCupWinner: {
-                FFWCTeam *team = (FFWCTeam *)[self.elements objectAtIndex:indexPath.row];
-                
+                __block FFWCTeam *team = (FFWCTeam *)[self.elements objectAtIndex:indexPath.row];
                 FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
                 [cell setupWithTeam:team];
+                
+                __weak FFWCController *weakSelf = self;
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
-                                   
+                                   [weakSelf submitPredictionOnTeam:team inGame:nil];
                                }];
                 return cell;
             }
@@ -114,29 +117,31 @@
              
             case FFWCDailyWins: {
                 FFWCGameCell *cell = [[FFWCGameCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCGameCell"];
-                [cell setupWithGame:[self.elements objectAtIndex:indexPath.row]];
+                __block FFWCGame *game = [self.elements objectAtIndex:indexPath.row];
+                [cell setupWithGame:game];
                 
+                __weak FFWCController *weakSelf = self;
                 [cell.homePTButton setAction:kUIButtonBlockTouchUpInside
                                    withBlock:^{
-                                       
+                                       [weakSelf submitPredictionOnTeam:game.homeTeam inGame:game];
                                    }];
                 [cell.guestPTButton setAction:kUIButtonBlockTouchUpInside
                                     withBlock:^{
-                                        
+                                       [weakSelf submitPredictionOnTeam:game.guestTeam inGame:game];
                                     }];
                 
                 return cell;
             }
                 
             case FFWCMvp: {
-                FFWCPlayer *player = (FFWCPlayer *)[self.elements objectAtIndex:indexPath.row];
-                
+                __block FFWCPlayer *player = (FFWCPlayer *)[self.elements objectAtIndex:indexPath.row];
                 FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
                 [cell setupWithPlayer:player];
                 
+                __weak FFWCController *weakSelf = self;
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
-                                   
+                                   [weakSelf submitPredictionOnPlayer:player];
                                }];
                 return cell;
             }
@@ -146,14 +151,14 @@
         }
     } else {
         FFWCGroup *group = [self.elements objectAtIndex:self.selectedCroupIndex];
-        FFWCTeam *team = [group.teams objectAtIndex:indexPath.row];
-        
+        __block FFWCTeam *team = [group.teams objectAtIndex:indexPath.row];
         FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
         [cell setupWithTeam:team];
         
+        __weak FFWCController *weakSelf = self;
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{
-                           
+                           [weakSelf submitPredictionOnTeam:team inGame:nil];
                        }];
         return cell;
     }
@@ -238,6 +243,65 @@
 {
     self.selectedCroupIndex = row;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+#pragma mark - Actions
+
+- (void)submitPredictionOnPlayer:(FFWCPlayer *)player
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   @"FWC", @"sport",
+                                   [[FFWCManager shared] stringForWCCategory:self.category], @"prediction_type",
+                                   player.statsId, @"predictable_id",
+                                   nil];
+    
+    __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:@""
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    
+    [FFIndividualPrediction submitPredictionForSession:self.session
+                                                params:params
+                                               success:^(id successObj) {
+                                                   [[FFWCManager shared] disablePTForPlayer:player];
+                                                   [self.tableView reloadData];
+                                                   [alert hide];
+                                               } failure:^(NSError *error) {
+                                                   NSLog(@" {FFWCC} : submittion failed: %@", error);
+                                                   [alert hide];
+                                               }];
+}
+
+- (void)submitPredictionOnTeam:(FFWCTeam *)team inGame:(FFWCGame *)game
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   @"FWC", @"sport",
+                                   [[FFWCManager shared] stringForWCCategory:self.category], @"prediction_type",
+                                   team.statsId, @"predictable_id",
+                                   nil];
+    if (game) {
+        [params addEntriesFromDictionary:@{
+                                           @"game_stats_id" : game.statsId
+                                           }];
+    }
+    
+    __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:@""
+                                      messsage:nil
+                                  loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    
+    [FFIndividualPrediction submitPredictionForSession:self.session
+                                                params:params
+                                               success:^(id successObj) {
+                                                   [[FFWCManager shared] disablePTForTeam:team
+                                                                                   inGame:game
+                                                                               inCategory:self.category];
+                                                   [self.tableView reloadData];
+                                                   [alert hide];
+                                               } failure:^(NSError *error) {
+                                                   NSLog(@" {FFWCC} : submittion failed: %@", error);
+                                                   [alert hide];
+                                               }];
 }
 
 @end

@@ -16,6 +16,7 @@
     if (self) {
         _name = dict[@"name"];
         _flagURL = dict[@"logo_url"];
+        _statsId = dict[@"stats_id"];
         _pt = [dict[@"pt"] integerValue];
         _disablePT = [dict[@"disable_pt"] boolValue];
     }

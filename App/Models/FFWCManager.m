@@ -71,4 +71,78 @@
                                      }];
 }
 
+- (NSString *)stringForWCCategory:(FFWCPredictionCategory)category
+{
+    switch (category) {
+        case FFWCCupWinner:
+            return @"win_the_cup";
+        case FFWCGroupWinners:
+            return @"win_groups";
+        case FFWCDailyWins:
+            return @"daily_wins";
+        case FFWCMvp:
+            return @"mvp";
+            
+        default:
+            return nil;
+    }
+}
+
+- (void)disablePTInCupWinnersForTeam:(FFWCTeam *)team
+{
+    for (FFWCTeam *t in self.cupWinners) {
+        if ([t.statsId isEqualToString:team.statsId])
+            t.disablePT = YES;
+    }
+}
+
+- (void)disablePTInGroupWinnersTeam:(FFWCTeam *)team
+{
+    for (FFWCGroup *group in self.groupWinners) {
+        for (FFWCTeam *t in group.teams)
+            if ([t.statsId isEqualToString:team.statsId])
+                t.disablePT = YES;
+    }
+}
+
+- (void)disablePTInDailyWinsForTeam:(FFWCTeam *)team inGame:(FFWCGame *)game
+{
+    for (FFWCGame *g in self.dailyWins) {
+        if ([game.statsId isEqualToString:g.statsId]) {
+            if ([game.homeTeam.statsId isEqualToString:team.statsId])
+                game.homeTeam.disablePT = YES;
+            else if ([game.guestTeam.statsId isEqualToString:team.statsId])
+                game.guestTeam.disablePT = YES;
+            else
+                assert(NO);
+        }
+    }
+}
+
+- (void)disablePTForPlayer:(FFWCPlayer *)player
+{
+    for (FFWCPlayer *candidate in self.mvpCandidates) {
+        if ([candidate.statsId isEqualToString:player.statsId])
+            candidate.disablePT = YES;
+    }
+}
+
+- (void)disablePTForTeam:(FFWCTeam *)team inGame:(FFWCGame *)game inCategory:(FFWCPredictionCategory)category
+{
+    switch (category) {
+        case FFWCCupWinner:
+            [self disablePTInCupWinnersForTeam:team];
+            break;
+        case FFWCGroupWinners:
+            [self disablePTInGroupWinnersTeam:team];
+            break;
+        case FFWCDailyWins:
+            [self disablePTInDailyWinsForTeam:team inGame:game];
+            break;
+            
+        default:
+            break;
+    }
+}
+
 @end

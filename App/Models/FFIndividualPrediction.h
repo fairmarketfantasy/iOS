@@ -24,4 +24,9 @@
 @property(nonatomic) FFDate* gameDay;
 @property(nonatomic) NSNumber* gameResult;
 
++ (void)submitPredictionForSession:(FFSession *)session
+                            params:(NSDictionary *)params
+                           success:(SBSuccessBlock)success
+                           failure:(SBErrorBlock)failure;
+
 @end

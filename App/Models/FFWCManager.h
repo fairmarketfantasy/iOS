@@ -9,6 +9,17 @@
 #import <Foundation/Foundation.h>
 
 @class FFSession;
+@class FFWCPlayer;
+@class FFWCTeam;
+@class FFWCGame;
+
+typedef NS_ENUM(NSUInteger, FFWCPredictionCategory)
+{
+    FFWCDailyWins = 0,
+    FFWCGroupWinners,
+    FFWCMvp,
+    FFWCCupWinner
+};
 
 @interface FFWCManager : NSObject
 
@@ -18,6 +29,10 @@
 @property (nonatomic, readonly) NSMutableArray *cupWinners; //array of WCTeams*
 
 + (FFWCManager*)shared;
+
 - (void)fetchDataForSession:(FFSession *)session dataWithCompletion:(void(^)(BOOL success))block;
+- (NSString *)stringForWCCategory:(FFWCPredictionCategory)category;
+- (void)disablePTForPlayer:(FFWCPlayer *)player;
+- (void)disablePTForTeam:(FFWCTeam *)team inGame:(FFWCGame *)game inCategory:(FFWCPredictionCategory)category;
 
 @end

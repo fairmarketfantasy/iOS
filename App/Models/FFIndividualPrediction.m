@@ -7,8 +7,10 @@
 //
 
 #import "FFIndividualPrediction.h"
-#import <SBData/NSDictionary+Convenience.h>
 #import "FFDate.h"
+#import "FFSessionManager.h"
+#import <SBData/NSDictionary+Convenience.h>
+
 
 @implementation FFIndividualPrediction
 
@@ -36,7 +38,10 @@
 
 + (NSString*)bulkPath
 {
-    return @"/individual_predictions/mine";
+    if ([[FFSessionManager shared].currentSportName isEqual:@"FWC"])
+        return @"/create_prediction";
+    else
+        return @"/individual_predictions/mine";
 }
 
 + (NSDictionary*)propertyToNetworkKeyMapping
@@ -74,5 +79,20 @@
     self.eventPredictions = [events copy];
 }
 */
+
++ (void)submitPredictionForSession:(FFSession *)session
+                            params:(NSDictionary *)params
+                           success:(SBSuccessBlock)success
+                           failure:(SBErrorBlock)failure
+{
+    [session authorizedJSONRequestWithMethod:@"POST"
+                                        path:[self bulkPath]
+                                   paramters:params
+                                     success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+                                         success(JSON);
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+                                         failure(error);
+                                     }];
+}
 
 @end

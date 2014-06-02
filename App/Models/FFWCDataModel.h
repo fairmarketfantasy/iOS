@@ -13,13 +13,14 @@
 @protected
     NSString *_name;
     NSString *_flagURL;
+    NSString *_statsId;
     NSInteger _pt;
     BOOL _disablePT;
-    
 }
 
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSString *flagURL;
+@property (nonatomic, readonly) NSString *statsId;
 @property (nonatomic, readonly) NSInteger pt;
 @property (nonatomic, assign) BOOL disablePT;
 

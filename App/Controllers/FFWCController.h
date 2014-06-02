@@ -7,14 +7,7 @@
 //
 
 #import "FFBaseViewController.h"
-
-typedef NS_ENUM(NSUInteger, FFWCPredictionCategory)
-{
-    FFWCDailyWins = 0,
-    FFWCGroupWinners,
-    FFWCMvp,
-    FFWCCupWinner
-};
+#import "FFWCManager.h"
 
 @interface FFWCController : FFBaseViewController
 
