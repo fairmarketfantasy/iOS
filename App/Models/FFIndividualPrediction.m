@@ -38,10 +38,7 @@
 
 + (NSString*)bulkPath
 {
-    if ([[FFSessionManager shared].currentSportName isEqual:@"FWC"])
-        return @"/create_prediction";
-    else
-        return @"/individual_predictions/mine";
+    return @"/individual_predictions/mine";
 }
 
 + (NSDictionary*)propertyToNetworkKeyMapping
@@ -86,7 +83,7 @@
                            failure:(SBErrorBlock)failure
 {
     [session authorizedJSONRequestWithMethod:@"POST"
-                                        path:[self bulkPath]
+                                        path:@"/create_prediction"
                                    paramters:params
                                      success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
                                          success(JSON);

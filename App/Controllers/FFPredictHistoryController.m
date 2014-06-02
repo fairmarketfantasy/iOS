@@ -62,7 +62,11 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     self.predictions = [NSMutableArray array];
     self.pageNumber = 1;
     
-    self.predictionType = FFPredictionsTypeRoster;
+    if ([[FFSessionManager shared].currentSportName isEqualToString:@"FWC"]) {
+        self.predictionType = FFPredictionsTypeIndividual;
+    } else {
+        self.predictionType = FFPredictionsTypeRoster;
+    }
     self.predictionState = FFPredictionStateSubmitted;
     self.typeSelector = FFPredictionsSelector.new;
     self.typeSelector.delegate = self;
@@ -96,9 +100,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     
-    // title
-    self.navigationItem.titleView = self.typeButton;
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
     
     internetReachability = [Reachability reachabilityForInternetConnection];
@@ -115,19 +116,19 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (void)willMoveToParentViewController:(UIViewController *)parent
 {
-    self.individualActivePredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFIndividualPrediction class]
-                                                                        session:self.session authorized:YES];
+    self.individualActivePredictions = [[FFPredictionSet alloc] initWithDataObjectClass:[FFIndividualPrediction class]
+                                                                                session:self.session authorized:YES];
     self.individualActivePredictions.delegate = self;
     
-    self.individualHistoryPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFIndividualPrediction class]
-                                                                              session:self.session authorized:YES];
+    self.individualHistoryPredictions = [[FFPredictionSet alloc] initWithDataObjectClass:[FFIndividualPrediction class]
+                                                                                 session:self.session authorized:YES];
     self.individualHistoryPredictions.delegate = self;
     
-    self.rosterActivePredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFRosterPrediction class]
-                                                                    session:self.session authorized:YES];
+    self.rosterActivePredictions = [[FFPredictionSet alloc] initWithDataObjectClass:[FFRosterPrediction class]
+                                                                            session:self.session authorized:YES];
     self.rosterActivePredictions.delegate = self;
-    self.rosterHistoryPredictions = [FFPredictionSet.alloc initWithDataObjectClass:[FFRosterPrediction class]
-                                                                    session:self.session authorized:YES];
+    self.rosterHistoryPredictions = [[FFPredictionSet alloc] initWithDataObjectClass:[FFRosterPrediction class]
+                                                                             session:self.session authorized:YES];
     self.rosterHistoryPredictions.delegate = self;
 }
 
@@ -135,6 +136,10 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 {
     [super viewWillAppear:animated];
     [self hideTypeSelector];
+    
+    // title
+    if ([[FFSessionManager shared].currentSportName isEqualToString:@"FWC"] == NO)
+        self.navigationItem.titleView = self.typeButton;
     
     self.unpaid = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Unpaidsubscription"] boolValue];
     
