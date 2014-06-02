@@ -12,11 +12,10 @@
 
 @interface FFWCManager : NSObject
 
-@property (nonatomic, readonly) NSMutableArray *dailyWins;
-@property (nonatomic, readonly) NSMutableArray *mvpCandidates;
-@property (nonatomic, readonly) NSMutableArray *groupWinners;
-@property (nonatomic, readonly) NSMutableArray *cupWinners;
-@property (nonatomic, readonly) NSArray *groupsTitles;
+@property (nonatomic, readonly) NSMutableArray *dailyWins; //array of WCTeams*
+@property (nonatomic, readonly) NSMutableArray *mvpCandidates; //array of WCPlayer*
+@property (nonatomic, readonly) NSMutableArray *groupWinners; //array of WCGroup*
+@property (nonatomic, readonly) NSMutableArray *cupWinners; //array of WCTeams*
 
 + (FFWCManager*)shared;
 - (void)fetchDataForSession:(FFSession *)session dataWithCompletion:(void(^)(BOOL success))block;
