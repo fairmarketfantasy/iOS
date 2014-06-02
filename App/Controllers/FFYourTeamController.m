@@ -116,8 +116,7 @@
 {
     [super viewWillAppear:animated];
  
-    FFSubmitViewType type = [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? FFSubmitViewTypeFantasy : FFSubmitViewTypeNonFantasy;
-    [self.submitView setupWithType:type];
+    [self updateSubmitViewType];
     
     if (self.networkStatus == NotReachable) {
         [self.tableView reloadData];
@@ -199,6 +198,14 @@
                 self.dataSource.unpaidSubscription == YES ||
                 [self.dataSource availableGames].count == 0);
     }
+}
+
+#pragma mark
+
+- (void)updateSubmitViewType
+{
+    FFSubmitViewType type = [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? FFSubmitViewTypeFantasy : FFSubmitViewTypeNonFantasy;
+    [self.submitView setupWithType:type];
 }
 
 - (void)showOrHideSubmitIfNeeded

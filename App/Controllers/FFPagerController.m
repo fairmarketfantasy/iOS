@@ -583,12 +583,15 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                     animated:NO
                   completion:nil];
     if ([category isEqualToString:FANTASY_SPORTS]) {
+        [self.teamController updateSubmitViewType];
         [self.receiverController resetPosition];
         [self updateMarkets];
     } else if ([category isEqualToString:@"sports"]) {
         if ([sport isEqual:FOOTBALL_WC]) {
             [self getWorldCupData];
         } else {
+            [self.teamController updateSubmitViewType];
+            [self.selectedTeams removeAllObjects];
             [self updateGames];
         }
     }

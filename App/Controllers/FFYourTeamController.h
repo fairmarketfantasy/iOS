@@ -27,5 +27,6 @@
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
 - (void)reloadWithServerError:(BOOL)isError;
 - (void)showOrHideSubmitIfNeeded;
+- (void)updateSubmitViewType;
 
 @end
