@@ -418,7 +418,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         if (self.predictionState == FFPredictionStateSubmitted) {
             [self.predictions addObjectsFromArray:self.individualActivePredictions.allObjects];
         } else {
-            [self.predictions addObjectsFromArray:self.individualActivePredictions.allObjects];
+            [self.predictions addObjectsFromArray:self.individualHistoryPredictions.allObjects];
         }
     }
     
