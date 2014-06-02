@@ -98,12 +98,7 @@
                 FFWCTeam *team = (FFWCTeam *)[self.elements objectAtIndex:indexPath.row];
                 
                 FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
-                [cell.flag setImageWithURL:[NSURL URLWithString:team.flagURL]
-                          placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
-               usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-                
-                cell.titleLabel.text = team.name;
-                
+                [cell setupWithTeam:team];
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
                                    
@@ -137,11 +132,7 @@
                 FFWCPlayer *player = (FFWCPlayer *)[self.elements objectAtIndex:indexPath.row];
                 
                 FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
-                [cell.flag setImageWithURL:[NSURL URLWithString:player.flagURL]
-                          placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
-               usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-                
-                cell.titleLabel.text = player.name;
+                [cell setupWithPlayer:player];
                 
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
@@ -158,11 +149,7 @@
         FFWCTeam *team = [group.teams objectAtIndex:indexPath.row];
         
         FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
-        [cell.flag setImageWithURL: [NSURL URLWithString:team.flagURL]
-                  placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
-       usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-        
-        cell.titleLabel.text = team.name;
+        [cell setupWithTeam:team];
         
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{

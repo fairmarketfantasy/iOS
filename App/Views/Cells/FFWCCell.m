@@ -8,6 +8,16 @@
 
 #import "FFWCCell.h"
 #import "FFPathImageView.h"
+#import "FFWCTeam.h"
+#import "FFWCPlayer.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+
+@interface FFWCCell()
+
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) FFPathImageView *flag;
+
+@end
 
 @implementation FFWCCell
 
@@ -70,6 +80,44 @@
         [self.contentView addSubview:separator2];
     }
     return self;
+}
+
+- (void)setupWithTeam:(FFWCTeam *)team
+{
+    self.titleLabel.text = team.name;
+    
+    self.PTButton.enabled = !team.disablePT;
+    
+    UIColor *color = team.disablePT ? [FFStyle lightGrey] : [FFStyle brightBlue];
+    [self.PTButton setTitleColor:color forState:UIControlStateNormal];
+    self.PTButton.layer.borderColor = color.CGColor;
+    
+    [self.flag setImageWithURL:[NSURL URLWithString:team.flagURL]
+              placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
+   usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [self.flag draw];
+    
+    [self.PTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", team.pt]
+                   forState:UIControlStateNormal];
+}
+
+- (void)setupWithPlayer:(FFWCPlayer *)player
+{
+    self.titleLabel.text = player.name;
+    
+    self.PTButton.enabled = !player.disablePT;
+    
+    UIColor *color = player.disablePT ? [FFStyle lightGrey] : [FFStyle brightBlue];
+    [self.PTButton setTitleColor:color forState:UIControlStateNormal];
+    self.PTButton.layer.borderColor = color.CGColor;
+    
+    [self.flag setImageWithURL:[NSURL URLWithString:player.flagURL]
+              placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
+   usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [self.flag draw];
+    
+    [self.PTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", player.pt]
+                   forState:UIControlStateNormal];
 }
 
 @end

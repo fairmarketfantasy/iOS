@@ -9,11 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @class FFPathImageView;
+@class FFWCPlayer;
+@class FFWCTeam;
 
 @interface FFWCCell : UITableViewCell
 
-@property (nonatomic, readonly) UILabel *titleLabel;
-@property (nonatomic, readonly) FFPathImageView *flag;
 @property (nonatomic, readonly) FFCustomButton* PTButton;
+
+- (void)setupWithTeam:(FFWCTeam *)team;
+- (void)setupWithPlayer:(FFWCPlayer *)player;
 
 @end
