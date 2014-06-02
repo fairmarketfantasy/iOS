@@ -565,6 +565,10 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)didUpdateToCategory:(NSString *)category sport:(NSString *)sport
 {
     [[FFSessionManager shared] saveCurrentCategory:category andSport:sport];
+    [self setViewControllers:@[[self getViewControllers].firstObject]
+                   direction:UIPageViewControllerNavigationDirectionForward
+                    animated:NO
+                  completion:nil];
     if ([category isEqualToString:FANTASY_SPORTS]) {
         [self.receiverController resetPosition];
         [self updateMarkets];
