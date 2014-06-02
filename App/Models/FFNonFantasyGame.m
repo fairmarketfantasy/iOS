@@ -102,7 +102,7 @@
                                                         @"team_logo" : self.homeTeamLogoURL ? self.homeTeamLogoURL : @"",
                                                         @"game_time" : self.gameTime,
                                                         @"market_name" : gameName ? gameName : @"",
-                                                        @"pt" : self.homeTeamPT ? self.homeTeamPT : @(0),
+                                                        @"pt" : self.homeTeamPT ? self.homeTeamPT : @"0",
                                                         @"team_stats_id" : self.homeTeamStatsId,
                                                         @"game_stats_id" : self.gameStatsId,
                                                         }];
@@ -117,7 +117,7 @@
                                                         @"team_logo" : self.awayTeamLogoURL ? self.awayTeamLogoURL : @"",
                                                         @"game_time" : self.gameTime,
                                                         @"market_name" : gameName ? gameName : @"",
-                                                        @"pt" : self.awayTeamPT ? self.awayTeamPT : @(0),
+                                                        @"pt" : self.awayTeamPT ? self.awayTeamPT : @"0",
                                                         @"team_stats_id" : self.awayTeamStatsId,
                                                         @"game_stats_id" : self.gameStatsId,
                                                         }];

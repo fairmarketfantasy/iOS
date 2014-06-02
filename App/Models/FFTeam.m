@@ -8,6 +8,7 @@
 
 #import "FFTeam.h"
 #import "FFDate.h"
+#import "Collection+UnNullable.h"
 
 @implementation FFTeam
 
@@ -15,6 +16,8 @@
 {
     self = [super init];
     if (self) {
+        dict = [dict removeNulls];
+        
         _name = [dict objectForKey:@"team_name"];
         _opponentName = [dict objectForKey:@"opposite_team"];
         _isHomeTeam = [[dict objectForKey:@"home_team"] boolValue];

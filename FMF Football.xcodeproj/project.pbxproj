@@ -218,6 +218,7 @@
 		F96F0C62192CFE86003AA3BA /* FFTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C61192CFE86003AA3BA /* FFTeam.m */; };
 		F9A981DE192623B900E8743C /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A981DC192623B900E8743C /* UbertestersSDK.framework */; };
 		F9A981DF192623BA00E8743C /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */; };
+		F9AC76C6193CC44300593116 /* Collection+UnNullable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AC76C5193CC44300593116 /* Collection+UnNullable.m */; };
 		F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */; };
 /* End PBXBuildFile section */
 
@@ -557,6 +558,8 @@
 		F9A27E8A192260B400BCE2AE /* FFYourTeamDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFYourTeamDataSource.h; sourceTree = "<group>"; };
 		F9A981DC192623B900E8743C /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
 		F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
+		F9AC76C4193CC44300593116 /* Collection+UnNullable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Collection+UnNullable.h"; path = "Categories/Collection+UnNullable.h"; sourceTree = "<group>"; };
+		F9AC76C5193CC44300593116 /* Collection+UnNullable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Collection+UnNullable.m"; path = "Categories/Collection+UnNullable.m"; sourceTree = "<group>"; };
 		F9FBDD5A19112D0C0009066D /* FFNoConnectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNoConnectionCell.h; sourceTree = "<group>"; };
 		F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNoConnectionCell.m; sourceTree = "<group>"; };
 		FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
@@ -667,6 +670,7 @@
 		896ACBB418B664F5001E9C64 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				F9AC76C3193CC43200593116 /* Categories */,
 				896ACC2418B664F5001E9C64 /* Models */,
 				896ACC1518B664F5001E9C64 /* Helpers */,
 				896ACBE818B664F5001E9C64 /* Controllers */,
@@ -1104,6 +1108,15 @@
 			path = UbertestersSDK;
 			sourceTree = "<group>";
 		};
+		F9AC76C3193CC43200593116 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				F9AC76C4193CC44300593116 /* Collection+UnNullable.h */,
+				F9AC76C5193CC44300593116 /* Collection+UnNullable.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1291,6 +1304,7 @@
 				896ACD0518B664F5001E9C64 /* FFNavigationBarItemView.m in Sources */,
 				F96F0C5C192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m in Sources */,
 				896ACCB118B664F5001E9C64 /* FFContestViewController.m in Sources */,
+				F9AC76C6193CC44300593116 /* Collection+UnNullable.m in Sources */,
 				89470EC218BF694200E405EF /* FFMenuCell.m in Sources */,
 				893D691218E5CD49005E305B /* FFPredictHeader.m in Sources */,
 				896ACCE718B664F5001E9C64 /* FFContestType.m in Sources */,
