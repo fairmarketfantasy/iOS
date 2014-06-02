@@ -177,6 +177,10 @@ SBDataObjectResultSetDelegate>
     // session
     self.teamController.session = self.session;
     self.receiverController.session = self.session;
+    self.cupWinnerController.session = self.session;
+    self.groupWinnerController.session = self.session;
+    self.dailyWinsController.session = self.session;
+    self.mvpController.session = self.session;
     
     // get player position names
     if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:FANTASY_SPORTS]) {
