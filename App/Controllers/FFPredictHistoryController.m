@@ -62,7 +62,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     self.predictions = [NSMutableArray array];
     self.pageNumber = 1;
     
-    if ([[FFSessionManager shared].currentSportName isEqualToString:@"FWC"]) {
+    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
         self.predictionType = FFPredictionsTypeIndividual;
     } else {
         self.predictionType = FFPredictionsTypeRoster;
@@ -138,7 +138,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     [self hideTypeSelector];
     
     // title
-    if ([[FFSessionManager shared].currentSportName isEqualToString:@"FWC"] == NO)
+    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC] == NO)
         self.navigationItem.titleView = self.typeButton;
     
     self.unpaid = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Unpaidsubscription"] boolValue];

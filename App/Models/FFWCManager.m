@@ -30,7 +30,7 @@
     NSString *path = @"home";
     [session authorizedJSONRequestWithMethod:@"GET"
                                         path:path
-                                   paramters:@{@"sport" : @"FWC"}
+                                   paramters:@{@"sport" : FOOTBALL_WC}
                                      success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
                                          NSLog(@" @{FFWCM} : JSON : %@", JSON);
                                          NSArray *dailyWinsDicts = [JSON objectForKey:@"daily_wins"];

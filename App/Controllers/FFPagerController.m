@@ -101,10 +101,15 @@ SBDataObjectResultSetDelegate>
         self.receiverController.delegate = self;
         self.receiverController.dataSource = self;
         
+        self.dailyWinsController = [[FFWCController alloc] init];
+        self.cupWinnerController = [[FFWCController alloc] init];
         self.groupWinnerController = [[FFWCController alloc] init];
         self.mvpController = [[FFWCController alloc] init];
-        self.cupWinnerController = [[FFWCController alloc] init];
-        self.dailyWinsController = [[FFWCController alloc] init];
+        
+        self.dailyWinsController.dataSource = self;
+        self.cupWinnerController.dataSource = self;
+        self.groupWinnerController.dataSource = self;
+        self.mvpController.dataSource = self;
         
         self.isFirstLaunch = YES;
         _rosterIsCreating = NO;
@@ -197,7 +202,7 @@ SBDataObjectResultSetDelegate>
             self.marketsSetSingle.delegate = self;
             [self updateMarkets];
         } else if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:@"sports"]) {
-            if ([[[FFSessionManager shared] currentSportName] isEqualToString:@"FWC"]) {
+            if ([[[FFSessionManager shared] currentSportName] isEqualToString:FOOTBALL_WC]) {
                 [self getWorldCupData];
             } else {
                 [self updateGames];
@@ -242,7 +247,11 @@ SBDataObjectResultSetDelegate>
                     [self fetchPositionsNames];
                     [self updateMarkets];
                 } else {
-                    [self updateGames];
+                    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
+                        [self getWorldCupData];
+                    } else {
+                        [self updateGames];
+                    }
                 }
             } else {
                 [self.games removeAllObjects];
@@ -458,11 +467,11 @@ SBDataObjectResultSetDelegate>
 
 - (NSArray*)getViewControllers
 {
-    if ([[FFSessionManager shared].currentSportName isEqualToString:@"FWC"]) {
+    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
         return @[
+                 self.dailyWinsController,
                  self.cupWinnerController,
                  self.groupWinnerController,
-                 self.dailyWinsController,
                  self.mvpController
                  ];
     } else {
@@ -577,7 +586,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         [self.receiverController resetPosition];
         [self updateMarkets];
     } else if ([category isEqualToString:@"sports"]) {
-        if ([sport isEqual:@"FWC"]) {
+        if ([sport isEqual:FOOTBALL_WC]) {
             [self getWorldCupData];
         } else {
             [self updateGames];

@@ -10,6 +10,7 @@
 #import "FFWCManager.h"
 #import "FFWCCell.h"
 #import "FFWCGameCell.h"
+#import "FFNoConnectionCell.h"
 #import "FFPathImageView.h"
 #import "FFAlertView.h"
 #import "FFRosterTableHeader.h"
@@ -19,11 +20,17 @@
 #import "FFWCGroup.h"
 #import "FFWCPlayer.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "Reachability.h"
+#import "FFYourTeamDataSource.h"
 
 @interface FFWCController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
+{
+    Reachability* internetReachability;
+}
 
 @property (nonatomic, strong) UIPickerView *picker;
 @property (nonatomic, strong) NSString *selectedGroup;
+@property (nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 
@@ -55,18 +62,49 @@
         self.picker.transform = CGAffineTransformConcat(t0, CGAffineTransformConcat(s0, t1));
         self.picker.backgroundColor = [FFStyle darkGrey];
     }
+    
+    //reachability
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    internetReachability = [Reachability reachabilityForInternetConnection];
+	BOOL success = [internetReachability startNotifier];
+	if (!success)
+		DLog(@"Failed to start notifier");
+    self.networkStatus = [internetReachability currentReachabilityStatus];
+}
+
+#pragma mark
+
+- (void)checkNetworkStatus:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    NetworkStatus previousStatus = self.networkStatus;
+    
+    if (internetStatus != self.networkStatus) {
+        self.networkStatus = internetStatus;
+        
+        if (internetStatus == NotReachable && previousStatus != NotReachable)
+            [self.tableView reloadData];
+    }
+}
+
+- (BOOL)isSomethingWrong
+{
+    return self.networkStatus == NotReachable || self.dataSource.unpaidSubscription;
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if ([self isSomethingWrong])
+        return 1;
+    
     return self.category == FFWCGroupWinners ? 2 : 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.elements.count == 0)
+    if (self.elements.count == 0 || [self isSomethingWrong])
         return 1;
     
     if (self.category == FFWCGroupWinners) {
@@ -83,6 +121,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([self isSomethingWrong])
+        return [UIScreen mainScreen].bounds.size.height - 64.f;
+    
     if (self.category == FFWCGroupWinners) {
         return indexPath.section == 0 ? 76.f : 80.f;
     } else if (self.category == FFWCDailyWins) {
@@ -95,6 +136,20 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
+        if ([self isSomethingWrong]) {
+            FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
+                                                                       forIndexPath:indexPath];
+            NSString *message = nil;
+            if (self.networkStatus == NotReachable) {
+                message = @"No Internet Connection";
+            } else if ([self.dataSource unpaidSubscription]) {
+                message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
+            }
+            
+            cell.message.text = message;
+            return cell;
+        }
+        
         switch (self.category) {
             case FFWCCupWinner: {
                 __block FFWCTeam *team = (FFWCTeam *)[self.elements objectAtIndex:indexPath.row];
@@ -250,7 +305,7 @@
 - (void)submitPredictionOnPlayer:(FFWCPlayer *)player
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   @"FWC", @"sport",
+                                   FOOTBALL_WC, @"sport",
                                    [[FFWCManager shared] stringForWCCategory:self.category], @"prediction_type",
                                    player.statsId, @"predictable_id",
                                    nil];
@@ -275,7 +330,7 @@
 - (void)submitPredictionOnTeam:(FFWCTeam *)team inGame:(FFWCGame *)game
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   @"FWC", @"sport",
+                                   FOOTBALL_WC, @"sport",
                                    [[FFWCManager shared] stringForWCCategory:self.category], @"prediction_type",
                                    team.statsId, @"predictable_id",
                                    nil];

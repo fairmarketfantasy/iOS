@@ -8,6 +8,7 @@
 
 #import "FFBaseViewController.h"
 #import "FFWCManager.h"
+#import "FFYourTeamDataSource.h"
 
 @interface FFWCController : FFBaseViewController
 
@@ -15,5 +16,7 @@
 @property (nonatomic, assign) NSUInteger selectedCroupIndex;
 @property (nonatomic, strong) NSArray *elements;
 @property (nonatomic, readonly) UITableView *tableView;
+
+@property (nonatomic, weak) id<FFYourTeamDataSource> dataSource;
 
 @end
