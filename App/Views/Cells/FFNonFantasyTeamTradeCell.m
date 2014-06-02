@@ -67,7 +67,7 @@
     
     self.titleLabel.text = [[FFDate prettyDateFormatter] stringFromDate:team.gameDate];
     
-    self.ptLabel.text = [NSString stringWithFormat:@"%i", [team.pt integerValue]];
+    self.ptLabel.text = [NSString stringWithFormat:@"%ui", (unsigned int)team.pt];
     self.teamNameLabel.text = team.name;
     if (team.gameName) {
         self.gameNameLabel.text = team.gameName;

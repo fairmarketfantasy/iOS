@@ -19,8 +19,8 @@
 @property (nonatomic, readonly) NSString *homeTeamStatsId;
 @property (nonatomic, readonly) NSString *awayTeamStatsId;
 @property (nonatomic, readonly) NSString *gameStatsId;
-@property (nonatomic, readonly) NSNumber *homeTeamPT;
-@property (nonatomic, readonly) NSNumber *awayTeamPT;
+@property (nonatomic, readonly) NSString *homeTeamPT;
+@property (nonatomic, readonly) NSString *awayTeamPT;
 @property (nonatomic, assign) NSNumber *homeTeamDisablePt;
 @property (nonatomic, assign) NSNumber *awayTeamDisablePt;
 

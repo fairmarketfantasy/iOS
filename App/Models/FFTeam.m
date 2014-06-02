@@ -28,9 +28,11 @@
             _gameDate = [dict objectForKey:@"game_time"];
         }
         
-        NSNumberFormatter *formatter = [NSNumberFormatter new];
-        formatter.numberStyle = NSNumberFormatterDecimalStyle;
-        _pt = [formatter numberFromString:[dict objectForKey:@"pt"]];
+//        NSNumberFormatter *formatter = [NSNumberFormatter new];
+//        formatter.numberStyle = NSNumberFormatterDecimalStyle;
+//        _pt = [formatter numberFromString:[dict objectForKey:@"pt"]];
+        
+        _pt = [[dict objectForKey:@"pt"] integerValue];
         
         _statsId = [dict objectForKey:@"team_stats_id"];
         _gameStatsId = [dict objectForKey:@"game_stats_id"];

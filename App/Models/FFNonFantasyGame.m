@@ -98,11 +98,11 @@
 {
     NSString *gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
     FFTeam *team = [[FFTeam alloc] initWithDictionary:@{
-                                                        @"team_name" : self.homeTeamName,
-                                                        @"team_logo" : self.homeTeamLogoURL,
+                                                        @"team_name" : self.homeTeamName ? self.homeTeamName : @"",
+                                                        @"team_logo" : self.homeTeamLogoURL ? self.homeTeamLogoURL : @"",
                                                         @"game_time" : self.gameTime,
-                                                        @"market_name" : gameName,
-                                                        @"pt" : self.homeTeamPT,
+                                                        @"market_name" : gameName ? gameName : @"",
+                                                        @"pt" : self.homeTeamPT ? self.homeTeamPT : @(0),
                                                         @"team_stats_id" : self.homeTeamStatsId,
                                                         @"game_stats_id" : self.gameStatsId,
                                                         }];
@@ -113,11 +113,11 @@
 {
     NSString *gameName = [NSString stringWithFormat:@"%@ @ %@", self.homeTeamName, self.awayTeamName];
     FFTeam *team = [[FFTeam alloc] initWithDictionary:@{
-                                                        @"team_name" : self.awayTeamName,
-                                                        @"team_logo" : self.awayTeamLogoURL,
+                                                        @"team_name" : self.awayTeamName ? self.awayTeamName : @"",
+                                                        @"team_logo" : self.awayTeamLogoURL ? self.awayTeamLogoURL : @"",
                                                         @"game_time" : self.gameTime,
-                                                        @"market_name" : gameName,
-                                                        @"pt" : self.awayTeamPT,
+                                                        @"market_name" : gameName ? gameName : @"",
+                                                        @"pt" : self.awayTeamPT ? self.awayTeamPT : @(0),
                                                         @"team_stats_id" : self.awayTeamStatsId,
                                                         @"game_stats_id" : self.gameStatsId,
                                                         }];

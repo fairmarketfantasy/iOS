@@ -18,7 +18,7 @@
 @property (nonatomic, readonly) FFDate *gameDate;
 @property (nonatomic, readonly) NSString *gameName;
 @property (nonatomic, readonly) NSString *logoURL;
-@property (nonatomic, readonly) NSNumber *pt;
+@property (nonatomic, readonly) NSUInteger *pt;
 @property (nonatomic, readonly) NSString *statsId;
 @property (nonatomic, readonly) NSString *gameStatsId;
 
