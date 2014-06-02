@@ -84,6 +84,8 @@
         
         if (internetStatus == NotReachable && previousStatus != NotReachable)
             [self.tableView reloadData];
+        else
+            [self.picker reloadAllComponents];
     }
 }
 
@@ -137,8 +139,7 @@
 {
     if (indexPath.section == 0) {
         if ([self isSomethingWrong]) {
-            FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
-                                                                       forIndexPath:indexPath];
+            FFNoConnectionCell* cell = [[FFNoConnectionCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kNoConnectionCellIdentifier];
             NSString *message = nil;
             if (self.networkStatus == NotReachable) {
                 message = @"No Internet Connection";
@@ -223,6 +224,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    if ([self isSomethingWrong])
+        return 0.f;
+    
     if ((self.category == FFWCGroupWinners && section == 1) || (self.category != FFWCGroupWinners && section == 0)) {
         return 40.f;
     }
@@ -231,6 +235,9 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    if ([self isSomethingWrong])
+        return nil;
+    
     if ((self.category == FFWCGroupWinners && section == 1) || (self.category != FFWCGroupWinners && section == 0)) {
         FFRosterTableHeader* view = [FFRosterTableHeader new];
         NSString *title = nil;
