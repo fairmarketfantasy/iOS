@@ -769,22 +769,40 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)makeIndividualPredictionOnTeam:(FFTeam *)team
 {
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
+    FFAlertView* confirmAlert = [FFAlertView.alloc initWithTitle:nil
+                                                         message:[NSString stringWithFormat:@"Predict %@ ?", team.name]
+                                               cancelButtonTitle:@"Cancel"
+                                                 okayButtonTitle:@"Submit"
+                                                        autoHide:NO];
+    [confirmAlert showInView:self.navigationController.view];
+    @weakify(confirmAlert)
+    @weakify(self)
+    confirmAlert.onOkay = ^(id obj) {
+        @strongify(confirmAlert)
+        @strongify(self)
+        __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Individual Predictions"
+                                                               messsage:nil
+                                                           loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.navigationController.view];
+        
+        [FFEvent fetchEventsForTeam:team.statsId
+                             inGame:team.gameStatsId
+                            session:self.session
+                            success:^(id successObj) {
+                                [self disablePTForTeam:team];
+                                [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                                                                 withRowAnimation:UITableViewRowAnimationAutomatic];
+                                [alert hide];
+                            } failure:^(NSError *error) {
+                                [alert hide];
+                            }];
+        [confirmAlert hide];
+    };
     
-    [FFEvent fetchEventsForTeam:team.statsId
-                         inGame:team.gameStatsId
-                        session:self.session
-                        success:^(id successObj) {
-                            [self disablePTForTeam:team];
-                            [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                                                             withRowAnimation:UITableViewRowAnimationAutomatic];
-                            [alert hide];
-                        } failure:^(NSError *error) {
-                            [alert hide];
-                        }];
+    confirmAlert.onCancel = ^(id obj) {
+        @strongify(confirmAlert)
+        [confirmAlert hide];
+    };
 }
 
 #pragma mark - FFEventsProtocol
