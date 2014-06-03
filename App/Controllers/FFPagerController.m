@@ -209,10 +209,12 @@ SBDataObjectResultSetDelegate>
             }
         }
         
-        [self setViewControllers:@[[self getViewControllers].firstObject]
-                       direction:UIPageViewControllerNavigationDirectionForward
-                        animated:NO
-                      completion:nil];
+        if ([[[FFSessionManager shared] currentSportName] isEqualToString:FOOTBALL_WC] == NO) {
+            [self setViewControllers:@[[self getViewControllers].firstObject]
+                           direction:UIPageViewControllerNavigationDirectionForward
+                            animated:NO
+                          completion:nil];            
+        }
         
         [self.view bringSubviewToFront:self.pager];
     }
@@ -468,12 +470,21 @@ SBDataObjectResultSetDelegate>
 - (NSArray*)getViewControllers
 {
     if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
-        return @[
-                 self.dailyWinsController,
-                 self.cupWinnerController,
-                 self.groupWinnerController,
-                 self.mvpController
-                 ];
+        NSMutableArray *controllers = [NSMutableArray array];
+        if (self.dailyWinsController.candidates.count > 0) {
+            [controllers addObject:self.dailyWinsController];
+        }
+        if (self.cupWinnerController.candidates.count > 0) {
+            [controllers addObject:self.cupWinnerController];
+        }
+        if (self.groupWinnerController.candidates.count > 0) {
+            [controllers addObject:self.groupWinnerController];
+        }
+        if (self.mvpController.candidates.count > 0) {
+            [controllers addObject:self.mvpController];
+        }
+        
+        return [NSArray arrayWithArray:controllers];
     } else {
         return @[
                  self.teamController,
@@ -577,11 +588,20 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)didUpdateToCategory:(NSString *)category sport:(NSString *)sport
 {
+    BOOL shouldSetController = NO;
+    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC] == YES && [sport isEqualToString:FOOTBALL_WC] == NO) {
+        shouldSetController = YES;
+    }
+    
     [[FFSessionManager shared] saveCurrentCategory:category andSport:sport];
-    [self setViewControllers:@[[self getViewControllers].firstObject]
-                   direction:UIPageViewControllerNavigationDirectionForward
-                    animated:NO
-                  completion:nil];
+    
+    if (shouldSetController) {
+        [self setViewControllers:@[[self getViewControllers].firstObject]
+                       direction:UIPageViewControllerNavigationDirectionForward
+                        animated:NO
+                      completion:nil];
+    }
+    
     if ([category isEqualToString:FANTASY_SPORTS]) {
         [self.teamController updateSubmitViewType];
         [self.receiverController resetPosition];
@@ -790,20 +810,32 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                if (success) {
                                    self.cupWinnerController.category = FFWCCupWinner;
                                    self.cupWinnerController.candidates = [NSArray arrayWithArray:[FFWCManager shared].cupWinners];
-                                   [self.cupWinnerController.tableView reloadData];
                                    
                                    self.groupWinnerController.category = FFWCGroupWinners;
                                    self.groupWinnerController.candidates = [NSArray arrayWithArray:[FFWCManager shared].groupWinners];
                                    self.groupWinnerController.selectedCroupIndex = 0;
-                                   [self.groupWinnerController.tableView reloadData];
                                    
                                    self.dailyWinsController.category = FFWCDailyWins;
                                    self.dailyWinsController.candidates = [NSArray arrayWithArray:[FFWCManager shared].dailyWins];
-                                   [self.dailyWinsController.tableView reloadData];
                                    
                                    self.mvpController.category = FFWCMvp;
                                    self.mvpController.candidates = [NSArray arrayWithArray:[FFWCManager shared].mvpCandidates];
-                                   [self.mvpController.tableView reloadData];
+                                   
+                                   __weak FFPagerController *weakSelf = self;
+                                   [self setViewControllers:@[[self getViewControllers].firstObject]
+                                                  direction:UIPageViewControllerNavigationDirectionForward
+                                                   animated:NO
+                                                 completion:^(BOOL finished) {
+                                                     if (finished) {
+                                                         weakSelf.pager.numberOfPages = (int)[weakSelf getViewControllers].count;
+                                                         weakSelf.pager.currentPage = (int)[[weakSelf getViewControllers] indexOfObject:weakSelf.viewControllers.firstObject];
+                                                         
+                                                         [weakSelf.dailyWinsController.tableView reloadData];
+                                                         [weakSelf.cupWinnerController.tableView reloadData];
+                                                         [weakSelf.groupWinnerController.tableView reloadData];
+                                                         [weakSelf.mvpController.tableView reloadData];
+                                                     }
+                                                 }];
                                }
                                
                                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -909,9 +941,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [self.teamController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
                                                                                inSection:0]]
                                          withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self.receiverController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
-                                                                                   inSection:0]]
-                                             withRowAnimation:UITableViewRowAnimationAutomatic];
+//    [self.receiverController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+//                                                                                   inSection:0]]
+//                                             withRowAnimation:UITableViewRowAnimationAutomatic];
     
     if (_rosterIsCreating == NO) {
         __weak FFPagerController *weakSelf = self;
