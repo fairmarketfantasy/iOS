@@ -1038,6 +1038,14 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                           success:^(id successObj) {
                                               [self deselectAllTeams];
                                               [self.teamController showOrHideSubmitIfNeeded];
+                                              
+                                              FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
+                                                                                              message:[successObj objectForKey:@"msg"]
+                                                                                    cancelButtonTitle:nil
+                                                                                      okayButtonTitle:@"OK"
+                                                                                             autoHide:YES];
+                                              [alert showInView:self.navigationController.view];
+                                              
                                               if (block)
                                                   block(YES);
                                           } failure:^(NSError *error) {
