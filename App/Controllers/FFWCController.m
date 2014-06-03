@@ -246,7 +246,7 @@
                 title = @"Win the Cup";
                 break;
             case FFWCGroupWinners:
-                title = @"Win the Group";
+                title = @"Win Groups";
                 break;
             case FFWCDailyWins:
                 title = @"Daily Wins";
@@ -328,6 +328,13 @@
                                                    [[FFWCManager shared] disablePTForPlayer:player];
                                                    [self.tableView reloadData];
                                                    [alert hide];
+                                                   
+                                                   FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
+                                                                                                   message:[successObj objectForKey:@"msg"]
+                                                                                         cancelButtonTitle:nil
+                                                                                           okayButtonTitle:@"OK"
+                                                                                                  autoHide:YES];
+                                                   [alert showInView:self.navigationController.view];
                                                } failure:^(NSError *error) {
                                                    NSLog(@" {FFWCC} : submittion failed: %@", error);
                                                    [alert hide];
@@ -360,6 +367,13 @@
                                                                                inCategory:self.category];
                                                    [self.tableView reloadData];
                                                    [alert hide];
+                                                   
+                                                   FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
+                                                                                                   message:[successObj objectForKey:@"msg"]
+                                                                                         cancelButtonTitle:nil
+                                                                                           okayButtonTitle:@"OK"
+                                                                                                  autoHide:YES];
+                                                   [alert showInView:self.navigationController.view];
                                                } failure:^(NSError *error) {
                                                    NSLog(@" {FFWCC} : submittion failed: %@", error);
                                                    [alert hide];
