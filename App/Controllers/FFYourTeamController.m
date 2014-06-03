@@ -314,7 +314,7 @@
 {
     FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamTradeCellIdentifier
                                                             forIndexPath:indexPath];
-    cell.titleLabel.text = player.team;
+    cell.titleLabel.text = [NSString stringWithFormat:@"%@ PPG %i", player.team, [player.ppg integerValue]];
     cell.nameLabel.text = player.name;
     cell.costLabel.text = [FFStyle.priceFormatter
                            stringFromNumber:@([player.purchasePrice floatValue])];
@@ -328,7 +328,7 @@
      usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [cell.avatar draw];
     cell.benched.hidden = !benched;
-    cell.PTButton.hidden = benched;
+    cell.PTButton.hidden = (benched || [player.ppg integerValue] == 0) ? YES : NO;
     __block FFPlayer* blockPlayer = player;
     @weakify(self)
     [cell.PTButton setAction:kUIButtonBlockTouchUpInside

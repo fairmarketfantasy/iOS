@@ -480,7 +480,7 @@
     if (self.players.count > indexPath.row) {
         __block FFPlayer* player = self.players[indexPath.row];
         
-        cell.titleLabel.text =  player.team;
+        cell.titleLabel.text = [NSString stringWithFormat:@"%@ PPG %i", player.team, [player.ppg integerValue]];
         cell.nameLabel.text = player.name;
         cell.costLabel.text = [FFStyle.priceFormatter stringFromNumber:@([player.buyPrice floatValue])];
         BOOL benched = player.benched.integerValue == 1;
@@ -492,7 +492,7 @@
          usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [cell.avatar draw];
         cell.benched.hidden = !benched;
-        cell.PTButton.hidden = benched;
+        cell.PTButton.hidden = (benched || [player.ppg integerValue] == 0) ? YES : NO;
         @weakify(self)
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{
