@@ -106,18 +106,18 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.elements.count == 0 || [self isSomethingWrong])
+    if (self.candidates.count == 0 || [self isSomethingWrong])
         return 1;
     
     if (self.category == FFWCGroupWinners) {
         if (section == 0) {
             return 1;
         } else {
-            FFWCGroup *group = [self.elements objectAtIndex:self.selectedCroupIndex];
+            FFWCGroup *group = [self.candidates objectAtIndex:self.selectedCroupIndex];
             return group.teams.count;
         }
     } else {
-        return self.elements.count;
+        return self.candidates.count;
     }
 }
 
@@ -153,7 +153,7 @@
         
         switch (self.category) {
             case FFWCCupWinner: {
-                __block FFWCTeam *team = (FFWCTeam *)[self.elements objectAtIndex:indexPath.row];
+                __block FFWCTeam *team = (FFWCTeam *)[self.candidates objectAtIndex:indexPath.row];
                 FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
                 [cell setupWithTeam:team];
                 
@@ -173,7 +173,7 @@
              
             case FFWCDailyWins: {
                 FFWCGameCell *cell = [[FFWCGameCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCGameCell"];
-                __block FFWCGame *game = [self.elements objectAtIndex:indexPath.row];
+                __block FFWCGame *game = [self.candidates objectAtIndex:indexPath.row];
                 [cell setupWithGame:game];
                 
                 __weak FFWCController *weakSelf = self;
@@ -190,7 +190,7 @@
             }
                 
             case FFWCMvp: {
-                __block FFWCPlayer *player = (FFWCPlayer *)[self.elements objectAtIndex:indexPath.row];
+                __block FFWCPlayer *player = (FFWCPlayer *)[self.candidates objectAtIndex:indexPath.row];
                 FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
                 [cell setupWithPlayer:player];
                 
@@ -206,7 +206,7 @@
                 return nil;
         }
     } else {
-        FFWCGroup *group = [self.elements objectAtIndex:self.selectedCroupIndex];
+        FFWCGroup *group = [self.candidates objectAtIndex:self.selectedCroupIndex];
         __block FFWCTeam *team = [group.teams objectAtIndex:indexPath.row];
         FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
         [cell setupWithTeam:team];
@@ -273,7 +273,7 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return self.elements.count;
+    return self.candidates.count;
 }
 
 #pragma mark - UIPickerViewDelegate
@@ -295,7 +295,7 @@
         pickerLabel.textColor = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? [UIColor whiteColor] : [UIColor blackColor];
     }
     
-    FFWCGroup *group = (FFWCGroup *)[self.elements objectAtIndex:row];
+    FFWCGroup *group = (FFWCGroup *)[self.candidates objectAtIndex:row];
     pickerLabel.text = group.title;
     
     return pickerLabel;

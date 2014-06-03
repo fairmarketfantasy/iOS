@@ -14,7 +14,7 @@
 
 @property (nonatomic, assign) FFWCPredictionCategory category;
 @property (nonatomic, assign) NSUInteger selectedCroupIndex;
-@property (nonatomic, strong) NSArray *elements;
+@property (nonatomic, strong) NSArray *candidates;
 @property (nonatomic, readonly) UITableView *tableView;
 
 @property (nonatomic, weak) id<FFYourTeamDataSource> dataSource;

@@ -789,20 +789,20 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                            dataWithCompletion:^(BOOL success) {
                                if (success) {
                                    self.cupWinnerController.category = FFWCCupWinner;
-                                   self.cupWinnerController.elements = [NSArray arrayWithArray:[FFWCManager shared].cupWinners];
+                                   self.cupWinnerController.candidates = [NSArray arrayWithArray:[FFWCManager shared].cupWinners];
                                    [self.cupWinnerController.tableView reloadData];
                                    
                                    self.groupWinnerController.category = FFWCGroupWinners;
-                                   self.groupWinnerController.elements = [NSArray arrayWithArray:[FFWCManager shared].groupWinners];
+                                   self.groupWinnerController.candidates = [NSArray arrayWithArray:[FFWCManager shared].groupWinners];
                                    self.groupWinnerController.selectedCroupIndex = 0;
                                    [self.groupWinnerController.tableView reloadData];
                                    
                                    self.dailyWinsController.category = FFWCDailyWins;
-                                   self.dailyWinsController.elements = [NSArray arrayWithArray:[FFWCManager shared].dailyWins];
+                                   self.dailyWinsController.candidates = [NSArray arrayWithArray:[FFWCManager shared].dailyWins];
                                    [self.dailyWinsController.tableView reloadData];
                                    
                                    self.mvpController.category = FFWCMvp;
-                                   self.mvpController.elements = [NSArray arrayWithArray:[FFWCManager shared].mvpCandidates];
+                                   self.mvpController.candidates = [NSArray arrayWithArray:[FFWCManager shared].mvpCandidates];
                                    [self.mvpController.tableView reloadData];
                                }
                                
