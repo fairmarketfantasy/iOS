@@ -471,16 +471,16 @@ SBDataObjectResultSetDelegate>
 {
     if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
         NSMutableArray *controllers = [NSMutableArray array];
-        if (self.dailyWinsController.candidates.count > 0) {
+        if (self.dailyWinsController.candidates.count > 0 || self.networkStatus == NotReachable) {
             [controllers addObject:self.dailyWinsController];
         }
-        if (self.cupWinnerController.candidates.count > 0) {
+        if (self.cupWinnerController.candidates.count > 0 || self.networkStatus == NotReachable) {
             [controllers addObject:self.cupWinnerController];
         }
-        if (self.groupWinnerController.candidates.count > 0) {
+        if (self.groupWinnerController.candidates.count > 0 || self.networkStatus == NotReachable) {
             [controllers addObject:self.groupWinnerController];
         }
-        if (self.mvpController.candidates.count > 0) {
+        if (self.mvpController.candidates.count > 0 || self.networkStatus == NotReachable) {
             [controllers addObject:self.mvpController];
         }
         
@@ -819,24 +819,23 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                    self.dailyWinsController.candidates = [NSArray arrayWithArray:[FFWCManager shared].dailyWins];
                                    
                                    self.mvpController.category = FFWCMvp;
-                                   self.mvpController.candidates = [NSArray arrayWithArray:[FFWCManager shared].mvpCandidates];
-                                   
-                                   __weak FFPagerController *weakSelf = self;
-                                   [self setViewControllers:@[[self getViewControllers].firstObject]
-                                                  direction:UIPageViewControllerNavigationDirectionForward
-                                                   animated:NO
-                                                 completion:^(BOOL finished) {
-                                                     if (finished) {
-                                                         weakSelf.pager.numberOfPages = (int)[weakSelf getViewControllers].count;
-                                                         weakSelf.pager.currentPage = (int)[[weakSelf getViewControllers] indexOfObject:weakSelf.viewControllers.firstObject];
-                                                         
-                                                         [weakSelf.dailyWinsController.tableView reloadData];
-                                                         [weakSelf.cupWinnerController.tableView reloadData];
-                                                         [weakSelf.groupWinnerController.tableView reloadData];
-                                                         [weakSelf.mvpController.tableView reloadData];
-                                                     }
-                                                 }];
+                                   self.mvpController.candidates = [NSArray arrayWithArray:[FFWCManager shared].mvpCandidates];       
                                }
+                               __weak FFPagerController *weakSelf = self;
+                               [self setViewControllers:@[[self getViewControllers].firstObject]
+                                              direction:UIPageViewControllerNavigationDirectionForward
+                                               animated:NO
+                                             completion:^(BOOL finished) {
+                                                 if (finished) {
+                                                     weakSelf.pager.numberOfPages = (int)[weakSelf getViewControllers].count;
+                                                     weakSelf.pager.currentPage = (int)[[weakSelf getViewControllers] indexOfObject:weakSelf.viewControllers.firstObject];
+                                                     
+                                                     [weakSelf.dailyWinsController.tableView reloadData];
+                                                     [weakSelf.cupWinnerController.tableView reloadData];
+                                                     [weakSelf.groupWinnerController.tableView reloadData];
+                                                     [weakSelf.mvpController.tableView reloadData];
+                                                 }
+                                             }];
                                
                                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                                [alert hide];
