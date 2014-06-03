@@ -749,19 +749,15 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                         block();
                                 } failure:^(NSError *error) {
                                     NSLog(@"Error: %@", error);
+                                    if (alert)
+                                        [alert hide];
                                     if ([[[error userInfo] objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Unpaid subscription!"]) {
                                         self.unpaid = YES;
                                         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
-                                        if (block) {
-                                            block();
-                                        }
-                                        return;
                                     }
 
                                     [self.teamController reloadWithServerError:YES];
                                     [self.receiverController reloadWithServerError:YES];
-                                    if (alert)
-                                        [alert hide];
                                     if (block)
                                         block();
                                 }];
