@@ -432,7 +432,8 @@ SBDataObjectResultSetDelegate>
          self.unpaid = NO;
          [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
          self.roster = successObj;
-         
+         SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.teamController.removeBenched ? 1 : 0];
+         self.roster.removeBenched = autoRemove;
          self.myTeam = [self newTeamWithPositions:[self allPositions]];
          
          [alert hide];

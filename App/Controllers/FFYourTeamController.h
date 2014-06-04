@@ -22,6 +22,7 @@
 
 @property(nonatomic, weak) id<FFYourTeamDelegate> delegate;
 @property(nonatomic, weak) id<FFYourTeamDataSource> dataSource;
+@property(nonatomic, assign) BOOL removeBenched;
 @property(nonatomic) UITableView* tableView;
 
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;

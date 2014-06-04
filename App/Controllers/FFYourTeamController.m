@@ -57,6 +57,8 @@
 {
     [super viewDidLoad];
     
+    self.removeBenched = YES;
+    
     // submit view
     self.submitView = [FFSubmitView new];
     [self.submitView.segments addTarget:self
@@ -298,7 +300,7 @@
     FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:kAutoFillCellIdentifier
                                                            forIndexPath:indexPath];
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        cell.autoRemovedBenched.on = self.dataSource.currentRoster.removeBenched.integerValue == 1;
+        cell.autoRemovedBenched.on = self.removeBenched;
         [cell.autoRemovedBenched addTarget:self
                                     action:@selector(autoRemovedBenched:)
                           forControlEvents:UIControlEventValueChanged];
@@ -314,7 +316,7 @@
 {
     FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:kTeamTradeCellIdentifier
                                                             forIndexPath:indexPath];
-    cell.titleLabel.text = [NSString stringWithFormat:@"%@ PPG %i", player.team, [player.ppg integerValue]];
+    cell.titleLabel.text = [NSString stringWithFormat:@"%@ PPG %li", player.team, (long)[player.ppg integerValue]];
     cell.nameLabel.text = player.name;
     cell.costLabel.text = [FFStyle.priceFormatter
                            stringFromNumber:@([player.purchasePrice floatValue])];
@@ -567,6 +569,7 @@
 - (void)autoRemovedBenched:(FUISwitch*)sender
 {
     [self toggleRemoveBench:sender];
+    self.removeBenched = sender.on;
 }
 
 - (void)toggleRemoveBench:(FUISwitch*)sender
