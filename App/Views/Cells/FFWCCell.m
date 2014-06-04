@@ -55,9 +55,9 @@
         _PTButton = [FFStyle coloredButtonWithText:@"PT"
                                              color:self.contentView.backgroundColor
                                        borderColor:[FFStyle brightBlue]];
-        self.PTButton.frame = CGRectMake(257.f,
+        self.PTButton.frame = CGRectMake(237.f,
                                          20.f,
-                                         40.f,
+                                         60.f,
                                          40.f);
         self.PTButton.layer.borderWidth = 2.f;
         [self.PTButton setTitleColor:[FFStyle brightBlue]

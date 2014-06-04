@@ -87,18 +87,18 @@
         [self.contentView addSubview:self.datelabel];
         
         // pt background
-        self.ptBackground = [[UIImageView alloc] initWithFrame:CGRectMake(115.f, 22.f, 89.f, 36.f)];
+        self.ptBackground = [[UIImageView alloc] initWithFrame:CGRectMake(115.f, 22.f, 90.f, 36.f)];
         [self.contentView addSubview:self.ptBackground];
         
         // pt buttons
         _homePTButton = [FFCustomButton buttonWithType:UIButtonTypeCustom];
-        self.homePTButton.frame = CGRectMake(120.f, 28.f, 35.f, 25.f);
+        self.homePTButton.frame = CGRectMake(115.f, 28.f, 45.f, 25.f);
         self.homePTButton.backgroundColor = [UIColor clearColor];
         self.homePTButton.titleLabel.font = [FFStyle blockFont:17.f];
         [self.contentView addSubview:self.homePTButton];
         
         _guestPTButton = [FFCustomButton buttonWithType:UIButtonTypeCustom];
-        self.guestPTButton.frame = CGRectMake(165.f, 28.f, 35.f, 25.f);
+        self.guestPTButton.frame = CGRectMake(160.f, 28.f, 45.f, 25.f);
         self.guestPTButton.backgroundColor = [UIColor clearColor];
         self.guestPTButton.titleLabel.font = [FFStyle blockFont:17.f];
         [self.contentView addSubview:self.guestPTButton];
