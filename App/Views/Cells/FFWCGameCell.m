@@ -37,7 +37,7 @@
         
         // avatars
         self.homeTeamFlag = [[FFPathImageView alloc] initWithFrame:CGRectMake(35.f, 10.f, 60.f, 60.f)
-                                                               image:[UIImage imageNamed:@"rosterslotempty"]
+                                                               image:[UIImage imageNamed:@"flag_placeholder.jpg"]
                                                             pathType:FFPathImageViewTypeSquare
                                                            pathColor:[UIColor clearColor]
                                                          borderColor:[UIColor clearColor]
@@ -49,7 +49,7 @@
         [self.homeTeamFlag draw];
         
         self.guestTeamFlag = [[FFPathImageView alloc] initWithFrame:CGRectMake(225.f, 10.f, 60.f, 60.f)
-                                                               image:[UIImage imageNamed:@"rosterslotempty"]
+                                                               image:[UIImage imageNamed:@"flag_placeholder.jpg"]
                                                             pathType:FFPathImageViewTypeSquare
                                                            pathColor:[UIColor clearColor]
                                                          borderColor:[UIColor clearColor]
@@ -124,12 +124,12 @@
     self.guestTeamName.text = game.guestTeam.name;
     
     [self.homeTeamFlag setImageWithURL:[NSURL URLWithString:game.homeTeam.flagURL]
-                        placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
+                        placeholderImage:[UIImage imageNamed:@"flag_placeholder.jpg"]
              usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [self.homeTeamFlag draw];
     
     [self.guestTeamFlag setImageWithURL:[NSURL URLWithString:game.guestTeam.flagURL]
-                      placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
+                      placeholderImage:[UIImage imageNamed:@"flag_placeholder.jpg"]
            usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [self.guestTeamFlag draw];
     

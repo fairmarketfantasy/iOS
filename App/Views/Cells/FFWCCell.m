@@ -31,7 +31,7 @@
         
         // flag
         _flag = [[FFPathImageView alloc] initWithFrame:CGRectMake(15.f, 10.f, 60.f, 60.f)
-                                                 image:[UIImage imageNamed:@"empty-team"]
+                                                 image:[UIImage imageNamed:@"flag_placeholder.jpg"]
                                               pathType:FFPathImageViewTypeSquare
                                              pathColor:[UIColor clearColor]
                                            borderColor:[UIColor clearColor]
@@ -93,7 +93,7 @@
     self.PTButton.layer.borderColor = color.CGColor;
     
     [self.flag setImageWithURL:[NSURL URLWithString:team.flagURL]
-              placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
+              placeholderImage:[UIImage imageNamed:@"flag_placeholder.jpg"]
    usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [self.flag draw];
     
@@ -112,7 +112,7 @@
     self.PTButton.layer.borderColor = color.CGColor;
     
     [self.flag setImageWithURL:[NSURL URLWithString:player.flagURL]
-              placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
+              placeholderImage:[UIImage imageNamed:@"flag_placeholder.jpg"]
    usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [self.flag draw];
     
