@@ -507,7 +507,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         case FFPredictionsTypeIndividual: {
             if (self.predictionState == FFPredictionStateSubmitted) {
                 [self.individualActivePredictions fetchWithParameters:@{
-                                                                        @"all" : @(YES),
                                                                         @"page" : @(self.pageNumber)
                                                                         }
                                                            completion:^{
@@ -518,7 +517,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                                            }];
             } else {
                 [self.individualHistoryPredictions fetchWithParameters:@{ @"historical" : @"true",
-                                                                          @"all" : @(YES),
                                                                           @"page" : @(self.pageNumber)
                                                                           }
                                                             completion:^{
@@ -537,7 +535,6 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         case FFPredictionsTypeRoster: {
             if (self.predictionState == FFPredictionStateSubmitted) {
                 [self.rosterActivePredictions fetchWithParameters:@{
-                                                                    @"all" : @(YES),
                                                                     @"page" : @(self.pageNumber)
                                                                     }
                                                        completion:^{
