@@ -459,8 +459,6 @@ SBDataObjectResultSetDelegate>
          self.unpaid = NO;
          [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
          self.roster = successObj;
-         SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.teamController.removeBenched ? 1 : 0];
-         self.roster.removeBenched = autoRemove;
          self.myTeam = [self newTeamWithPositions:[self allPositions]];
          
          [alert hide];
@@ -670,13 +668,14 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          //         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
          //                                          withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
+         player.purchasePrice = [successObj objectForKey:@"price"];
          [self addPlayerToMyTeam:player];
-         [self.teamController refreshRosterWithShowingAlert:YES completion:nil];
          [self setViewControllers:@[self.teamController]
                         direction:UIPageViewControllerNavigationDirectionReverse
                          animated:YES
                        completion:nil];
-                           
+         [self.teamController refreshRosterWithShowingAlert:YES completion:nil];
+         
          self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
                                         self.viewControllers.firstObject];
          
@@ -982,15 +981,13 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [self.teamController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
                                                                                inSection:0]]
                                          withRowAnimation:UITableViewRowAnimationAutomatic];
-//    [self.receiverController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
-//                                                                                   inSection:0]]
-//                                             withRowAnimation:UITableViewRowAnimationAutomatic];
-    
     if (_rosterIsCreating == NO) {
         __weak FFPagerController *weakSelf = self;
         [self createRosterWithCompletion:^(BOOL success) {
             if (success) {
-                [weakSelf.teamController reloadWithServerError:NO];
+                [weakSelf.teamController.tableView reloadData];
+                [weakSelf.teamController showOrHideSubmitIfNeeded];
+//                [weakSelf.teamController reloadWithServerError:NO];
                 [weakSelf.receiverController fetchPlayersWithShowingAlert:NO completion:^{
                     [weakSelf.receiverController reloadWithServerError:NO ];
                 }];
@@ -1141,8 +1138,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              for (FFPlayer *player in self.roster.players) {
                  [self addPlayerToMyTeam:player];
              }
-             SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.teamController.removeBenched ? 1 : 0];
-             self.roster.removeBenched = autoRemove;
              
              if (block)
                  block(YES);
@@ -1192,8 +1187,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                  [self addPlayerToMyTeam:player];
              }
          }
-         SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.teamController.removeBenched ? 1 : 0];
-         self.roster.removeBenched = autoRemove;
          
          if (block)
              block(YES);
@@ -1215,8 +1208,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          ^(id successObj) {
              @strongify(self)
              self.roster = successObj;
-             SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.teamController.removeBenched ? 1 : 0];
-             self.roster.removeBenched = autoRemove;
              
              if (block)
                  block(YES);

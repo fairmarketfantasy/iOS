@@ -57,8 +57,6 @@
 {
     [super viewDidLoad];
     
-    self.removeBenched = YES;
-    
     // submit view
     self.submitView = [FFSubmitView new];
     [self.submitView.segments addTarget:self
@@ -300,8 +298,7 @@
     FFAutoFillCell* cell = [tableView dequeueReusableCellWithIdentifier:kAutoFillCellIdentifier
                                                            forIndexPath:indexPath];
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        cell.autoRemovedBenched.on = self.removeBenched;
-//        cell.autoRemovedBenched.on = self.dataSource.currentRoster.removeBenched.integerValue == 0;
+        cell.autoRemovedBenched.on = self.dataSource.currentRoster.removeBenched.integerValue == 1;
 
         [cell.autoRemovedBenched addTarget:self
                                     action:@selector(autoRemovedBenched:)
@@ -571,7 +568,6 @@
 - (void)autoRemovedBenched:(FUISwitch*)sender
 {
     [self toggleRemoveBench:sender];
-    self.removeBenched = sender.on;
 }
 
 - (void)toggleRemoveBench:(FUISwitch*)sender
