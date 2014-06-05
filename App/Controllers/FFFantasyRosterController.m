@@ -309,29 +309,6 @@
     return cell;
 }
 
-- (FFNonFantasyTeamCell *)provideNonFantasyTeamCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
-{
-    FFNonFantasyTeamCell *cell = [tableView dequeueReusableCellWithIdentifier:kNonFantasyTeamCellIdentifier
-                                                                 forIndexPath:indexPath];
-    
-    cell.titleLabel.text = [NSString stringWithFormat:@"%@", @"Team Not Selected"];
-    return cell;
-}
-
-- (FFNonFantasyTeamTradeCell *)provideNonFantasyTeamTradeCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
-{
-    FFNonFantasyTeamTradeCell *cell = [tableView dequeueReusableCellWithIdentifier:kNonFantasyTeamTradeCellIdentifier
-                                                                      forIndexPath:indexPath];
-    
-    FFTeam *team = [self.dataSource teams][indexPath.row];
-    [cell setupWithGame:team];
-    [cell.deleteBtn setAction:kUIButtonBlockTouchUpInside
-                    withBlock:^{
-                        [self.delegate removeTeam:team];
-                    }];
-    return cell;
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView
@@ -427,18 +404,11 @@
 {
     if (section == 1) {
         FFRosterTableHeader* view = [FFRosterTableHeader new];
-        NSString *title = nil;
-        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-            title = @"Your Team";
-        } else {
-            title = @"Your choices";
-        }
         view.titleLabel.text = @"Your Team";
-        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-            view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.dataSource.currentRoster.remainingSalary.floatValue)];
-            view.priceLabel.textColor = self.dataSource.currentRoster.remainingSalary.floatValue > 0.f
-            ? [FFStyle brightGreen] : [FFStyle brightRed];
-        }
+        view.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.dataSource.currentRoster.remainingSalary.floatValue)];
+        view.priceLabel.textColor = self.dataSource.currentRoster.remainingSalary.floatValue > 0.f
+        ? [FFStyle brightGreen] : [FFStyle brightRed];
+ 
         return view;
     }
     return nil;
@@ -525,14 +495,9 @@
 
 - (void)onSubmit:(FUISegmentedControl*)segments
 {
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        FFRosterSubmitType rosterType = (FFRosterSubmitType)segments.selectedSegmentIndex;
-        [self submitRoster:rosterType];
-        self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
-    } else {
-        [self submitRoster:0];
-    }
-    
+    FFRosterSubmitType rosterType = (FFRosterSubmitType)segments.selectedSegmentIndex;
+    [self submitRoster:rosterType];
+    self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
 }
 
 - (void)submitRoster:(FFRosterSubmitType)rosterType
@@ -544,16 +509,12 @@
     [self.delegate submitRoster:rosterType completion:^(BOOL success) {
         [alert hide];
         if (success) {
-            if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-                [[[FFAlertView alloc] initWithTitle:nil
-                                            message:self.dataSource.currentRoster.messageAfterSubmit
-                                  cancelButtonTitle:nil
-                                    okayButtonTitle:@"Ok"
-                                           autoHide:YES]
-                 showInView:self.navigationController.view];
-            } else {
-                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
+            [[[FFAlertView alloc] initWithTitle:nil
+                                        message:self.dataSource.currentRoster.messageAfterSubmit
+                              cancelButtonTitle:nil
+                                okayButtonTitle:@"Ok"
+                                       autoHide:YES]
+             showInView:self.navigationController.view];
         }
     }];
 }
