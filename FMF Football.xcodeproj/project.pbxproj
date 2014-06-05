@@ -223,6 +223,8 @@
 		F9AF0EEB193F044D00A2A353 /* login_wc.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F9AF0EE9193F044D00A2A353 /* login_wc.jpg */; };
 		F9CEA47C1940973400048CB7 /* FFFantasyRosterController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CEA47B1940973400048CB7 /* FFFantasyRosterController.m */; };
 		F9CEA47F1940979200048CB7 /* FFNonFantasyRosterController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CEA47E1940979200048CB7 /* FFNonFantasyRosterController.m */; };
+		F9CEA48219409E4000048CB7 /* FFPlayersController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CEA48119409E4000048CB7 /* FFPlayersController.m */; };
+		F9CEA4851940A57700048CB7 /* FFGamesController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CEA4841940A57700048CB7 /* FFGamesController.m */; };
 		F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */; };
 /* End PBXBuildFile section */
 
@@ -570,6 +572,10 @@
 		F9CEA47B1940973400048CB7 /* FFFantasyRosterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFFantasyRosterController.m; sourceTree = "<group>"; };
 		F9CEA47D1940979200048CB7 /* FFNonFantasyRosterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNonFantasyRosterController.h; sourceTree = "<group>"; };
 		F9CEA47E1940979200048CB7 /* FFNonFantasyRosterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNonFantasyRosterController.m; sourceTree = "<group>"; };
+		F9CEA48019409E4000048CB7 /* FFPlayersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPlayersController.h; sourceTree = "<group>"; };
+		F9CEA48119409E4000048CB7 /* FFPlayersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPlayersController.m; sourceTree = "<group>"; };
+		F9CEA4831940A57700048CB7 /* FFGamesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFGamesController.h; sourceTree = "<group>"; };
+		F9CEA4841940A57700048CB7 /* FFGamesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFGamesController.m; sourceTree = "<group>"; };
 		F9FBDD5A19112D0C0009066D /* FFNoConnectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNoConnectionCell.h; sourceTree = "<group>"; };
 		F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNoConnectionCell.m; sourceTree = "<group>"; };
 		FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
@@ -825,6 +831,10 @@
 				F9CEA47E1940979200048CB7 /* FFNonFantasyRosterController.m */,
 				8972767B18D93FBE008D995C /* FFWideReceiverController.h */,
 				8972767C18D93FBE008D995C /* FFWideReceiverController.m */,
+				F9CEA48019409E4000048CB7 /* FFPlayersController.h */,
+				F9CEA48119409E4000048CB7 /* FFPlayersController.m */,
+				F9CEA4831940A57700048CB7 /* FFGamesController.h */,
+				F9CEA4841940A57700048CB7 /* FFGamesController.m */,
 				3A9B09A9193B3ABF00C81CA7 /* FFWCController.h */,
 				3A9B09AA193B3ABF00C81CA7 /* FFWCController.m */,
 				89F1A09A18DCC951001369E3 /* FFPTController.h */,
@@ -1395,6 +1405,7 @@
 				89923F0218EE3D0D00F74FEB /* FFPredictRosterScoreController.m in Sources */,
 				3AA7EDE5193A12C70087C08E /* FFWCGroup.m in Sources */,
 				89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */,
+				F9CEA4851940A57700048CB7 /* FFGamesController.m in Sources */,
 				896ACCBF18B664F5001E9C64 /* FFMyAccountViewController.m in Sources */,
 				896ACCF718B664F5001E9C64 /* FFRosterSlotCell.m in Sources */,
 				890504CF18D9EEC7006CD2EA /* AnimatedTransitioning.m in Sources */,
@@ -1408,6 +1419,7 @@
 				890504DB18D9FA44006CD2EA /* FFTeamAddCell.m in Sources */,
 				89923EFC18EE338800F74FEB /* FFPredictRosterPagerController.m in Sources */,
 				896ACD0718B664F5001E9C64 /* FFTextField.m in Sources */,
+				F9CEA48219409E4000048CB7 /* FFPlayersController.m in Sources */,
 				89DE99F618D34638006A66C4 /* FFMarketsCell.m in Sources */,
 				8951A33218D08A9E0019384D /* FFBannerCell.m in Sources */,
 				896ACCB318B664F5001E9C64 /* FFCreateGameViewController.m in Sources */,
