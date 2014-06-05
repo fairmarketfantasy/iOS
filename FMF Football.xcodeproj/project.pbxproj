@@ -221,6 +221,8 @@
 		F9AC76C6193CC44300593116 /* Collection+UnNullable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AC76C5193CC44300593116 /* Collection+UnNullable.m */; };
 		F9AF0EEA193F044D00A2A353 /* flag_placeholder.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F9AF0EE8193F044D00A2A353 /* flag_placeholder.jpg */; };
 		F9AF0EEB193F044D00A2A353 /* login_wc.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F9AF0EE9193F044D00A2A353 /* login_wc.jpg */; };
+		F9CEA47C1940973400048CB7 /* FFFantasyRosterController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CEA47B1940973400048CB7 /* FFFantasyRosterController.m */; };
+		F9CEA47F1940979200048CB7 /* FFNonFantasyRosterController.m in Sources */ = {isa = PBXBuildFile; fileRef = F9CEA47E1940979200048CB7 /* FFNonFantasyRosterController.m */; };
 		F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */; };
 /* End PBXBuildFile section */
 
@@ -564,6 +566,10 @@
 		F9AC76C5193CC44300593116 /* Collection+UnNullable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Collection+UnNullable.m"; path = "Categories/Collection+UnNullable.m"; sourceTree = "<group>"; };
 		F9AF0EE8193F044D00A2A353 /* flag_placeholder.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flag_placeholder.jpg; sourceTree = "<group>"; };
 		F9AF0EE9193F044D00A2A353 /* login_wc.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = login_wc.jpg; sourceTree = "<group>"; };
+		F9CEA47A1940973400048CB7 /* FFFantasyRosterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFFantasyRosterController.h; sourceTree = "<group>"; };
+		F9CEA47B1940973400048CB7 /* FFFantasyRosterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFFantasyRosterController.m; sourceTree = "<group>"; };
+		F9CEA47D1940979200048CB7 /* FFNonFantasyRosterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNonFantasyRosterController.h; sourceTree = "<group>"; };
+		F9CEA47E1940979200048CB7 /* FFNonFantasyRosterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNonFantasyRosterController.m; sourceTree = "<group>"; };
 		F9FBDD5A19112D0C0009066D /* FFNoConnectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNoConnectionCell.h; sourceTree = "<group>"; };
 		F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNoConnectionCell.m; sourceTree = "<group>"; };
 		FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
@@ -813,6 +819,10 @@
 				F9A27E8A192260B400BCE2AE /* FFYourTeamDataSource.h */,
 				89DE99EB18D2D1AF006A66C4 /* FFYourTeamController.h */,
 				89DE99EC18D2D1AF006A66C4 /* FFYourTeamController.m */,
+				F9CEA47A1940973400048CB7 /* FFFantasyRosterController.h */,
+				F9CEA47B1940973400048CB7 /* FFFantasyRosterController.m */,
+				F9CEA47D1940979200048CB7 /* FFNonFantasyRosterController.h */,
+				F9CEA47E1940979200048CB7 /* FFNonFantasyRosterController.m */,
 				8972767B18D93FBE008D995C /* FFWideReceiverController.h */,
 				8972767C18D93FBE008D995C /* FFWideReceiverController.m */,
 				3A9B09A9193B3ABF00C81CA7 /* FFWCController.h */,
@@ -1325,6 +1335,7 @@
 				893D690F18E5CB22005E305B /* FFPredictHistoryTable.m in Sources */,
 				896ACCEF18B664F5001E9C64 /* FFSession.m in Sources */,
 				F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */,
+				F9CEA47C1940973400048CB7 /* FFFantasyRosterController.m in Sources */,
 				896ACCE518B664F5001E9C64 /* main.m in Sources */,
 				3AA7EDDC1939FF5B0087C08E /* FFWCTeam.m in Sources */,
 				896ACCD718B664F5001E9C64 /* FFStyle.m in Sources */,
@@ -1387,6 +1398,7 @@
 				896ACCBF18B664F5001E9C64 /* FFMyAccountViewController.m in Sources */,
 				896ACCF718B664F5001E9C64 /* FFRosterSlotCell.m in Sources */,
 				890504CF18D9EEC7006CD2EA /* AnimatedTransitioning.m in Sources */,
+				F9CEA47F1940979200048CB7 /* FFNonFantasyRosterController.m in Sources */,
 				897C869118EC1FC40068D03F /* FFEvent.m in Sources */,
 				8951A33518D08A9E0019384D /* FFEntrantsCell.m in Sources */,
 				896ACCE918B664F5001E9C64 /* FFGame.m in Sources */,
