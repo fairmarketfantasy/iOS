@@ -330,6 +330,19 @@ SBDataObjectResultSetDelegate>
     return newTeam;
 }
 
+- (BOOL)playerAlreadyInTeam:(FFPlayer *)player
+{
+    for (NSMutableDictionary *position in self.myTeam) {
+        if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
+            FFPlayer *pl = position[@"player"];
+            if ([pl.name isEqualToString:player.name]) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
 - (void)addPlayerToMyTeam:(FFPlayer *)player
 {
     for (NSMutableDictionary *position in self.myTeam) {
@@ -339,7 +352,7 @@ SBDataObjectResultSetDelegate>
                 break;
             } else {
                 if ([position[@"player"] isKindOfClass:[NSString class]]) {
-                    if ([position[@"player"] isEqualToString:@""]) {
+                    if ([position[@"player"] isEqualToString:@""] && [self playerAlreadyInTeam:player] == NO) {
                         [position setObject:player forKey:@"player"];
                         break;
                     } else {
@@ -358,6 +371,20 @@ SBDataObjectResultSetDelegate>
             FFPlayer *pl = position[@"player"];
             if ([pl.name isEqualToString:player.name]) {
                 [position setObject:@"" forKey:@"player"];
+            }
+        }
+    }
+}
+
+- (void)removeBenchedPlayersFromTeam
+{
+    for (NSMutableDictionary *position in self.myTeam) {
+        if ([position[@"player"] isKindOfClass:[NSString class]] == NO) {
+            FFPlayer *player = position[@"player"];
+            if (player) {
+                if ([player.benched integerValue] == 1) {
+                    [self removePlayerFromMyTeam:player];
+                }
             }
         }
     }
@@ -1114,6 +1141,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              for (FFPlayer *player in self.roster.players) {
                  [self addPlayerToMyTeam:player];
              }
+             SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.teamController.removeBenched ? 1 : 0];
+             self.roster.removeBenched = autoRemove;
              
              if (block)
                  block(YES);
@@ -1157,6 +1186,15 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      ^(id successObj) {
          @strongify(self)
          self.roster = successObj;
+         if ([self.roster.removeBenched integerValue] == 1) {
+             [self removeBenchedPlayersFromTeam];
+             for (FFPlayer *player in self.roster.players) {
+                 [self addPlayerToMyTeam:player];
+             }
+         }
+         SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.teamController.removeBenched ? 1 : 0];
+         self.roster.removeBenched = autoRemove;
+         
          if (block)
              block(YES);
      }
@@ -1177,6 +1215,8 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          ^(id successObj) {
              @strongify(self)
              self.roster = successObj;
+             SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.teamController.removeBenched ? 1 : 0];
+             self.roster.removeBenched = autoRemove;
              
              if (block)
                  block(YES);

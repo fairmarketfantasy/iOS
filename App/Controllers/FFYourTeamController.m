@@ -301,6 +301,8 @@
                                                            forIndexPath:indexPath];
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
         cell.autoRemovedBenched.on = self.removeBenched;
+//        cell.autoRemovedBenched.on = self.dataSource.currentRoster.removeBenched.integerValue == 0;
+
         [cell.autoRemovedBenched addTarget:self
                                     action:@selector(autoRemovedBenched:)
                           forControlEvents:UIControlEventValueChanged];
