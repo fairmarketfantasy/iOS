@@ -60,14 +60,14 @@
     if ([_currentCategoryName isEqualToString:category] == NO) {
         _currentCategoryName = [category stringByReplacingOccurrencesOfString:@"_" withString:@" "];
         [[NSUserDefaults standardUserDefaults] setObject:_currentCategoryName forKey:kCurrentCategoryKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
     if ([_currentSportName isEqualToString:sport] == NO) {
-        [[NSUserDefaults standardUserDefaults] setObject:sport forKey:kCurrentSportKey];
         _currentSportName = sport;
+        [[NSUserDefaults standardUserDefaults] setObject:sport forKey:kCurrentSportKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    
-    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (NSString *)readCurrentCategoryName
