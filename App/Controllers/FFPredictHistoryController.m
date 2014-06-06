@@ -284,13 +284,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 __block FFIndividualPrediction* prediction = self.predictions[indexPath.row];
                 cell.choiceLabel.text = prediction.playerName;
                 cell.eventLabel.text = prediction.marketName;
-                NSString *dayString = nil;
-                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-                    dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
-                } else {
-                    dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameTime];
-                }
-                cell.dayLabel.text = dayString;
+                
                 cell.ptLabel.text = prediction.predictThat;
                 if (prediction.eventPredictions.count > 0) {
                     NSDictionary* eventPrediction = prediction.eventPredictions.firstObject;
@@ -303,7 +297,20 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                     }
                 }
                 
-                cell.timeLabel.text = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
+                NSString *dayString = nil;
+                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+                    dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
+                } else {
+                    dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameTime];
+                }
+                if ([prediction.marketName isEqualToString:@"MVP"]) {
+                    dayString = @"N/A";
+                    cell.timeLabel.text = @"N/A";
+                } else {
+                    cell.timeLabel.text = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
+                }
+                cell.dayLabel.text = dayString;
+                
                 cell.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
                 NSString *resultString = nil;
                 //TODO:field gameResult in fantasy and anon-fantasy has different type
