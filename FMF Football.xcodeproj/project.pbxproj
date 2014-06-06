@@ -216,10 +216,10 @@
 		F96F0C58192CE0EF003AA3BA /* plus-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C54192CE0EF003AA3BA /* plus-btn.png */; };
 		F96F0C5C192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C5B192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m */; };
 		F96F0C62192CFE86003AA3BA /* FFTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C61192CFE86003AA3BA /* FFTeam.m */; };
+		F9A92F9D1941C66500AC1B3B /* flag_placeholder.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F9A92F9C1941C66500AC1B3B /* flag_placeholder.jpg */; };
 		F9A981DE192623B900E8743C /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A981DC192623B900E8743C /* UbertestersSDK.framework */; };
 		F9A981DF192623BA00E8743C /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */; };
 		F9AC76C6193CC44300593116 /* Collection+UnNullable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AC76C5193CC44300593116 /* Collection+UnNullable.m */; };
-		F9AF0EEA193F044D00A2A353 /* flag_placeholder.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F9AF0EE8193F044D00A2A353 /* flag_placeholder.jpg */; };
 		F9AF0EEB193F044D00A2A353 /* login_wc.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F9AF0EE9193F044D00A2A353 /* login_wc.jpg */; };
 		F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */; };
 /* End PBXBuildFile section */
@@ -558,11 +558,11 @@
 		F96F0C60192CFE86003AA3BA /* FFTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFTeam.h; sourceTree = "<group>"; };
 		F96F0C61192CFE86003AA3BA /* FFTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFTeam.m; sourceTree = "<group>"; };
 		F9A27E8A192260B400BCE2AE /* FFYourTeamDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFYourTeamDataSource.h; sourceTree = "<group>"; };
+		F9A92F9C1941C66500AC1B3B /* flag_placeholder.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flag_placeholder.jpg; sourceTree = "<group>"; };
 		F9A981DC192623B900E8743C /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
 		F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
 		F9AC76C4193CC44300593116 /* Collection+UnNullable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Collection+UnNullable.h"; path = "Categories/Collection+UnNullable.h"; sourceTree = "<group>"; };
 		F9AC76C5193CC44300593116 /* Collection+UnNullable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Collection+UnNullable.m"; path = "Categories/Collection+UnNullable.m"; sourceTree = "<group>"; };
-		F9AF0EE8193F044D00A2A353 /* flag_placeholder.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flag_placeholder.jpg; sourceTree = "<group>"; };
 		F9AF0EE9193F044D00A2A353 /* login_wc.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = login_wc.jpg; sourceTree = "<group>"; };
 		F9FBDD5A19112D0C0009066D /* FFNoConnectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNoConnectionCell.h; sourceTree = "<group>"; };
 		F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNoConnectionCell.m; sourceTree = "<group>"; };
@@ -742,7 +742,7 @@
 		896ACBCA18B664F5001E9C64 /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
-				F9AF0EE8193F044D00A2A353 /* flag_placeholder.jpg */,
+				F9A92F9C1941C66500AC1B3B /* flag_placeholder.jpg */,
 				F9AF0EE9193F044D00A2A353 /* login_wc.jpg */,
 				F9227E281934976A009DD1D1 /* plus-btn-disable.png */,
 				F9227E291934976A009DD1D1 /* pt_disable_both.png */,
@@ -1178,7 +1178,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				893D690B18E5C1F9005E305B /* show.png in Resources */,
-				F9AF0EEA193F044D00A2A353 /* flag_placeholder.jpg in Resources */,
 				89F2E70618BE249A00B23A99 /* accessory_uncollapse@2x.png in Resources */,
 				89BABFC818BDFC99001AD755 /* Localizable.strings in Resources */,
 				89F2E70318BE249A00B23A99 /* accessory_collapse@2x.png in Resources */,
@@ -1206,6 +1205,7 @@
 				89C985B818E48B3300ABB652 /* accessory_uncollapse.png in Resources */,
 				89F2E70218BE249A00B23A99 /* accessory_check@2x.png in Resources */,
 				896ACC7918B664F5001E9C64 /* bannerclose@2x.png in Resources */,
+				F9A92F9D1941C66500AC1B3B /* flag_placeholder.jpg in Resources */,
 				896ACC6B18B664F5001E9C64 /* FMF@2x.png in Resources */,
 				893D690A18E5C1F9005E305B /* hide@2x.png in Resources */,
 				896ACC5918B664F5001E9C64 /* FMF-58.png in Resources */,
