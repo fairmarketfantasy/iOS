@@ -34,23 +34,6 @@
 
 @implementation FFNonFantasyManager
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        self.selectedTeams = [NSMutableArray array];
-        
-        self.rosterController = [FFNonFantasyRosterController new];
-        self.rosterController.delegate = self;
-        self.rosterController.dataSource = self;
-        
-        self.gamesController = [FFGamesController new];
-        self.gamesController.delegate = self;
-        self.gamesController.dataSource = self;
-    }
-    return self;
-}
-
 + (FFNonFantasyManager*)shared
 {
     static dispatch_once_t onceToken;
@@ -63,6 +46,16 @@
 
 - (void)setupWithSession:(FFSession *)session andPagerController:(UIPageViewController *)pager
 {
+    self.selectedTeams = [NSMutableArray array];
+    
+    self.rosterController = [FFNonFantasyRosterController new];
+    self.rosterController.delegate = self;
+    self.rosterController.dataSource = self;
+    
+    self.gamesController = [FFGamesController new];
+    self.gamesController.delegate = self;
+    self.gamesController.dataSource = self;
+    
     self.pageController = pager;
     
     self.session = session;
@@ -71,6 +64,11 @@
     
     [self.selectedTeams removeAllObjects];
     [self updateGames];
+    
+    [self.pageController setViewControllers:@[self.rosterController]
+                                  direction:UIPageViewControllerNavigationDirectionReverse
+                                   animated:NO
+                                 completion:nil];
 }
 
 - (void)updateGames

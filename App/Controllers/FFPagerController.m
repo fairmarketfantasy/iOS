@@ -229,8 +229,8 @@ SBDataObjectResultSetDelegate>
     
     self.isFirstLaunch = NO;
     
-    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
-    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
+//    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
+//    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
     
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
@@ -657,11 +657,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         }
     }
     
-    [self setViewControllers:@[[self.del getViewControllers].firstObject]
-                   direction:UIPageViewControllerNavigationDirectionForward
-                    animated:NO
-                  completion:nil];
-
+//    [self setViewControllers:@[[self.del getViewControllers].firstObject]
+//                   direction:UIPageViewControllerNavigationDirectionForward
+//                    animated:NO
+//                  completion:nil];
+    
 }
 
 - (void)logout

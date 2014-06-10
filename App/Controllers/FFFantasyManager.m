@@ -44,21 +44,6 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
 
 @implementation FFFantasyManager
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        self.rosterController = [FFFantasyRosterController new];
-        self.rosterController.delegate = self;
-        self.rosterController.dataSource = self;
-        
-        self.playersController = [FFPlayersController new];
-        self.playersController.delegate = self;
-        self.playersController.dataSource = self;
-    }
-    return self;
-}
-
 + (FFFantasyManager*)shared
 {
     static dispatch_once_t onceToken;
@@ -71,6 +56,14 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
 
 - (void)setupWithSession:(FFSession *)session andPagerController:(UIPageViewController *)pager
 {
+    self.rosterController = [FFFantasyRosterController new];
+    self.rosterController.delegate = self;
+    self.rosterController.dataSource = self;
+    
+    self.playersController = [FFPlayersController new];
+    self.playersController.delegate = self;
+    self.playersController.dataSource = self;
+    
     self.pageController = pager;
     
     self.session = session;
@@ -86,6 +79,11 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
     
     [self fetchPositionsNames];
     [self updateMarkets];
+    
+    [self.pageController setViewControllers:@[self.rosterController]
+                                  direction:UIPageViewControllerNavigationDirectionForward
+                                   animated:NO
+                                 completion:nil];
 }
 
 - (void)updateMarkets
@@ -164,7 +162,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
 
 - (NSMutableDictionary *)emptyPosition
 {
-    return  [NSMutableDictionary dictionaryWithObjectsAndKeys:@"", @"name", @"", @"player", nil];
+    return [NSMutableDictionary dictionaryWithObjectsAndKeys:@"", @"name", @"", @"player", nil];
 }
 
 - (BOOL)isPositionUnique:(NSString *)position
