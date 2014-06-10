@@ -20,7 +20,7 @@
 #import "FFPlayer.h"
 #import "FFRoster.h"
 
-@interface FFFantasyManager() <SBDataObjectResultSetDelegate, FFPagerDelegate, FFFantasyRosterDataSource,
+@interface FFFantasyManager() <SBDataObjectResultSetDelegate, FFFantasyRosterDataSource,
 FFFantasyRosterDelegate, FFPlayersProtocol>
 
 @property (nonatomic, strong) FFFantasyRosterController *rosterController;
@@ -150,7 +150,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
     }
 }
 
-#pragma mark -
+#pragma mark - FFPagerDelegate
 
 - (NSArray *)getViewControllers
 {
@@ -461,7 +461,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
 - (void)showPosition:(NSString*)position
 {
     @weakify(self)
-    [self.pageController setViewControllers:@[self.rosterController]
+    [self.pageController setViewControllers:@[self.playersController]
                                   direction:UIPageViewControllerNavigationDirectionForward
                                    animated:YES
                                  completion:

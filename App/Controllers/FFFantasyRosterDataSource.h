@@ -31,7 +31,6 @@
 
 @end
 
-
 @protocol FFFantasyRosterDelegate <NSObject>
 
 - (void)showPosition:(NSString*)position;

@@ -217,6 +217,7 @@
 		F96F0C5C192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C5B192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m */; };
 		F96F0C62192CFE86003AA3BA /* FFTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C61192CFE86003AA3BA /* FFTeam.m */; };
 		F9A6A12B1947151E00D6D4B0 /* FFFantasyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A6A12A1947151E00D6D4B0 /* FFFantasyManager.m */; };
+		F9A6A13119473B7200D6D4B0 /* FFNonFantasyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A6A13019473B7200D6D4B0 /* FFNonFantasyManager.m */; };
 		F9A981DE192623B900E8743C /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A981DC192623B900E8743C /* UbertestersSDK.framework */; };
 		F9A981DF192623BA00E8743C /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */; };
 		F9AC76C6193CC44300593116 /* Collection+UnNullable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AC76C5193CC44300593116 /* Collection+UnNullable.m */; };
@@ -566,6 +567,9 @@
 		F9A6A1291947151E00D6D4B0 /* FFFantasyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFFantasyManager.h; sourceTree = "<group>"; };
 		F9A6A12A1947151E00D6D4B0 /* FFFantasyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFFantasyManager.m; sourceTree = "<group>"; };
 		F9A6A12C19472F5E00D6D4B0 /* FFFantasyRosterDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFFantasyRosterDataSource.h; sourceTree = "<group>"; };
+		F9A6A12F19473B7200D6D4B0 /* FFNonFantasyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNonFantasyManager.h; sourceTree = "<group>"; };
+		F9A6A13019473B7200D6D4B0 /* FFNonFantasyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNonFantasyManager.m; sourceTree = "<group>"; };
+		F9A6A13219473BD200D6D4B0 /* FFNonFantasyRosterDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFNonFantasyRosterDataSource.h; sourceTree = "<group>"; };
 		F9A981DC192623B900E8743C /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
 		F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
 		F9AC76C4193CC44300593116 /* Collection+UnNullable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Collection+UnNullable.h"; path = "Categories/Collection+UnNullable.h"; sourceTree = "<group>"; };
@@ -1140,6 +1144,9 @@
 		F9A6A12E194732A300D6D4B0 /* NonFantasy */ = {
 			isa = PBXGroup;
 			children = (
+				F9A6A13219473BD200D6D4B0 /* FFNonFantasyRosterDataSource.h */,
+				F9A6A12F19473B7200D6D4B0 /* FFNonFantasyManager.h */,
+				F9A6A13019473B7200D6D4B0 /* FFNonFantasyManager.m */,
 				F9CEA47D1940979200048CB7 /* FFNonFantasyRosterController.h */,
 				F9CEA47E1940979200048CB7 /* FFNonFantasyRosterController.m */,
 				F9CEA4831940A57700048CB7 /* FFGamesController.h */,
@@ -1450,6 +1457,7 @@
 				3A9B09AE193B486E00C81CA7 /* FFWCCell.m in Sources */,
 				896ACCAD18B664F5001E9C64 /* FFBaseViewController.m in Sources */,
 				89F1058F1901787700B8B00E /* FFForgotPassword.m in Sources */,
+				F9A6A13119473B7200D6D4B0 /* FFNonFantasyManager.m in Sources */,
 				89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */,
 				896ACCC918B664F5001E9C64 /* FFTickerDrawerViewController.m in Sources */,
 				F96F0C62192CFE86003AA3BA /* FFTeam.m in Sources */,

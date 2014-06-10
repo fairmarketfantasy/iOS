@@ -38,6 +38,7 @@
 #import <SBData/SBTypes.h>
 
 #import "FFFantasyManager.h"
+#import "FFNonFantasyManager.h"
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
 FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtocol, FFYourTeamDelegate, FFYourTeamDataSource,
@@ -210,7 +211,9 @@ SBDataObjectResultSetDelegate>
             if ([[[FFSessionManager shared] currentSportName] isEqualToString:FOOTBALL_WC]) {
                 [self getWorldCupData];
             } else {
-                [self updateGames];
+//                [self updateGames];
+                self.del = [FFNonFantasyManager shared];
+                [[FFNonFantasyManager shared] setupWithSession:self.session andPagerController:self];
             }
         }
         
@@ -629,26 +632,36 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     
     [[FFSessionManager shared] saveCurrentCategory:category andSport:sport];
     
-    if (shouldSetController) {
-        [self setViewControllers:@[[self.del getViewControllers].firstObject]
-                       direction:UIPageViewControllerNavigationDirectionForward
-                        animated:NO
-                      completion:nil];
-    }
+//    if (shouldSetController) {
+//        [self setViewControllers:@[[self.del getViewControllers].firstObject]
+//                       direction:UIPageViewControllerNavigationDirectionForward
+//                        animated:NO
+//                      completion:nil];
+//    }
     
     if ([category isEqualToString:FANTASY_SPORTS]) {
-        [self.teamController updateSubmitViewType];
-        [self.receiverController resetPosition];
-        [self updateMarkets];
+//        [self.teamController updateSubmitViewType];
+//        [self.receiverController resetPosition];
+//        [self updateMarkets];
+        self.del = [FFFantasyManager shared];
+        [[FFFantasyManager shared] setupWithSession:self.session andPagerController:self];
     } else if ([category isEqualToString:@"sports"]) {
         if ([sport isEqual:FOOTBALL_WC]) {
             [self getWorldCupData];
         } else {
-            [self.teamController updateSubmitViewType];
-            [self.selectedTeams removeAllObjects];
-            [self updateGames];
+            self.del = [FFNonFantasyManager shared];
+            [[FFNonFantasyManager shared] setupWithSession:self.session andPagerController:self];
+//            [self.teamController updateSubmitViewType];
+//            [self.selectedTeams removeAllObjects];
+//            [self updateGames];
         }
     }
+    
+    [self setViewControllers:@[[self.del getViewControllers].firstObject]
+                   direction:UIPageViewControllerNavigationDirectionForward
+                    animated:NO
+                  completion:nil];
+
 }
 
 - (void)logout

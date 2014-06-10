@@ -151,91 +151,14 @@
     [self.tableView reloadData];
 }
 
-- (void)showPosition:(NSString*)position
-{
-    if ([self.dataSource uniquePositions].count == 0) {
-        return;
-    }
-    
-    for (NSString* positionName in [self.dataSource uniquePositions]) {
-        if ([positionName isEqualToString:position]) {
-            [self selectPosition:[[self.dataSource uniquePositions] indexOfObject:positionName]];
-            NSUInteger selectedIndex = [[self.dataSource uniquePositions] indexOfObject:positionName];
-            break;
-        }
-    }
-}
-
 #pragma mark - private
 
 - (BOOL)isSomethingWrong
 {
     return (self.networkStatus == NotReachable ||
             self.isServerError ||
-            self.dataSource.unpaidSubscription == YES ||
+//            self.dataSource.unpaidSubscription == YES ||
             [self.dataSource availableGames].count == 0);
-}
-
-- (void)selectPosition:(NSUInteger)position
-{
-    self.position = position;
-    [self fetchPlayersWithShowingAlert:YES completion:^{
-        [self.tableView reloadData];
-    }];
-}
-
-- (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
-{
-    if ([self isSomethingWrong]) {
-        block();
-        return;
-    }
-    
-    if (![self.dataSource.currentRoster objId]) {
-        self.players = @[];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
-        return;
-    }
-    
-    __block FFAlertView* alert = nil;
-    if (shouldShow) {
-        alert = [[FFAlertView alloc] initWithTitle:@"Loading Players"
-                                          messsage:nil
-                                      loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
-    }
-    
-    __block BOOL shouldRemoveBenched = [[self.dataSource currentRoster] removeBenched].integerValue == 1;
-    
-    @weakify(self)
-    [FFPlayer fetchPlayersForRoster:[self.dataSource rosterId]
-                           position:[self.dataSource uniquePositions][self.position]
-                     removedBenched:shouldRemoveBenched
-                            session:self.session
-                            success:
-     ^(id successObj) {
-         @strongify(self)
-         self.isServerError = NO;
-         self.players = successObj;
-         //         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-         //                       withRowAnimation:UITableViewRowAnimationAutomatic];
-         if(alert)
-             [alert hide];
-         if (block)
-             block();
-     }
-                            failure:
-     ^(NSError *error) {
-         @strongify(self)
-         self.players = @[];
-         //         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-         //                       withRowAnimation:UITableViewRowAnimationAutomatic];
-         if(alert)
-             [alert hide];
-         if (block)
-             block();
-     }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -281,9 +204,9 @@
             NSString *message = nil;
             if (self.networkStatus == NotReachable) {
                 message = @"No Internet Connection";
-            } else if ([self.dataSource unpaidSubscription]) {
+            } /*else if ([self.dataSource unpaidSubscription]) {
                 message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
-            } else if ([self.dataSource availableGames].count == 0) {
+            }*/ else if ([self.dataSource availableGames].count == 0) {
                 message = @"No Games Scheduled";
             }
             
@@ -359,21 +282,6 @@
         FFRosterTableHeader* view = [FFRosterTableHeader new];
         view.titleLabel.text = @"Games for today";
         return view;
-
-        NSString* positionName = @"";
-        if (self.delegate && self.networkStatus != NotReachable && [self.dataSource uniquePositions].count > 0) {
-            positionName = [self.dataSource uniquePositions][self.position];
-            NSString* positionFullName = self.dataSource.positionsNames[positionName];
-            if (positionFullName) {
-                positionName = positionFullName;
-            }
-        }
-        view.titleLabel.text = positionName;
-        view.priceLabel.text = self.delegate ?
-        [[FFStyle priceFormatter] stringFromNumber:@([[self.dataSource currentRoster] remainingSalary].floatValue)] : @"";
-        view.priceLabel.textColor = [[self.dataSource currentRoster] remainingSalary].floatValue > 0.f
-        ? [FFStyle brightGreen] : [FFStyle brightRed];
-        return view;
     }
     return nil;
 }
@@ -387,11 +295,6 @@
 }
 
 #pragma mark - button actions
-
-- (void)segments:(FUISegmentedControl*)segments
-{
-    [self selectPosition:segments.selectedSegmentIndex];
-}
 
 - (void)autoFill:(id)sender
 {

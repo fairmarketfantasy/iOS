@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FFYourTeamDataSource.h"
+#import "FFNonFantasyRosterDataSource.h"
+#import "FFBaseViewController.h"
 
 @class FFRoster;
 
@@ -16,19 +17,17 @@
 @class Reachability;
 @class FFPlayer;
 
-@interface FFNonFantasyRosterController : UIViewController {
+@interface FFNonFantasyRosterController : FFBaseViewController {
     Reachability* internetReachability;
 }
 
-@property(nonatomic, weak) id<FFYourTeamDelegate> delegate;
-@property(nonatomic, weak) id<FFYourTeamDataSource> dataSource;
+@property(nonatomic, weak) id<FFNonFantasyRosterDelegate> delegate;
+@property(nonatomic, weak) id<FFNonFantasyRosterDataSource> dataSource;
 @property(nonatomic, assign) BOOL removeBenched;
-@property(nonatomic) UITableView* tableView;
+@property(nonatomic, strong) UITableView* tableView;
 
-- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
 - (void)reloadWithServerError:(BOOL)isError;
 - (void)showOrHideSubmitIfNeeded;
-- (void)updateSubmitViewType;
 
 @end
 

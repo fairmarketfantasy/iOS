@@ -39,13 +39,11 @@
 #import "FFPlayer.h"
 #import "FFDate.h"
 
-@interface FFNonFantasyRosterController () <UITableViewDataSource, UITableViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
+@interface FFNonFantasyRosterController () <UITableViewDataSource, UITableViewDelegate>
 
 // models
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 @property(nonatomic) FFSubmitView* submitView;
-@property(nonatomic) FFMarketSet* marketsSetRegular;
-@property(nonatomic) FFMarketSet* marketsSetSingle;
 
 @property(nonatomic, assign) NetworkStatus networkStatus;
 @property(nonatomic, assign) BOOL isServerError;
@@ -162,7 +160,7 @@
 {
     return (self.networkStatus == NotReachable ||
             self.isServerError ||
-            self.dataSource.unpaidSubscription == YES ||
+//            self.dataSource.unpaidSubscription == YES ||
             [self.dataSource availableGames].count == 0);
 }
 
@@ -186,38 +184,6 @@
          tableInsets.bottom = anyObject ? submitHeight : 0.f;
          self.tableView.contentInset = tableInsets;
      }];
-}
-
-#pragma mark
-
-- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
-{
-    if (self.networkStatus == NotReachable) {
-        if (shouldShow) {
-            [[FFAlertView noInternetConnectionAlert] showInView:self.view];
-        }
-        
-        block();
-        return;
-    }
-    
-    __block FFAlertView* alert = nil;
-    if (shouldShow) {
-        alert = [[FFAlertView alloc] initWithTitle:@""
-                                          messsage:nil
-                                      loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.view];
-    }
-    
-    @weakify(self)
-    [self.delegate refreshRosterWithCompletion:^(BOOL success) {
-        @strongify(self)
-        [self reloadWithServerError:!success];
-        if (alert)
-            [alert hide];
-        if (block)
-            block();
-    }];
 }
 
 #pragma mark - Cells
@@ -297,9 +263,9 @@
                     NSString *message = nil;
                     if (self.networkStatus == NotReachable) {
                         message = @"No Internet Connection";
-                    } else if ([self.dataSource unpaidSubscription]) {
+                    } /*else if ([self.dataSource unpaidSubscription]) {
                         message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
-                    } else if ([self.dataSource availableGames].count == 0) {
+                    } */else if ([self.dataSource availableGames].count == 0) {
                         message = @"No Games Scheduled";
                     }
                     
@@ -358,32 +324,6 @@
 
 #pragma mark - button actions
 
-- (void)autoRemovedBenched:(FUISwitch*)sender
-{
-    [self toggleRemoveBench:sender];
-    self.removeBenched = sender.on;
-}
-
-- (void)toggleRemoveBench:(FUISwitch*)sender
-{
-    if (self.networkStatus == NotReachable) {
-        [[FFAlertView noInternetConnectionAlert] showInView:self.view];
-        return;
-    }
-    
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Toggle Auto-Remove Benched Players"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    
-    @weakify(self)
-    [self.delegate toggleRemoveBenchWithCompletion:^(BOOL success) {
-        @strongify(self)
-        [self reloadWithServerError:!success];
-        [alert hide];
-    }];
-}
-
 - (void)autoFill:(UIButton*)button
 {
     if (self.networkStatus == NotReachable) {
@@ -404,29 +344,6 @@
     }];
 }
 
-- (void)removePlayer:(FFPlayer*)player
-{
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Removing Player"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    
-    @weakify(self)
-    [self.delegate removePlayer:player completion:^(BOOL success) {
-        @strongify(self)
-        [alert hide];
-        [self showOrHideSubmitIfNeeded];
-        
-        if (success) {
-            [self refreshRosterWithShowingAlert:YES completion:^{
-                [self.tableView reloadData];
-            }];
-            
-            [self.delegate showPosition:player.position];
-        }
-    }];
-}
-
 - (void)onSubmit:(FUISegmentedControl*)segments
 {
     [self submitRoster:0];
@@ -438,7 +355,7 @@
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
-    [self.delegate submitRoster:rosterType completion:^(BOOL success) {
+    [self.delegate submitRosterCompletion:^(BOOL success) {
         [alert hide];
         if (success) {
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
