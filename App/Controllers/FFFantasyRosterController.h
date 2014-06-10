@@ -9,20 +9,18 @@
 #import <UIKit/UIKit.h>
 
 #import "FFYourTeamDataSource.h"
+#import "FFBaseViewController.h"
 
-@class FFRoster;
+#import "FFFantasyRosterDataSource.h"
 
-@class FFMarket;
-@class FFMarketSet;
 @class Reachability;
-@class FFPlayer;
 
-@interface FFFantasyRosterController : UIViewController {
+@interface FFFantasyRosterController : FFBaseViewController {
     Reachability* internetReachability;
 }
 
-@property(nonatomic, weak) id<FFYourTeamDelegate> delegate;
-@property(nonatomic, weak) id<FFYourTeamDataSource> dataSource;
+@property(nonatomic, weak) id<FFFantasyRosterDelegate> delegate;
+@property(nonatomic, weak) id<FFFantasyRosterDataSource> dataSource;
 @property(nonatomic, assign) BOOL removeBenched;
 @property(nonatomic) UITableView* tableView;
 

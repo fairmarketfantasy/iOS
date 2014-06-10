@@ -10,14 +10,16 @@
 
 @class Reachability;
 
-@protocol FFActiveMarketProtocol <NSObject>
+@protocol FFPagerDelegate <NSObject>
 
-
+- (NSArray *)getViewControllers;
 
 @end
 
 @interface FFPagerController : UIPageViewController {
         Reachability* internetReachability;
 }
+
+@property (nonatomic, weak) id<FFPagerDelegate> del;
 
 @end

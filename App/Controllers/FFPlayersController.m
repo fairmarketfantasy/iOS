@@ -179,7 +179,7 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 {
     return (self.networkStatus == NotReachable ||
             self.isServerError ||
-            self.dataSource.unpaidSubscription == YES ||
+//            self.dataSource.unpaidSubscription == YES ||
             self.markets.count == 0);
 }
 
@@ -331,9 +331,9 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
                 NSString *message = nil;
                 if (self.networkStatus == NotReachable) {
                     message = @"No Internet Connection";
-                } else if ([self.dataSource unpaidSubscription]) {
+                } /*else if ([self.dataSource unpaidSubscription]) {
                     message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
-                } else if (self.markets.count == 0) {
+                }*/ else if (self.markets.count == 0) {
                     message = @"No Games Scheduled";
                 }
                 

@@ -216,6 +216,7 @@
 		F96F0C58192CE0EF003AA3BA /* plus-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C54192CE0EF003AA3BA /* plus-btn.png */; };
 		F96F0C5C192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C5B192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m */; };
 		F96F0C62192CFE86003AA3BA /* FFTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C61192CFE86003AA3BA /* FFTeam.m */; };
+		F9A6A12B1947151E00D6D4B0 /* FFFantasyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A6A12A1947151E00D6D4B0 /* FFFantasyManager.m */; };
 		F9A981DE192623B900E8743C /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A981DC192623B900E8743C /* UbertestersSDK.framework */; };
 		F9A981DF192623BA00E8743C /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */; };
 		F9AC76C6193CC44300593116 /* Collection+UnNullable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AC76C5193CC44300593116 /* Collection+UnNullable.m */; };
@@ -562,6 +563,9 @@
 		F96F0C60192CFE86003AA3BA /* FFTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFTeam.h; sourceTree = "<group>"; };
 		F96F0C61192CFE86003AA3BA /* FFTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFTeam.m; sourceTree = "<group>"; };
 		F9A27E8A192260B400BCE2AE /* FFYourTeamDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFYourTeamDataSource.h; sourceTree = "<group>"; };
+		F9A6A1291947151E00D6D4B0 /* FFFantasyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFFantasyManager.h; sourceTree = "<group>"; };
+		F9A6A12A1947151E00D6D4B0 /* FFFantasyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFFantasyManager.m; sourceTree = "<group>"; };
+		F9A6A12C19472F5E00D6D4B0 /* FFFantasyRosterDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFFantasyRosterDataSource.h; sourceTree = "<group>"; };
 		F9A981DC192623B900E8743C /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
 		F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
 		F9AC76C4193CC44300593116 /* Collection+UnNullable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Collection+UnNullable.h"; path = "Categories/Collection+UnNullable.h"; sourceTree = "<group>"; };
@@ -814,6 +818,8 @@
 		896ACBE818B664F5001E9C64 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F9A6A12D1947325D00D6D4B0 /* Fantasy */,
+				F9A6A12E194732A300D6D4B0 /* NonFantasy */,
 				896ACBE918B664F5001E9C64 /* FFAppDelegate.h */,
 				896ACBEA18B664F5001E9C64 /* FFAppDelegate.m */,
 				896ACBEB18B664F5001E9C64 /* FFBaseViewController.h */,
@@ -825,16 +831,8 @@
 				F9A27E8A192260B400BCE2AE /* FFYourTeamDataSource.h */,
 				89DE99EB18D2D1AF006A66C4 /* FFYourTeamController.h */,
 				89DE99EC18D2D1AF006A66C4 /* FFYourTeamController.m */,
-				F9CEA47A1940973400048CB7 /* FFFantasyRosterController.h */,
-				F9CEA47B1940973400048CB7 /* FFFantasyRosterController.m */,
-				F9CEA47D1940979200048CB7 /* FFNonFantasyRosterController.h */,
-				F9CEA47E1940979200048CB7 /* FFNonFantasyRosterController.m */,
 				8972767B18D93FBE008D995C /* FFWideReceiverController.h */,
 				8972767C18D93FBE008D995C /* FFWideReceiverController.m */,
-				F9CEA48019409E4000048CB7 /* FFPlayersController.h */,
-				F9CEA48119409E4000048CB7 /* FFPlayersController.m */,
-				F9CEA4831940A57700048CB7 /* FFGamesController.h */,
-				F9CEA4841940A57700048CB7 /* FFGamesController.m */,
 				3A9B09A9193B3ABF00C81CA7 /* FFWCController.h */,
 				3A9B09AA193B3ABF00C81CA7 /* FFWCController.m */,
 				89F1A09A18DCC951001369E3 /* FFPTController.h */,
@@ -1125,6 +1123,31 @@
 			name = "Non Fantasy";
 			sourceTree = "<group>";
 		};
+		F9A6A12D1947325D00D6D4B0 /* Fantasy */ = {
+			isa = PBXGroup;
+			children = (
+				F9A6A12C19472F5E00D6D4B0 /* FFFantasyRosterDataSource.h */,
+				F9A6A1291947151E00D6D4B0 /* FFFantasyManager.h */,
+				F9A6A12A1947151E00D6D4B0 /* FFFantasyManager.m */,
+				F9CEA47A1940973400048CB7 /* FFFantasyRosterController.h */,
+				F9CEA47B1940973400048CB7 /* FFFantasyRosterController.m */,
+				F9CEA48019409E4000048CB7 /* FFPlayersController.h */,
+				F9CEA48119409E4000048CB7 /* FFPlayersController.m */,
+			);
+			name = Fantasy;
+			sourceTree = "<group>";
+		};
+		F9A6A12E194732A300D6D4B0 /* NonFantasy */ = {
+			isa = PBXGroup;
+			children = (
+				F9CEA47D1940979200048CB7 /* FFNonFantasyRosterController.h */,
+				F9CEA47E1940979200048CB7 /* FFNonFantasyRosterController.m */,
+				F9CEA4831940A57700048CB7 /* FFGamesController.h */,
+				F9CEA4841940A57700048CB7 /* FFGamesController.m */,
+			);
+			name = NonFantasy;
+			sourceTree = "<group>";
+		};
 		F9A981DB192623B900E8743C /* UbertestersSDK */ = {
 			isa = PBXGroup;
 			children = (
@@ -1326,6 +1349,7 @@
 				89F6D15C18F56A4C001DE023 /* FFDate.m in Sources */,
 				89C985BF18E5AB9400ABB652 /* FFPredictHistoryController.m in Sources */,
 				8961095818D1CD4F006BCFA4 /* FFPagerController.m in Sources */,
+				F9A6A12B1947151E00D6D4B0 /* FFFantasyManager.m in Sources */,
 				896ACCFD18B664F5001E9C64 /* FFBubblePicker.m in Sources */,
 				896ACD0118B664F5001E9C64 /* FFGameButtonView.m in Sources */,
 				89F1A09F18DCCABD001369E3 /* FFPTCell.m in Sources */,

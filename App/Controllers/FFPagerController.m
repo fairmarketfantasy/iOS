@@ -37,6 +37,8 @@
 #import "FFWCManager.h"
 #import <SBData/SBTypes.h>
 
+#import "FFFantasyManager.h"
+
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
 FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtocol, FFYourTeamDelegate, FFYourTeamDataSource,
 SBDataObjectResultSetDelegate>
@@ -188,19 +190,22 @@ SBDataObjectResultSetDelegate>
     self.mvpController.session = self.session;
     
     // get player position names
-    if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:FANTASY_SPORTS]) {
-        [self fetchPositionsNames];        
-    }
+//    if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:FANTASY_SPORTS]) {
+//        [self fetchPositionsNames];        
+//    }
     
     if (self.isFirstLaunch) {
         if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:FANTASY_SPORTS]) {
-            self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-                                                                          session:self.session authorized:YES];
-            self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-                                                                         session:self.session authorized:YES];
-            self.marketsSetRegular.delegate = self;
-            self.marketsSetSingle.delegate = self;
-            [self updateMarkets];
+//            self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+//                                                                          session:self.session authorized:YES];
+//            self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+//                                                                         session:self.session authorized:YES];
+//            self.marketsSetRegular.delegate = self;
+//            self.marketsSetSingle.delegate = self;
+//            [self updateMarkets];
+            self.del = [FFFantasyManager shared];
+            [[FFFantasyManager shared] setupWithSession:self.session andPagerController:self];
+            
         } else if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:@"sports"]) {
             if ([[[FFSessionManager shared] currentSportName] isEqualToString:FOOTBALL_WC]) {
                 [self getWorldCupData];
@@ -210,7 +215,7 @@ SBDataObjectResultSetDelegate>
         }
         
         if ([[[FFSessionManager shared] currentSportName] isEqualToString:FOOTBALL_WC] == NO) {
-            [self setViewControllers:@[[self getViewControllers].firstObject]
+            [self setViewControllers:@[[self.del getViewControllers].firstObject]
                            direction:UIPageViewControllerNavigationDirectionForward
                             animated:NO
                           completion:nil];            
@@ -221,8 +226,8 @@ SBDataObjectResultSetDelegate>
     
     self.isFirstLaunch = NO;
     
-    self.pager.numberOfPages = (int)[self getViewControllers].count;
-    self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:self.viewControllers.firstObject];
+    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
+    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
     
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
@@ -497,28 +502,29 @@ SBDataObjectResultSetDelegate>
 
 - (NSArray*)getViewControllers
 {
-    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
-        NSMutableArray *controllers = [NSMutableArray array];
-        if (self.dailyWinsController.candidates.count > 0 || self.networkStatus == NotReachable) {
-            [controllers addObject:self.dailyWinsController];
-        }
-        if (self.cupWinnerController.candidates.count > 0 || self.networkStatus == NotReachable) {
-            [controllers addObject:self.cupWinnerController];
-        }
-        if (self.groupWinnerController.candidates.count > 0 || self.networkStatus == NotReachable) {
-            [controllers addObject:self.groupWinnerController];
-        }
-        if (self.mvpController.candidates.count > 0 || self.networkStatus == NotReachable) {
-            [controllers addObject:self.mvpController];
-        }
-        
-        return [NSArray arrayWithArray:controllers];
-    } else {
-        return @[
-                 self.teamController,
-                 self.receiverController
-                 ];
-    }
+//    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
+//        NSMutableArray *controllers = [NSMutableArray array];
+//        if (self.dailyWinsController.candidates.count > 0 || self.networkStatus == NotReachable) {
+//            [controllers addObject:self.dailyWinsController];
+//        }
+//        if (self.cupWinnerController.candidates.count > 0 || self.networkStatus == NotReachable) {
+//            [controllers addObject:self.cupWinnerController];
+//        }
+//        if (self.groupWinnerController.candidates.count > 0 || self.networkStatus == NotReachable) {
+//            [controllers addObject:self.groupWinnerController];
+//        }
+//        if (self.mvpController.candidates.count > 0 || self.networkStatus == NotReachable) {
+//            [controllers addObject:self.mvpController];
+//        }
+//        
+//        return [NSArray arrayWithArray:controllers];
+//    } else {
+//        return @[
+//                 self.teamController,
+//                 self.receiverController
+//                 ];
+//    }
+    return [self.del getViewControllers];
 }
 
 - (void)fetchPositionsNames
@@ -551,7 +557,7 @@ SBDataObjectResultSetDelegate>
 - (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
      viewControllerBeforeViewController:(UIViewController*)viewController
 {
-    NSUInteger index = [[self getViewControllers] indexOfObject:viewController];
+    NSUInteger index = [[self.del getViewControllers] indexOfObject:viewController];
     if (index == NSNotFound) {
         WTFLog;
         return nil;
@@ -559,21 +565,21 @@ SBDataObjectResultSetDelegate>
     if (index == 0) {
         return nil;
     }
-    return [self getViewControllers][--index];
+    return [self.del getViewControllers][--index];
 }
 
 - (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
       viewControllerAfterViewController:(UIViewController*)viewController
 {
-    NSUInteger index = [[self getViewControllers] indexOfObject:viewController];
+    NSUInteger index = [[self.del getViewControllers] indexOfObject:viewController];
     if (index == NSNotFound) {
         WTFLog;
         return nil;
     }
-    if (index == [self getViewControllers].count - 1) {
+    if (index == [self.del getViewControllers].count - 1) {
         return nil;
     }
-    return [self getViewControllers][++index];
+    return [self.del getViewControllers][++index];
 }
 
 #pragma mark - UIPageViewControllerDelegate
@@ -587,7 +593,7 @@ SBDataObjectResultSetDelegate>
     if (!completed) {
         return;
     }
-    self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:
                                    self.viewControllers.firstObject];
     
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
@@ -624,7 +630,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [[FFSessionManager shared] saveCurrentCategory:category andSport:sport];
     
     if (shouldSetController) {
-        [self setViewControllers:@[[self getViewControllers].firstObject]
+        [self setViewControllers:@[[self.del getViewControllers].firstObject]
                        direction:UIPageViewControllerNavigationDirectionForward
                         animated:NO
                       completion:nil];
@@ -677,7 +683,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                          animated:YES
                        completion:nil];
                            
-         self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+         self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:
                                         self.viewControllers.firstObject];
          
      }
@@ -741,7 +747,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                     animated:YES
                   completion:nil];
     
-    self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:
                                    self.viewControllers.firstObject];
     
     [self.teamController reloadWithServerError:NO];
@@ -864,13 +870,13 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                    self.mvpController.candidates = [NSArray arrayWithArray:[FFWCManager shared].mvpCandidates];       
                                }
                                __weak FFPagerController *weakSelf = self;
-                               [self setViewControllers:@[[self getViewControllers].firstObject]
+                               [self setViewControllers:@[[self.del getViewControllers].firstObject]
                                               direction:UIPageViewControllerNavigationDirectionForward
                                                animated:NO
                                              completion:^(BOOL finished) {
                                                  if (finished) {
-                                                     weakSelf.pager.numberOfPages = (int)[weakSelf getViewControllers].count;
-                                                     weakSelf.pager.currentPage = (int)[[weakSelf getViewControllers] indexOfObject:weakSelf.viewControllers.firstObject];
+                                                     weakSelf.pager.numberOfPages = (int)[weakSelf.del getViewControllers].count;
+                                                     weakSelf.pager.currentPage = (int)[[weakSelf.del getViewControllers] indexOfObject:weakSelf.viewControllers.firstObject];
                                                      
                                                      [weakSelf.dailyWinsController.tableView reloadData];
                                                      [weakSelf.cupWinnerController.tableView reloadData];
@@ -1047,7 +1053,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                   completion:
      ^(BOOL finished) {
          @strongify(self)
-         self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+         self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:
                                         self.viewControllers.firstObject];
          
          [self.receiverController showPosition:position];
@@ -1162,7 +1168,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                            direction:UIPageViewControllerNavigationDirectionReverse
                             animated:YES
                           completion:nil];
-            self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+            self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:
                                            self.viewControllers.firstObject];
         }
         
@@ -1244,7 +1250,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                     animated:YES
                   completion:nil];
     
-    self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:
                                    self.viewControllers.firstObject];
 }
 
