@@ -1467,13 +1467,14 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Anton Chuev (28B92DEJE3)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Fair Market Fantasy, LLC (3Y8TH8VAFX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Fair Market Fantasy, LLC (3Y8TH8VAFX)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "App/FMF Football-Prefix.pch";
 				INFOPLIST_FILE = "App/FMF Football-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9D8814CF-BFA9-4605-9280-C3611C2E84D5";
+				PROVISIONING_PROFILE = "D94CAE40-DF9D-47E7-93AA-F38972B3AA43";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1483,15 +1484,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer: Anton Chuev (28B92DEJE3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Anton Chuev (28B92DEJE3)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Fair Market Fantasy, LLC (3Y8TH8VAFX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Fair Market Fantasy, LLC (3Y8TH8VAFX)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "App/FMF Football-Prefix.pch";
 				INFOPLIST_FILE = "App/FMF Football-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9D8814CF-BFA9-4605-9280-C3611C2E84D5";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9D8814CF-BFA9-4605-9280-C3611C2E84D5";
+				PROVISIONING_PROFILE = "D94CAE40-DF9D-47E7-93AA-F38972B3AA43";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D94CAE40-DF9D-47E7-93AA-F38972B3AA43";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
