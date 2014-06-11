@@ -249,8 +249,8 @@
 		3A9B09AD193B486E00C81CA7 /* FFWCCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCCell.m; sourceTree = "<group>"; };
 		3A9B09AF193B6D2600C81CA7 /* FFWCGameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCGameCell.h; sourceTree = "<group>"; };
 		3A9B09B0193B6D2600C81CA7 /* FFWCGameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCGameCell.m; sourceTree = "<group>"; };
-		3AA7EDD41939EE770087C08E /* FFWCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCManager.h; sourceTree = "<group>"; };
-		3AA7EDD51939EE770087C08E /* FFWCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCManager.m; sourceTree = "<group>"; };
+		3AA7EDD41939EE770087C08E /* FFWCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FFWCManager.h; path = ../Models/FFWCManager.h; sourceTree = "<group>"; };
+		3AA7EDD51939EE770087C08E /* FFWCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FFWCManager.m; path = ../Models/FFWCManager.m; sourceTree = "<group>"; };
 		3AA7EDD71939FF080087C08E /* FFWCGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCGame.h; sourceTree = "<group>"; };
 		3AA7EDD81939FF080087C08E /* FFWCGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCGame.m; sourceTree = "<group>"; };
 		3AA7EDDA1939FF5B0087C08E /* FFWCTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCTeam.h; sourceTree = "<group>"; };
@@ -668,8 +668,6 @@
 		3AA7EDD31939ED520087C08E /* Football World Cup */ = {
 			isa = PBXGroup;
 			children = (
-				3AA7EDD41939EE770087C08E /* FFWCManager.h */,
-				3AA7EDD51939EE770087C08E /* FFWCManager.m */,
 				3AA7EDD71939FF080087C08E /* FFWCGame.h */,
 				3AA7EDD81939FF080087C08E /* FFWCGame.m */,
 				3AA7EDDA1939FF5B0087C08E /* FFWCTeam.h */,
@@ -822,6 +820,7 @@
 		896ACBE818B664F5001E9C64 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F9A93239194888F10012193F /* Fototball WC */,
 				F9A6A12D1947325D00D6D4B0 /* Fantasy */,
 				F9A6A12E194732A300D6D4B0 /* NonFantasy */,
 				896ACBE918B664F5001E9C64 /* FFAppDelegate.h */,
@@ -837,8 +836,6 @@
 				89DE99EC18D2D1AF006A66C4 /* FFYourTeamController.m */,
 				8972767B18D93FBE008D995C /* FFWideReceiverController.h */,
 				8972767C18D93FBE008D995C /* FFWideReceiverController.m */,
-				3A9B09A9193B3ABF00C81CA7 /* FFWCController.h */,
-				3A9B09AA193B3ABF00C81CA7 /* FFWCController.m */,
 				89F1A09A18DCC951001369E3 /* FFPTController.h */,
 				89F1A09B18DCC951001369E3 /* FFPTController.m */,
 				89C985BD18E5AB9400ABB652 /* FFPredictHistoryController.h */,
@@ -1153,6 +1150,17 @@
 				F9CEA4841940A57700048CB7 /* FFGamesController.m */,
 			);
 			name = NonFantasy;
+			sourceTree = "<group>";
+		};
+		F9A93239194888F10012193F /* Fototball WC */ = {
+			isa = PBXGroup;
+			children = (
+				3AA7EDD41939EE770087C08E /* FFWCManager.h */,
+				3AA7EDD51939EE770087C08E /* FFWCManager.m */,
+				3A9B09A9193B3ABF00C81CA7 /* FFWCController.h */,
+				3A9B09AA193B3ABF00C81CA7 /* FFWCController.m */,
+			);
+			name = "Fototball WC";
 			sourceTree = "<group>";
 		};
 		F9A981DB192623B900E8743C /* UbertestersSDK */ = {

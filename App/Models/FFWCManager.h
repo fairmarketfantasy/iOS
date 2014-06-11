@@ -30,6 +30,8 @@ typedef NS_ENUM(NSUInteger, FFWCPredictionCategory)
 
 + (FFWCManager*)shared;
 
+- (void)setupWithSession:(FFSession *)session andPagerController:(UIPageViewController *)pager;
+
 - (void)fetchDataForSession:(FFSession *)session dataWithCompletion:(void(^)(BOOL success))block;
 - (NSString *)stringForWCCategory:(FFWCPredictionCategory)category;
 - (void)disablePTForPlayer:(FFWCPlayer *)player;
