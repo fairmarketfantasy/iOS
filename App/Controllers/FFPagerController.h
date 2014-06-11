@@ -22,6 +22,8 @@
         Reachability* internetReachability;
 }
 
+- (void)updatePager;
+
 @property (nonatomic, weak) id<FFPagerDelegate> del;
 
 @end

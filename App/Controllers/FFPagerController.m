@@ -153,20 +153,18 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
             }
         }
         
-        if ([[[FFSessionManager shared] currentSportName] isEqualToString:FOOTBALL_WC] == NO) {
-            [self setViewControllers:@[[self.del getViewControllers].firstObject]
-                           direction:UIPageViewControllerNavigationDirectionForward
-                            animated:NO
-                          completion:nil];
-        }
+        [self setViewControllers:@[[self.del getViewControllers].firstObject]
+                       direction:UIPageViewControllerNavigationDirectionForward
+                        animated:NO
+                      completion:nil];
     
         [self.view bringSubviewToFront:self.pager];
     }
     
     self.isFirstLaunch = NO;
     
-//    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
-//    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
+    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
+    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
     
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
@@ -338,12 +336,19 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
         }
     }
     
-    if ([sport isEqual:FOOTBALL_WC] == NO) {
-        [self setViewControllers:@[[self.del getViewControllers].firstObject]
-                       direction:UIPageViewControllerNavigationDirectionForward
-                        animated:NO
-                      completion:nil];
-    }
+    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
+    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
+    
+    [self setViewControllers:@[[self.del getViewControllers].firstObject]
+                   direction:UIPageViewControllerNavigationDirectionForward
+                    animated:NO
+                  completion:nil];
+}
+
+- (void)updatePager
+{
+    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
+    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
 }
 
 - (void)logout

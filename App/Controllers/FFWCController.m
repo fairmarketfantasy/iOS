@@ -91,7 +91,8 @@
 
 - (BOOL)isSomethingWrong
 {
-    return self.networkStatus == NotReachable /*|| self.dataSource.unpaidSubscription*/;
+    return self.networkStatus == NotReachable ||
+    self.candidates.count == 0/*|| self.dataSource.unpaidSubscription*/;
 }
 
 #pragma mark - UITableViewDataSource

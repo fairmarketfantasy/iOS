@@ -8,6 +8,7 @@
 
 #import "FFWCManager.h"
 
+#import "FFPagerController.h"
 #import "FFWCController.h"
 #import "FFAlertView.h"
 
@@ -27,7 +28,7 @@
 
 @property (nonatomic, strong) FFSession *session;
 
-@property (nonatomic, weak) UIPageViewController *pageController;
+@property (nonatomic, weak) FFPagerController *pageController;
 
 @end
 
@@ -69,6 +70,7 @@
     [self fetchDataForSession:self.session
            dataWithCompletion:^(BOOL success) {
                [alert hide];
+               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                if (success) {
                    self.cupWinnerController.category = FFWCCupWinner;
                    self.cupWinnerController.candidates = [NSArray arrayWithArray:self.cupWinners];
@@ -87,6 +89,8 @@
                                                  direction:UIPageViewControllerNavigationDirectionForward
                                                   animated:NO
                                                 completion:nil];
+                   
+                   [self.pageController updatePager];
                    
                    [self.dailyWinsController.tableView reloadData];
                    [self.cupWinnerController.tableView reloadData];
@@ -158,6 +162,10 @@
     }
     if (self.mvpController.candidates.count > 0/*|| self.networkStatus == NotReachable*/) {
         [controllers addObject:self.mvpController];
+    }
+    
+    if (controllers.count == 0) {
+        [controllers addObject:self.dailyWinsController];
     }
     
     return [NSArray arrayWithArray:controllers];
