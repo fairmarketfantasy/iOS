@@ -217,7 +217,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     }
     self.predictionType = type;
 
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForItem:NSNotFound inSection:0]
                           atScrollPosition:UITableViewScrollPositionBottom
                                   animated:YES];
     [self refreshWithShowingAlert:YES completion:^{
