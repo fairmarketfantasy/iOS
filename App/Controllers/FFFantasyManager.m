@@ -80,10 +80,10 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
     [self fetchPositionsNames];
     [self updateMarkets];
     
-    [self.pageController setViewControllers:@[self.rosterController]
-                                  direction:UIPageViewControllerNavigationDirectionForward
-                                   animated:NO
-                                 completion:nil];
+//    [self.pageController setViewControllers:@[self.rosterController]
+//                                  direction:UIPageViewControllerNavigationDirectionForward
+//                                   animated:NO
+//                                 completion:nil];
 }
 
 - (void)updateMarkets
@@ -105,7 +105,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
     __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:@""
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.rosterController.navigationController.view];
+    [alert showInView:self.rosterController.view];
  
     [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason completion:^{
         [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination completion:^{

@@ -17,6 +17,6 @@
 @property (nonatomic, strong) NSArray *candidates;
 @property (nonatomic, readonly) UITableView *tableView;
 
-@property (nonatomic, weak) id<FFYourTeamDataSource> dataSource;
+//@property (nonatomic, weak) id<FFYourTeamDataSource> dataSource;
 
 @end

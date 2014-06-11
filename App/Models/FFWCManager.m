@@ -18,7 +18,7 @@
 #import "FFWCPlayer.h"
 #import "FFSession.h"
 
-@interface FFWCManager()
+@interface FFWCManager() 
 
 @property (nonatomic, strong) FFWCController* dailyWinsController;
 @property (nonatomic, strong) FFWCController* mvpController;
@@ -26,6 +26,8 @@
 @property (nonatomic, strong) FFWCController* groupWinnerController;
 
 @property (nonatomic, strong) FFSession *session;
+
+@property (nonatomic, weak) UIPageViewController *pageController;
 
 @end
 
@@ -44,53 +46,54 @@
 
 - (void)setupWithSession:(FFSession *)session andPagerController:(UIPageViewController *)pager
 {
+    self.dailyWinsController = [[FFWCController alloc] init];
+    self.cupWinnerController = [[FFWCController alloc] init];
+    self.groupWinnerController = [[FFWCController alloc] init];
+    self.mvpController = [[FFWCController alloc] init];
+
+    self.session = session;
+    self.pageController = pager;
     
+    [self getWorldCupData];
 }
 
 - (void)getWorldCupData
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-//    __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:@""
-//                                                           messsage:nil
-//                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-//    [alert showInView:self.navigationController.view];
+    __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
+                                                           messsage:@""
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.dailyWinsController.view];
     
     [self fetchDataForSession:self.session
-                           dataWithCompletion:^(BOOL success) {
-                               if (success) {
-                                   self.cupWinnerController.category = FFWCCupWinner;
-                                   self.cupWinnerController.candidates = [NSArray arrayWithArray:[FFWCManager shared].cupWinners];
-                                   
-                                   self.groupWinnerController.category = FFWCGroupWinners;
-                                   self.groupWinnerController.candidates = [NSArray arrayWithArray:[FFWCManager shared].groupWinners];
-                                   self.groupWinnerController.selectedCroupIndex = 0;
-                                   
-                                   self.dailyWinsController.category = FFWCDailyWins;
-                                   self.dailyWinsController.candidates = [NSArray arrayWithArray:[FFWCManager shared].dailyWins];
-                                   
-                                   self.mvpController.category = FFWCMvp;
-                                   self.mvpController.candidates = [NSArray arrayWithArray:[FFWCManager shared].mvpCandidates];
-                               }
-//                               __weak FFPagerController *weakSelf = self;
-//                               [self setViewControllers:@[[self.del getViewControllers].firstObject]
-//                                              direction:UIPageViewControllerNavigationDirectionForward
-//                                               animated:NO
-//                                             completion:^(BOOL finished) {
-//                                                 if (finished) {
-//                                                     weakSelf.pager.numberOfPages = (int)[weakSelf.del getViewControllers].count;
-//                                                     weakSelf.pager.currentPage = (int)[[weakSelf.del getViewControllers] indexOfObject:weakSelf.viewControllers.firstObject];
-//                                                     
-//                                                     [weakSelf.dailyWinsController.tableView reloadData];
-//                                                     [weakSelf.cupWinnerController.tableView reloadData];
-//                                                     [weakSelf.groupWinnerController.tableView reloadData];
-//                                                     [weakSelf.mvpController.tableView reloadData];
-//                                                 }
-//                                             }];
-//                               
-//                               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-//                               [alert hide];
-                           }];
+           dataWithCompletion:^(BOOL success) {
+               [alert hide];
+               if (success) {
+                   self.cupWinnerController.category = FFWCCupWinner;
+                   self.cupWinnerController.candidates = [NSArray arrayWithArray:self.cupWinners];
+                   
+                   self.groupWinnerController.category = FFWCGroupWinners;
+                   self.groupWinnerController.candidates = [NSArray arrayWithArray:self.groupWinners];
+                   self.groupWinnerController.selectedCroupIndex = 0;
+                   
+                   self.dailyWinsController.category = FFWCDailyWins;
+                   self.dailyWinsController.candidates = [NSArray arrayWithArray:self.dailyWins];
+                   
+                   self.mvpController.category = FFWCMvp;
+                   self.mvpController.candidates = [NSArray arrayWithArray:self.mvpCandidates];
+                   
+                   [self.pageController setViewControllers:@[[self getViewControllers].firstObject]
+                                                 direction:UIPageViewControllerNavigationDirectionForward
+                                                  animated:NO
+                                                completion:nil];
+                   
+                   [self.dailyWinsController.tableView reloadData];
+                   [self.cupWinnerController.tableView reloadData];
+                   [self.groupWinnerController.tableView reloadData];
+                   [self.mvpController.tableView reloadData];
+               }
+           }];
 }
 
 - (void)fetchDataForSession:(FFSession *)session dataWithCompletion:(void(^)(BOOL success))block
@@ -139,6 +142,8 @@
                                      }];
 }
 
+#pragma mark - FFPagerDelegate
+
 - (NSArray*)getViewControllers
 {
     NSMutableArray *controllers = [NSMutableArray array];
@@ -157,6 +162,8 @@
     
     return [NSArray arrayWithArray:controllers];
 }
+
+#pragma mark
 
 - (NSString *)stringForWCCategory:(FFWCPredictionCategory)category
 {

@@ -91,7 +91,7 @@
 
 - (BOOL)isSomethingWrong
 {
-    return self.networkStatus == NotReachable || self.dataSource.unpaidSubscription;
+    return self.networkStatus == NotReachable /*|| self.dataSource.unpaidSubscription*/;
 }
 
 #pragma mark - UITableViewDataSource
@@ -143,9 +143,9 @@
             NSString *message = nil;
             if (self.networkStatus == NotReachable) {
                 message = @"No Internet Connection";
-            } else if ([self.dataSource unpaidSubscription]) {
+            }/* else if ([self.dataSource unpaidSubscription]) {
                 message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
-            }
+            }*/
             
             cell.message.text = message;
             return cell;

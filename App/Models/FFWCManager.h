@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FFPagerController.h"
 
 @class FFSession;
 @class FFWCPlayer;
@@ -21,7 +22,7 @@ typedef NS_ENUM(NSUInteger, FFWCPredictionCategory)
     FFWCCupWinner
 };
 
-@interface FFWCManager : NSObject
+@interface FFWCManager : NSObject <FFPagerDelegate>
 
 @property (nonatomic, readonly) NSMutableArray *dailyWins; //array of WCTeams*
 @property (nonatomic, readonly) NSMutableArray *mvpCandidates; //array of WCPlayer*

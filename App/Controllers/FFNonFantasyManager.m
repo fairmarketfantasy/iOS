@@ -65,10 +65,10 @@
     [self.selectedTeams removeAllObjects];
     [self updateGames];
     
-    [self.pageController setViewControllers:@[self.rosterController]
-                                  direction:UIPageViewControllerNavigationDirectionReverse
-                                   animated:NO
-                                 completion:nil];
+//    [self.pageController setViewControllers:@[self.rosterController]
+//                                  direction:UIPageViewControllerNavigationDirectionReverse
+//                                   animated:NO
+//                                 completion:nil];
 }
 
 - (void)updateGames
@@ -142,7 +142,7 @@
         alert = [[FFAlertView alloc] initWithTitle:nil
                                           messsage:@""
                                       loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.rosterController.navigationController.view];
+        [alert showInView:self.rosterController.view];
     }
     
     [FFNonFantasyGame fetchGamesSession:self.session

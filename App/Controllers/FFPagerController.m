@@ -47,32 +47,15 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
 }
 
 @property(nonatomic) StyledPageControl* pager;
-@property(nonatomic) FFYourTeamController* teamController;
-@property(nonatomic) FFWideReceiverController* receiverController;
-
-@property(nonatomic) FFWCController* dailyWinsController;
-@property(nonatomic) FFWCController* mvpController;
-@property(nonatomic) FFWCController* cupWinnerController;
-@property(nonatomic) FFWCController* groupWinnerController;
 
 @property(nonatomic) UIButton* globalMenuButton;
-@property(nonatomic) NSDictionary* positionsNames;
 
 @property(nonatomic, assign) NetworkStatus networkStatus;
 @property(nonatomic, assign) BOOL isFirstLaunch;
 
-@property(nonatomic) FFMarketSet* marketsSetRegular;
-@property(nonatomic) FFMarketSet* marketsSetSingle;
-
-@property(nonatomic, strong) NSArray* markets;
 @property(nonatomic) FFMarket* selectedMarket;
 
-@property(nonatomic, strong) NSMutableArray *myTeam;
-@property(nonatomic, strong) FFRoster* roster;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
-
-@property(nonatomic, strong) NSMutableArray *games;
-@property(nonatomic, strong) NSMutableArray *selectedTeams;
 
 @property(nonatomic, assign) BOOL unpaid;
 
@@ -86,38 +69,12 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.positionsNames = @{};
-        self.selectedTeams = [NSMutableArray array];
         self.view.backgroundColor = [FFStyle darkGreen];
         self.dataSource = self;
         self.delegate = self;
-        self.teamController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
-                                                         bundle:[NSBundle mainBundle]]
-                               instantiateViewControllerWithIdentifier:@"TeamController"];
-        self.receiverController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
-                                                             bundle:[NSBundle mainBundle]]
-                                   instantiateViewControllerWithIdentifier:@"ReceiverController"];
-
-        self.teamController.delegate = self;
-        self.teamController.dataSource = self;
-        self.receiverController.delegate = self;
-        self.receiverController.dataSource = self;
-        
-        self.dailyWinsController = [[FFWCController alloc] init];
-        self.cupWinnerController = [[FFWCController alloc] init];
-        self.groupWinnerController = [[FFWCController alloc] init];
-        self.mvpController = [[FFWCController alloc] init];
-        
-        self.dailyWinsController.dataSource = self;
-        self.cupWinnerController.dataSource = self;
-        self.groupWinnerController.dataSource = self;
-        self.mvpController.dataSource = self;
         
         self.isFirstLaunch = YES;
         _rosterIsCreating = NO;
-        
-        self.myTeam = [NSMutableArray array];
-        self.games = [NSMutableArray array];
     }
     
     return self;
@@ -181,36 +138,16 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
 {
     [super viewWillAppear:animated];
     
-    // session
-    self.teamController.session = self.session;
-    self.receiverController.session = self.session;
-    self.cupWinnerController.session = self.session;
-    self.groupWinnerController.session = self.session;
-    self.dailyWinsController.session = self.session;
-    self.mvpController.session = self.session;
-    
-    // get player position names
-//    if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:FANTASY_SPORTS]) {
-//        [self fetchPositionsNames];        
-//    }
-    
     if (self.isFirstLaunch) {
         if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:FANTASY_SPORTS]) {
-//            self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-//                                                                          session:self.session authorized:YES];
-//            self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-//                                                                         session:self.session authorized:YES];
-//            self.marketsSetRegular.delegate = self;
-//            self.marketsSetSingle.delegate = self;
-//            [self updateMarkets];
             self.del = [FFFantasyManager shared];
             [[FFFantasyManager shared] setupWithSession:self.session andPagerController:self];
             
         } else if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:@"sports"]) {
             if ([[[FFSessionManager shared] currentSportName] isEqualToString:FOOTBALL_WC]) {
-                [self getWorldCupData];
+                self.del = [FFWCManager shared];
+                [[FFWCManager shared] setupWithSession:self.session andPagerController:self];
             } else {
-//                [self updateGames];
                 self.del = [FFNonFantasyManager shared];
                 [[FFNonFantasyManager shared] setupWithSession:self.session andPagerController:self];
             }
@@ -220,9 +157,9 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
             [self setViewControllers:@[[self.del getViewControllers].firstObject]
                            direction:UIPageViewControllerNavigationDirectionForward
                             animated:NO
-                          completion:nil];            
+                          completion:nil];
         }
-        
+    
         [self.view bringSubviewToFront:self.pager];
     }
     
@@ -257,13 +194,13 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
 //                    [self updateMarkets];
                 } else {
                     if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
-                        [self getWorldCupData];
+//                        [self getWorldCupData];
                     } else {
 //                        [self updateGames];
                     }
                 }
             } else {
-                [self.games removeAllObjects];
+//                [self.games removeAllObjects];
             }
         }
     }    
@@ -301,33 +238,6 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
             vc.URL = [NSURL URLWithString:[baseUrl stringByAppendingString:@"/pages/mobile/terms"]];
         }
     }
-}
-
-- (NSArray*)getViewControllers
-{
-//    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
-//        NSMutableArray *controllers = [NSMutableArray array];
-//        if (self.dailyWinsController.candidates.count > 0 || self.networkStatus == NotReachable) {
-//            [controllers addObject:self.dailyWinsController];
-//        }
-//        if (self.cupWinnerController.candidates.count > 0 || self.networkStatus == NotReachable) {
-//            [controllers addObject:self.cupWinnerController];
-//        }
-//        if (self.groupWinnerController.candidates.count > 0 || self.networkStatus == NotReachable) {
-//            [controllers addObject:self.groupWinnerController];
-//        }
-//        if (self.mvpController.candidates.count > 0 || self.networkStatus == NotReachable) {
-//            [controllers addObject:self.mvpController];
-//        }
-//        
-//        return [NSArray arrayWithArray:controllers];
-//    } else {
-//        return @[
-//                 self.teamController,
-//                 self.receiverController
-//                 ];
-//    }
-    return [self.del getViewControllers];
 }
 
 #pragma mark - button actions
@@ -385,9 +295,9 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
         //should update players list after swipe as in bug MLB-156
         if (self.pager.currentPage == 1) {
-            [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
-                [self.receiverController reloadWithServerError:NO];
-            }];
+//            [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
+//                [self.receiverController reloadWithServerError:NO];
+//            }];
         }
     }
 }
@@ -415,36 +325,25 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     
     [[FFSessionManager shared] saveCurrentCategory:category andSport:sport];
     
-//    if (shouldSetController) {
-//        [self setViewControllers:@[[self.del getViewControllers].firstObject]
-//                       direction:UIPageViewControllerNavigationDirectionForward
-//                        animated:NO
-//                      completion:nil];
-//    }
-    
     if ([category isEqualToString:FANTASY_SPORTS]) {
-//        [self.teamController updateSubmitViewType];
-//        [self.receiverController resetPosition];
-//        [self updateMarkets];
         self.del = [FFFantasyManager shared];
         [[FFFantasyManager shared] setupWithSession:self.session andPagerController:self];
     } else if ([category isEqualToString:@"sports"]) {
         if ([sport isEqual:FOOTBALL_WC]) {
-            [self getWorldCupData];
+            self.del = [FFWCManager shared];
+            [[FFWCManager shared] setupWithSession:self.session andPagerController:self];
         } else {
             self.del = [FFNonFantasyManager shared];
             [[FFNonFantasyManager shared] setupWithSession:self.session andPagerController:self];
-//            [self.teamController updateSubmitViewType];
-//            [self.selectedTeams removeAllObjects];
-//            [self updateGames];
         }
     }
     
-//    [self setViewControllers:@[[self.del getViewControllers].firstObject]
-//                   direction:UIPageViewControllerNavigationDirectionForward
-//                    animated:NO
-//                  completion:nil];
-    
+    if ([sport isEqual:FOOTBALL_WC] == NO) {
+        [self setViewControllers:@[[self.del getViewControllers].firstObject]
+                       direction:UIPageViewControllerNavigationDirectionForward
+                        animated:NO
+                      completion:nil];
+    }
 }
 
 - (void)logout
@@ -454,60 +353,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                                   completion:nil];
 }
 
-
 #pragma mark - FFEventsProtocol
 
 - (NSString*)marketId
 {
     return self.selectedMarket.objId;
-}
-
-#pragma mark -
-
-- (void)getWorldCupData
-{
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    
-    __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:@""
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    
-    [[FFWCManager shared] fetchDataForSession:self.session
-                           dataWithCompletion:^(BOOL success) {
-                               if (success) {
-                                   self.cupWinnerController.category = FFWCCupWinner;
-                                   self.cupWinnerController.candidates = [NSArray arrayWithArray:[FFWCManager shared].cupWinners];
-                                   
-                                   self.groupWinnerController.category = FFWCGroupWinners;
-                                   self.groupWinnerController.candidates = [NSArray arrayWithArray:[FFWCManager shared].groupWinners];
-                                   self.groupWinnerController.selectedCroupIndex = 0;
-                                   
-                                   self.dailyWinsController.category = FFWCDailyWins;
-                                   self.dailyWinsController.candidates = [NSArray arrayWithArray:[FFWCManager shared].dailyWins];
-                                   
-                                   self.mvpController.category = FFWCMvp;
-                                   self.mvpController.candidates = [NSArray arrayWithArray:[FFWCManager shared].mvpCandidates];       
-                               }
-                               __weak FFPagerController *weakSelf = self;
-                               [self setViewControllers:@[[self.del getViewControllers].firstObject]
-                                              direction:UIPageViewControllerNavigationDirectionForward
-                                               animated:NO
-                                             completion:^(BOOL finished) {
-                                                 if (finished) {
-                                                     weakSelf.pager.numberOfPages = (int)[weakSelf.del getViewControllers].count;
-                                                     weakSelf.pager.currentPage = (int)[[weakSelf.del getViewControllers] indexOfObject:weakSelf.viewControllers.firstObject];
-                                                     
-                                                     [weakSelf.dailyWinsController.tableView reloadData];
-                                                     [weakSelf.cupWinnerController.tableView reloadData];
-                                                     [weakSelf.groupWinnerController.tableView reloadData];
-                                                     [weakSelf.mvpController.tableView reloadData];
-                                                 }
-                                             }];
-                               
-                               [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                               [alert hide];
-                           }];
 }
 
 @end

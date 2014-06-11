@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class FFSession;
+
 @class Reachability;
 
 @protocol FFPagerDelegate <NSObject>
