@@ -50,6 +50,9 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 //pagination stuff
 @property(nonatomic, strong) NSMutableArray *predictions;
 @property(nonatomic, assign) NSUInteger pageNumber;
+@property(nonatomic, assign) BOOL nextPageIsEmpty;
+
+@property(nonatomic, assign) BOOL needToRefresh;
 
 @end
 
@@ -107,6 +110,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 	if ( !success )
 		DLog(@"Failed to start notifier");
     self.networkStatus = [internetReachability currentReachabilityStatus];
+    
+    self.needToRefresh = YES;
 }
 
 - (void)dealloc
@@ -143,8 +148,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     
     self.unpaid = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Unpaidsubscription"] boolValue];
     
-    if (self.networkStatus != NotReachable) {
-        [self refreshWithShowingAlert:NO completion:^{
+    if (self.networkStatus != NotReachable && self.needToRefresh) {
+        [self refreshWithShowingAlert:YES completion:^{
             [self.tableView reloadData];
         }];        
     }
@@ -152,8 +157,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [self.predictions removeAllObjects];
-    self.pageNumber = 1;
+    self.needToRefresh = NO;
     [super viewWillDisappear:animated];
     [self hideTypeSelector];
 }
@@ -182,7 +186,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
             (internetStatus == NotReachable && previousStatus != NotReachable)) {
             
             if (internetStatus == NotReachable) {
-                self.pageNumber = 1;
+                [self resetPaginationData];
                 self.tableView.tableHeaderView = nil;
                 [self.tableView reloadData];
             } else {
@@ -200,7 +204,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    self.pageNumber = 1;
+    [self resetPaginationData];
     [self refreshWithShowingAlert:NO completion:^{
         [self.tableView reloadData];
         [refreshControl endRefreshing];
@@ -212,8 +216,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 - (void)predictionsTypeSelected:(FFPredictionsType)type
 {
     if (self.predictionType != type) {
-        [self.predictions removeAllObjects];
-        self.pageNumber = 1;
+        [self resetPaginationData];
     }
     self.predictionType = type;
 
@@ -267,7 +270,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         return cell;
     }
     
-    if (indexPath.row == self.predictions.count - 1 && self.predictions.count % 25 == 0) {
+    if (indexPath.row == self.predictions.count - 1 && self.predictions.count % 25 == 0 && self.nextPageIsEmpty == NO) {
         self.pageNumber++;
         [self refreshWithShowingAlert:YES completion:^{
             [self.tableView reloadData];
@@ -434,6 +437,10 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
         }
     }
     
+    if (resultSet.allObjects.count == 0) {
+        self.nextPageIsEmpty = YES;
+    }
+    
     [self.tableView reloadData];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
@@ -442,8 +449,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (void)changeHistory:(FUISegmentedControl*)segments
 {
-    [self.predictions removeAllObjects];
-    self.pageNumber = 1;
+    [self resetPaginationData];
     BOOL isHistory = segments.selectedSegmentIndex == 1;
     self.predictionState = isHistory ? FFPredictionStateFinished : FFPredictionStateSubmitted;
     [self refreshWithShowingAlert:YES completion:^{
@@ -452,6 +458,13 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 }
 
 #pragma mark - private
+
+- (void)resetPaginationData
+{
+    [self.predictions removeAllObjects];
+    self.nextPageIsEmpty = NO;
+    self.pageNumber = 1;
+}
 
 - (void)hideTypeSelector
 {
