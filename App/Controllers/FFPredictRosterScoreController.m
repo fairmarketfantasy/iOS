@@ -35,7 +35,7 @@
                                   self.delegate.roster.contestRank.integerValue];
         NSString* subTitle = self.delegate.roster.amountPaid.integerValue == 0
         ? @"Didn't win this time"
-        : [NSString stringWithFormat:@"And won %i", self.delegate.roster.amountPaid.integerValue];
+        : [NSString stringWithFormat:@"And won %i", self.delegate.roster.amountPaid.integerValue/100];
         self.scoreView.scoreLabel.text = [NSString stringWithFormat:@"%@\n%@", leaderString, subTitle];
     } else {
         self.scoreView.scoreLabel.text = @"";
