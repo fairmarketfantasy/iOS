@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FFManager.h"
 #import "FFPagerController.h"
 
 @class FFSession;
@@ -22,16 +23,12 @@ typedef NS_ENUM(NSUInteger, FFWCPredictionCategory)
     FFWCCupWinner
 };
 
-@interface FFWCManager : NSObject <FFPagerDelegate>
+@interface FFWCManager : FFManager <FFPagerDelegate>
 
 @property (nonatomic, readonly) NSMutableArray *dailyWins; //array of WCTeams*
 @property (nonatomic, readonly) NSMutableArray *mvpCandidates; //array of WCPlayer*
 @property (nonatomic, readonly) NSMutableArray *groupWinners; //array of WCGroup*
 @property (nonatomic, readonly) NSMutableArray *cupWinners; //array of WCTeams*
-
-+ (FFWCManager*)shared;
-
-- (void)setupWithSession:(FFSession *)session andPagerController:(UIPageViewController *)pager;
 
 - (void)fetchDataForSession:(FFSession *)session dataWithCompletion:(void(^)(BOOL success))block;
 - (NSString *)stringForWCCategory:(FFWCPredictionCategory)category;

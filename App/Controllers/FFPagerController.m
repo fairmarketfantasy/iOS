@@ -34,14 +34,16 @@
 #import "FFTeam.h"
 #import "FFNonFantasyGame.h"
 #import "FFSessionManager.h"
-#import "FFWCManager.h"
 #import <SBData/SBTypes.h>
 
+#import "FFManager.h"
+#import "FFWCManager.h"
 #import "FFFantasyManager.h"
 #import "FFNonFantasyManager.h"
 
+
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
-FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
+FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
 {
     __block BOOL _rosterIsCreating;
 }
@@ -58,6 +60,8 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
 @property(nonatomic, assign) BOOL unpaid;
+
+@property (nonatomic, strong) FFManager *manager;
 
 @end
 
@@ -140,20 +144,18 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
     
     if (self.isFirstLaunch) {
         if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:FANTASY_SPORTS]) {
-            self.del = [FFFantasyManager shared];
-            [[FFFantasyManager shared] setupWithSession:self.session andPagerController:self];
-            
+            self.manager = [[FFFantasyManager alloc] initWithSession:self.session];
         } else if ([[[FFSessionManager shared] currentCategoryName] isEqualToString:@"sports"]) {
             if ([[[FFSessionManager shared] currentSportName] isEqualToString:FOOTBALL_WC]) {
-                self.del = [FFWCManager shared];
-                [[FFWCManager shared] setupWithSession:self.session andPagerController:self];
+                self.manager = [[FFWCManager alloc] initWithSession:self.session];
             } else {
-                self.del = [FFNonFantasyManager shared];
-                [[FFNonFantasyManager shared] setupWithSession:self.session andPagerController:self];
+                self.manager = [[FFNonFantasyManager alloc] initWithSession:self.session];
             }
         }
         
-        [self setViewControllers:@[[self.del getViewControllers].firstObject]
+        self.manager.delegate = self;
+        
+        [self setViewControllers:@[[self.manager getViewControllers].firstObject]
                        direction:UIPageViewControllerNavigationDirectionForward
                         animated:NO
                       completion:nil];
@@ -163,8 +165,8 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
     
     self.isFirstLaunch = NO;
     
-    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
-    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
+    self.pager.numberOfPages = (int)[self.manager getViewControllers].count;
+    self.pager.currentPage = (int)[[self.manager getViewControllers] indexOfObject:self.viewControllers.firstObject];
     
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
@@ -221,7 +223,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
         vc.delegate = self;
     } else if ([segue.identifier isEqualToString:@"GotoPT"]) {
         FFPTController* vc = segue.destinationViewController;
-        vc.delegate = self;
+//        vc.delegate = self;
         vc.player = (FFPlayer*)sender;
     } else if ([segue.identifier isEqualToString:@"GotoPredictions"]) {
         // TODO: implement
@@ -251,7 +253,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
 - (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
      viewControllerBeforeViewController:(UIViewController*)viewController
 {
-    NSUInteger index = [[self.del getViewControllers] indexOfObject:viewController];
+    NSUInteger index = [[self.manager getViewControllers] indexOfObject:viewController];
     if (index == NSNotFound) {
         WTFLog;
         return nil;
@@ -259,21 +261,21 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
     if (index == 0) {
         return nil;
     }
-    return [self.del getViewControllers][--index];
+    return [self.manager getViewControllers][--index];
 }
 
 - (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
       viewControllerAfterViewController:(UIViewController*)viewController
 {
-    NSUInteger index = [[self.del getViewControllers] indexOfObject:viewController];
+    NSUInteger index = [[self.manager getViewControllers] indexOfObject:viewController];
     if (index == NSNotFound) {
         WTFLog;
         return nil;
     }
-    if (index == [self.del getViewControllers].count - 1) {
+    if (index == [self.manager getViewControllers].count - 1) {
         return nil;
     }
-    return [self.del getViewControllers][++index];
+    return [self.manager getViewControllers][++index];
 }
 
 #pragma mark - UIPageViewControllerDelegate
@@ -287,7 +289,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFEventsProtocol>
     if (!completed) {
         return;
     }
-    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:
+    self.pager.currentPage = (int)[[self.manager getViewControllers] indexOfObject:
                                    self.viewControllers.firstObject];
     
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
@@ -324,31 +326,24 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [[FFSessionManager shared] saveCurrentCategory:category andSport:sport];
     
     if ([category isEqualToString:FANTASY_SPORTS]) {
-        self.del = [FFFantasyManager shared];
-        [[FFFantasyManager shared] setupWithSession:self.session andPagerController:self];
+        self.manager = [[FFFantasyManager alloc] initWithSession:self.session];
     } else if ([category isEqualToString:@"sports"]) {
         if ([sport isEqual:FOOTBALL_WC]) {
-            self.del = [FFWCManager shared];
-            [[FFWCManager shared] setupWithSession:self.session andPagerController:self];
+            self.manager = [[FFWCManager alloc] initWithSession:self.session];
         } else {
-            self.del = [FFNonFantasyManager shared];
-            [[FFNonFantasyManager shared] setupWithSession:self.session andPagerController:self];
+            self.manager = [[FFNonFantasyManager alloc] initWithSession:self.session];
         }
     }
     
-    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
-    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
+    self.manager.delegate = self;
+//    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
+//    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
     
-    [self setViewControllers:@[[self.del getViewControllers].firstObject]
+    [self setViewControllers:@[[self.manager getViewControllers].firstObject]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:NO
                   completion:nil];
-}
 
-- (void)updatePager
-{
-    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
-    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
 }
 
 - (void)logout
@@ -358,11 +353,32 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                                   completion:nil];
 }
 
-#pragma mark - FFEventsProtocol
+#pragma mark - FFManagerDelegate
 
-- (NSString*)marketId
+- (void)shouldSetViewController
 {
-    return self.selectedMarket.objId;
+    [self setViewControllers:@[[self.manager getViewControllers].firstObject]
+                   direction:UIPageViewControllerNavigationDirectionForward
+                    animated:NO
+                  completion:nil];
+}
+
+- (void)shouldSetViewController:(UIViewController *)controller
+                      direction:(UIPageViewControllerNavigationDirection)direction
+                       animated:(BOOL)animated
+                     completion:(void (^)(BOOL finished))block
+{
+    [self setViewControllers:@[controller]
+                   direction:direction
+                    animated:animated
+                  completion:block];
+    self.pager.currentPage = (int)[[self.manager getViewControllers] indexOfObject:self.viewControllers.firstObject];
+}
+
+- (void)updatePagerView
+{
+    self.pager.numberOfPages = (int)[self.manager getViewControllers].count;
+    self.pager.currentPage = (int)[[self.manager getViewControllers] indexOfObject:self.viewControllers.firstObject];
 }
 
 @end

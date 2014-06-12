@@ -19,14 +19,12 @@
 #import "FFWCPlayer.h"
 #import "FFSession.h"
 
-@interface FFWCManager() 
+@interface FFWCManager() <FFWCDelegate>
 
 @property (nonatomic, strong) FFWCController* dailyWinsController;
 @property (nonatomic, strong) FFWCController* mvpController;
 @property (nonatomic, strong) FFWCController* cupWinnerController;
 @property (nonatomic, strong) FFWCController* groupWinnerController;
-
-@property (nonatomic, strong) FFSession *session;
 
 @property (nonatomic, weak) FFPagerController *pageController;
 
@@ -34,28 +32,41 @@
 
 @implementation FFWCManager
 
-
-+ (FFWCManager*)shared
+- (id)initWithSession:(FFSession *)session
 {
-    static dispatch_once_t onceToken;
-    static FFWCManager* shared;
-    dispatch_once(&onceToken, ^{
-        shared = [self new];
-    });
-    return shared;
+    self = [super initWithSession:session];
+    if (self) {
+        self.dailyWinsController = [[FFWCController alloc] init];
+        self.cupWinnerController = [[FFWCController alloc] init];
+        self.groupWinnerController = [[FFWCController alloc] init];
+        self.mvpController = [[FFWCController alloc] init];
+        
+        [self getWorldCupData];
+    }
+    return self;
 }
 
-- (void)setupWithSession:(FFSession *)session andPagerController:(UIPageViewController *)pager
+- (NSArray*)getViewControllers
 {
-    self.dailyWinsController = [[FFWCController alloc] init];
-    self.cupWinnerController = [[FFWCController alloc] init];
-    self.groupWinnerController = [[FFWCController alloc] init];
-    self.mvpController = [[FFWCController alloc] init];
-
-    self.session = session;
-    self.pageController = pager;
+    NSMutableArray *controllers = [NSMutableArray array];
+    if (self.dailyWinsController.candidates.count > 0 /*|| self.networkStatus == NotReachable*/) {
+        [controllers addObject:self.dailyWinsController];
+    }
+    if (self.cupWinnerController.candidates.count > 0 /*|| self.networkStatus == NotReachable*/) {
+        [controllers addObject:self.cupWinnerController];
+    }
+    if (self.groupWinnerController.candidates.count > 0 /*|| self.networkStatus == NotReachable*/) {
+        [controllers addObject:self.groupWinnerController];
+    }
+    if (self.mvpController.candidates.count > 0/*|| self.networkStatus == NotReachable*/) {
+        [controllers addObject:self.mvpController];
+    }
     
-    [self getWorldCupData];
+    if (controllers.count == 0) {
+        [controllers addObject:self.dailyWinsController];
+    }
+    
+    return [NSArray arrayWithArray:controllers];
 }
 
 - (void)getWorldCupData
@@ -74,23 +85,26 @@
                if (success) {
                    self.cupWinnerController.category = FFWCCupWinner;
                    self.cupWinnerController.candidates = [NSArray arrayWithArray:self.cupWinners];
+                   self.cupWinnerController.delegate = self;
                    
                    self.groupWinnerController.category = FFWCGroupWinners;
                    self.groupWinnerController.candidates = [NSArray arrayWithArray:self.groupWinners];
                    self.groupWinnerController.selectedCroupIndex = 0;
+                   self.groupWinnerController.delegate = self;
                    
                    self.dailyWinsController.category = FFWCDailyWins;
                    self.dailyWinsController.candidates = [NSArray arrayWithArray:self.dailyWins];
+                   self.dailyWinsController.delegate = self;
                    
                    self.mvpController.category = FFWCMvp;
                    self.mvpController.candidates = [NSArray arrayWithArray:self.mvpCandidates];
+                   self.mvpController.delegate = self;
                    
-                   [self.pageController setViewControllers:@[[self getViewControllers].firstObject]
-                                                 direction:UIPageViewControllerNavigationDirectionForward
-                                                  animated:NO
-                                                completion:nil];
-                   
-                   [self.pageController updatePager];
+                   [self.delegate shouldSetViewController:[self getViewControllers].firstObject
+                                                direction:UIPageViewControllerNavigationDirectionForward
+                                                 animated:YES
+                                               completion:nil];
+                   [self.delegate updatePagerView];
                    
                    [self.dailyWinsController.tableView reloadData];
                    [self.cupWinnerController.tableView reloadData];
@@ -144,31 +158,6 @@
                                          if (block)
                                              block(NO);
                                      }];
-}
-
-#pragma mark - FFPagerDelegate
-
-- (NSArray*)getViewControllers
-{
-    NSMutableArray *controllers = [NSMutableArray array];
-    if (self.dailyWinsController.candidates.count > 0 /*|| self.networkStatus == NotReachable*/) {
-        [controllers addObject:self.dailyWinsController];
-    }
-    if (self.cupWinnerController.candidates.count > 0 /*|| self.networkStatus == NotReachable*/) {
-        [controllers addObject:self.cupWinnerController];
-    }
-    if (self.groupWinnerController.candidates.count > 0 /*|| self.networkStatus == NotReachable*/) {
-        [controllers addObject:self.groupWinnerController];
-    }
-    if (self.mvpController.candidates.count > 0/*|| self.networkStatus == NotReachable*/) {
-        [controllers addObject:self.mvpController];
-    }
-    
-    if (controllers.count == 0) {
-        [controllers addObject:self.dailyWinsController];
-    }
-    
-    return [NSArray arrayWithArray:controllers];
 }
 
 #pragma mark

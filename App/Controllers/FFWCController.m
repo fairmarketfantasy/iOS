@@ -314,7 +314,7 @@
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    FOOTBALL_WC, @"sport",
-                                   [[FFWCManager shared] stringForWCCategory:self.category], @"prediction_type",
+                                   [self.delegate stringForWCCategory:self.category], @"prediction_type",
                                    player.statsId, @"predictable_id",
                                    nil];
     
@@ -337,7 +337,7 @@
         [FFIndividualPrediction submitPredictionForSession:self.session
                                                     params:params
                                                    success:^(id successObj) {
-                                                       [[FFWCManager shared] disablePTForPlayer:player];
+                                                       [self.delegate disablePTForPlayer:player];
                                                        [self.tableView reloadData];
                                                        [alert hide];
                                                        
@@ -364,7 +364,7 @@
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
                                    FOOTBALL_WC, @"sport",
-                                   [[FFWCManager shared] stringForWCCategory:self.category], @"prediction_type",
+                                   [self.delegate stringForWCCategory:self.category], @"prediction_type",
                                    team.statsId, @"predictable_id",
                                    nil];
     if (game) {
@@ -392,7 +392,7 @@
         [FFIndividualPrediction submitPredictionForSession:self.session
                                                     params:params
                                                    success:^(id successObj) {
-                                                       [[FFWCManager shared] disablePTForTeam:team
+                                                       [self.delegate disablePTForTeam:team
                                                                                        inGame:game
                                                                                    inCategory:self.category];
                                                        [self.tableView reloadData];

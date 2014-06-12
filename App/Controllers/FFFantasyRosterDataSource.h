@@ -29,6 +29,8 @@
 - (NSArray *)allPositions;
 - (NSArray *)uniquePositions;
 
+- (void)showIndividualPredictionForSender:(UIViewController *)controller andPlayer:(FFPlayer *)player;
+
 @end
 
 @protocol FFFantasyRosterDelegate <NSObject>

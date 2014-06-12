@@ -8,13 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "FFPagerController.h"
+#import "FFPTController.h"
+#import "FFManager.h"
 
 @class FFSession;
 
-@interface FFFantasyManager : NSObject <FFPagerDelegate>
-
-+ (FFFantasyManager*)shared;
-
-- (void)setupWithSession:(FFSession *)session andPagerController:(UIPageViewController *)pager;
+@interface FFFantasyManager : FFManager <FFPagerDelegate, FFEventsProtocol>
 
 @end

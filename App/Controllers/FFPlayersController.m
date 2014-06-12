@@ -23,7 +23,6 @@
 #import "FFDate.h"
 #import "FFMarketSet.h"
 #import "FFPathImageView.h"
-#import "FFPTController.h"
 #import "FFAlertView.h"
 #import "Reachability.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
@@ -225,8 +224,6 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
          @strongify(self)
          self.isServerError = NO;
          self.players = successObj;
-         //         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-         //                       withRowAnimation:UITableViewRowAnimationAutomatic];
          if(alert)
              [alert hide];
          if (block)
@@ -236,8 +233,6 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
      ^(NSError *error) {
          @strongify(self)
          self.players = @[];
-         //         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-         //                       withRowAnimation:UITableViewRowAnimationAutomatic];
          if(alert)
              [alert hide];
          if (block)
@@ -416,8 +411,9 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{
                            @strongify(self)
-                           [self.parentViewController performSegueWithIdentifier:@"GotoPT"
-                                                                          sender:player]; // TODO: refactode it (?)
+                           [self.dataSource showIndividualPredictionForSender:self andPlayer:player];
+//                           [self.parentViewController performSegueWithIdentifier:@"GotoPT"
+//                                                                          sender:player]; // TODO: refactode it (?)
                        }];
         [cell.addButton setAction:kUIButtonBlockTouchUpInside
                         withBlock:^{

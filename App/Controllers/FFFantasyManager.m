@@ -10,6 +10,7 @@
 #import "FFFantasyRosterController.h"
 #import "FFPlayersController.h"
 #import "FFPagerController.h"
+#import "FFPTController.h"
 
 #import "FFFantasyRosterDataSource.h"
 
@@ -21,11 +22,10 @@
 #import "FFRoster.h"
 
 @interface FFFantasyManager() <SBDataObjectResultSetDelegate, FFFantasyRosterDataSource,
-FFFantasyRosterDelegate, FFPlayersProtocol>
+FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
 
 @property (nonatomic, strong) FFFantasyRosterController *rosterController;
 @property (nonatomic, strong) FFPlayersController *playersController;
-@property (nonatomic, strong) FFSession *session;
 
 @property (nonatomic, strong) FFMarketSet* marketsSetRegular;
 @property (nonatomic, strong) FFMarketSet* marketsSetSingle;
@@ -38,52 +38,44 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
 @property (nonatomic, assign) BOOL rosterIsCreating;
 @property (nonatomic, assign) BOOL unpaid;
 
-@property (nonatomic, weak) UIPageViewController *pageController;
-
 @end
 
 @implementation FFFantasyManager
 
-+ (FFFantasyManager*)shared
+- (id)initWithSession:(FFSession *)session
 {
-    static dispatch_once_t onceToken;
-    static FFFantasyManager* shared;
-    dispatch_once(&onceToken, ^{
-        shared = [self new];
-    });
-    return shared;
+    self = [super initWithSession:session];
+    if (self) {
+        self.rosterController = [FFFantasyRosterController new];
+        self.rosterController.delegate = self;
+        self.rosterController.dataSource = self;
+        
+        self.playersController = [FFPlayersController new];
+        self.playersController.delegate = self;
+        self.playersController.dataSource = self;
+        
+        self.rosterController.session = session;
+        self.playersController.session = session;
+        
+        self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                      session:self.session authorized:YES];
+        self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                     session:self.session authorized:YES];
+        self.marketsSetRegular.delegate = self;
+        self.marketsSetSingle.delegate = self;
+        
+        [self fetchPositionsNames];
+        [self updateMarkets];
+    }
+    return self;
 }
 
-- (void)setupWithSession:(FFSession *)session andPagerController:(UIPageViewController *)pager
+- (NSArray *)getViewControllers
 {
-    self.rosterController = [FFFantasyRosterController new];
-    self.rosterController.delegate = self;
-    self.rosterController.dataSource = self;
-    
-    self.playersController = [FFPlayersController new];
-    self.playersController.delegate = self;
-    self.playersController.dataSource = self;
-    
-    self.pageController = pager;
-    
-    self.session = session;
-    self.rosterController.session = session;
-    self.playersController.session = session;
-    
-    self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-                                                                  session:self.session authorized:YES];
-    self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
-                                                                 session:self.session authorized:YES];
-    self.marketsSetRegular.delegate = self;
-    self.marketsSetSingle.delegate = self;
-    
-    [self fetchPositionsNames];
-    [self updateMarkets];
-    
-//    [self.pageController setViewControllers:@[self.rosterController]
-//                                  direction:UIPageViewControllerNavigationDirectionForward
-//                                   animated:NO
-//                                 completion:nil];
+    return @[
+             self.rosterController,
+             self.playersController
+             ];
 }
 
 - (void)updateMarkets
@@ -146,16 +138,6 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
             [self.playersController.tableView reloadData];
         }
     }
-}
-
-#pragma mark - FFPagerDelegate
-
-- (NSArray *)getViewControllers
-{
-    return @[
-             self.rosterController,
-             self.playersController
-             ];
 }
 
 #pragma mark - Manage My Team
@@ -252,7 +234,19 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
     }
 }
 
+#pragma mark - FFEventsProtocol
+
+- (NSString*)marketId
+{
+    return self.selectedMarket.objId;
+}
+
 #pragma mark - DataSource
+
+- (void)showIndividualPredictionForSender:(UIViewController *)controller andPlayer:(FFPlayer *)player
+{
+//    [self.pageController performSegueWithIdentifier:@"GotoPT" sender:player];
+}
 
 - (NSString*)rosterId
 {
@@ -343,7 +337,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.pageController.navigationController.view];
+    [alert showInView:self.rosterController.view];
     
     @weakify(self)
     [FFRoster createNewRosterForMarket:self.selectedMarket.objId
@@ -397,29 +391,27 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
 
 - (void)addPlayer:(FFPlayer*)player
 {
-    //    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Buying Player"
-    //                                                           messsage:nil
-    //                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    //    [alert showInView:self.navigationController.view];
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Buying Player"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.playersController.view];
     @weakify(self)
     [self.roster addPlayer:player
                    success:
      ^(id successObj) {
          @strongify(self)
+         [alert hide];
          [self addPlayerToMyTeam:player];
          [self.rosterController refreshRosterWithShowingAlert:YES completion:nil];
-         [self.pageController setViewControllers:@[self.rosterController]
-                                       direction:UIPageViewControllerNavigationDirectionReverse
-                                        animated:YES
-                                      completion:nil];
-         
-         //         self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
-         //                                        self.viewControllers.firstObject];
+         [self.delegate shouldSetViewController:self.rosterController
+                                      direction:UIPageViewControllerNavigationDirectionReverse
+                                       animated:YES
+                                     completion:nil];
      }
                    failure:
      ^(NSError *error) {
          @strongify(self)
-         //         [alert hide];
+         [alert hide];
          
          //show this alert cause unclear situation:
          //1)user has choosen player on some position
@@ -459,17 +451,13 @@ FFFantasyRosterDelegate, FFPlayersProtocol>
 - (void)showPosition:(NSString*)position
 {
     @weakify(self)
-    [self.pageController setViewControllers:@[self.playersController]
-                                  direction:UIPageViewControllerNavigationDirectionForward
-                                   animated:YES
-                                 completion:
-     ^(BOOL finished) {
-         @strongify(self)
-         //         self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
-         //                                        self.viewControllers.firstObject];
-         
-         [self.playersController showPosition:position];
-     }];
+    [self.delegate shouldSetViewController:self.playersController
+                                 direction:UIPageViewControllerNavigationDirectionForward
+                                  animated:YES
+                                completion:^(BOOL finished) {
+                                    @strongify(self)
+                                    [self.playersController showPosition:position];
+                                }];
 }
 
 - (void)removePlayer:(FFPlayer*)player completion:(void(^)(BOOL success))block

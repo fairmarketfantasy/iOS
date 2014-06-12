@@ -23,10 +23,6 @@
 @property (nonatomic, strong) FFNonFantasyRosterController *rosterController;
 @property (nonatomic, strong) FFGamesController *gamesController;
 
-@property (nonatomic, strong) FFSession *session;
-
-@property (nonatomic, weak) UIPageViewController *pageController;
-
 @property(nonatomic, strong) NSMutableArray *games;
 @property(nonatomic, strong) NSMutableArray *selectedTeams;
 
@@ -34,41 +30,35 @@
 
 @implementation FFNonFantasyManager
 
-+ (FFNonFantasyManager*)shared
+- (id)initWithSession:(FFSession *)session
 {
-    static dispatch_once_t onceToken;
-    static FFNonFantasyManager* shared;
-    dispatch_once(&onceToken, ^{
-        shared = [self new];
-    });
-    return shared;
+    self = [super initWithSession:session];
+    if (self) {
+        self.selectedTeams = [NSMutableArray array];
+        
+        self.rosterController = [FFNonFantasyRosterController new];
+        self.rosterController.delegate = self;
+        self.rosterController.dataSource = self;
+        
+        self.gamesController = [FFGamesController new];
+        self.gamesController.delegate = self;
+        self.gamesController.dataSource = self;
+        
+        self.rosterController.session = session;
+        self.gamesController.session = session;
+        
+        [self updateGames];
+    }
+    
+    return self;
 }
 
-- (void)setupWithSession:(FFSession *)session andPagerController:(UIPageViewController *)pager
+- (NSArray *)getViewControllers
 {
-    self.selectedTeams = [NSMutableArray array];
-    
-    self.rosterController = [FFNonFantasyRosterController new];
-    self.rosterController.delegate = self;
-    self.rosterController.dataSource = self;
-    
-    self.gamesController = [FFGamesController new];
-    self.gamesController.delegate = self;
-    self.gamesController.dataSource = self;
-    
-    self.pageController = pager;
-    
-    self.session = session;
-    self.rosterController.session = session;
-    self.gamesController.session = session;
-    
-    [self.selectedTeams removeAllObjects];
-    [self updateGames];
-    
-//    [self.pageController setViewControllers:@[self.rosterController]
-//                                  direction:UIPageViewControllerNavigationDirectionReverse
-//                                   animated:NO
-//                                 completion:nil];
+    return @[
+             self.rosterController,
+             self.gamesController
+             ];
 }
 
 - (void)updateGames
@@ -119,18 +109,6 @@
             }
         }
     }
-}
-
-#pragma mark
-
-- (NSArray *)availableGames
-{
-    return self.games;
-}
-
-- (NSArray *)teams
-{
-    return self.selectedTeams;
 }
 
 #pragma mark
@@ -249,18 +227,27 @@
     [self setTeam:newTeam selected:YES];
     [self.selectedTeams addObject:newTeam];
     
-    [self.pageController setViewControllers:@[self.rosterController]
-                                  direction:UIPageViewControllerNavigationDirectionReverse
-                                   animated:YES
-                                 completion:nil];
-    
-//    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:
-//                                   self.viewControllers.firstObject];
+    [self.delegate shouldSetViewController:self.rosterController
+                                 direction:UIPageViewControllerNavigationDirectionReverse
+                                  animated:YES
+                                completion:nil];
     
     [self.rosterController reloadWithServerError:NO];
 }
 
-#pragma mark 
+#pragma mark - FFNonFantasyRosterDataSource
+
+- (NSArray *)availableGames
+{
+    return self.games;
+}
+
+- (NSArray *)teams
+{
+    return self.selectedTeams;
+}
+
+#pragma mark - FFNonFantasyRosterDelegate
 
 - (void)removeTeam:(FFTeam *)removedTeam
 {
@@ -274,41 +261,28 @@
     
     [self.rosterController.tableView reloadData];
     
-    __weak FFNonFantasyManager *weakSelf = self;
-    [self.pageController setViewControllers:@[self.gamesController]
-                                  direction:UIPageViewControllerNavigationDirectionForward
-                                   animated:YES
-                                 completion:^(BOOL finished) {
-                                     if (finished)
-//                                         weakSelf.pager.currentPage = (int)[[weakSelf getViewControllers] indexOfObject:
-//                                                                            weakSelf.viewControllers.firstObject];
-                                     [weakSelf.rosterController.tableView reloadData];
-                                 }];
+    [self.delegate shouldSetViewController:self.gamesController
+                                 direction:UIPageViewControllerNavigationDirectionForward
+                                  animated:YES
+                                completion:nil];
 }
 
 - (void)showAvailableGames
 {
-    [self.pageController setViewControllers:@[self.gamesController]
-                                  direction:UIPageViewControllerNavigationDirectionForward
-                                   animated:YES
-                                 completion:nil];
-    
-//    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:
-//                                   self.viewControllers.firstObject];
+    [self.delegate shouldSetViewController:self.gamesController
+                                 direction:UIPageViewControllerNavigationDirectionForward
+                                  animated:YES
+                                completion:nil];
 }
 
 - (void)autoFillWithCompletion:(void(^)(BOOL success))block
 {
     [self deselectAllTeams];
     
-//    if (self.pager.currentPage == 1) {
-//        [self setViewControllers:@[self.teamController]
-//                       direction:UIPageViewControllerNavigationDirectionReverse
-//                        animated:YES
-//                      completion:nil];
-//        self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:
-//                                       self.viewControllers.firstObject];
-//    }
+    [self.delegate shouldSetViewController:self.rosterController
+                                 direction:UIPageViewControllerNavigationDirectionReverse
+                                  animated:YES
+                                completion:nil];
     
     [FFRoster autofillForSession:self.session
                          success:^(id successObj) {
@@ -354,16 +328,6 @@
                                           if (block)
                                               block(NO);
                                       }];
-}
-
-#pragma mark - FFPagerDelegate
-
-- (NSArray *)getViewControllers
-{
-    return @[
-             self.rosterController,
-             self.gamesController
-             ];
 }
 
 @end
