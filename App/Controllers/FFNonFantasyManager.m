@@ -15,7 +15,7 @@
 
 #import "FFNonFantasyGame.h"
 #import "FFTeam.h"
-#import "FFEvent.h"
+#import "FFIndividualPrediction.h"
 #import "FFRoster.h"
 
 @interface FFNonFantasyManager() <FFNonFantasyRosterDataSource, FFNonFantasyRosterDelegate, FFGamesProtocol>
@@ -175,17 +175,20 @@
                                                            loadingStyle:FFAlertViewLoadingStylePlain];
         [alert showInView:self.rosterController.navigationController.view];
         
-        [FFEvent fetchEventsForTeam:team.statsId
-                             inGame:team.gameStatsId
-                            session:self.session
-                            success:^(id successObj) {
-                                [self disablePTForTeam:team];
-                                [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                                                                 withRowAnimation:UITableViewRowAnimationAutomatic];
-                                [alert hide];
-                            } failure:^(NSError *error) {
-                                [alert hide];
-                            }];
+        
+        
+        [FFIndividualPrediction submitPredictionForTeam:team.statsId
+                                                 inGame:team.gameStatsId
+                                                session:self.session
+                                                success:^(id successObj) {
+                                                    [self disablePTForTeam:team];
+                                                    [self.gamesController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                                                                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                                                    [alert hide];
+
+                                                } failure:^(NSError *error) {
+                                                    [alert hide];
+                                                }];
         [confirmAlert hide];
     };
     

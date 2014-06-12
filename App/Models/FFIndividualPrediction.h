@@ -29,4 +29,10 @@
                            success:(SBSuccessBlock)success
                            failure:(SBErrorBlock)failure;
 
++ (void)submitPredictionForTeam:(NSString *)teamId
+                         inGame:(NSString *)gameId
+                        session:(SBSession*)session
+                        success:(SBSuccessBlock)success
+                        failure:(SBErrorBlock)failure;
+
 @end

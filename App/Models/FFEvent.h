@@ -30,10 +30,4 @@
                                success:(SBSuccessBlock)success
                                failure:(SBErrorBlock)failure;
 
-+ (void)fetchEventsForTeam:(NSString *)teamId
-                    inGame:(NSString *)gameId
-                   session:(SBSession*)session
-                   success:(SBSuccessBlock)success
-                   failure:(SBErrorBlock)failure;
-
 @end

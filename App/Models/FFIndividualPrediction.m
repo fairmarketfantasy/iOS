@@ -92,4 +92,27 @@
                                      }];
 }
 
++ (void)submitPredictionForTeam:(NSString *)teamId
+                         inGame:(NSString *)gameId
+                        session:(SBSession*)session
+                        success:(SBSuccessBlock)success
+                        failure:(SBErrorBlock)failure
+{
+    NSDictionary *params = @{
+                             @"game_stats_id" : gameId,
+                             @"team_stats_id" : teamId
+                             };
+    
+    [session authorizedJSONRequestWithMethod:@"POST"
+                                        path:@"/game_predictions"
+                                   paramters:params
+                                     success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+                                         if(success)
+                                             success(JSON);
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+                                         if (failure)
+                                             failure(error);
+                                     }];
+}
+
 @end
