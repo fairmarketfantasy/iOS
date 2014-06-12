@@ -8,8 +8,6 @@
 
 #import "FFPagerController.h"
 #import "FFMenuViewController.h"
-#import "FFYourTeamController.h"
-#import "FFWideReceiverController.h"
 #import "FFPTController.h"
 #import "FFWCController.h"
 #import "FFStyle.h"
@@ -22,7 +20,6 @@
 #import "Reachability.h"
 // model
 #import "FFControllerProtocol.h"
-#import "FFYourTeamDataSource.h"
 #import "FFMarketSet.h"
 #import "FFMarket.h"
 #import "FFEvent.h"
@@ -44,24 +41,14 @@
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
 FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
-{
-    __block BOOL _rosterIsCreating;
-}
 
-@property(nonatomic) StyledPageControl* pager;
-
-@property(nonatomic) UIButton* globalMenuButton;
-
-@property(nonatomic, assign) NetworkStatus networkStatus;
-@property(nonatomic, assign) BOOL isFirstLaunch;
-
-@property(nonatomic) FFMarket* selectedMarket;
-
-@property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
-
-@property(nonatomic, assign) BOOL unpaid;
-
+@property (nonatomic, strong) StyledPageControl* pager;
+@property (nonatomic, strong) UIButton* globalMenuButton;
 @property (nonatomic, strong) FFManager *manager;
+@property (nonatomic, assign) NetworkStatus networkStatus;
+@property (nonatomic, assign) BOOL isFirstLaunch;
+@property (nonatomic, assign) NSUInteger tryCreateRosterTimes;
+@property (nonatomic, assign) BOOL unpaid;
 
 @end
 
@@ -78,7 +65,6 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
         self.delegate = self;
         
         self.isFirstLaunch = YES;
-        _rosterIsCreating = NO;
     }
     
     return self;
@@ -159,8 +145,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
                        direction:UIPageViewControllerNavigationDirectionForward
                         animated:NO
                       completion:nil];
-    
-        [self.view bringSubviewToFront:self.pager];
+//        [self.view bringSubviewToFront:self.pager];
     }
     
     self.isFirstLaunch = NO;

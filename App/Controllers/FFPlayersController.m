@@ -7,7 +7,6 @@
 //
 
 #import "FFPlayersController.h"
-#import "FFYourTeamDataSource.h"
 #import "FFWideReceiverTable.h"
 #import "FFWideReceiverCell.h"
 #import "FFTeamAddCell.h"

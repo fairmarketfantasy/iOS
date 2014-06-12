@@ -7,12 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FFPagerController.h"
 #import "FFPTController.h"
 #import "FFManager.h"
 
 @class FFSession;
 
-@interface FFFantasyManager : FFManager <FFPagerDelegate, FFEventsProtocol>
+@interface FFFantasyManager : FFManager <FFEventsProtocol>
 
 @end

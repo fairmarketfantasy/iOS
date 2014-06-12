@@ -7,10 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-#import "FFYourTeamDataSource.h"
 #import "FFBaseViewController.h"
-
 #import "FFFantasyRosterDataSource.h"
 
 @class Reachability;

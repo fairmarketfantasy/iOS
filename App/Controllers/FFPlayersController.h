@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "FFBaseViewController.h"
-#import "FFYourTeamDataSource.h"
-
 #import "FFFantasyRosterDataSource.h"
 
 @class FFPlayer;

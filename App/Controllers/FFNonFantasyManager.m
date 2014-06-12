@@ -175,8 +175,6 @@
                                                            loadingStyle:FFAlertViewLoadingStylePlain];
         [alert showInView:self.rosterController.navigationController.view];
         
-        
-        
         [FFIndividualPrediction submitPredictionForTeam:team.statsId
                                                  inGame:team.gameStatsId
                                                 session:self.session
@@ -185,7 +183,7 @@
                                                     [self.gamesController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                                                                                   withRowAnimation:UITableViewRowAnimationAutomatic];
                                                     [alert hide];
-
+                                                    
                                                 } failure:^(NSError *error) {
                                                     [alert hide];
                                                 }];

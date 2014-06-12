@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FFPagerController.h"
 #import "FFSession.h"
 #import "FFManager.h"
 
-@interface FFNonFantasyManager : FFManager <FFPagerDelegate>
+@interface FFNonFantasyManager : FFManager
 
 @end

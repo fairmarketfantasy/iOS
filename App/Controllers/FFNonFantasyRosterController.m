@@ -7,7 +7,6 @@
 //
 
 #import "FFNonFantasyRosterController.h"
-#import "FFYourTeamController.h"
 #import "FFSessionViewController.h"
 #import "FFTeamTable.h"
 #import "FFAutoFillCell.h"

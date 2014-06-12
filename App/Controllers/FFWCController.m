@@ -21,7 +21,6 @@
 #import "FFWCPlayer.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "Reachability.h"
-#import "FFYourTeamDataSource.h"
 
 @interface FFWCController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 {

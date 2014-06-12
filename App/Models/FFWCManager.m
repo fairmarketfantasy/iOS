@@ -7,11 +7,8 @@
 //
 
 #import "FFWCManager.h"
-
-#import "FFPagerController.h"
 #import "FFWCController.h"
 #import "FFAlertView.h"
-
 #import "FFSession.h"
 #import "FFWCGame.h"
 #import "FFWCGroup.h"
@@ -26,7 +23,10 @@
 @property (nonatomic, strong) FFWCController* cupWinnerController;
 @property (nonatomic, strong) FFWCController* groupWinnerController;
 
-@property (nonatomic, weak) FFPagerController *pageController;
+@property (nonatomic, strong) NSMutableArray *dailyWins; //array of WCTeams*
+@property (nonatomic, strong) NSMutableArray *mvpCandidates; //array of WCPlayer*
+@property (nonatomic, strong) NSMutableArray *groupWinners; //array of WCGroup*
+@property (nonatomic, strong) NSMutableArray *cupWinners; //array of WCTeams*
 
 @end
 

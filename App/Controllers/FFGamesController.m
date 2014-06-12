@@ -7,24 +7,15 @@
 //
 
 #import "FFGamesController.h"
-#import "FFWideReceiverController.h"
-#import "FFYourTeamDataSource.h"
 #import "FFPagerController.h"
 #import "FFWideReceiverTable.h"
-#import "FFWideReceiverCell.h"
-#import "FFTeamAddCell.h"
 #import "FFNoConnectionCell.h"
-#import "FFCollectionMarketCell.h"
 #import "FFNonFantasyGameCell.h"
-#import "FFMarketsCell.h"
 #import "FFAutoFillCell.h"
 #import "FFRosterTableHeader.h"
-#import "FFMarketSelector.h"
 #import "FFAccountHeader.h"
 #import "FFStyle.h"
-#import "FFMarket.h"
 #import "FFDate.h"
-#import "FFMarketSet.h"
 #import "FFPathImageView.h"
 #import "FFPTController.h"
 #import "FFAlertView.h"
@@ -41,14 +32,11 @@
 #import "FFNonFantasyGame.h"
 #import "FFSessionManager.h"
 
-@interface FFGamesController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
+@interface FFGamesController () <UITableViewDataSource, UITableViewDelegate>
 
 @property(nonatomic, assign) NSUInteger position;
 @property(nonatomic, assign) NetworkStatus networkStatus;
 @property(nonatomic, assign) BOOL isServerError;
-
-@property(nonatomic) FFMarketSet* marketsSetRegular;
-@property(nonatomic) FFMarketSet* marketsSetSingle;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
 @end
@@ -87,35 +75,17 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        if (self.players.count == 0) {
-            [self fetchPlayersWithShowingAlert:NO completion:^{
-                [self.tableView reloadData];
-            }];
-        } else {
-            [self.tableView reloadData];
-        }
-    } else {
-        [self.tableView reloadData];
-    }
+    [self.tableView reloadData];
 }
 
 #pragma mark
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        [self fetchPlayersWithShowingAlert:NO completion:^{
-            [self.tableView reloadData];
-            [refreshControl endRefreshing];
-        }];
-    } else {
-        [self.delegate fetchGamesShowAlert:NO withCompletion:^{
-            [self.tableView reloadData];
-            [refreshControl endRefreshing];
-        }];
-    }
+    [self.delegate fetchGamesShowAlert:NO withCompletion:^{
+        [self.tableView reloadData];
+        [refreshControl endRefreshing];
+    }];
 }
 
 #pragma mark -

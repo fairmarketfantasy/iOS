@@ -8,7 +8,6 @@
 
 #import "FFBaseViewController.h"
 #import "FFWCManager.h"
-#import "FFYourTeamDataSource.h"
 
 @class FFSession;
 @class FFWCPlayer;
