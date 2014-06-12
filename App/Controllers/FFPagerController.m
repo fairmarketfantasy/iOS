@@ -145,7 +145,6 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
                        direction:UIPageViewControllerNavigationDirectionForward
                         animated:NO
                       completion:nil];
-//        [self.view bringSubviewToFront:self.pager];
     }
     
     self.isFirstLaunch = NO;
@@ -336,14 +335,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 }
 
 #pragma mark - FFManagerDelegate
-
-- (void)shouldSetViewController
-{
-    [self setViewControllers:@[[self.manager getViewControllers].firstObject]
-                   direction:UIPageViewControllerNavigationDirectionForward
-                    animated:NO
-                  completion:nil];
-}
 
 - (void)shouldSetViewController:(UIViewController *)controller
                       direction:(UIPageViewControllerNavigationDirection)direction

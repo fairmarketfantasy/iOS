@@ -15,7 +15,6 @@
 
 - (void)openIndividualPredictionsForPlayer:(FFPlayer *)player;
 - (void)updatePagerView;
-- (void)shouldSetViewController;
 - (void)shouldSetViewController:(UIViewController *)controller
                       direction:(UIPageViewControllerNavigationDirection)direction
                        animated:(BOOL)animated
