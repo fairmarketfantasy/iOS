@@ -15,6 +15,7 @@
 #import "FFWCTeam.h"
 #import "FFWCPlayer.h"
 #import "FFSession.h"
+#import "FFIndividualPrediction.h"
 
 @interface FFWCManager() <FFWCDelegate>
 
@@ -79,10 +80,10 @@
     [alert showInView:self.dailyWinsController.view];
     
     [self fetchDataForSession:self.session
-           dataWithCompletion:^(BOOL success) {
+           dataWithCompletion:^(NSError *error) {
                [alert hide];
                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-               if (success) {
+               if (!error) {
                    self.cupWinnerController.category = FFWCCupWinner;
                    self.cupWinnerController.candidates = [NSArray arrayWithArray:self.cupWinners];
                    self.cupWinnerController.delegate = self;
@@ -114,7 +115,7 @@
            }];
 }
 
-- (void)fetchDataForSession:(FFSession *)session dataWithCompletion:(void(^)(BOOL success))block
+- (void)fetchDataForSession:(FFSession *)session dataWithCompletion:(void(^)(NSError *error))block
 {
     NSString *path = @"home";
     [session authorizedJSONRequestWithMethod:@"GET"
@@ -151,33 +152,16 @@
                                          }
                                          
                                          if (block)
-                                             block(YES);
+                                             block(nil);
                                          
                                      } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
                                          NSLog(@" {FFWCM} : error during fetching data : %@", error);
                                          if (block)
-                                             block(NO);
+                                             block(error);
                                      }];
 }
 
 #pragma mark
-
-- (NSString *)stringForWCCategory:(FFWCPredictionCategory)category
-{
-    switch (category) {
-        case FFWCCupWinner:
-            return @"win_the_cup";
-        case FFWCGroupWinners:
-            return @"win_groups";
-        case FFWCDailyWins:
-            return @"daily_wins";
-        case FFWCMvp:
-            return @"mvp";
-            
-        default:
-            return nil;
-    }
-}
 
 - (void)disablePTInCupWinnersForTeam:(FFWCTeam *)team
 {
@@ -234,6 +218,153 @@
         default:
             break;
     }
+}
+
+#pragma mark
+
+- (NSString *)stringForWCCategory:(FFWCPredictionCategory)category
+{
+    switch (category) {
+        case FFWCCupWinner:
+            return @"win_the_cup";
+        case FFWCGroupWinners:
+            return @"win_groups";
+        case FFWCDailyWins:
+            return @"daily_wins";
+        case FFWCMvp:
+            return @"mvp";
+            
+        default:
+            return nil;
+    }
+}
+
+- (FFWCController *)controllerForWCCategory:(FFWCPredictionCategory)category
+{
+    switch (category) {
+        case FFWCCupWinner:
+            return self.cupWinnerController;
+        case FFWCGroupWinners:
+            return self.groupWinnerController;
+        case FFWCDailyWins:
+            return self.dailyWinsController;
+        case FFWCMvp:
+            return self.mvpController;
+            
+        default:
+            return nil;
+    }
+}
+
+#pragma mark - FFWCDelegate
+
+- (void)submitPredictionOnPlayer:(FFWCPlayer *)player category:(FFWCPredictionCategory)category
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   FOOTBALL_WC, @"sport",
+                                   [self stringForWCCategory:category], @"prediction_type",
+                                   player.statsId, @"predictable_id",
+                                   nil];
+    FFAlertView* confirmAlert = [[FFAlertView alloc] initWithTitle:nil
+                                                         message:[NSString stringWithFormat:@"Predict %@ ?", player.name]
+                                               cancelButtonTitle:@"Cancel"
+                                                 okayButtonTitle:@"Submit"
+                                                        autoHide:NO];
+    [confirmAlert showInView:[self controllerForWCCategory:category].view];
+    @weakify(confirmAlert)
+    @weakify(self)
+    confirmAlert.onOkay = ^(id obj) {
+        @strongify(confirmAlert)
+        @strongify(self)
+        __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Individual Predictions"
+                                                               messsage:nil
+                                                           loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:[self controllerForWCCategory:category].view];
+        
+        [FFIndividualPrediction submitPredictionForSession:self.session
+                                                    params:params
+                                                   success:^(id successObj) {
+                                                       [self disablePTForPlayer:player];
+                                                       [[self controllerForWCCategory:category].tableView reloadData];
+                                                       [alert hide];
+                                                       
+                                                       FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
+                                                                                                       message:[successObj objectForKey:@"msg"]
+                                                                                             cancelButtonTitle:nil
+                                                                                               okayButtonTitle:@"OK"
+                                                                                                      autoHide:YES];
+                                                       [alert showInView:[self controllerForWCCategory:category].view];
+                                                   } failure:^(NSError *error) {
+                                                       NSLog(@" {FFWCC} : submittion failed: %@", error);
+                                                       [alert hide];
+                                                   }];
+        [confirmAlert hide];
+    };
+    
+    confirmAlert.onCancel = ^(id obj) {
+        @strongify(confirmAlert)
+        [confirmAlert hide];
+    };
+}
+
+- (void)submitPredictionOnTeam:(FFWCTeam *)team
+                        inGame:(FFWCGame *)game
+                      category:(FFWCPredictionCategory)category
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                   FOOTBALL_WC, @"sport",
+                                   [self stringForWCCategory:category], @"prediction_type",
+                                   team.statsId, @"predictable_id",
+                                   nil];
+    if (game) {
+        [params addEntriesFromDictionary:@{
+                                           @"game_stats_id" : game.statsId
+                                           }];
+    }
+    
+    FFAlertView* confirmAlert = [FFAlertView.alloc initWithTitle:nil
+                                                         message:[NSString stringWithFormat:@"Predict %@ ?", team.name]
+                                               cancelButtonTitle:@"Cancel"
+                                                 okayButtonTitle:@"Submit"
+                                                        autoHide:NO];
+    [confirmAlert showInView:[self controllerForWCCategory:category].view];
+
+    @weakify(confirmAlert)
+    @weakify(self)
+    confirmAlert.onOkay = ^(id obj) {
+        @strongify(confirmAlert)
+        @strongify(self)
+        __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Individual Predictions"
+                                                               messsage:nil
+                                                           loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:[self controllerForWCCategory:category].view];
+        
+        [FFIndividualPrediction submitPredictionForSession:self.session
+                                                    params:params
+                                                   success:^(id successObj) {
+                                                       [self disablePTForTeam:team
+                                                                       inGame:game
+                                                                   inCategory:category];
+                                                       [[self controllerForWCCategory:category].tableView reloadData];
+                                                       [alert hide];
+                                                       
+                                                       FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
+                                                                                                       message:[successObj objectForKey:@"msg"]
+                                                                                             cancelButtonTitle:nil
+                                                                                               okayButtonTitle:@"OK"
+                                                                                                      autoHide:YES];
+                                                       [alert showInView:[self controllerForWCCategory:category].view];
+                                                   } failure:^(NSError *error) {
+                                                       NSLog(@" {FFWCC} : submittion failed: %@", error);
+                                                       [alert hide];
+                                                   }];
+        [confirmAlert hide];
+    };
+    
+    confirmAlert.onCancel = ^(id obj) {
+        @strongify(confirmAlert)
+        [confirmAlert hide];
+    };
 }
 
 @end

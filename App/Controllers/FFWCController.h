@@ -16,11 +16,12 @@
 
 @protocol FFWCDelegate <NSObject>
 
-- (void)fetchDataForSession:(FFSession *)session dataWithCompletion:(void(^)(BOOL success))block;
-- (NSString *)stringForWCCategory:(FFWCPredictionCategory)category;
-- (void)disablePTForPlayer:(FFWCPlayer *)player;
-- (void)disablePTForTeam:(FFWCTeam *)team inGame:(FFWCGame *)game inCategory:(FFWCPredictionCategory)category;
+- (void)submitPredictionOnTeam:(FFWCTeam *)team
+                        inGame:(FFWCGame *)game
+                      category:(FFWCPredictionCategory)category;
 
+- (void)submitPredictionOnPlayer:(FFWCPlayer *)player
+                        category:(FFWCPredictionCategory)category;
 @end
 
 @interface FFWCController : FFBaseViewController

@@ -160,7 +160,8 @@
                 __weak FFWCController *weakSelf = self;
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
-                                   [weakSelf submitPredictionOnTeam:team inGame:nil];
+                                   [weakSelf.delegate submitPredictionOnTeam:team inGame:nil category:self.category];
+//                                   [weakSelf submitPredictionOnTeam:team inGame:nil];
                                }];
                 return cell;
             }
@@ -179,11 +180,13 @@
                 __weak FFWCController *weakSelf = self;
                 [cell.homePTButton setAction:kUIButtonBlockTouchUpInside
                                    withBlock:^{
-                                       [weakSelf submitPredictionOnTeam:game.homeTeam inGame:game];
+                                       [weakSelf.delegate submitPredictionOnTeam:game.homeTeam inGame:game category:self.category];
+//                                       [weakSelf submitPredictionOnTeam:game.homeTeam inGame:game];
                                    }];
                 [cell.guestPTButton setAction:kUIButtonBlockTouchUpInside
                                     withBlock:^{
-                                       [weakSelf submitPredictionOnTeam:game.guestTeam inGame:game];
+                                        [weakSelf.delegate submitPredictionOnTeam:game.guestTeam inGame:game category:self.category];
+//                                       [weakSelf submitPredictionOnTeam:game.guestTeam inGame:game];
                                     }];
                 
                 return cell;
@@ -197,7 +200,8 @@
                 __weak FFWCController *weakSelf = self;
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
-                                   [weakSelf submitPredictionOnPlayer:player];
+                                   [weakSelf.delegate submitPredictionOnPlayer:player category:self.category];
+//                                   [weakSelf submitPredictionOnPlayer:player];
                                }];
                 return cell;
             }
@@ -214,7 +218,8 @@
         __weak FFWCController *weakSelf = self;
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{
-                           [weakSelf submitPredictionOnTeam:team inGame:nil];
+                           [weakSelf.delegate submitPredictionOnTeam:team inGame:nil category:self.category];
+//                           [weakSelf submitPredictionOnTeam:team inGame:nil];
                        }];
         return cell;
     }
@@ -305,115 +310,6 @@
 {
     self.selectedCroupIndex = row;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
-#pragma mark - Actions
-
-- (void)submitPredictionOnPlayer:(FFWCPlayer *)player
-{
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   FOOTBALL_WC, @"sport",
-                                   [self.delegate stringForWCCategory:self.category], @"prediction_type",
-                                   player.statsId, @"predictable_id",
-                                   nil];
-    
-    FFAlertView* confirmAlert = [FFAlertView.alloc initWithTitle:nil
-                                                         message:[NSString stringWithFormat:@"Predict %@ ?", player.name]
-                                               cancelButtonTitle:@"Cancel"
-                                                 okayButtonTitle:@"Submit"
-                                                        autoHide:NO];
-    [confirmAlert showInView:self.navigationController.view];
-    @weakify(confirmAlert)
-    @weakify(self)
-    confirmAlert.onOkay = ^(id obj) {
-        @strongify(confirmAlert)
-        @strongify(self)
-        __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Individual Predictions"
-                                                               messsage:nil
-                                                           loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
-        
-        [FFIndividualPrediction submitPredictionForSession:self.session
-                                                    params:params
-                                                   success:^(id successObj) {
-                                                       [self.delegate disablePTForPlayer:player];
-                                                       [self.tableView reloadData];
-                                                       [alert hide];
-                                                       
-                                                       FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
-                                                                                                       message:[successObj objectForKey:@"msg"]
-                                                                                             cancelButtonTitle:nil
-                                                                                               okayButtonTitle:@"OK"
-                                                                                                      autoHide:YES];
-                                                       [alert showInView:self.navigationController.view];
-                                                   } failure:^(NSError *error) {
-                                                       NSLog(@" {FFWCC} : submittion failed: %@", error);
-                                                       [alert hide];
-                                                   }];
-        [confirmAlert hide];
-    };
-    
-    confirmAlert.onCancel = ^(id obj) {
-        @strongify(confirmAlert)
-        [confirmAlert hide];
-    };
-}
-
-- (void)submitPredictionOnTeam:(FFWCTeam *)team inGame:(FFWCGame *)game
-{
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   FOOTBALL_WC, @"sport",
-                                   [self.delegate stringForWCCategory:self.category], @"prediction_type",
-                                   team.statsId, @"predictable_id",
-                                   nil];
-    if (game) {
-        [params addEntriesFromDictionary:@{
-                                           @"game_stats_id" : game.statsId
-                                           }];
-    }
-    
-    FFAlertView* confirmAlert = [FFAlertView.alloc initWithTitle:nil
-                                                         message:[NSString stringWithFormat:@"Predict %@ ?", team.name]
-                                               cancelButtonTitle:@"Cancel"
-                                                 okayButtonTitle:@"Submit"
-                                                        autoHide:NO];
-    [confirmAlert showInView:self.navigationController.view];
-    @weakify(confirmAlert)
-    @weakify(self)
-    confirmAlert.onOkay = ^(id obj) {
-        @strongify(confirmAlert)
-        @strongify(self)
-        __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Individual Predictions"
-                                                               messsage:nil
-                                                           loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
-        
-        [FFIndividualPrediction submitPredictionForSession:self.session
-                                                    params:params
-                                                   success:^(id successObj) {
-                                                       [self.delegate disablePTForTeam:team
-                                                                                       inGame:game
-                                                                                   inCategory:self.category];
-                                                       [self.tableView reloadData];
-                                                       [alert hide];
-                                                       
-                                                       FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
-                                                                                                       message:[successObj objectForKey:@"msg"]
-                                                                                             cancelButtonTitle:nil
-                                                                                               okayButtonTitle:@"OK"
-                                                                                                      autoHide:YES];
-                                                       [alert showInView:self.navigationController.view];
-                                                   } failure:^(NSError *error) {
-                                                       NSLog(@" {FFWCC} : submittion failed: %@", error);
-                                                       [alert hide];
-                                                   }];
-        [confirmAlert hide];
-    };
-    
-    confirmAlert.onCancel = ^(id obj) {
-        @strongify(confirmAlert)
-        [confirmAlert hide];
-    };
 }
 
 @end
