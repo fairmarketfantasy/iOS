@@ -289,8 +289,9 @@
     [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                    withBlock:^{
                        @strongify(self)
-                       [self.parentViewController performSegueWithIdentifier:@"GotoPT"
-                                                                      sender:blockPlayer]; // TODO: refactode it (?)
+                       [self.dataSource showIndividualPredictionsForPlayer:player];
+//                       [self.parentViewController performSegueWithIdentifier:@"GotoPT"
+//                                                                      sender:blockPlayer]; // TODO: refactode it (?)
                    }];
     [cell.tradeButton setAction:kUIButtonBlockTouchUpInside
                       withBlock:^{

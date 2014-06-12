@@ -411,7 +411,7 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{
                            @strongify(self)
-                           [self.dataSource showIndividualPredictionForSender:self andPlayer:player];
+                           [self.dataSource showIndividualPredictionsForPlayer:player];
 //                           [self.parentViewController performSegueWithIdentifier:@"GotoPT"
 //                                                                          sender:player]; // TODO: refactode it (?)
                        }];

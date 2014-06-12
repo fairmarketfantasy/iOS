@@ -223,7 +223,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
         vc.delegate = self;
     } else if ([segue.identifier isEqualToString:@"GotoPT"]) {
         FFPTController* vc = segue.destinationViewController;
-//        vc.delegate = self;
+        vc.delegate = (FFFantasyManager *)self.manager;
         vc.player = (FFPlayer*)sender;
     } else if ([segue.identifier isEqualToString:@"GotoPredictions"]) {
         // TODO: implement
@@ -294,6 +294,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
     
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
         //should update players list after swipe as in bug MLB-156
+        //TODO:should fix this bug
         if (self.pager.currentPage == 1) {
 //            [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
 //                [self.receiverController reloadWithServerError:NO];
@@ -336,14 +337,10 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     }
     
     self.manager.delegate = self;
-//    self.pager.numberOfPages = (int)[self.del getViewControllers].count;
-//    self.pager.currentPage = (int)[[self.del getViewControllers] indexOfObject:self.viewControllers.firstObject];
-    
     [self setViewControllers:@[[self.manager getViewControllers].firstObject]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:NO
                   completion:nil];
-
 }
 
 - (void)logout
@@ -379,6 +376,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 {
     self.pager.numberOfPages = (int)[self.manager getViewControllers].count;
     self.pager.currentPage = (int)[[self.manager getViewControllers] indexOfObject:self.viewControllers.firstObject];
+}
+
+- (void)openIndividualPredictionsForPlayer:(FFPlayer *)player
+{
+    [self performSegueWithIdentifier:@"GotoPT" sender:player];
 }
 
 @end

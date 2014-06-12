@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @class FFSession;
+@class FFPlayer;
 
 @protocol FFManagerDelegate <NSObject>
 
+- (void)openIndividualPredictionsForPlayer:(FFPlayer *)player;
 - (void)updatePagerView;
 - (void)shouldSetViewController;
 - (void)shouldSetViewController:(UIViewController *)controller

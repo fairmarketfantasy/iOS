@@ -29,7 +29,7 @@
 - (NSArray *)allPositions;
 - (NSArray *)uniquePositions;
 
-- (void)showIndividualPredictionForSender:(UIViewController *)controller andPlayer:(FFPlayer *)player;
+- (void)showIndividualPredictionsForPlayer:(FFPlayer *)player;
 
 @end
 

@@ -243,9 +243,9 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
 
 #pragma mark - DataSource
 
-- (void)showIndividualPredictionForSender:(UIViewController *)controller andPlayer:(FFPlayer *)player
+- (void)showIndividualPredictionsForPlayer:(FFPlayer *)player
 {
-//    [self.pageController performSegueWithIdentifier:@"GotoPT" sender:player];
+    [self.delegate openIndividualPredictionsForPlayer:player];
 }
 
 - (NSString*)rosterId
