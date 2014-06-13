@@ -24,4 +24,26 @@
     return @[];
 }
 
+- (BOOL)errorExists
+{
+    return self.errorType != FFErrorTypeNoError;
+}
+
+- (NSString *)messageForError
+{
+    switch (self.errorType) {
+        case FFErrorTypeTimeOut:
+            return @"Time Out Error";
+        case FFErrorTypeUnknownServerError:
+            return @"Unknown Server Error";
+        case FFErrorTypeUnpaid:
+            return @"Unpaid Subscription";
+            
+        default:
+            break;
+    }
+    
+    return nil;
+}
+
 @end

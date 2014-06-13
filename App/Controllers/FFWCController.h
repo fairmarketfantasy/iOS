@@ -23,9 +23,6 @@
 - (void)submitPredictionOnPlayer:(FFWCPlayer *)player
                         category:(FFWCPredictionCategory)category;
 
-- (BOOL)errorExists;
-- (NSString *)messageForError;
-
 @end
 
 @interface FFWCController : FFBaseViewController
@@ -36,6 +33,7 @@
 @property (nonatomic, readonly) UITableView *tableView;
 
 @property (nonatomic, weak) id <FFWCDelegate> delegate;
+@property (nonatomic, weak) id <FFErrorHandlingDelegate> errorDelegate;
 
 - (void)resetPicker;
 

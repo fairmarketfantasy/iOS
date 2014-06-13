@@ -27,9 +27,7 @@
 #import "FFCollectionMarketCell.h"
 #import <libextobjc/EXTScope.h>
 #import <FlatUIKit.h>
-
 #import "Reachability.h"
-
 // models
 #import "FFRoster.h"
 #import "FFMarket.h"
@@ -37,6 +35,8 @@
 #import "FFUser.h"
 #import "FFPlayer.h"
 #import "FFDate.h"
+
+#import "FFManager.h"
 
 @interface FFFantasyRosterController () <UITableViewDataSource, UITableViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
@@ -145,15 +145,9 @@
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
-        
-        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
-            (internetStatus == NotReachable && previousStatus != NotReachable)) {
-            
-            if (internetStatus == NotReachable) {
-                [self showOrHideSubmitIfNeeded];
-                [self.tableView reloadData];
-                
-            }
+        if (internetStatus == NotReachable && previousStatus != NotReachable) {
+            [self showOrHideSubmitIfNeeded];
+            [self.tableView reloadData];
         }
     }
 }
@@ -162,10 +156,9 @@
 
 - (BOOL)isSomethingWrong
 {
-    return (self.networkStatus == NotReachable ||
-            self.isServerError ||
-            //self.dataSource.unpaidSubscription == YES ||
-            self.markets.count == 0);
+    return [self.errorDelegate errorExists] ||
+            self.networkStatus == NotReachable ||
+            self.markets.count == 0;
 }
 
 #pragma mark
@@ -202,24 +195,8 @@
         block();
         return;
     }
-    
-    __block FFAlertView* alert = nil;
-    if (shouldShow) {
-        alert = [[FFAlertView alloc] initWithTitle:@""
-                                          messsage:nil
-                                      loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.view];
-    }
-    
-    @weakify(self)
-    [self.delegate refreshRosterWithCompletion:^(BOOL success) {
-        @strongify(self)
-        [self reloadWithServerError:!success];
-        if (alert)
-            [alert hide];
-        if (block)
-            block();
-    }];
+        
+    [self.delegate refreshRosterWithCompletion:nil];
 }
 
 #pragma mark - Cells
@@ -354,6 +331,8 @@
                         message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
                     }*/ else if (self.markets.count == 0) {
                         message = @"No Games Scheduled";
+                    } else {
+                        message = [self.errorDelegate messageForError];
                     }
                     
                     cell.message.text = message;
@@ -433,42 +412,12 @@
 
 - (void)toggleRemoveBench:(FUISwitch*)sender
 {
-    if (self.networkStatus == NotReachable) {
-        [[FFAlertView noInternetConnectionAlert] showInView:self.view];
-        return;
-    }
-    
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Toggle Auto-Remove Benched Players"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    
-    @weakify(self)
-    [self.delegate toggleRemoveBenchWithCompletion:^(BOOL success) {
-        @strongify(self)
-        [self reloadWithServerError:!success];
-        [alert hide];
-    }];
+    [self.delegate toggleRemoveBenchWithCompletion:nil];
 }
 
 - (void)autoFill:(UIButton*)button
 {
-    if (self.networkStatus == NotReachable) {
-        [[FFAlertView noInternetConnectionAlert] showInView:self.view];
-        return;
-    }
-    
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Auto Fill Roster"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    
-    @weakify(self)
-    [self.delegate autoFillWithCompletion:^(BOOL success) {
-        @strongify(self)
-        [self reloadWithServerError:!success];
-        [alert hide];
-    }];
+    [self.delegate autoFillWithCompletion:nil];
 }
 
 - (void)removePlayer:(FFPlayer*)player
@@ -497,27 +446,9 @@
 - (void)onSubmit:(FUISegmentedControl*)segments
 {
     FFRosterSubmitType rosterType = (FFRosterSubmitType)segments.selectedSegmentIndex;
-    [self submitRoster:rosterType];
+    [self.delegate submitRoster:rosterType completion:nil];
+//    [self submitRoster:rosterType];
     self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
-}
-
-- (void)submitRoster:(FFRosterSubmitType)rosterType
-{
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Submitting Roster"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    [self.delegate submitRoster:rosterType completion:^(BOOL success) {
-        [alert hide];
-        if (success) {
-            [[[FFAlertView alloc] initWithTitle:nil
-                                        message:self.dataSource.currentRoster.messageAfterSubmit
-                              cancelButtonTitle:nil
-                                okayButtonTitle:@"Ok"
-                                       autoHide:YES]
-             showInView:self.navigationController.view];
-        }
-    }];
 }
 
 #pragma mark - FFMarketSelectorDataSource

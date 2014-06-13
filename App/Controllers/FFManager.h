@@ -30,7 +30,14 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 
 @end
 
-@interface FFManager : NSObject
+@protocol FFErrorHandlingDelegate <NSObject>
+
+- (BOOL)errorExists;
+- (NSString *)messageForError;
+
+@end
+
+@interface FFManager : NSObject <FFErrorHandlingDelegate>
 
 - (id)initWithSession:(FFSession *)session;
 - (NSArray *)getViewControllers;

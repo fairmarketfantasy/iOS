@@ -99,7 +99,7 @@
 
 - (BOOL)isSomethingWrong
 {
-    return [self.delegate errorExists] || self.networkStatus == NotReachable;
+    return [self.errorDelegate errorExists] || self.networkStatus == NotReachable;
 }
 
 #pragma mark - UITableViewDataSource
@@ -152,7 +152,7 @@
             if (self.networkStatus == NotReachable) {
                 message = @"No Internet Connection";
             } else {
-                message = [self.delegate messageForError];
+                message = [self.errorDelegate messageForError];
             }
             
             /* else if ([self.dataSource unpaidSubscription]) {

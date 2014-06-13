@@ -34,6 +34,8 @@
 #import "FFPlayer.h"
 #import "FFTeam.h"
 
+#import "FFManager.h"
+
 @interface FFPlayersController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource,
 UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
@@ -125,19 +127,14 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
-        
-        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
-            (internetStatus == NotReachable && previousStatus != NotReachable)) {
-            
-            if (internetStatus == NotReachable) {
+        if (internetStatus == NotReachable && previousStatus != NotReachable) {
+            [self.tableView reloadData];
+        } else if (internetStatus != NotReachable && previousStatus == NotReachable) {
+            [self fetchPlayersWithShowingAlert:YES completion:^{
                 [self.tableView reloadData];
-            } else {
-                [self fetchPlayersWithShowingAlert:YES completion:^{
-                    [self.tableView reloadData];
-                }];
-            }
+            }];
         }
-    }
+    }    
 }
 
 #pragma mark - public
@@ -175,9 +172,8 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
 - (BOOL)isSomethingWrong
 {
-    return (self.networkStatus == NotReachable ||
-            self.isServerError ||
-//            self.dataSource.unpaidSubscription == YES ||
+    return ([self.errorDelegate errorExists] ||
+            self.networkStatus == NotReachable ||
             self.markets.count == 0);
 }
 
@@ -191,52 +187,7 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
 - (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
-    if ([self isSomethingWrong]) {
-        block();
-        return;
-    }
-    
-    if (![self.dataSource.currentRoster objId]) {
-        self.players = @[];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
-        return;
-    }
-    
-    __block FFAlertView* alert = nil;
-    if (shouldShow) {
-        alert = [[FFAlertView alloc] initWithTitle:@"Loading Players"
-                                          messsage:nil
-                                      loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
-    }
-    
-    __block BOOL shouldRemoveBenched = [[self.dataSource currentRoster] removeBenched].integerValue == 1;
-    
-    @weakify(self)
-    [FFPlayer fetchPlayersForRoster:[self.dataSource rosterId]
-                           position:[self.dataSource uniquePositions][self.position]
-                     removedBenched:shouldRemoveBenched
-                            session:self.session
-                            success:
-     ^(id successObj) {
-         @strongify(self)
-         self.isServerError = NO;
-         self.players = successObj;
-         if(alert)
-             [alert hide];
-         if (block)
-             block();
-     }
-                            failure:
-     ^(NSError *error) {
-         @strongify(self)
-         self.players = @[];
-         if(alert)
-             [alert hide];
-         if (block)
-             block();
-     }];
+    [self.delegate fetchPlayersForPosition:self.position WithShowingAlert:shouldShow completion:block];
 }
 
 #pragma mark - UIPickerViewDataSource
@@ -329,6 +280,8 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
                     message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
                 }*/ else if (self.markets.count == 0) {
                     message = @"No Games Scheduled";
+                } else {
+                    message = [self.errorDelegate messageForError];
                 }
                 
                 cell.message.text = message;

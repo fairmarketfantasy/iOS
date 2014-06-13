@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FFBaseViewController.h"
 #import "FFFantasyRosterDataSource.h"
+#import "FFManager.h"
 
 @class FFPlayer;
 @class FFTeam;
@@ -16,6 +17,7 @@
 @protocol FFPlayersProtocol <NSObject>
 
 - (void)addPlayer:(FFPlayer*)player;
+- (void)fetchPlayersForPosition:(NSInteger)position WithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
 
 @end
 
@@ -25,10 +27,11 @@
     Reachability* internetReachability;
 }
 
-@property(nonatomic) NSArray* players; // should contain FFPlayer*
+@property(nonatomic, strong) NSArray* players; // should contain FFPlayer*
+@property(nonatomic, strong) UITableView* tableView;
+@property(nonatomic, weak) id<FFErrorHandlingDelegate> errorDelegate;
 @property(nonatomic, weak) id<FFPlayersProtocol> delegate;
 @property(nonatomic, weak) id<FFFantasyRosterDataSource> dataSource;
-@property(nonatomic) UITableView* tableView;
 
 - (void)showPosition:(NSString*)position;
 - (void)resetPosition;

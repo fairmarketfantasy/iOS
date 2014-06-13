@@ -52,6 +52,11 @@
         self.groupWinnerController.delegate = self;
         self.mvpController.delegate = self;
         
+        self.dailyWinsController.errorDelegate = self;
+        self.cupWinnerController.errorDelegate = self;
+        self.groupWinnerController.errorDelegate = self;
+        self.mvpController.errorDelegate = self;
+        
         //reachability
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusHasChanged:) name:kReachabilityChangedNotification object:nil];
         internetReachability = [Reachability reachabilityForInternetConnection];
@@ -419,28 +424,6 @@
         @strongify(confirmAlert)
         [confirmAlert hide];
     };
-}
-
-- (BOOL)errorExists
-{
-    return self.errorType != FFErrorTypeNoError;
-}
-
-- (NSString *)messageForError
-{
-    switch (self.errorType) {
-        case FFErrorTypeTimeOut:
-            return @"Time Out Error";
-        case FFErrorTypeUnknownServerError:
-            return @"Unknown Server Error";
-        case FFErrorTypeUnpaid:
-            return @"Unpaid Subscription";
-            
-        default:
-            break;
-    }
-    
-    return nil;
 }
 
 @end
