@@ -16,8 +16,11 @@
 #import "FFWCPlayer.h"
 #import "FFSession.h"
 #import "FFIndividualPrediction.h"
+#import "Reachability.h"
 
-@interface FFWCManager() <FFWCDelegate>
+@interface FFWCManager() <FFWCDelegate> {
+     Reachability* internetReachability;
+}
 
 @property (nonatomic, strong) FFWCController* dailyWinsController;
 @property (nonatomic, strong) FFWCController* mvpController;
@@ -28,6 +31,8 @@
 @property (nonatomic, strong) NSMutableArray *mvpCandidates; //array of WCPlayer*
 @property (nonatomic, strong) NSMutableArray *groupWinners; //array of WCGroup*
 @property (nonatomic, strong) NSMutableArray *cupWinners; //array of WCTeams*
+
+@property (nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 
@@ -42,29 +47,72 @@
         self.groupWinnerController = [[FFWCController alloc] init];
         self.mvpController = [[FFWCController alloc] init];
         
+        self.dailyWinsController.delegate = self;
+        self.cupWinnerController.delegate = self;
+        self.groupWinnerController.delegate = self;
+        self.mvpController.delegate = self;
+        
+        //reachability
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusHasChanged:) name:kReachabilityChangedNotification object:nil];
+        internetReachability = [Reachability reachabilityForInternetConnection];
+        BOOL success = [internetReachability startNotifier];
+        if (!success)
+            DLog(@"Failed to start notifier");
+        self.networkStatus = [internetReachability currentReachabilityStatus];
+        
         [self getWorldCupData];
     }
     return self;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+}
+
+- (void)networkStatusHasChanged:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    NetworkStatus previousStatus = self.networkStatus;
+    
+    if (internetStatus != self.networkStatus) {
+        self.networkStatus = internetStatus;
+        
+        if (internetStatus != NotReachable && previousStatus == NotReachable) {
+            [self getWorldCupData];
+        } 
+    }
+}
+
+- (void)reloadControllers
+{
+    [self.dailyWinsController.tableView reloadData];
+    [self.cupWinnerController.tableView reloadData];
+    [self.groupWinnerController.tableView reloadData];
+    [self.mvpController.tableView reloadData];
+}
+
 - (NSArray*)getViewControllers
 {
     NSMutableArray *controllers = [NSMutableArray array];
-    if (self.dailyWinsController.candidates.count > 0 /*|| self.networkStatus == NotReachable*/) {
+    if (self.dailyWinsController.candidates.count > 0 || (self.dailyWinsController.candidates.count == 0 && self.networkStatus == NotReachable)) {
         [controllers addObject:self.dailyWinsController];
     }
-    if (self.cupWinnerController.candidates.count > 0 /*|| self.networkStatus == NotReachable*/) {
+    if (self.cupWinnerController.candidates.count > 0 || (self.cupWinnerController.candidates.count == 0 && self.networkStatus == NotReachable)) {
         [controllers addObject:self.cupWinnerController];
     }
-    if (self.groupWinnerController.candidates.count > 0 /*|| self.networkStatus == NotReachable*/) {
+    if (self.groupWinnerController.candidates.count > 0 || (self.groupWinnerController.candidates.count == 0 && self.networkStatus == NotReachable)) {
         [controllers addObject:self.groupWinnerController];
     }
-    if (self.mvpController.candidates.count > 0/*|| self.networkStatus == NotReachable*/) {
+    if (self.mvpController.candidates.count > 0 || (self.mvpController.candidates.count == 0 && self.networkStatus == NotReachable)) {
         [controllers addObject:self.mvpController];
     }
     
     if (controllers.count == 0) {
         [controllers addObject:self.dailyWinsController];
+        [controllers addObject:self.cupWinnerController];
+        [controllers addObject:self.groupWinnerController];
+        [controllers addObject:self.mvpController];
     }
     
     return [NSArray arrayWithArray:controllers];
@@ -84,22 +132,21 @@
                [alert hide];
                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                if (!error) {
+                   self.errorType = FFErrorTypeNoError;
+                   [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
+                   [[NSUserDefaults standardUserDefaults] synchronize];
                    self.cupWinnerController.category = FFWCCupWinner;
                    self.cupWinnerController.candidates = [NSArray arrayWithArray:self.cupWinners];
-                   self.cupWinnerController.delegate = self;
                    
                    self.groupWinnerController.category = FFWCGroupWinners;
                    self.groupWinnerController.candidates = [NSArray arrayWithArray:self.groupWinners];
                    self.groupWinnerController.selectedCroupIndex = 0;
-                   self.groupWinnerController.delegate = self;
                    
                    self.dailyWinsController.category = FFWCDailyWins;
                    self.dailyWinsController.candidates = [NSArray arrayWithArray:self.dailyWins];
-                   self.dailyWinsController.delegate = self;
                    
                    self.mvpController.category = FFWCMvp;
                    self.mvpController.candidates = [NSArray arrayWithArray:self.mvpCandidates];
-                   self.mvpController.delegate = self;
                    
                    [self.delegate shouldSetViewController:[self getViewControllers].firstObject
                                                 direction:UIPageViewControllerNavigationDirectionForward
@@ -107,10 +154,17 @@
                                                completion:nil];
                    [self.delegate updatePagerView];
                    
-                   [self.dailyWinsController.tableView reloadData];
-                   [self.cupWinnerController.tableView reloadData];
-                   [self.groupWinnerController.tableView reloadData];
-                   [self.mvpController.tableView reloadData];
+                   [self reloadControllers];
+                   [self.groupWinnerController resetPicker];
+               } else {
+                   NSString *errorDescription = [[error userInfo] objectForKey:@"NSLocalizedDescription"];
+                   if ([errorDescription isEqualToString:@"Unpaid subscription!"]) {
+                       self.errorType = FFErrorTypeUnpaid;
+                       [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
+                       [[NSUserDefaults standardUserDefaults] synchronize];
+                   } else {
+                       self.errorType = FFErrorTypeUnknownServerError;
+                   }
                }
            }];
 }
@@ -365,6 +419,28 @@
         @strongify(confirmAlert)
         [confirmAlert hide];
     };
+}
+
+- (BOOL)errorExists
+{
+    return self.errorType != FFErrorTypeNoError;
+}
+
+- (NSString *)messageForError
+{
+    switch (self.errorType) {
+        case FFErrorTypeTimeOut:
+            return @"Time Out Error";
+        case FFErrorTypeUnknownServerError:
+            return @"Unknown Server Error";
+        case FFErrorTypeUnpaid:
+            return @"Unpaid Subscription";
+            
+        default:
+            break;
+    }
+    
+    return nil;
 }
 
 @end

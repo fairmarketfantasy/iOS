@@ -71,6 +71,18 @@
     self.networkStatus = [internetReachability currentReachabilityStatus];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+}
+
+- (void)resetPicker
+{
+    [self.picker setNeedsLayout];
+    [self.picker reloadAllComponents];
+    [self.picker selectRow:0 inComponent:0 animated:NO];
+}
+
 #pragma mark
 
 - (void)checkNetworkStatus:(NSNotification *)notification
@@ -80,18 +92,14 @@
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
-        
         if (internetStatus == NotReachable && previousStatus != NotReachable)
             [self.tableView reloadData];
-        else
-            [self.picker reloadAllComponents];
     }
 }
 
 - (BOOL)isSomethingWrong
 {
-    return self.networkStatus == NotReachable ||
-    self.candidates.count == 0/*|| self.dataSource.unpaidSubscription*/;
+    return [self.delegate errorExists] || self.networkStatus == NotReachable;
 }
 
 #pragma mark - UITableViewDataSource
@@ -106,7 +114,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.candidates.count == 0 || [self isSomethingWrong])
+    if ([self isSomethingWrong])
         return 1;
     
     if (self.category == FFWCGroupWinners) {
@@ -143,7 +151,11 @@
             NSString *message = nil;
             if (self.networkStatus == NotReachable) {
                 message = @"No Internet Connection";
-            }/* else if ([self.dataSource unpaidSubscription]) {
+            } else {
+                message = [self.delegate messageForError];
+            }
+            
+            /* else if ([self.dataSource unpaidSubscription]) {
                 message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
             }*/
             
@@ -161,7 +173,6 @@
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
                                    [weakSelf.delegate submitPredictionOnTeam:team inGame:nil category:self.category];
-//                                   [weakSelf submitPredictionOnTeam:team inGame:nil];
                                }];
                 return cell;
             }
@@ -181,12 +192,10 @@
                 [cell.homePTButton setAction:kUIButtonBlockTouchUpInside
                                    withBlock:^{
                                        [weakSelf.delegate submitPredictionOnTeam:game.homeTeam inGame:game category:self.category];
-//                                       [weakSelf submitPredictionOnTeam:game.homeTeam inGame:game];
                                    }];
                 [cell.guestPTButton setAction:kUIButtonBlockTouchUpInside
                                     withBlock:^{
                                         [weakSelf.delegate submitPredictionOnTeam:game.guestTeam inGame:game category:self.category];
-//                                       [weakSelf submitPredictionOnTeam:game.guestTeam inGame:game];
                                     }];
                 
                 return cell;
@@ -201,7 +210,6 @@
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
                                    [weakSelf.delegate submitPredictionOnPlayer:player category:self.category];
-//                                   [weakSelf submitPredictionOnPlayer:player];
                                }];
                 return cell;
             }
@@ -219,7 +227,6 @@
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{
                            [weakSelf.delegate submitPredictionOnTeam:team inGame:nil category:self.category];
-//                           [weakSelf submitPredictionOnTeam:team inGame:nil];
                        }];
         return cell;
     }

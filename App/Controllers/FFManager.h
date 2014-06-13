@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, FFErrorType)
+{
+    FFErrorTypeUnknownServerError,
+    FFErrorTypeUnpaid,
+    FFErrorTypeTimeOut,
+    FFErrorTypeNoError
+};
+
 @class FFSession;
 @class FFPlayer;
 
@@ -29,5 +37,6 @@
 
 @property (nonatomic, strong) FFSession *session;
 @property (nonatomic, weak) id <FFManagerDelegate> delegate;
+@property (nonatomic, assign) FFErrorType errorType;
 
 @end
