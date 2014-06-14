@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 
 - (id)initWithSession:(FFSession *)session;
 - (NSArray *)getViewControllers;
+- (void)handleError:(NSError *)error;
 
 @property (nonatomic, strong) FFSession *session;
 @property (nonatomic, weak) id <FFManagerDelegate> delegate;

@@ -109,6 +109,8 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
              ];
 }
 
+#pragma mark - Error handling
+
 - (void)handleError:(NSError *)error
 {
     NSString *errorBody = @"There is no room for another";

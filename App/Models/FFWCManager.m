@@ -162,14 +162,7 @@
                    [self reloadControllers];
                    [self.groupWinnerController resetPicker];
                } else {
-                   NSString *errorDescription = [[error userInfo] objectForKey:@"NSLocalizedDescription"];
-                   if ([errorDescription isEqualToString:@"Unpaid subscription!"]) {
-                       self.errorType = FFErrorTypeUnpaid;
-                       [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
-                       [[NSUserDefaults standardUserDefaults] synchronize];
-                   } else {
-                       self.errorType = FFErrorTypeUnknownServerError;
-                   }
+                   [self handleError:error];
                }
            }];
 }
@@ -218,6 +211,22 @@
                                          if (block)
                                              block(error);
                                      }];
+}
+
+#pragma mark - Error handling
+
+- (void)handleError:(NSError *)error
+{
+    NSString *errorDescription = [[error userInfo] objectForKey:@"NSLocalizedDescription"];
+    if ([errorDescription isEqualToString:@"Unpaid subscription!"]) {
+        self.errorType = FFErrorTypeUnpaid;
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    } else {
+        self.errorType = FFErrorTypeUnknownServerError;
+    }
+    
+    [self reloadControllers];
 }
 
 #pragma mark
@@ -343,6 +352,7 @@
         [FFIndividualPrediction submitPredictionForSession:self.session
                                                     params:params
                                                    success:^(id successObj) {
+                                                       self.errorType = FFErrorTypeNoError;
                                                        [self disablePTForPlayer:player];
                                                        [[self controllerForWCCategory:category].tableView reloadData];
                                                        [alert hide];
@@ -354,6 +364,7 @@
                                                                                                       autoHide:YES];
                                                        [alert showInView:[self controllerForWCCategory:category].view];
                                                    } failure:^(NSError *error) {
+                                                       [self handleError:error];
                                                        NSLog(@" {FFWCC} : submittion failed: %@", error);
                                                        [alert hide];
                                                    }];
@@ -401,6 +412,7 @@
         [FFIndividualPrediction submitPredictionForSession:self.session
                                                     params:params
                                                    success:^(id successObj) {
+                                                       self.errorType = FFErrorTypeNoError;
                                                        [self disablePTForTeam:team
                                                                        inGame:game
                                                                    inCategory:category];
@@ -414,6 +426,7 @@
                                                                                                       autoHide:YES];
                                                        [alert showInView:[self controllerForWCCategory:category].view];
                                                    } failure:^(NSError *error) {
+                                                       [self handleError:error];
                                                        NSLog(@" {FFWCC} : submittion failed: %@", error);
                                                        [alert hide];
                                                    }];

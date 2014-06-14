@@ -46,4 +46,9 @@
     return nil;
 }
 
+- (void)handleError:(NSError *)error
+{
+    
+}
+
 @end
