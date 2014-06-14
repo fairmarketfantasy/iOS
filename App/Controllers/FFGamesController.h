@@ -30,7 +30,6 @@
 @property(nonatomic, weak) id<FFNonFantasyRosterDataSource> dataSource;
 @property(nonatomic) UITableView* tableView;
 
-- (void)resetPosition;
 - (void)reloadWithServerError:(BOOL)isError;
 
 @end

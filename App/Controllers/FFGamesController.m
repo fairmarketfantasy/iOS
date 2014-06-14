@@ -110,11 +110,6 @@
 
 #pragma mark - public
 
-- (void)resetPosition
-{
-    self.position = 0;
-}
-
 - (void)reloadWithServerError:(BOOL)isError
 {
     self.isServerError = isError;

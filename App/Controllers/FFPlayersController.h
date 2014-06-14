@@ -35,7 +35,6 @@
 @property (nonatomic, readonly) NSUInteger position;
 
 - (void)showPosition:(NSString*)position;
-- (void)resetPosition;
 
 @end
 
