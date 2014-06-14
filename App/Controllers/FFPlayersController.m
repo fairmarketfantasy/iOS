@@ -39,7 +39,6 @@
 @interface FFPlayersController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource,
 UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
-@property(nonatomic, assign) NSUInteger position;
 @property(nonatomic, assign) NetworkStatus networkStatus;
 @property(nonatomic, assign) BOOL isServerError;
 
@@ -56,7 +55,7 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.position = 0;
+    _position = 0;
     self.tableView = [[FFWideReceiverTable alloc] initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -100,9 +99,7 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
     
     [self.picker reloadAllComponents];
     if (self.players.count == 0) {
-        [self fetchPlayersWithShowingAlert:NO completion:^{
-            [self.tableView reloadData];
-        }];
+        [self.delegate fetchPlayersForPosition:self.position showAlert:NO completion:nil];
     } else {
         [self.tableView reloadData];
     }
@@ -112,8 +109,7 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    [self fetchPlayersWithShowingAlert:NO completion:^{
-        [self.tableView reloadData];
+    [self.delegate fetchPlayersForPosition:self.position showAlert:NO completion:^{
         [refreshControl endRefreshing];
     }];
 }
@@ -129,10 +125,6 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
         self.networkStatus = internetStatus;
         if (internetStatus == NotReachable && previousStatus != NotReachable) {
             [self.tableView reloadData];
-        } else if (internetStatus != NotReachable && previousStatus == NotReachable) {
-            [self fetchPlayersWithShowingAlert:YES completion:^{
-                [self.tableView reloadData];
-            }];
         }
     }    
 }
@@ -141,7 +133,7 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
 - (void)resetPosition
 {
-    self.position = 0;
+    _position = 0;
     [self.picker selectRow:0 inComponent:0 animated:NO];
 }
 
@@ -179,15 +171,8 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
 - (void)selectPosition:(NSUInteger)position
 {
-    self.position = position;
-    [self fetchPlayersWithShowingAlert:YES completion:^{
-        [self.tableView reloadData];
-    }];
-}
-
-- (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
-{
-    [self.delegate fetchPlayersForPosition:self.position WithShowingAlert:shouldShow completion:block];
+    _position = position;
+    [self.delegate fetchPlayersForPosition:position showAlert:YES completion:nil];
 }
 
 #pragma mark - UIPickerViewDataSource

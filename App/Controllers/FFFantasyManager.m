@@ -334,16 +334,14 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
                                                                                  inSection:0]]
                                            withRowAnimation:UITableViewRowAnimationAutomatic];
     if (_rosterIsCreating == NO) {
-        __weak FFFantasyManager *weakSelf = self;
+//        __weak FFFantasyManager *weakSelf = self;
         [self createRosterWithCompletion:^(NSError *error) {
             if (error) {
 //                [self handleError:error];
 //                [weakSelf.rosterController.tableView reloadData];
 //                [weakSelf.playersController.tableView reloadData];
             } else {
-                [weakSelf.playersController fetchPlayersWithShowingAlert:NO completion:^{
-                    [weakSelf.playersController.tableView reloadData];
-                }];
+                [self fetchPlayersForPosition:self.playersController.position showAlert:NO completion:nil];
              }
         }];
     }
@@ -659,7 +657,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
 
 #pragma mark - FFPlayersProtocol
 
-- (void)fetchPlayersForPosition:(NSInteger)position WithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
+- (void)fetchPlayersForPosition:(NSInteger)position showAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
     if (![self.currentRoster objId]) {
         self.playersController.players = @[];
@@ -688,6 +686,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
          @strongify(self)
          self.errorType = FFErrorTypeNoError;
          self.playersController.players = successObj;
+         [self.playersController.tableView reloadData];
          
          if(alert)
              [alert hide];
@@ -721,6 +720,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
          self.errorType = FFErrorTypeNoError;
          [self addPlayerToMyTeam:player];
          [self refreshRosterWithShowingAlert:YES completion:nil];
+         [self fetchPlayersForPosition:self.playersController.position showAlert:NO completion:nil];
          [self.delegate shouldSetViewController:self.rosterController
                                       direction:UIPageViewControllerNavigationDirectionReverse
                                        animated:YES

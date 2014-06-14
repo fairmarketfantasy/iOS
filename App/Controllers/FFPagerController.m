@@ -275,16 +275,6 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
     }
     self.pager.currentPage = (int)[[self.manager getViewControllers] indexOfObject:
                                    self.viewControllers.firstObject];
-    
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        //should update players list after swipe as in bug MLB-156
-        //TODO:should fix this bug
-        if (self.pager.currentPage == 1) {
-//            [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
-//                [self.receiverController reloadWithServerError:NO];
-//            }];
-        }
-    }
 }
 
 - (void)pageViewController:(UIPageViewController*)pageViewController
