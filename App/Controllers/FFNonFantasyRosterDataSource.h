@@ -17,7 +17,6 @@
 
 @end
 
-
 @protocol FFNonFantasyRosterDelegate <NSObject>
 
 - (void)submitRosterCompletion:(void (^)(BOOL))block;

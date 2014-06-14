@@ -12,7 +12,6 @@
 #import "FFManager.h"
 
 @class FFPlayer;
-@class FFTeam;
 
 @protocol FFPlayersProtocol <NSObject>
 

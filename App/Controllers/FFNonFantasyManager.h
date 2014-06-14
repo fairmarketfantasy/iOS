@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FFSession.h"
 #import "FFManager.h"
 
 @interface FFNonFantasyManager : FFManager

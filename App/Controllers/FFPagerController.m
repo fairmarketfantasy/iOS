@@ -7,37 +7,23 @@
 //
 
 #import "FFPagerController.h"
+#import "FFWebViewController.h"
 #import "FFMenuViewController.h"
+#import "FFSessionViewController.h"
 #import "FFPTController.h"
 #import "FFWCController.h"
-#import "FFStyle.h"
-#import "StyledPageControl.h"
-#import "FFNavigationBarItemView.h"
-#import "FFLogo.h"
-#import "FFWebViewController.h"
-#import "FFAlertView.h"
-
-#import "Reachability.h"
-// model
-#import "FFControllerProtocol.h"
-#import "FFMarketSet.h"
-#import "FFMarket.h"
-#import "FFEvent.h"
-#import "FFSessionViewController.h"
-#import "FFMarketSelector.h"
-#import "FFContestType.h"
-#import "FFRoster.h"
-#import "FFPlayer.h"
-#import "FFTeam.h"
-#import "FFNonFantasyGame.h"
 #import "FFSessionManager.h"
-#import <SBData/SBTypes.h>
-
 #import "FFManager.h"
 #import "FFWCManager.h"
 #import "FFFantasyManager.h"
 #import "FFNonFantasyManager.h"
-
+#import "FFStyle.h"
+#import "StyledPageControl.h"
+#import "FFNavigationBarItemView.h"
+#import "FFLogo.h"
+#import "FFAlertView.h"
+#import "FFControllerProtocol.h"
+#import <SBData/SBTypes.h>
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
 FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
@@ -45,10 +31,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
 @property (nonatomic, strong) StyledPageControl* pager;
 @property (nonatomic, strong) UIButton* globalMenuButton;
 @property (nonatomic, strong) FFManager *manager;
-@property (nonatomic, assign) NetworkStatus networkStatus;
 @property (nonatomic, assign) BOOL isFirstLaunch;
-@property (nonatomic, assign) NSUInteger tryCreateRosterTimes;
-@property (nonatomic, assign) BOOL unpaid;
 
 @end
 
@@ -151,43 +134,6 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
     
     self.pager.numberOfPages = (int)[self.manager getViewControllers].count;
     self.pager.currentPage = (int)[[self.manager getViewControllers] indexOfObject:self.viewControllers.firstObject];
-    
-    internetReachability = [Reachability reachabilityForInternetConnection];
-	BOOL success = [internetReachability startNotifier];
-	if ( !success )
-		DLog(@"Failed to start notifier");
-    self.networkStatus = [internetReachability currentReachabilityStatus];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusHasChanged:) name:kReachabilityChangedNotification object:nil];
-}
-
-- (void)networkStatusHasChanged:(NSNotification *)notification
-{
-    NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
-    NetworkStatus previousStatus = self.networkStatus;
-    
-    if (internetStatus != self.networkStatus) {
-        self.networkStatus = internetStatus;
-        
-        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
-            (internetStatus == NotReachable && previousStatus != NotReachable)) {
-            if (internetStatus != NotReachable) {
-                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-//                    [self fetchPositionsNames];
-//                    [self updateMarkets];
-                } else {
-                    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
-//                        [self getWorldCupData];
-                    } else {
-//                        [self updateGames];
-                    }
-                }
-            } else {
-//                [self.games removeAllObjects];
-            }
-        }
-    }    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue

@@ -7,13 +7,11 @@
 //
 
 #import "FFGamesController.h"
-#import "FFPagerController.h"
 #import "FFWideReceiverTable.h"
 #import "FFNoConnectionCell.h"
 #import "FFNonFantasyGameCell.h"
 #import "FFAutoFillCell.h"
 #import "FFRosterTableHeader.h"
-#import "FFAccountHeader.h"
 #import "FFStyle.h"
 #import "FFDate.h"
 #import "FFPathImageView.h"
@@ -25,9 +23,6 @@
 #import <libextobjc/EXTScope.h>
 #import <FlatUIKit.h>
 // model
-#import "FFUser.h"
-#import "FFRoster.h"
-#import "FFPlayer.h"
 #import "FFTeam.h"
 #import "FFNonFantasyGame.h"
 #import "FFSessionManager.h"
@@ -36,8 +31,6 @@
 
 @property(nonatomic, assign) NSUInteger position;
 @property(nonatomic, assign) NetworkStatus networkStatus;
-@property(nonatomic, assign) BOOL isServerError;
-@property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
 @end
 

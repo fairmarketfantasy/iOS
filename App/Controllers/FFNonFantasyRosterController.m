@@ -22,21 +22,12 @@
 #import "Reachability.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 // models
-#import "FFRoster.h"
-#import "FFMarket.h"
-#import "FFMarketSet.h"
-#import "FFUser.h"
-#import "FFPlayer.h"
 #import "FFDate.h"
 
 @interface FFNonFantasyRosterController () <UITableViewDataSource, UITableViewDelegate>
 
-// models
-@property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
-@property(nonatomic) FFSubmitView* submitView;
-
-@property(nonatomic, assign) NetworkStatus networkStatus;
-@property(nonatomic, assign) BOOL isServerError;
+@property (nonatomic, strong) FFSubmitView* submitView;
+@property (nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 

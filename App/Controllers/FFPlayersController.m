@@ -32,21 +32,14 @@
 #import "FFUser.h"
 #import "FFRoster.h"
 #import "FFPlayer.h"
-#import "FFTeam.h"
-
-#import "FFManager.h"
 
 @interface FFPlayersController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource,
 UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
-@property(nonatomic, assign) NetworkStatus networkStatus;
-@property(nonatomic, assign) BOOL isServerError;
-
-@property(nonatomic) FFMarketSet* marketsSetRegular;
-@property(nonatomic) FFMarketSet* marketsSetSingle;
-@property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
-
-@property(nonatomic, strong) UIPickerView *picker;
+@property (nonatomic, strong) UIPickerView *picker;
+@property (nonatomic, strong) FFMarketSet* marketsSetRegular;
+@property (nonatomic, strong) FFMarketSet* marketsSetSingle;
+@property (nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 
@@ -451,7 +444,6 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
     [self.dataSource setCurrentMarket:selectedMarket];
-    self.tryCreateRosterTimes = 3;
 }
 
 @end

@@ -24,10 +24,8 @@
 
 @property (nonatomic, strong) FFNonFantasyRosterController *rosterController;
 @property (nonatomic, strong) FFGamesController *gamesController;
-
 @property (nonatomic, strong) NSMutableArray *games;
 @property (nonatomic, strong) NSMutableArray *selectedTeams;
-
 @property (nonatomic, assign) NetworkStatus networkStatus;
 
 @end

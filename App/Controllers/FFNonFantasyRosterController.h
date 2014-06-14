@@ -11,12 +11,7 @@
 #import "FFBaseViewController.h"
 #import "FFManager.h"
 
-@class FFRoster;
-
-@class FFMarket;
-@class FFMarketSet;
 @class Reachability;
-@class FFPlayer;
 
 @interface FFNonFantasyRosterController : FFBaseViewController {
     Reachability* internetReachability;

@@ -9,11 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "FFManager.h"
 
-@class FFSession;
-@class FFWCPlayer;
-@class FFWCTeam;
-@class FFWCGame;
-
 typedef NS_ENUM(NSUInteger, FFWCPredictionCategory)
 {
     FFWCDailyWins = 0,

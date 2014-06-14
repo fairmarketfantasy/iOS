@@ -14,8 +14,6 @@
 #import "FFTeamCell.h"
 #import "FFTeamTradeCell.h"
 #import "FFNoConnectionCell.h"
-#import "FFNonFantasyTeamCell.h"
-#import "FFNonFantasyTeamTradeCell.h"
 #import "FFSubmitView.h"
 #import "FFAlertView.h"
 #import "FFRosterTableHeader.h"
@@ -43,9 +41,7 @@
 @property (nonatomic, strong) FFSubmitView* submitView;
 @property (nonatomic, strong) FFMarketSet* marketsSetRegular;
 @property (nonatomic, strong) FFMarketSet* marketsSetSingle;
-@property (nonatomic, assign) NSUInteger tryCreateRosterTimes;
 @property (nonatomic, assign) NetworkStatus networkStatus;
-@property (nonatomic, assign) BOOL isServerError;
 
 @end
 
@@ -450,7 +446,6 @@
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
     [self.dataSource setCurrentMarket:selectedMarket];
-    self.tryCreateRosterTimes = 3;
 }
 
 @end
