@@ -7,29 +7,20 @@
 //
 
 #import "FFNonFantasyRosterController.h"
-#import "FFSessionViewController.h"
 #import "FFTeamTable.h"
 #import "FFAutoFillCell.h"
-#import "FFMarketsCell.h"
-#import "FFTeamCell.h"
-#import "FFTeamTradeCell.h"
 #import "FFNoConnectionCell.h"
 #import "FFNonFantasyTeamCell.h"
 #import "FFNonFantasyTeamTradeCell.h"
 #import "FFSubmitView.h"
 #import "FFAlertView.h"
 #import "FFRosterTableHeader.h"
-#import "FFAccountHeader.h"
-#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
-#import "FFMarketSelector.h"
 #import "FFSessionManager.h"
-#import "FFCollectionMarketCell.h"
 #import <libextobjc/EXTScope.h>
 #import <FlatUIKit.h>
-
 #import "Reachability.h"
-
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 // models
 #import "FFRoster.h"
 #import "FFMarket.h"
@@ -122,15 +113,6 @@
     [refreshControl endRefreshing];
 }
 
-#pragma mark
-
-- (void)reloadWithServerError:(BOOL)isError
-{
-    self.isServerError = isError;
-    [self.tableView reloadData];
-    [self showOrHideSubmitIfNeeded];
-}
-
 #pragma mark -
 
 - (void)checkNetworkStatus:(NSNotification *)notification
@@ -140,17 +122,9 @@
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
-        
-        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
-            (internetStatus == NotReachable && previousStatus != NotReachable)) {
-            
-            if (internetStatus == NotReachable) {
-                [self showOrHideSubmitIfNeeded];
-                [self.tableView reloadData];
-                
-            }
-        }
-    }
+        if (internetStatus == NotReachable && previousStatus != NotReachable)
+            [self.tableView reloadData];
+    }    
 }
 
 #pragma mark - private
@@ -158,8 +132,7 @@
 - (BOOL)isSomethingWrong
 {
     return (self.networkStatus == NotReachable ||
-            self.isServerError ||
-//            self.dataSource.unpaidSubscription == YES ||
+            [self.errorDelegate isError] ||
             [self.dataSource availableGames].count == 0);
 }
 
@@ -262,10 +235,10 @@
                     NSString *message = nil;
                     if (self.networkStatus == NotReachable) {
                         message = @"No Internet Connection";
-                    } /*else if ([self.dataSource unpaidSubscription]) {
-                        message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
-                    } */else if ([self.dataSource availableGames].count == 0) {
+                    } else if ([self.dataSource availableGames].count == 0) {
                         message = @"No Games Scheduled";
+                    } else {
+                        message = [self.errorDelegate messageForError];
                     }
                     
                     cell.message.text = message;
@@ -325,41 +298,12 @@
 
 - (void)autoFill:(UIButton*)button
 {
-    if (self.networkStatus == NotReachable) {
-        [[FFAlertView noInternetConnectionAlert] showInView:self.view];
-        return;
-    }
-    
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Auto Fill Roster"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    
-    @weakify(self)
-    [self.delegate autoFillWithCompletion:^(BOOL success) {
-        @strongify(self)
-        [self reloadWithServerError:!success];
-        [alert hide];
-    }];
+    [self.delegate autoFillWithCompletion:nil];
 }
 
 - (void)onSubmit:(FUISegmentedControl*)segments
 {
-    [self submitRoster:0];
-}
-
-- (void)submitRoster:(FFRosterSubmitType)rosterType
-{
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Submitting Roster"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    [self.delegate submitRosterCompletion:^(BOOL success) {
-        [alert hide];
-        if (success) {
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
-    }];
+    [self.delegate submitRosterCompletion:nil];
 }
 
 @end

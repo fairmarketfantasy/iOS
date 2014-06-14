@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FFNonFantasyRosterDataSource.h"
 #import "FFBaseViewController.h"
+#import "FFManager.h"
 
 @class FFRoster;
 
@@ -21,12 +22,12 @@
     Reachability* internetReachability;
 }
 
-@property(nonatomic, weak) id<FFNonFantasyRosterDelegate> delegate;
-@property(nonatomic, weak) id<FFNonFantasyRosterDataSource> dataSource;
-@property(nonatomic, assign) BOOL removeBenched;
-@property(nonatomic, strong) UITableView* tableView;
+@property (nonatomic, weak) id<FFNonFantasyRosterDelegate> delegate;
+@property (nonatomic, weak) id<FFNonFantasyRosterDataSource> dataSource;
+@property (nonatomic, weak) id<FFErrorHandlingDelegate> errorDelegate;
+@property (nonatomic, assign) BOOL removeBenched;
+@property (nonatomic, strong) UITableView* tableView;
 
-- (void)reloadWithServerError:(BOOL)isError;
 - (void)showOrHideSubmitIfNeeded;
 
 @end

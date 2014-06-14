@@ -47,7 +47,7 @@
 {
     [super viewDidLoad];
     self.position = 0;
-    self.tableView = [[FFWideReceiverTable alloc] initWithFrame:self.view.bounds];
+    _tableView = [[FFWideReceiverTable alloc] initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
@@ -83,7 +83,6 @@
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
     [self.delegate fetchGamesShowAlert:NO withCompletion:^{
-        [self.tableView reloadData];
         [refreshControl endRefreshing];
     }];
 }
@@ -97,23 +96,9 @@
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
-        
-        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
-            (internetStatus == NotReachable && previousStatus != NotReachable)) {
-            
-            if (internetStatus == NotReachable) {
-                [self.tableView reloadData];
-            }
-        }
+        if (internetStatus == NotReachable && previousStatus != NotReachable)
+            [self.tableView reloadData];
     }
-}
-
-#pragma mark - public
-
-- (void)reloadWithServerError:(BOOL)isError
-{
-    self.isServerError = isError;
-    [self.tableView reloadData];
 }
 
 #pragma mark - private
@@ -121,8 +106,7 @@
 - (BOOL)isSomethingWrong
 {
     return (self.networkStatus == NotReachable ||
-            self.isServerError ||
-//            self.dataSource.unpaidSubscription == YES ||
+            [self.errorDelegate isError] ||
             [self.dataSource availableGames].count == 0);
 }
 
@@ -169,10 +153,10 @@
             NSString *message = nil;
             if (self.networkStatus == NotReachable) {
                 message = @"No Internet Connection";
-            } /*else if ([self.dataSource unpaidSubscription]) {
-                message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
-            }*/ else if ([self.dataSource availableGames].count == 0) {
+            } else if ([self.dataSource availableGames].count == 0) {
                 message = @"No Games Scheduled";
+            } else {
+                message = [self.errorDelegate messageForError];
             }
             
             cell.message.text = message;

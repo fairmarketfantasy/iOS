@@ -10,21 +10,25 @@
 #import "FFNonFantasyRosterController.h"
 #import "FFGamesController.h"
 #import "FFNonFantasyRosterDataSource.h"
-
 #import "FFAlertView.h"
-
 #import "FFNonFantasyGame.h"
 #import "FFTeam.h"
 #import "FFIndividualPrediction.h"
 #import "FFRoster.h"
+#import "Reachability.h"
 
 @interface FFNonFantasyManager() <FFNonFantasyRosterDataSource, FFNonFantasyRosterDelegate, FFGamesProtocol>
+{
+    Reachability* internetReachability;
+}
 
 @property (nonatomic, strong) FFNonFantasyRosterController *rosterController;
 @property (nonatomic, strong) FFGamesController *gamesController;
 
-@property(nonatomic, strong) NSMutableArray *games;
-@property(nonatomic, strong) NSMutableArray *selectedTeams;
+@property (nonatomic, strong) NSMutableArray *games;
+@property (nonatomic, strong) NSMutableArray *selectedTeams;
+
+@property (nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 
@@ -39,18 +43,48 @@
         self.rosterController = [FFNonFantasyRosterController new];
         self.rosterController.delegate = self;
         self.rosterController.dataSource = self;
+        self.rosterController.errorDelegate = self;
         
         self.gamesController = [FFGamesController new];
         self.gamesController.delegate = self;
         self.gamesController.dataSource = self;
+        self.gamesController.errorDelegate = self;
         
         self.rosterController.session = session;
         self.gamesController.session = session;
+        
+        //reachability
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusHasChanged:) name:kReachabilityChangedNotification object:nil];
+        internetReachability = [Reachability reachabilityForInternetConnection];
+        BOOL success = [internetReachability startNotifier];
+        if (!success)
+            DLog(@"Failed to start notifier");
+        self.networkStatus = [internetReachability currentReachabilityStatus];
+
         
         [self updateGames];
     }
     
     return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+}
+
+- (void)networkStatusHasChanged:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    NetworkStatus previousStatus = self.networkStatus;
+    
+    if (internetStatus != self.networkStatus) {
+        self.networkStatus = internetStatus;
+        
+        if (internetStatus != NotReachable && previousStatus == NotReachable) {
+            [self updateGames];
+        }
+    }
 }
 
 - (NSArray *)getViewControllers
@@ -65,6 +99,25 @@
 {
     self.games = [NSMutableArray array];
     [self fetchGamesShowAlert:YES withCompletion:nil];
+}
+
+#pragma mark - Error handling
+
+- (void)handleError:(NSError *)error
+{
+    NSLog(@"Error: %@", error);
+    NSString *errorDescription = [[error userInfo] objectForKey:@"NSLocalizedDescription"];
+    if ([errorDescription isEqualToString:@"Unpaid subscription!"]) {
+        self.errorType = FFErrorTypeUnpaid;
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    } else {
+        self.errorType = FFErrorTypeUnknownServerError;
+    }
+    
+    [self.rosterController.tableView reloadData];
+    [self.rosterController showOrHideSubmitIfNeeded];
+    [self.gamesController.tableView reloadData];
 }
 
 #pragma mark
@@ -125,9 +178,9 @@
     
     [FFNonFantasyGame fetchGamesSession:self.session
                                 success:^(id successObj) {
-                                    NSLog(@"Success object: %@", successObj);
-//                                    self.unpaid = NO;
+                                    self.errorType = FFErrorTypeNoError;
                                     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
+                                    [[NSUserDefaults standardUserDefaults] synchronize];
                                     NSMutableArray *games = [NSMutableArray array];
                                     for (FFNonFantasyGame *game in successObj) {
                                         [game setupTeams];
@@ -135,23 +188,16 @@
                                     }
                                     self.games = [NSMutableArray arrayWithArray:games];
                                     [self updateSelectedGames];
-                                    [self.rosterController reloadWithServerError:NO];
-                                    [self.gamesController reloadWithServerError:NO];
+                                    [self.rosterController.tableView reloadData];
+                                    [self.gamesController.tableView reloadData];
                                     if (alert)
                                         [alert hide];
                                     if (block)
                                         block();
                                 } failure:^(NSError *error) {
-                                    NSLog(@"Error: %@", error);
+                                    [self handleError:error];
                                     if (alert)
                                         [alert hide];
-                                    if ([[[error userInfo] objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Unpaid subscription!"]) {
-//                                        self.unpaid = YES;
-                                        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
-                                    }
-                                    
-                                    [self.rosterController reloadWithServerError:YES];
-                                    [self.gamesController reloadWithServerError:YES];
                                     if (block)
                                         block();
                                 }];
@@ -179,12 +225,14 @@
                                                  inGame:team.gameStatsId
                                                 session:self.session
                                                 success:^(id successObj) {
+                                                    self.errorType = FFErrorTypeNoError;
                                                     [self disablePTForTeam:team];
                                                     [self.gamesController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
                                                                                   withRowAnimation:UITableViewRowAnimationAutomatic];
                                                     [alert hide];
                                                     
                                                 } failure:^(NSError *error) {
+                                                    [self handleError:error];
                                                     [alert hide];
                                                 }];
         [confirmAlert hide];
@@ -233,7 +281,8 @@
                                   animated:YES
                                 completion:nil];
     
-    [self.rosterController reloadWithServerError:NO];
+    [self.rosterController.tableView reloadData];
+    [self.rosterController showOrHideSubmitIfNeeded];
 }
 
 #pragma mark - FFNonFantasyRosterDataSource
@@ -278,6 +327,12 @@
 
 - (void)autoFillWithCompletion:(void(^)(BOOL success))block
 {
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Auto Fill Roster"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.rosterController.view];
+
+    
     [self deselectAllTeams];
     
     [self.delegate shouldSetViewController:self.rosterController
@@ -287,11 +342,17 @@
     
     [FFRoster autofillForSession:self.session
                          success:^(id successObj) {
+                             self.errorType = FFErrorTypeNoError;
                              self.selectedTeams = [NSMutableArray arrayWithArray:successObj];
                              [self updateSelectedGames];
+                             [self.rosterController.tableView reloadData];
+                             [self.rosterController showOrHideSubmitIfNeeded];
+                             [alert hide];
                              if (block)
                                  block(YES);
                          } failure:^(NSError *error) {
+                             [alert hide];
+                             [self handleError:error];
                              if (block)
                                  block(NO);
                          }];
@@ -299,6 +360,11 @@
 
 - (void)submitRosterCompletion:(void (^)(BOOL))block
 {
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Submitting Roster"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.rosterController.view];
+    
     NSMutableArray *teamsDicts = [NSMutableArray arrayWithCapacity:self.selectedTeams.count];
     for (FFTeam *team in self.selectedTeams) {
         NSDictionary * dict = @{
@@ -312,20 +378,25 @@
     [FFRoster submitNonFantasyRosterWithTeams:teamsDicts
                                       session:self.session
                                       success:^(id successObj) {
+                                          self.errorType = FFErrorTypeNoError;
                                           [self deselectAllTeams];
+                                          [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                                                                         withRowAnimation:UITableViewRowAnimationAutomatic];
                                           [self.rosterController showOrHideSubmitIfNeeded];
+                                          [alert hide];
                                           
-                                          FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
+                                          FFAlertView* successAlert = [[FFAlertView alloc] initWithTitle:nil
                                                                                           message:[successObj objectForKey:@"msg"]
                                                                                 cancelButtonTitle:nil
                                                                                   okayButtonTitle:@"OK"
                                                                                          autoHide:YES];
-                                          [alert showInView:self.rosterController.navigationController.view];
+                                          [successAlert showInView:self.rosterController.navigationController.view];
                                           
                                           if (block)
                                               block(YES);
                                       } failure:^(NSError *error) {
-                                          NSLog(@"Error: %@", error);
+                                          [self handleError:error];
+                                          [alert hide];
                                           if (block)
                                               block(NO);
                                       }];

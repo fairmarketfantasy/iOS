@@ -131,13 +131,6 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
 #pragma mark - public
 
-- (void)reloadWithServerError:(BOOL)isError
-{
-    self.isServerError = isError;
-    [self.picker reloadAllComponents];
-    [self.tableView reloadData];
-}
-
 - (void)showPosition:(NSString*)position
 {
     if ([self.dataSource uniquePositions].count == 0) {
@@ -255,9 +248,7 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
                 NSString *message = nil;
                 if (self.networkStatus == NotReachable) {
                     message = @"No Internet Connection";
-                } /*else if ([self.dataSource unpaidSubscription]) {
-                    message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
-                }*/ else if (self.markets.count == 0) {
+                } else if (self.markets.count == 0) {
                     message = @"No Games Scheduled";
                 } else {
                     message = [self.errorDelegate messageForError];

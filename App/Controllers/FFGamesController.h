@@ -8,6 +8,7 @@
 
 #import "FFBaseViewController.h"
 #import "FFNonFantasyRosterDataSource.h"
+#import "FFManager.h"
 
 @class FFTeam;
 
@@ -25,12 +26,10 @@
     Reachability* internetReachability;
 }
 
-@property(nonatomic) NSArray* players; // should contain FFPlayer*
-@property(nonatomic, weak) id<FFGamesProtocol> delegate;
-@property(nonatomic, weak) id<FFNonFantasyRosterDataSource> dataSource;
-@property(nonatomic) UITableView* tableView;
-
-- (void)reloadWithServerError:(BOOL)isError;
+@property (nonatomic, weak) id<FFGamesProtocol> delegate;
+@property (nonatomic, weak) id<FFNonFantasyRosterDataSource> dataSource;
+@property (nonatomic, weak) id<FFErrorHandlingDelegate> errorDelegate;
+@property (nonatomic, readonly) UITableView* tableView;
 
 @end
 
