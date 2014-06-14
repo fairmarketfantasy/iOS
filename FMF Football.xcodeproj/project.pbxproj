@@ -678,6 +678,47 @@
 			name = "Football World Cup";
 			sourceTree = "<group>";
 		};
+		3AC89EEA194C5312009DCD61 /* Unused */ = {
+			isa = PBXGroup;
+			children = (
+				896ACBF718B664F5001E9C64 /* FFHomeViewController.h */,
+				896ACBF818B664F5001E9C64 /* FFHomeViewController.m */,
+				896ACBED18B664F5001E9C64 /* FFContestEntrantsViewController.h */,
+				896ACBEE18B664F5001E9C64 /* FFContestEntrantsViewController.m */,
+				896ACBEF18B664F5001E9C64 /* FFContestViewController.h */,
+				896ACBF018B664F5001E9C64 /* FFContestViewController.m */,
+				896ACBF118B664F5001E9C64 /* FFCreateGameViewController.h */,
+				896ACBF218B664F5001E9C64 /* FFCreateGameViewController.m */,
+				896ACBF318B664F5001E9C64 /* FFDrawerViewController.h */,
+				896ACBF418B664F5001E9C64 /* FFDrawerViewController.m */,
+				896ACBF518B664F5001E9C64 /* FFFindGameViewController.h */,
+				896ACBF618B664F5001E9C64 /* FFFindGameViewController.m */,
+				896ACBF918B664F5001E9C64 /* FFInviteViewController.h */,
+				896ACBFA18B664F5001E9C64 /* FFInviteViewController.m */,
+				896ACBFF18B664F5001E9C64 /* FFNavigationController.h */,
+				896ACC0018B664F5001E9C64 /* FFNavigationController.m */,
+				896ACC0118B664F5001E9C64 /* FFOptionSelectController.h */,
+				896ACC0218B664F5001E9C64 /* FFOptionSelectController.m */,
+				896ACC0318B664F5001E9C64 /* FFRosterViewController.h */,
+				896ACC0418B664F5001E9C64 /* FFRosterViewController.m */,
+				896ACC0718B664F5001E9C64 /* FFTickerDrawerViewController.h */,
+				896ACC0818B664F5001E9C64 /* FFTickerDrawerViewController.m */,
+				896ACC0918B664F5001E9C64 /* FFTickerMaximizedDrawerViewController.h */,
+				896ACC0A18B664F5001E9C64 /* FFTickerMaximizedDrawerViewController.m */,
+				896ACC0B18B664F5001E9C64 /* FFTickerMinimizedDrawerViewController.h */,
+				896ACC0C18B664F5001E9C64 /* FFTickerMinimizedDrawerViewController.m */,
+				896ACC0D18B664F5001E9C64 /* FFTokenPurchaseViewController.h */,
+				896ACC0E18B664F5001E9C64 /* FFTokenPurchaseViewController.m */,
+				896ACC0F18B664F5001E9C64 /* FFValueEntryController.h */,
+				896ACC1018B664F5001E9C64 /* FFValueEntryController.m */,
+				896ACC1118B664F5001E9C64 /* FFWebViewController.h */,
+				896ACC1218B664F5001E9C64 /* FFWebViewController.m */,
+				89BB56DE18E997B1003EE7DA /* FFPasswordController.h */,
+				89BB56DF18E997B1003EE7DA /* FFPasswordController.m */,
+			);
+			name = Unused;
+			sourceTree = "<group>";
+		};
 		896ACAED18B663C2001E9C64 /* Test */ = {
 			isa = PBXGroup;
 			children = (
@@ -823,6 +864,7 @@
 				F9A93239194888F10012193F /* Fototball WC */,
 				F9A6A12D1947325D00D6D4B0 /* Fantasy */,
 				F9A6A12E194732A300D6D4B0 /* NonFantasy */,
+				3AC89EEA194C5312009DCD61 /* Unused */,
 				896ACBE918B664F5001E9C64 /* FFAppDelegate.h */,
 				896ACBEA18B664F5001E9C64 /* FFAppDelegate.m */,
 				896ACBEB18B664F5001E9C64 /* FFBaseViewController.h */,
@@ -845,40 +887,6 @@
 				896ACBFC18B664F5001E9C64 /* FFMenuViewController.m */,
 				896ACBFD18B664F5001E9C64 /* FFMyAccountViewController.h */,
 				896ACBFE18B664F5001E9C64 /* FFMyAccountViewController.m */,
-				896ACBF718B664F5001E9C64 /* FFHomeViewController.h */,
-				896ACBF818B664F5001E9C64 /* FFHomeViewController.m */,
-				896ACBED18B664F5001E9C64 /* FFContestEntrantsViewController.h */,
-				896ACBEE18B664F5001E9C64 /* FFContestEntrantsViewController.m */,
-				896ACBEF18B664F5001E9C64 /* FFContestViewController.h */,
-				896ACBF018B664F5001E9C64 /* FFContestViewController.m */,
-				896ACBF118B664F5001E9C64 /* FFCreateGameViewController.h */,
-				896ACBF218B664F5001E9C64 /* FFCreateGameViewController.m */,
-				896ACBF318B664F5001E9C64 /* FFDrawerViewController.h */,
-				896ACBF418B664F5001E9C64 /* FFDrawerViewController.m */,
-				896ACBF518B664F5001E9C64 /* FFFindGameViewController.h */,
-				896ACBF618B664F5001E9C64 /* FFFindGameViewController.m */,
-				896ACBF918B664F5001E9C64 /* FFInviteViewController.h */,
-				896ACBFA18B664F5001E9C64 /* FFInviteViewController.m */,
-				896ACBFF18B664F5001E9C64 /* FFNavigationController.h */,
-				896ACC0018B664F5001E9C64 /* FFNavigationController.m */,
-				896ACC0118B664F5001E9C64 /* FFOptionSelectController.h */,
-				896ACC0218B664F5001E9C64 /* FFOptionSelectController.m */,
-				896ACC0318B664F5001E9C64 /* FFRosterViewController.h */,
-				896ACC0418B664F5001E9C64 /* FFRosterViewController.m */,
-				896ACC0718B664F5001E9C64 /* FFTickerDrawerViewController.h */,
-				896ACC0818B664F5001E9C64 /* FFTickerDrawerViewController.m */,
-				896ACC0918B664F5001E9C64 /* FFTickerMaximizedDrawerViewController.h */,
-				896ACC0A18B664F5001E9C64 /* FFTickerMaximizedDrawerViewController.m */,
-				896ACC0B18B664F5001E9C64 /* FFTickerMinimizedDrawerViewController.h */,
-				896ACC0C18B664F5001E9C64 /* FFTickerMinimizedDrawerViewController.m */,
-				896ACC0D18B664F5001E9C64 /* FFTokenPurchaseViewController.h */,
-				896ACC0E18B664F5001E9C64 /* FFTokenPurchaseViewController.m */,
-				896ACC0F18B664F5001E9C64 /* FFValueEntryController.h */,
-				896ACC1018B664F5001E9C64 /* FFValueEntryController.m */,
-				896ACC1118B664F5001E9C64 /* FFWebViewController.h */,
-				896ACC1218B664F5001E9C64 /* FFWebViewController.m */,
-				89BB56DE18E997B1003EE7DA /* FFPasswordController.h */,
-				89BB56DF18E997B1003EE7DA /* FFPasswordController.m */,
 			);
 			name = "Controllers & Managers";
 			path = Controllers;

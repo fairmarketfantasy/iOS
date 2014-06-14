@@ -40,14 +40,12 @@
 
 @interface FFFantasyRosterController () <UITableViewDataSource, UITableViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
-// models
-@property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
-@property(nonatomic) FFSubmitView* submitView;
-@property(nonatomic) FFMarketSet* marketsSetRegular;
-@property(nonatomic) FFMarketSet* marketsSetSingle;
-
-@property(nonatomic, assign) NetworkStatus networkStatus;
-@property(nonatomic, assign) BOOL isServerError;
+@property (nonatomic, strong) FFSubmitView* submitView;
+@property (nonatomic, strong) FFMarketSet* marketsSetRegular;
+@property (nonatomic, strong) FFMarketSet* marketsSetSingle;
+@property (nonatomic, assign) NSUInteger tryCreateRosterTimes;
+@property (nonatomic, assign) NetworkStatus networkStatus;
+@property (nonatomic, assign) BOOL isServerError;
 
 @end
 
@@ -83,8 +81,6 @@
     [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(autoFill:) name:@"Autofill" object:nil];
-    
     //reachability
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
     internetReachability = [Reachability reachabilityForInternetConnection];
@@ -97,7 +93,6 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"Autofill" object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -120,20 +115,10 @@
 #pragma mark -
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
-{
-    [self refreshRosterWithShowingAlert:NO completion:^{
-        [self.tableView reloadData];
+{    
+    [self.delegate refreshRosterWithShowingAlert:NO completion:^{
         [refreshControl endRefreshing];
     }];
-}
-
-#pragma mark
-
-- (void)reloadWithServerError:(BOOL)isError
-{
-    self.isServerError = isError;
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-    [self showOrHideSubmitIfNeeded];
 }
 
 #pragma mark -
@@ -156,7 +141,7 @@
 
 - (BOOL)isSomethingWrong
 {
-    return [self.errorDelegate errorExists] ||
+    return [self.errorDelegate isError] ||
             self.networkStatus == NotReachable ||
             self.markets.count == 0;
 }
@@ -187,16 +172,16 @@
 
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
-    if (self.networkStatus == NotReachable) {
-        if (shouldShow) {
-            [[FFAlertView noInternetConnectionAlert] showInView:self.view];
-        }
-        
-        block();
-        return;
-    }
-        
-    [self.delegate refreshRosterWithCompletion:nil];
+//    if (self.networkStatus == NotReachable) {
+//        if (shouldShow) {
+//            [[FFAlertView noInternetConnectionAlert] showInView:self.view];
+//        }
+//        
+//        block();
+//        return;
+//    }
+    
+    [self.delegate refreshRosterWithShowingAlert:shouldShow completion:block];
 }
 
 #pragma mark - Cells
@@ -327,9 +312,7 @@
                     NSString *message = nil;
                     if (self.networkStatus == NotReachable) {
                         message = @"No Internet Connection";
-                    } /*else if ([self.dataSource unpaidSubscription]) {
-                        message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
-                    }*/ else if (self.markets.count == 0) {
+                    } else if (self.markets.count == 0) {
                         message = @"No Games Scheduled";
                     } else {
                         message = [self.errorDelegate messageForError];
@@ -338,10 +321,8 @@
                     cell.message.text = message;
                     return cell;
                 }
-                
                 return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
             }
-            
             return [self provideAutoFillCellForTable:tableView atIndexPath:indexPath];
         }
             
@@ -355,7 +336,6 @@
                 if (!player) {
                     return [self provideTeamCellWithPosition:positionName forTable:tableView atIndexPath:indexPath];
                 }
-                
                 return [self provideTeamTradeCellWithPlayer:player forTable:tableView atIndexPath:indexPath];
             } else {
                 return [self provideTeamCellWithPosition:positionName forTable:tableView atIndexPath:indexPath];
@@ -422,32 +402,13 @@
 
 - (void)removePlayer:(FFPlayer*)player
 {
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Removing Player"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.navigationController.view];
-    
-    @weakify(self)
-    [self.delegate removePlayer:player completion:^(BOOL success) {
-        @strongify(self)
-        [alert hide];
-        [self showOrHideSubmitIfNeeded];
-        
-        if (success) {
-            [self refreshRosterWithShowingAlert:YES completion:^{
-                [self.tableView reloadData];
-            }];
-            
-            [self.delegate showPosition:player.position];
-        }
-    }];
+    [self.delegate removePlayer:player completion:nil];
 }
 
 - (void)onSubmit:(FUISegmentedControl*)segments
 {
     FFRosterSubmitType rosterType = (FFRosterSubmitType)segments.selectedSegmentIndex;
     [self.delegate submitRoster:rosterType completion:nil];
-//    [self submitRoster:rosterType];
     self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
 }
 

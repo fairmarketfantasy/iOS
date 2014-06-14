@@ -17,14 +17,12 @@
     Reachability* internetReachability;
 }
 
+@property(nonatomic, strong) UITableView* tableView;
 @property(nonatomic, weak) id<FFErrorHandlingDelegate> errorDelegate;
 @property(nonatomic, weak) id<FFFantasyRosterDelegate> delegate;
 @property(nonatomic, weak) id<FFFantasyRosterDataSource> dataSource;
 @property(nonatomic, assign) BOOL removeBenched;
-@property(nonatomic) UITableView* tableView;
 
-- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
-- (void)reloadWithServerError:(BOOL)isError;
 - (void)showOrHideSubmitIfNeeded;
 
 @end

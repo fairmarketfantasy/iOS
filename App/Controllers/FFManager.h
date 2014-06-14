@@ -21,6 +21,7 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 
 @protocol FFManagerDelegate <NSObject>
 
+- (UIViewController *)selectedController;
 - (void)openIndividualPredictionsForPlayer:(FFPlayer *)player;
 - (void)updatePagerView;
 - (void)shouldSetViewController:(UIViewController *)controller
@@ -32,7 +33,7 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 
 @protocol FFErrorHandlingDelegate <NSObject>
 
-- (BOOL)errorExists;
+- (BOOL)isError;
 - (NSString *)messageForError;
 
 @end

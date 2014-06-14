@@ -336,6 +336,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 #pragma mark - FFManagerDelegate
 
+- (UIViewController *)selectedController
+{
+    return self.viewControllers.firstObject;
+}
+
 - (void)shouldSetViewController:(UIViewController *)controller
                       direction:(UIPageViewControllerNavigationDirection)direction
                        animated:(BOOL)animated

@@ -99,7 +99,7 @@
 
 - (BOOL)isSomethingWrong
 {
-    return [self.errorDelegate errorExists] || self.networkStatus == NotReachable;
+    return [self.errorDelegate isError] || self.networkStatus == NotReachable;
 }
 
 #pragma mark - UITableViewDataSource

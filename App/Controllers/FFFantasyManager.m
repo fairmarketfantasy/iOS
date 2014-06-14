@@ -28,18 +28,14 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
 
 @property (nonatomic, strong) FFFantasyRosterController *rosterController;
 @property (nonatomic, strong) FFPlayersController *playersController;
-
 @property (nonatomic, strong) FFMarketSet* marketsSetRegular;
 @property (nonatomic, strong) FFMarketSet* marketsSetSingle;
-
 @property (nonatomic, strong) NSMutableArray *myTeam;
 @property (nonatomic, strong) NSDictionary* positionsNames;
 @property (nonatomic, strong) FFRoster *roster;
 @property (nonatomic, strong) FFMarket* selectedMarket;
-
 @property (nonatomic, assign) BOOL rosterIsCreating;
 @property (nonatomic, assign) BOOL unpaid;
-
 @property (nonatomic, assign) NetworkStatus networkStatus;
 
 @end
@@ -135,8 +131,11 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
         [alert showInView:self.playersController.view];
     } else {
         self.errorType = FFErrorTypeUnknownServerError;
-        
     }
+    
+    [self.rosterController.tableView reloadData];
+    [self.rosterController showOrHideSubmitIfNeeded];
+    [self.playersController.tableView reloadData];
 }
 
 #pragma mark
@@ -176,7 +175,6 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
     [self.rosterController.tableView reloadData];
     NSArray *markets = [self availableMarkets];
     if (markets.count > 0) {
-        
         if ([self.rosterController respondsToSelector:@selector(marketSelected:)]) {
             [self.rosterController performSelector:@selector(marketSelected:) withObject:markets.firstObject];
         }
@@ -343,11 +341,10 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
 //                [weakSelf.rosterController.tableView reloadData];
 //                [weakSelf.playersController.tableView reloadData];
             } else {
-//                [weakSelf.rosterController reloadWithServerError:NO];
                 [weakSelf.playersController fetchPlayersWithShowingAlert:NO completion:^{
-                    [weakSelf.playersController reloadWithServerError:NO ];
+                    [weakSelf.playersController.tableView reloadData];
                 }];
-            }
+             }
         }];
     }
 }
@@ -404,7 +401,8 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.rosterController.view];
+//    [alert showInView:self.rosterController.view];
+    [alert showInView:[self.delegate selectedController].view];
     
     @weakify(self)
     [FFRoster createNewRosterForMarket:self.selectedMarket.objId
@@ -413,7 +411,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
      ^(id successObj) {
          @strongify(self)
          _rosterIsCreating = NO;
-         self.unpaid = NO;
+         self.errorType = FFErrorTypeNoError;
          [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
          self.roster = successObj;
          SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.rosterController.removeBenched ? 1 : 0];
@@ -436,33 +434,6 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
          self.roster = nil;
          if (block)
              block(error);
-     }];
-}
-
-- (void)addPlayer:(FFPlayer*)player
-{
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Buying Player"
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.playersController.view];
-    @weakify(self)
-    [self.roster addPlayer:player
-                   success:
-     ^(id successObj) {
-         @strongify(self)
-         [alert hide];
-         [self addPlayerToMyTeam:player];
-         [self.rosterController refreshRosterWithShowingAlert:YES completion:nil];
-         [self.delegate shouldSetViewController:self.rosterController
-                                      direction:UIPageViewControllerNavigationDirectionReverse
-                                       animated:YES
-                                     completion:nil];
-     }
-                   failure:
-     ^(NSError *error) {
-         @strongify(self)
-         [alert hide];
-         [self handleError:error];
      }];
 }
 
@@ -499,17 +470,30 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
 
 - (void)removePlayer:(FFPlayer*)player completion:(void(^)(BOOL success))block
 {
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Removing Player"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.rosterController.view];
+    
     @weakify(self)
     [self.roster removePlayer:player
                       success:
      ^(id successObj) {
          @strongify(self)
+         [alert hide];
+         self.errorType = FFErrorTypeNoError;
          [self removePlayerFromMyTeam:player];
+         [self.rosterController showOrHideSubmitIfNeeded];
+         
+         [self refreshRosterWithShowingAlert:NO completion:nil];
+         [self showPosition:player.position];
+         
          if (block)
              block(YES);
      }
                       failure:
      ^(NSError *error) {
+         [alert hide];
          [self handleError:error];
          if (block)
              block(NO);
@@ -528,6 +512,15 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
                        success:
      ^(id successObj) {
          @strongify(self)
+         self.errorType = FFErrorTypeNoError;
+         
+         [[[FFAlertView alloc] initWithTitle:nil
+                                     message:self.currentRoster.messageAfterSubmit
+                           cancelButtonTitle:nil
+                             okayButtonTitle:@"Ok"
+                                    autoHide:YES]
+          showInView:self.rosterController.view];
+         
          [alert hide];
          if (block)
              block(YES);
@@ -558,6 +551,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
      ^(id successObj) {
          @strongify(self)
          [alert hide];
+         self.errorType = FFErrorTypeNoError;
          self.roster = successObj;
          self.myTeam = [self newTeamWithPositions:[self allPositions]];
          for (FFPlayer *player in self.roster.players) {
@@ -595,6 +589,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
      ^(id successObj) {
          @strongify(self)
          [alert hide];
+         self.errorType = FFErrorTypeNoError;
          self.roster = successObj;
          if ([self.roster.removeBenched integerValue] == 1) {
              [self removeBenchedPlayersFromTeam];
@@ -620,41 +615,49 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
      }];
 }
 
-- (void)refreshRosterWithCompletion:(void(^)(BOOL success))block
+- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
-                                                           messsage:nil
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.rosterController.view];
-    
+    __block FFAlertView* alert = nil;
+    if (shouldShow) {
+        alert = [[FFAlertView alloc] initWithTitle:@""
+                                          messsage:nil
+                                      loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.rosterController.view];
+    }
+
     if (self.roster) {
         @weakify(self)
         [self.roster refreshInBackgroundWithBlock:
          ^(id successObj) {
              @strongify(self)
-             [alert hide];
+             self.errorType = FFErrorTypeNoError;
              self.roster = successObj;
              SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.rosterController.removeBenched ? 1 : 0];
              self.roster.removeBenched = autoRemove;
              [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
              
+             if (alert)
+                 [alert hide];
              if (block)
-                 block(YES);
+                 block();
          }
                                           failure:
          ^(NSError *error) {
              @strongify(self)
-             [alert hide];
              [self handleError:error];
              self.roster = nil;
              
+             if (alert)
+                 [alert hide];
              if (block)
-                 block(NO);
+                 block();
          }];
     } else {
         [self createRosterWithCompletion:nil];
     }
 }
+
+#pragma mark - FFPlayersProtocol
 
 - (void)fetchPlayersForPosition:(NSInteger)position WithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
@@ -683,6 +686,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
                             success:
      ^(id successObj) {
          @strongify(self)
+         self.errorType = FFErrorTypeNoError;
          self.playersController.players = successObj;
          
          if(alert)
@@ -699,6 +703,34 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
              [alert hide];
          if (block)
              block();
+     }];
+}
+
+- (void)addPlayer:(FFPlayer*)player
+{
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Buying Player"
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.playersController.view];
+    @weakify(self)
+    [self.roster addPlayer:player
+                   success:
+     ^(id successObj) {
+         @strongify(self)
+         [alert hide];
+         self.errorType = FFErrorTypeNoError;
+         [self addPlayerToMyTeam:player];
+         [self refreshRosterWithShowingAlert:YES completion:nil];
+         [self.delegate shouldSetViewController:self.rosterController
+                                      direction:UIPageViewControllerNavigationDirectionReverse
+                                       animated:YES
+                                     completion:nil];
+     }
+                   failure:
+     ^(NSError *error) {
+         @strongify(self)
+         [alert hide];
+         [self handleError:error];
      }];
 }
 

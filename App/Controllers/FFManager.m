@@ -24,7 +24,7 @@
     return @[];
 }
 
-- (BOOL)errorExists
+- (BOOL)isError
 {
     return self.errorType != FFErrorTypeNoError;
 }
@@ -37,7 +37,7 @@
         case FFErrorTypeUnknownServerError:
             return @"Unknown Server Error";
         case FFErrorTypeUnpaid:
-            return @"Unpaid Subscription";
+            return @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
             
         default:
             break;

@@ -172,7 +172,7 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
 - (BOOL)isSomethingWrong
 {
-    return ([self.errorDelegate errorExists] ||
+    return ([self.errorDelegate isError] ||
             self.networkStatus == NotReachable ||
             self.markets.count == 0);
 }
