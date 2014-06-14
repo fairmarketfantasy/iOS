@@ -152,7 +152,7 @@
             if (self.networkStatus == NotReachable) {
                 message = @"No Internet Connection";
             } else {
-                message = [self.errorDelegate messageForError];
+                message = [self.errorDelegate errorMessage];
             }
             
             /* else if ([self.dataSource unpaidSubscription]) {

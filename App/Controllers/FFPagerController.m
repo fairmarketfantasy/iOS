@@ -159,10 +159,10 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
     self.networkStatus = [internetReachability currentReachabilityStatus];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusHasChanged:) name:kReachabilityChangedNotification object:nil];
 }
 
-- (void)checkNetworkStatus:(NSNotification *)notification
+- (void)networkStatusHasChanged:(NSNotification *)notification
 {
     NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
     NetworkStatus previousStatus = self.networkStatus;

@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 @protocol FFErrorHandlingDelegate <NSObject>
 
 - (BOOL)isError;
-- (NSString *)messageForError;
+- (NSString *)errorMessage;
 
 @end
 

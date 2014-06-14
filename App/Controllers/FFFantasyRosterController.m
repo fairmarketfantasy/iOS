@@ -82,7 +82,7 @@
     [self.tableView addSubview:refreshControl];
     
     //reachability
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusHasChanged:) name:kReachabilityChangedNotification object:nil];
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
 	if ( !success )
@@ -123,7 +123,7 @@
 
 #pragma mark -
 
-- (void)checkNetworkStatus:(NSNotification *)notification
+- (void)networkStatusHasChanged:(NSNotification *)notification
 {
     NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
     NetworkStatus previousStatus = self.networkStatus;
@@ -315,7 +315,7 @@
                     } else if (self.markets.count == 0) {
                         message = @"No Games Scheduled";
                     } else {
-                        message = [self.errorDelegate messageForError];
+                        message = [self.errorDelegate errorMessage];
                     }
                     
                     cell.message.text = message;

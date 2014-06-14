@@ -24,12 +24,19 @@
     return @[];
 }
 
+- (void)handleError:(NSError *)error
+{
+    
+}
+
+#pragma mark - FFErrorHandlingDelegate
+
 - (BOOL)isError
 {
     return self.errorType != FFErrorTypeNoError;
 }
 
-- (NSString *)messageForError
+- (NSString *)errorMessage
 {
     switch (self.errorType) {
         case FFErrorTypeTimeOut:
@@ -44,11 +51,6 @@
     }
     
     return nil;
-}
-
-- (void)handleError:(NSError *)error
-{
-    
 }
 
 @end
