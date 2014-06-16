@@ -56,7 +56,7 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     NSDateFormatter* formatter = NSDateFormatter.new;
     formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"MMMM d, y"
                                                            options:0
-                                                            locale:[NSLocale currentLocale]];
+                                                            locale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
     formatter.timeZone = [NSTimeZone localTimeZone];
     return formatter;
 }
@@ -66,7 +66,7 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     NSDateFormatter* formatter = NSDateFormatter.new;
     formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"E M dd"
                                                            options:0
-                                                            locale:[NSLocale currentLocale]];
+                                                            locale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
     formatter.timeZone = [NSTimeZone localTimeZone];
     return formatter;
 }
@@ -76,7 +76,27 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
     NSDateFormatter* formatter = NSDateFormatter.new;
     formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"h:m a"
                                                            options:0
-                                                            locale:[NSLocale currentLocale]];
+                                                            locale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
+    formatter.timeZone = [NSTimeZone localTimeZone];
+    return formatter;
+}
+
++ (NSDateFormatter *)dayOfWeekFormatter
+{
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"E"
+                                                           options:0
+                                                            locale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
+    formatter.timeZone = [NSTimeZone localTimeZone];
+    return formatter;
+}
+
++ (NSDateFormatter *)dayOfMonthFormatter
+{
+    NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"d"
+                                                           options:0
+                                                            locale:[NSLocale localeWithLocaleIdentifier:@"en_US"]];
     formatter.timeZone = [NSTimeZone localTimeZone];
     return formatter;
 }

@@ -18,14 +18,6 @@
     return formatter;
 }
 
-+ (NSDateFormatter *)prettyDateFormatter
-{
-    NSDateFormatter* formatter = NSDateFormatter.new;
-    formatter.dateFormat = @"dd MMM HH:mm";
-    formatter.timeZone = [NSTimeZone localTimeZone];
-    return formatter;
-}
-
 #pragma mark - SBField protocol
 
 - (NSString*)description

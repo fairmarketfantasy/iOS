@@ -25,6 +25,8 @@
 + (NSDateFormatter*)marketDateFormatter;
 + (NSDateFormatter*)dateFormatter;
 + (NSDateFormatter*)dayFormatter;
++ (NSDateFormatter *)dayOfWeekFormatter;
++ (NSDateFormatter *)dayOfMonthFormatter;
 + (NSDateFormatter*)timeFormatter;
 
 + (UIColor*)darkGrey;

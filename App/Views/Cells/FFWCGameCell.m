@@ -78,7 +78,7 @@
         [self.contentView addSubview:self.guestTeamName];
         
         // date
-        self.datelabel = [[UILabel alloc] initWithFrame:CGRectMake(120.f, 70.f, 80.f, 20.f)];
+        self.datelabel = [[UILabel alloc] initWithFrame:CGRectMake(110.f, 70.f, 100.f, 20.f)];
         self.datelabel.textAlignment = NSTextAlignmentCenter;
         self.datelabel.backgroundColor = [UIColor clearColor];
         self.datelabel.font = [FFStyle regularFont:14.f];
@@ -150,15 +150,17 @@
     [self.homePTButton setTitleColor:homePTColor forState:UIControlStateNormal];
     [self.guestPTButton setTitleColor:guestPTColor forState:UIControlStateNormal];
     
-    [self.homePTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", game.homeTeam.pt]
+    [self.homePTButton setTitle:[NSString stringWithFormat:@"%@%li", @"PT", (long)game.homeTeam.pt]
                        forState:UIControlStateNormal];
-    [self.guestPTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", game.guestTeam.pt]
+    [self.guestPTButton setTitle:[NSString stringWithFormat:@"%@%li", @"PT", (long)game.guestTeam.pt]
                         forState:UIControlStateNormal];
     
     self.homePTButton.enabled = !game.homeTeam.disablePT;
     self.guestPTButton.enabled = !game.guestTeam.disablePT;
     
-    self.datelabel.text = [[FFDate prettyDateFormatter] stringFromDate:game.date];
+    NSString *dayOfMonth = [[FFStyle dayOfMonthFormatter] stringFromDate:game.date];
+    NSString *dayOfWeak = [[FFStyle dayOfWeekFormatter] stringFromDate:game.date];
+    self.datelabel.text = [NSString stringWithFormat:@"%@%@ @ %@", dayOfWeak, dayOfMonth, [[FFStyle timeFormatter] stringFromDate:game.date]];
 }
 
 @end
