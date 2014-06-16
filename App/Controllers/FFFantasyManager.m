@@ -419,6 +419,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
          self.myTeam = [self newTeamWithPositions:[self allPositions]];
          
          [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+         [self.rosterController showOrHideSubmitIfNeeded];
          
          [alert hide];
          if (block) {
