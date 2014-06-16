@@ -282,15 +282,27 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
             
             if (self.predictions.count > indexPath.row) {
                 __block FFIndividualPrediction* prediction = self.predictions[indexPath.row];
+                
+                //title
                 cell.choiceLabel.text = prediction.playerName;
                 cell.eventLabel.text = prediction.marketName;
+                //day
                 NSString *dayString = nil;
+                NSString *timeString = nil;
                 if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
                     dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
                 } else {
-                    dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameTime];
+                    NSDate *defaultDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
+                    if ([prediction.gameTime isEqualToDate:defaultDate]) {
+                        dayString = timeString = @"N/A";
+                    } else {
+                        dayString = timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
+                    }
                 }
                 cell.dayLabel.text = dayString;
+                //time
+                cell.timeLabel.text = timeString;
+                //pt
                 cell.ptLabel.text = prediction.predictThat;
                 if (prediction.eventPredictions.count > 0) {
                     NSDictionary* eventPrediction = prediction.eventPredictions.firstObject;
@@ -303,8 +315,9 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                     }
                 }
                 
-                cell.timeLabel.text = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
+                //award
                 cell.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
+                //result
                 NSString *resultString = nil;
                 //TODO:field gameResult in fantasy and anon-fantasy has different type
                 if ([prediction.state isEqualToString:@"cancelled"]) {
