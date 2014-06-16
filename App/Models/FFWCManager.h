@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FFManager.h"
+#import "FFSportManager.h"
 
 typedef NS_ENUM(NSUInteger, FFWCPredictionCategory)
 {
@@ -17,6 +17,6 @@ typedef NS_ENUM(NSUInteger, FFWCPredictionCategory)
     FFWCCupWinner
 };
 
-@interface FFWCManager : FFManager
+@interface FFWCManager : FFSportManager
 
 @end

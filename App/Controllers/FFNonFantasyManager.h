@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FFManager.h"
+#import "FFSportManager.h"
 
-@interface FFNonFantasyManager : FFManager
+@interface FFNonFantasyManager : FFSportManager
 
 @end

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FFBaseViewController.h"
 #import "FFFantasyRosterDataSource.h"
-#import "FFManager.h"
+#import "FFSportManager.h"
 
 @class Reachability;
 

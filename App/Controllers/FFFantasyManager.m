@@ -7,7 +7,7 @@
 //
 
 #import "FFFantasyManager.h"
-#import "FFManager.h"
+#import "FFSportManager.h"
 #import "FFFantasyRosterController.h"
 #import "FFPlayersController.h"
 #import "FFPagerController.h"

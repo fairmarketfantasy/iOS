@@ -34,7 +34,7 @@
 #import "FFPlayer.h"
 #import "FFDate.h"
 
-#import "FFManager.h"
+#import "FFSportManager.h"
 
 @interface FFFantasyRosterController () <UITableViewDataSource, UITableViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 

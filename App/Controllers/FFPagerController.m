@@ -13,7 +13,7 @@
 #import "FFPTController.h"
 #import "FFWCController.h"
 #import "FFSessionManager.h"
-#import "FFManager.h"
+#import "FFSportManager.h"
 #import "FFWCManager.h"
 #import "FFFantasyManager.h"
 #import "FFNonFantasyManager.h"
@@ -26,11 +26,11 @@
 #import <SBData/SBTypes.h>
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
-FFUserProtocol, FFMenuViewControllerDelegate, FFManagerDelegate>
+FFUserProtocol, FFMenuViewControllerDelegate, FFSportManagerDelegate>
 
 @property (nonatomic, strong) StyledPageControl* pager;
 @property (nonatomic, strong) UIButton* globalMenuButton;
-@property (nonatomic, strong) FFManager *manager;
+@property (nonatomic, strong) FFSportManager *manager;
 @property (nonatomic, assign) BOOL isFirstLaunch;
 
 @end
@@ -270,7 +270,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                                   completion:nil];
 }
 
-#pragma mark - FFManagerDelegate
+#pragma mark - FFSportManagerDelegate
 
 - (UIViewController *)selectedController
 {

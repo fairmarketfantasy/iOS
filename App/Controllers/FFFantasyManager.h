@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "FFPTController.h"
-#import "FFManager.h"
+#import "FFSportManager.h"
 
 @class FFSession;
 
-@interface FFFantasyManager : FFManager <FFEventsProtocol>
+@interface FFFantasyManager : FFSportManager <FFEventsProtocol>
 
 @end

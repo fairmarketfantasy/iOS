@@ -8,7 +8,7 @@
 
 #import "FFBaseViewController.h"
 #import "FFNonFantasyRosterDataSource.h"
-#import "FFManager.h"
+#import "FFSportManager.h"
 
 @class FFTeam;
 

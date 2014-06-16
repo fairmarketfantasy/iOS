@@ -1,5 +1,5 @@
 //
-//  FFManager.h
+//  FFSportManager.h
 //  FMF Football
 //
 //  Created by Anton Chuev on 6/12/14.
@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 @class FFSession;
 @class FFPlayer;
 
-@protocol FFManagerDelegate <NSObject>
+@protocol FFSportManagerDelegate <NSObject>
 
 - (UIViewController *)selectedController;
 - (void)openIndividualPredictionsForPlayer:(FFPlayer *)player;
@@ -38,14 +38,14 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 
 @end
 
-@interface FFManager : NSObject <FFErrorHandlingDelegate>
+@interface FFSportManager : NSObject <FFErrorHandlingDelegate>
 
 - (id)initWithSession:(FFSession *)session;
 - (NSArray *)getViewControllers;
 - (void)handleError:(NSError *)error;
 
 @property (nonatomic, strong) FFSession *session;
-@property (nonatomic, weak) id <FFManagerDelegate> delegate;
+@property (nonatomic, weak) id <FFSportManagerDelegate> delegate;
 @property (nonatomic, assign) FFErrorType errorType;
 
 @end
