@@ -664,8 +664,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
 {
     if (![self.currentRoster objId]) {
         self.playersController.players = @[];
-        [self.playersController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                                        withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.playersController.tableView reloadData];
         return;
     }
     
