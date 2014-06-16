@@ -22,9 +22,8 @@
 {
     NSDateFormatter* formatter = NSDateFormatter.new;
     formatter.dateFormat = @"dd MMM HH:mm";
-    formatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"UTC"];
+    formatter.timeZone = [NSTimeZone localTimeZone];
     return formatter;
-
 }
 
 #pragma mark - SBField protocol
