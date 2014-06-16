@@ -130,7 +130,13 @@
     __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
                                                            messsage:@""
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
-    [alert showInView:self.dailyWinsController.view];
+    if (self.delegate.selectedController) {
+        [alert showInView:self.delegate.selectedController.view];
+    } else {
+//        [alert showInView:self.dailyWinsController.view];
+        FFWCController *firstController = [self getViewControllers].firstObject;
+        [alert showInView:firstController.view];
+    }
     
     [self fetchDataForSession:self.session
            dataWithCompletion:^(NSError *error) {

@@ -155,10 +155,6 @@
                 message = [self.errorDelegate errorMessage];
             }
             
-            /* else if ([self.dataSource unpaidSubscription]) {
-                message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
-            }*/
-            
             cell.message.text = message;
             return cell;
         }
