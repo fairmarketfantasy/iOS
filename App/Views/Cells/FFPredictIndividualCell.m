@@ -144,11 +144,15 @@
         dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
         timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
     } else {
-        NSDate *defaultDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
-        if ([prediction.gameTime isEqualToDate:defaultDate]) {
+        if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
             dayString = timeString = @"N/A";
         } else {
-            dayString = timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
+            NSDate *defaultDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
+            if ([prediction.gameTime isEqualToDate:defaultDate]) {
+                dayString = timeString = @"N/A";
+            } else {
+                dayString = timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
+            }
         }
     }
     self.dayLabel.text = dayString;
