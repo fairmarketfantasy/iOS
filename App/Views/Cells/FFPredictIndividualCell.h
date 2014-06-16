@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FFIndividualPrediction.h"
 
 @interface FFPredictIndividualCell : UITableViewCell
 
@@ -18,5 +19,7 @@
 @property(nonatomic, readonly) UILabel* timeLabel;
 @property(nonatomic, readonly) UILabel* awaidLabel;
 @property(nonatomic, readonly) UILabel* resultLabel;
+
+- (void)setupWithPrediction:(FFIndividualPrediction *)prediction;
 
 @end

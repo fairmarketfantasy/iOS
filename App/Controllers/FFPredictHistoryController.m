@@ -281,60 +281,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                                                             forIndexPath:indexPath];
             
             if (self.predictions.count > indexPath.row) {
-                __block FFIndividualPrediction* prediction = self.predictions[indexPath.row];
-                
-                //title
-                cell.choiceLabel.text = prediction.playerName;
-                cell.eventLabel.text = prediction.marketName;
-                //day
-                NSString *dayString = nil;
-                NSString *timeString = nil;
-                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-                    dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
-                } else {
-                    NSDate *defaultDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
-                    if ([prediction.gameTime isEqualToDate:defaultDate]) {
-                        dayString = timeString = @"N/A";
-                    } else {
-                        dayString = timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
-                    }
-                }
-                cell.dayLabel.text = dayString;
-                //time
-                cell.timeLabel.text = timeString;
-                //pt
-                cell.ptLabel.text = prediction.predictThat;
-                if (prediction.eventPredictions.count > 0) {
-                    NSDictionary* eventPrediction = prediction.eventPredictions.firstObject;
-                    if (eventPrediction) {
-                        cell.predictLabel.text = [NSString stringWithFormat:@"%@: %@ %@",
-                                                  [eventPrediction[@"diff"] isEqualToString:@"less"]
-                                                  ? @"Under": @"Over", // TODO: refactor it and move to model
-                                                  eventPrediction[@"value"],
-                                                  eventPrediction[@"event_type"]];
-                    }
-                }
-                
-                //award
-                cell.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
-                //result
-                NSString *resultString = nil;
-                //TODO:field gameResult in fantasy and anon-fantasy has different type
-                if ([prediction.state isEqualToString:@"cancelled"]) {
-                    resultString = @"Didn't play";
-                } else if ([prediction.gameResult isKindOfClass:[NSNumber class]]) {
-                    if (prediction.gameResult)
-                        resultString = [prediction.gameResult stringValue];
-                    else
-                        resultString = @"N/A";
-                } else if ([prediction.gameResult isKindOfClass:[NSString class]]) {
-                    resultString = ((NSString *)prediction.gameResult && [(NSString *)prediction.gameResult isEqualToString:@""] == NO) ?
-                    (NSString *)prediction.gameResult : @"N/A";
-                } else {
-                    resultString = @"N/A";
-                }
-                
-                cell.resultLabel.text = resultString;
+                FFIndividualPrediction* prediction = self.predictions[indexPath.row];
+                [cell setupWithPrediction:prediction];
             }
             return cell;
         }
@@ -352,25 +300,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                        [self performSegueWithIdentifier:@"GotoPredictRoster"
                                                                  sender:prediction]; // TODO: refactode it (?)
                                    }];
-                BOOL isFinished = [prediction.state isEqualToString:@"finished"];
-                cell.nameLabel.text = prediction.market.name;
-                cell.teamLabel.text = prediction.contestType.name;
-                cell.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.startedAt];
-                cell.stateLabel.text = prediction.state;
-                cell.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%li", (long)prediction.score.integerValue] : @"N/A";
-                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%li", (long)prediction.contestRankPayout.integerValue / 100] : @"N/A";
-                NSDateFormatter* formatter = [FFStyle timeFormatter];
-                
-                cell.rankLabel.text = isFinished ?
-                [NSString stringWithFormat:@"%li of %li", (long)prediction.contestRank.integerValue, (long)prediction.contestType.maxEntries.integerValue]
-                : @"Not started yet";
-                
-                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-                    FFFantasyGame* firstGame = prediction.market.games.firstObject;
-                    cell.gameTimeLabel.text = firstGame ? [formatter stringFromDate:firstGame.gameTime] : @"N/A";
-                } else {
-                    cell.gameTimeLabel.text = prediction.startedAt ? [formatter stringFromDate:prediction.startedAt] : @"N/A";
-                }
+                [cell setupWithPrediction:prediction];
             }
             return cell;
         }

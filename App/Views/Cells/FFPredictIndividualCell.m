@@ -7,6 +7,9 @@
 //
 
 #import "FFPredictIndividualCell.h"
+#import "FFIndividualPrediction.h"
+#import "FFSessionManager.h"
+#import "FFDate.h"
 
 @implementation FFPredictIndividualCell
 
@@ -127,6 +130,62 @@
         [self.contentView addSubview:captionResultLabel];
     }
     return self;
+}
+
+- (void)setupWithPrediction:(FFIndividualPrediction *)prediction
+{
+    //title
+    self.choiceLabel.text = prediction.playerName;
+    self.eventLabel.text = prediction.marketName;
+    //day
+    NSString *dayString = nil;
+    NSString *timeString = nil;
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
+    } else {
+        NSDate *defaultDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
+        if ([prediction.gameTime isEqualToDate:defaultDate]) {
+            dayString = timeString = @"N/A";
+        } else {
+            dayString = timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
+        }
+    }
+    self.dayLabel.text = dayString;
+    //time
+    self.timeLabel.text = timeString;
+    //pt
+    self.ptLabel.text = prediction.predictThat;
+    if (prediction.eventPredictions.count > 0) {
+        NSDictionary* eventPrediction = prediction.eventPredictions.firstObject;
+        if (eventPrediction) {
+            self.predictLabel.text = [NSString stringWithFormat:@"%@: %@ %@",
+                                      [eventPrediction[@"diff"] isEqualToString:@"less"]
+                                      ? @"Under": @"Over", // TODO: refactor it and move to model
+                                      eventPrediction[@"value"],
+                                      eventPrediction[@"event_type"]];
+        }
+    }
+    
+    //award
+    self.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
+    //result
+    NSString *resultString = nil;
+    //TODO:field gameResult in fantasy and anon-fantasy has different type
+    if ([prediction.state isEqualToString:@"cancelled"]) {
+        resultString = @"Didn't play";
+    } else if ([prediction.gameResult isKindOfClass:[NSNumber class]]) {
+        if (prediction.gameResult)
+            resultString = [prediction.gameResult stringValue];
+        else
+            resultString = @"N/A";
+    } else if ([prediction.gameResult isKindOfClass:[NSString class]]) {
+        resultString = ((NSString *)prediction.gameResult && [(NSString *)prediction.gameResult isEqualToString:@""] == NO) ?
+        (NSString *)prediction.gameResult : @"N/A";
+    } else {
+        resultString = @"N/A";
+    }
+    
+    self.resultLabel.text = resultString;
 }
 
 @end

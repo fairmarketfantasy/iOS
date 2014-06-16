@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FFRosterPrediction.h"
 
 @class FFCustomButton;
 
@@ -21,5 +22,7 @@
 @property(nonatomic, readonly) UILabel* gameTimeLabel;
 @property(nonatomic, readonly) UILabel* rankLabel;
 @property(nonatomic, readonly) UILabel* awardLabel;
+
+- (void)setupWithPrediction:(FFRosterPrediction *)prediction;
 
 @end
