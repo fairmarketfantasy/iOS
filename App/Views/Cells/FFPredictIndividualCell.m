@@ -142,6 +142,7 @@
     NSString *timeString = nil;
     if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
         dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
+        timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
     } else {
         NSDate *defaultDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
         if ([prediction.gameTime isEqualToDate:defaultDate]) {
