@@ -25,6 +25,7 @@
 @dynamic gameTime;
 @dynamic gameDay;
 @dynamic gameResult;
+@dynamic currentPT;
 
 + (NSString*)tableName
 {
@@ -45,6 +46,7 @@
 {
     return [[super propertyToNetworkKeyMapping] dictionaryByMergingWithDictionary:
             @{
+              @"currentPT" : @"current_pt",
               @"playerId" : @"player_id",
               @"playerStatId" : @"player_stat_id",
               @"marketName" : @"market_name",
@@ -112,6 +114,21 @@
                                      } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
                                          if (failure)
                                              failure(error);
+                                     }];
+}
+
++ (void)tradePredictionForSession:(FFSession *)session
+                           params:(NSDictionary *)params
+                          success:(SBSuccessBlock)success
+                          failure:(SBErrorBlock)failure
+{
+    [session authorizedJSONRequestWithMethod:@"DELETE"
+                                        path:@"/trade_prediction"
+                                   paramters:params
+                                     success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+                                         success(JSON);
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+                                         failure(error);
                                      }];
 }
 

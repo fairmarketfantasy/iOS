@@ -18,6 +18,7 @@
 @property(nonatomic) NSArray* eventPredictions;
 @property(nonatomic) NSString* playerName;
 @property(nonatomic) NSString* predictThat;
+@property(nonatomic) NSString* currentPT;
 @property(nonatomic) NSString* award;
 @property(nonatomic) NSString* state;
 @property(nonatomic) FFDate* gameTime;
@@ -34,5 +35,10 @@
                         session:(SBSession*)session
                         success:(SBSuccessBlock)success
                         failure:(SBErrorBlock)failure;
+
++ (void)tradePredictionForSession:(FFSession *)session
+                           params:(NSDictionary *)params
+                          success:(SBSuccessBlock)success
+                          failure:(SBErrorBlock)failure;
 
 @end

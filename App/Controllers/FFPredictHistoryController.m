@@ -231,6 +231,25 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 #pragma mark - button actions
 
+- (void)tradeIndividulPrediction:(FFIndividualPrediction *)prediction
+{
+    [FFIndividualPrediction tradePredictionForSession:self.session
+                                               params:@{
+                                                        @"id" : prediction.objId,
+                                                        @"sport" : [FFSessionManager shared].currentSportName
+                                                        }
+                                              success:^(id successObj) {
+                                                  FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
+                                                                                                  message:[successObj objectForKey:@"msg"]
+                                                                                        cancelButtonTitle:nil
+                                                                                          okayButtonTitle:@"OK"
+                                                                                                 autoHide:YES];
+                                                  [alert showInView:self.view];
+                                              } failure:^(NSError *error) {
+                                                  NSLog(@"Error: %@", error);
+                                              }];
+}
+
 - (void)showOrHideTypeSelectorIfNeeded
 {
     if (!self.typeSelector.userInteractionEnabled) {
@@ -285,6 +304,17 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
             if (self.predictions.count > indexPath.row) {
                 FFIndividualPrediction* prediction = self.predictions[indexPath.row];
                 [cell setupWithPrediction:prediction];
+                
+                if ([prediction.state isEqualToString:@"submitted"] && prediction.currentPT) {
+                    cell.tradeButton.hidden = NO;
+                    __weak FFPredictHistoryController *weakSelf = self;
+                    [cell.tradeButton setAction:kUIButtonBlockTouchUpInside
+                                      withBlock:^{
+                                          [weakSelf tradeIndividulPrediction:prediction];
+                                      }];
+                } else {
+                    cell.tradeButton.hidden = YES;
+                }
             }
             return cell;
         }

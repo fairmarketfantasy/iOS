@@ -19,6 +19,8 @@
 @property(nonatomic, readonly) UILabel* timeLabel;
 @property(nonatomic, readonly) UILabel* awaidLabel;
 @property(nonatomic, readonly) UILabel* resultLabel;
+@property(nonatomic, readonly) FFCustomButton* tradeButton;
+
 
 - (void)setupWithPrediction:(FFIndividualPrediction *)prediction;
 

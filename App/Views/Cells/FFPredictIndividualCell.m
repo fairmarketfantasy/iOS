@@ -32,6 +32,21 @@
         separator2.backgroundColor = [UIColor colorWithWhite:1.f
                                                        alpha:.5f];
         [self.contentView addSubview:separator2];
+        // button
+        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] == NO) {
+            _tradeButton = [FFStyle coloredButtonWithText:@"Trade"
+                                                    color:[FFStyle brightBlue]
+                                              borderColor:[UIColor clearColor]];
+            self.tradeButton.frame = CGRectMake(205.f, 15.f, 100.f, 30.f);
+            self.tradeButton.titleEdgeInsets = UIEdgeInsetsMake(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ?
+                                                                3.f : 5.5f,
+                                                                0.f, 0.f, 0.f);
+            self.tradeButton.titleLabel.font = [FFStyle blockFont:17.f];
+            [self.tradeButton setTitleColor:[FFStyle white]
+                                   forState:UIControlStateNormal];
+            [self.contentView addSubview:self.tradeButton];
+        }
+        
         // labels
         _choiceLabel = [[UILabel alloc] initWithFrame:
                       CGRectMake(10.f, 10.f, 190.f, 25.f)];
