@@ -116,7 +116,7 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
     NSString *errorBody = @"There is no room for another";
     NSString *errorDescription = [[error userInfo] objectForKey:@"NSLocalizedDescription"];
     if ([errorDescription isEqualToString:@"Unpaid subscription!"]) {
-        self.errorType = FFErrorTypeUnpaid;
+        self.unpaidSubscription = YES;
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     } else if ([errorDescription rangeOfString:errorBody].location != NSNotFound) {
@@ -413,6 +413,8 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
          _rosterIsCreating = NO;
          self.errorType = FFErrorTypeNoError;
          [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
+         [[NSUserDefaults standardUserDefaults] synchronize];
+         self.unpaidSubscription = NO;
          self.roster = successObj;
          SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.rosterController.removeBenched ? 1 : 0];
          self.roster.removeBenched = autoRemove;

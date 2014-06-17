@@ -11,7 +11,6 @@
 typedef NS_ENUM(NSInteger, FFErrorType)
 {
     FFErrorTypeUnknownServerError,
-    FFErrorTypeUnpaid,
     FFErrorTypeTimeOut,
     FFErrorTypeNoError
 };
@@ -34,6 +33,8 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 @protocol FFErrorHandlingDelegate <NSObject>
 
 - (BOOL)isError;
+- (BOOL)isUnpaid;
+- (NSString *)unpaidErrorMessage;
 - (NSString *)errorMessage;
 
 @end
@@ -47,5 +48,6 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 @property (nonatomic, strong) FFSession *session;
 @property (nonatomic, weak) id <FFSportManagerDelegate> delegate;
 @property (nonatomic, assign) FFErrorType errorType;
+@property (nonatomic, assign) BOOL unpaidSubscription;
 
 @end

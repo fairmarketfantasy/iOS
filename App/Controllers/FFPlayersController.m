@@ -145,6 +145,7 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 - (BOOL)isSomethingWrong
 {
     return ([self.errorDelegate isError] ||
+            [self.errorDelegate isUnpaid] ||
             self.networkStatus == NotReachable ||
             self.markets.count == 0);
 }
@@ -241,6 +242,8 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
                 NSString *message = nil;
                 if (self.networkStatus == NotReachable) {
                     message = @"No Internet Connection";
+                } else if ([self.errorDelegate isUnpaid]) {
+                    message = [self.errorDelegate unpaidErrorMessage];
                 } else if (self.markets.count == 0) {
                     message = @"No Games Scheduled";
                 } else {

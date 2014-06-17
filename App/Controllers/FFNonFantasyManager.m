@@ -106,7 +106,7 @@
     NSLog(@"Error: %@", error);
     NSString *errorDescription = [[error userInfo] objectForKey:@"NSLocalizedDescription"];
     if ([errorDescription isEqualToString:@"Unpaid subscription!"]) {
-        self.errorType = FFErrorTypeUnpaid;
+        self.unpaidSubscription = YES;
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     } else {
@@ -177,6 +177,7 @@
     [FFNonFantasyGame fetchGamesSession:self.session
                                 success:^(id successObj) {
                                     self.errorType = FFErrorTypeNoError;
+                                    self.unpaidSubscription = NO;
                                     [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
                                     [[NSUserDefaults standardUserDefaults] synchronize];
                                     NSMutableArray *games = [NSMutableArray array];

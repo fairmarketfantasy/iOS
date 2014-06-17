@@ -123,6 +123,7 @@
 - (BOOL)isSomethingWrong
 {
     return (self.networkStatus == NotReachable ||
+            [self.errorDelegate isUnpaid] ||
             [self.errorDelegate isError] ||
             [self.dataSource availableGames].count == 0);
 }
@@ -226,6 +227,8 @@
                     NSString *message = nil;
                     if (self.networkStatus == NotReachable) {
                         message = @"No Internet Connection";
+                    } else if ([self.errorDelegate isUnpaid]) {
+                        message = [self.errorDelegate unpaidErrorMessage];
                     } else if ([self.dataSource availableGames].count == 0) {
                         message = @"No Games Scheduled";
                     } else {

@@ -144,6 +144,7 @@
                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                if (!error) {
                    self.errorType = FFErrorTypeNoError;
+                   self.unpaidSubscription = NO;
                    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
                    [[NSUserDefaults standardUserDefaults] synchronize];
                    self.cupWinnerController.category = FFWCCupWinner;
@@ -225,7 +226,7 @@
 {
     NSString *errorDescription = [[error userInfo] objectForKey:@"NSLocalizedDescription"];
     if ([errorDescription isEqualToString:@"Unpaid subscription!"]) {
-        self.errorType = FFErrorTypeUnpaid;
+        self.unpaidSubscription = YES;
         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     } else {

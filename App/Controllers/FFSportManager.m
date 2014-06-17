@@ -36,6 +36,16 @@
     return self.errorType != FFErrorTypeNoError;
 }
 
+- (BOOL)isUnpaid
+{
+    return self.unpaidSubscription;
+}
+
+- (NSString *)unpaidErrorMessage
+{
+    return @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
+}
+
 - (NSString *)errorMessage
 {
     switch (self.errorType) {
@@ -43,8 +53,6 @@
             return @"Time Out Error";
         case FFErrorTypeUnknownServerError:
             return @"Unknown Server Error";
-        case FFErrorTypeUnpaid:
-            return @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
             
         default:
             break;

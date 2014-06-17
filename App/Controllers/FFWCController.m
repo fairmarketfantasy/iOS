@@ -99,7 +99,9 @@
 
 - (BOOL)isSomethingWrong
 {
-    return [self.errorDelegate isError] || self.networkStatus == NotReachable;
+    return ([self.errorDelegate isError] ||
+            [self.errorDelegate isUnpaid] ||
+            self.networkStatus == NotReachable);
 }
 
 #pragma mark - UITableViewDataSource
@@ -151,6 +153,8 @@
             NSString *message = nil;
             if (self.networkStatus == NotReachable) {
                 message = @"No Internet Connection";
+            } else if ([self.errorDelegate isUnpaid]) {
+                message = [self.errorDelegate unpaidErrorMessage];
             } else {
                 message = [self.errorDelegate errorMessage];
             }
