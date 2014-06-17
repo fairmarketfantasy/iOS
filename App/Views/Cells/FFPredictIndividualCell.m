@@ -58,7 +58,7 @@
         self.ptLabel.textColor = [FFStyle darkGreyTextColor];
         [self.contentView addSubview:self.ptLabel];
         _predictLabel = [[UILabel alloc] initWithFrame:
-                         CGRectMake(90.f, 120.f, 80.f, 30.f)];
+                         CGRectMake(90.f, [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? 120.f : 115.f, 80.f, 30.f)];
         self.predictLabel.adjustsFontSizeToFitWidth = YES;
         self.predictLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.predictLabel.minimumScaleFactor = .8f;
@@ -135,8 +135,13 @@
 - (void)setupWithPrediction:(FFIndividualPrediction *)prediction
 {
     //title
-    self.choiceLabel.text = prediction.playerName;
-    self.eventLabel.text = prediction.marketName;
+    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
+        self.choiceLabel.text = prediction.marketName;
+        self.eventLabel.text = prediction.playerName;
+    } else {
+        self.choiceLabel.text = prediction.playerName;
+        self.eventLabel.text = prediction.marketName;
+    }
     //day
     NSString *dayString = nil;
     NSString *timeString = nil;
@@ -157,6 +162,7 @@
     self.timeLabel.text = timeString;
     //pt
     self.ptLabel.text = prediction.predictThat;
+    //prediction
     if (prediction.eventPredictions.count > 0) {
         NSDictionary* eventPrediction = prediction.eventPredictions.firstObject;
         if (eventPrediction) {
@@ -166,10 +172,11 @@
                                       eventPrediction[@"value"],
                                       eventPrediction[@"event_type"]];
         }
+    } else {
+        self.predictLabel.text = @"N/A";
     }
     
     //award
-    
     CGFloat award = [prediction.award floatValue];
 //    self.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
     self.awaidLabel.text = prediction.award ? [NSString stringWithFormat:@"%.1f", award] : @"N/A";
