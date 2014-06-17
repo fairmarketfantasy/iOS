@@ -233,21 +233,40 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 - (void)tradeIndividulPrediction:(FFIndividualPrediction *)prediction
 {
-    [FFIndividualPrediction tradePredictionForSession:self.session
-                                               params:@{
-                                                        @"id" : prediction.objId,
-                                                        @"sport" : [FFSessionManager shared].currentSportName
-                                                        }
-                                              success:^(id successObj) {
-                                                  FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
-                                                                                                  message:[successObj objectForKey:@"msg"]
-                                                                                        cancelButtonTitle:nil
-                                                                                          okayButtonTitle:@"OK"
-                                                                                                 autoHide:YES];
-                                                  [alert showInView:self.view];
-                                              } failure:^(NSError *error) {
-                                                  NSLog(@"Error: %@", error);
-                                              }];
+    FFAlertView* confirmAlert = [FFAlertView.alloc initWithTitle:nil
+                                                         message:prediction.tradeMessage
+                                               cancelButtonTitle:@"Cancel"
+                                                 okayButtonTitle:@"Submit"
+                                                        autoHide:NO];
+    [confirmAlert showInView:self.view];
+    
+    @weakify(confirmAlert)
+    @weakify(self)
+    confirmAlert.onOkay = ^(id obj) {
+        @strongify(confirmAlert)
+        @strongify(self)
+        [FFIndividualPrediction tradePredictionForSession:self.session
+                                                   params:@{
+                                                            @"id" : prediction.objId,
+                                                            @"sport" : [FFSessionManager shared].currentSportName
+                                                            }
+                                                  success:^(id successObj) {
+                                                      FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
+                                                                                                      message:[successObj objectForKey:@"msg"]
+                                                                                            cancelButtonTitle:nil
+                                                                                              okayButtonTitle:@"OK"
+                                                                                                     autoHide:YES];
+                                                      [alert showInView:self.view];
+                                                  } failure:^(NSError *error) {
+                                                      NSLog(@"Error: %@", error);
+                                                  }];
+        [confirmAlert hide];
+    };
+    
+    confirmAlert.onCancel = ^(id obj) {
+        @strongify(confirmAlert)
+        [confirmAlert hide];
+    };
 }
 
 - (void)showOrHideTypeSelectorIfNeeded

@@ -26,6 +26,7 @@
 @dynamic gameDay;
 @dynamic gameResult;
 @dynamic currentPT;
+@dynamic tradeMessage;
 
 + (NSString*)tableName
 {
@@ -57,7 +58,8 @@
               @"state" : @"state",
               @"gameTime" : @"game_time",
               @"gameDay" : @"game_day",
-              @"gameResult" : @"game_result"
+              @"gameResult" : @"game_result",
+              @"tradeMessage" : @"trade_message"
               }];
 }
 // TODO: FFEventPrediction

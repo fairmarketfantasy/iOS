@@ -21,6 +21,7 @@
 @property(nonatomic) NSString* currentPT;
 @property(nonatomic) NSString* award;
 @property(nonatomic) NSString* state;
+@property(nonatomic) NSString* tradeMessage;
 @property(nonatomic) FFDate* gameTime;
 @property(nonatomic) FFDate* gameDay;
 @property(nonatomic) NSNumber* gameResult;
