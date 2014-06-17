@@ -144,15 +144,12 @@
         dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
         timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
     } else {
-        if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
+        NSDate *defaultDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
+        if ([prediction.gameTime isEqualToDate:defaultDate]) {
             dayString = timeString = @"N/A";
         } else {
-            NSDate *defaultDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
-            if ([prediction.gameTime isEqualToDate:defaultDate]) {
-                dayString = timeString = @"N/A";
-            } else {
-                dayString = timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
-            }
+            dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameTime];
+            timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
         }
     }
     self.dayLabel.text = dayString;
@@ -172,7 +169,10 @@
     }
     
     //award
-    self.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
+    
+    CGFloat award = [prediction.award floatValue];
+//    self.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
+    self.awaidLabel.text = prediction.award ? [NSString stringWithFormat:@"%.1f", award] : @"N/A";
     //result
     NSString *resultString = nil;
     //TODO:field gameResult in fantasy and anon-fantasy has different type
