@@ -217,8 +217,6 @@
 		F9A6A12B1947151E00D6D4B0 /* FFFantasyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A6A12A1947151E00D6D4B0 /* FFFantasyManager.m */; };
 		F9A6A13119473B7200D6D4B0 /* FFNonFantasyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A6A13019473B7200D6D4B0 /* FFNonFantasyManager.m */; };
 		F9A7566619499E2C0023758A /* FFSportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F9A7566519499E2C0023758A /* FFSportManager.m */; };
-		F9A981DE192623B900E8743C /* UbertestersSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9A981DC192623B900E8743C /* UbertestersSDK.framework */; };
-		F9A981DF192623BA00E8743C /* UbertestersSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */; };
 		F9AAA5D6194EE44400C16EF1 /* flag_placeholder.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F9AAA5D5194EE44400C16EF1 /* flag_placeholder.jpg */; };
 		F9AC76C6193CC44300593116 /* Collection+UnNullable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AC76C5193CC44300593116 /* Collection+UnNullable.m */; };
 		F9AF0EEB193F044D00A2A353 /* login_wc.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F9AF0EE9193F044D00A2A353 /* login_wc.jpg */; };
@@ -566,8 +564,6 @@
 		F9A6A13219473BD200D6D4B0 /* FFNonFantasyRosterDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFNonFantasyRosterDataSource.h; sourceTree = "<group>"; };
 		F9A7566419499E2C0023758A /* FFSportManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFSportManager.h; sourceTree = "<group>"; };
 		F9A7566519499E2C0023758A /* FFSportManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSportManager.m; sourceTree = "<group>"; };
-		F9A981DC192623B900E8743C /* UbertestersSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UbertestersSDK.framework; sourceTree = "<group>"; };
-		F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UbertestersSDKResources.bundle; sourceTree = "<group>"; };
 		F9AAA5D5194EE44400C16EF1 /* flag_placeholder.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flag_placeholder.jpg; sourceTree = "<group>"; };
 		F9AC76C4193CC44300593116 /* Collection+UnNullable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Collection+UnNullable.h"; path = "Categories/Collection+UnNullable.h"; sourceTree = "<group>"; };
 		F9AC76C5193CC44300593116 /* Collection+UnNullable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Collection+UnNullable.m"; path = "Categories/Collection+UnNullable.m"; sourceTree = "<group>"; };
@@ -594,7 +590,6 @@
 				89DFD29818B37F420079F427 /* OpenGLES.framework in Frameworks */,
 				89DFD29618B37F3A0079F427 /* AudioToolbox.framework in Frameworks */,
 				89DFD29418B37F2B0079F427 /* CoreLocation.framework in Frameworks */,
-				F9A981DE192623B900E8743C /* UbertestersSDK.framework in Frameworks */,
 				89DFD29218B37F1B0079F427 /* CoreTelephony.framework in Frameworks */,
 				1527AE3317DFDCFB00D181D7 /* SystemConfiguration.framework in Frameworks */,
 				89DFD29018B37EE30079F427 /* CoreImage.framework in Frameworks */,
@@ -639,7 +634,6 @@
 			children = (
 				895E760618DB45F000B00F90 /* CoreMotion.framework */,
 				89DFD29718B37F420079F427 /* OpenGLES.framework */,
-				F9A981DB192623B900E8743C /* UbertestersSDK */,
 				89DFD29518B37F3A0079F427 /* AudioToolbox.framework */,
 				89DFD29318B37F2B0079F427 /* CoreLocation.framework */,
 				89DFD29118B37F1B0079F427 /* CoreTelephony.framework */,
@@ -1165,15 +1159,6 @@
 			name = "Fototball WC";
 			sourceTree = "<group>";
 		};
-		F9A981DB192623B900E8743C /* UbertestersSDK */ = {
-			isa = PBXGroup;
-			children = (
-				F9A981DC192623B900E8743C /* UbertestersSDK.framework */,
-				F9A981DD192623B900E8743C /* UbertestersSDKResources.bundle */,
-			);
-			path = UbertestersSDK;
-			sourceTree = "<group>";
-		};
 		F9AC76C3193CC43200593116 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -1295,7 +1280,6 @@
 				896ACC6518B664F5001E9C64 /* FMF-Small.png in Resources */,
 				896ACC5518B664F5001E9C64 /* Default@2x.png in Resources */,
 				89C985BB18E48B8000ABB652 /* accessory_disclosure_dark.png in Resources */,
-				F9A981DF192623BA00E8743C /* UbertestersSDKResources.bundle in Resources */,
 				89C985B418E48B3300ABB652 /* accessory_check.png in Resources */,
 				89F1A08F18DC7CAB001369E3 /* active@2x.png in Resources */,
 				896ACC9D18B664F5001E9C64 /* loginbg@2x.png in Resources */,
@@ -1549,11 +1533,7 @@
 			baseConfigurationReference = FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer: Anton Chuev (28B92DEJE3)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/Vendor/UbertestersSDK",
-					"$(PROJECT_DIR)/UbertestersSDK",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "App/FMF Football-Prefix.pch";
 				INFOPLIST_FILE = "App/FMF Football-Info.plist";
@@ -1570,11 +1550,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer: Anton Chuev (28B92DEJE3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Anton Chuev (28B92DEJE3)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/Vendor/UbertestersSDK",
-					"$(PROJECT_DIR)/UbertestersSDK",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "App/FMF Football-Prefix.pch";
 				INFOPLIST_FILE = "App/FMF Football-Info.plist";
