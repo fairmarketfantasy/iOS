@@ -245,18 +245,26 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     confirmAlert.onOkay = ^(id obj) {
         @strongify(confirmAlert)
         @strongify(self)
+        __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Trading..."
+                                                               messsage:nil
+                                                           loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.view];
+        
         [FFIndividualPrediction tradePredictionForSession:self.session
                                                    params:@{
                                                             @"id" : prediction.objId,
                                                             @"sport" : [FFSessionManager shared].currentSportName
                                                             }
                                                   success:^(id successObj) {
-                                                      FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
-                                                                                                      message:[successObj objectForKey:@"msg"]
-                                                                                            cancelButtonTitle:nil
-                                                                                              okayButtonTitle:@"OK"
-                                                                                                     autoHide:YES];
-                                                      [alert showInView:self.view];
+                                                      [alert hide];
+                                                      FFAlertView *successAlert = [[FFAlertView alloc] initWithTitle:nil
+                                                                                                             message:[successObj objectForKey:@"msg"]
+                                                                                                   cancelButtonTitle:nil
+                                                                                                     okayButtonTitle:@"OK"
+                                                                                                            autoHide:YES];
+                                                      [successAlert showInView:self.view];
+                                                      [self.predictions removeObject:prediction];
+                                                      [self.tableView reloadData];
                                                   } failure:^(NSError *error) {
                                                       NSLog(@"Error: %@", error);
                                                   }];
