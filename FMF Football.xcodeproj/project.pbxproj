@@ -711,8 +711,6 @@
 				896ACC0E18B664F5001E9C64 /* FFTokenPurchaseViewController.m */,
 				896ACC0F18B664F5001E9C64 /* FFValueEntryController.h */,
 				896ACC1018B664F5001E9C64 /* FFValueEntryController.m */,
-				896ACC1118B664F5001E9C64 /* FFWebViewController.h */,
-				896ACC1218B664F5001E9C64 /* FFWebViewController.m */,
 				89BB56DE18E997B1003EE7DA /* FFPasswordController.h */,
 				89BB56DF18E997B1003EE7DA /* FFPasswordController.m */,
 			);
@@ -887,6 +885,8 @@
 				896ACBFC18B664F5001E9C64 /* FFMenuViewController.m */,
 				896ACBFD18B664F5001E9C64 /* FFMyAccountViewController.h */,
 				896ACBFE18B664F5001E9C64 /* FFMyAccountViewController.m */,
+				896ACC1118B664F5001E9C64 /* FFWebViewController.h */,
+				896ACC1218B664F5001E9C64 /* FFWebViewController.m */,
 			);
 			name = "Controllers & Managers";
 			path = Controllers;
