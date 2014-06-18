@@ -65,7 +65,7 @@
             DLog(@"Failed to start notifier");
         self.networkStatus = [internetReachability currentReachabilityStatus];
         
-        [self getWorldCupData];
+        [self getWorldCupDataWithShowingAlert:YES resetToFirstController:YES completion:nil];
     }
     return self;
 }
@@ -84,17 +84,19 @@
         self.networkStatus = internetStatus;
         
         if (internetStatus != NotReachable && previousStatus == NotReachable) {
-            [self getWorldCupData];
+            [self getWorldCupDataWithShowingAlert:YES resetToFirstController:YES completion:nil];
         } 
     }
 }
 
 - (void)reloadControllers
 {
-    [self.dailyWinsController.tableView reloadData];
-    [self.cupWinnerController.tableView reloadData];
-    [self.groupWinnerController.tableView reloadData];
-    [self.mvpController.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.dailyWinsController.tableView reloadData];
+        [self.cupWinnerController.tableView reloadData];
+        [self.groupWinnerController.tableView reloadData];
+        [self.mvpController.tableView reloadData];
+    });
 }
 
 - (NSArray*)getViewControllers
@@ -123,19 +125,23 @@
     return [NSArray arrayWithArray:controllers];
 }
 
-- (void)getWorldCupData
+- (void)getWorldCupDataWithShowingAlert:(BOOL)shouldShow
+                 resetToFirstController:(BOOL)shouldReset
+                             completion:(void(^)(void))block
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
-                                                           messsage:@""
-                                                       loadingStyle:FFAlertViewLoadingStylePlain];
-    if (self.delegate.selectedController) {
-        [alert showInView:self.delegate.selectedController.view];
-    } else {
-//        [alert showInView:self.dailyWinsController.view];
-        FFWCController *firstController = [self getViewControllers].firstObject;
-        [alert showInView:firstController.view];
+    __block FFAlertView *alert = nil;
+    if (shouldShow) {
+        alert = [[FFAlertView alloc] initWithTitle:nil
+                                          messsage:@""
+                                      loadingStyle:FFAlertViewLoadingStylePlain];
+        if (self.delegate.selectedController) {
+            [alert showInView:self.delegate.selectedController.view];
+        } else {
+            FFWCController *firstController = [self getViewControllers].firstObject;
+            [alert showInView:firstController.view];
+        }
     }
     
     [self fetchDataForSession:self.session
@@ -160,10 +166,13 @@
                    self.mvpController.category = FFWCMvp;
                    self.mvpController.candidates = [NSArray arrayWithArray:self.mvpCandidates];
                    
-                   [self.delegate shouldSetViewController:[self getViewControllers].firstObject
-                                                direction:UIPageViewControllerNavigationDirectionForward
-                                                 animated:YES
-                                               completion:nil];
+                   if (shouldReset) {
+                       [self.delegate shouldSetViewController:[self getViewControllers].firstObject
+                                                    direction:UIPageViewControllerNavigationDirectionForward
+                                                     animated:YES
+                                                   completion:nil];
+                   }
+                   
                    [self.delegate updatePagerView];
                    
                    [self reloadControllers];
@@ -171,6 +180,8 @@
                } else {
                    [self handleError:error];
                }
+               if(block)
+                   block();
            }];
 }
 
@@ -333,6 +344,11 @@
 
 #pragma mark - FFWCDelegate
 
+- (void)refreshDataShowingAlert:(BOOL)shouldShow completion:(void (^)(void))block
+{
+    [self getWorldCupDataWithShowingAlert:shouldShow resetToFirstController:NO completion:block];
+}
+
 - (void)submitPredictionOnPlayer:(FFWCPlayer *)player category:(FFWCPredictionCategory)category
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -361,7 +377,9 @@
                                                    success:^(id successObj) {
                                                        self.errorType = FFErrorTypeNoError;
                                                        [self disablePTForPlayer:player];
-                                                       [[self controllerForWCCategory:category].tableView reloadData];
+                                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                                           [[self controllerForWCCategory:category].tableView reloadData];                                                           
+                                                       });
                                                        [alert hide];
                                                        
                                                        FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
@@ -423,7 +441,9 @@
                                                        [self disablePTForTeam:team
                                                                        inGame:game
                                                                    inCategory:category];
-                                                       [[self controllerForWCCategory:category].tableView reloadData];
+                                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                                           [[self controllerForWCCategory:category].tableView reloadData];
+                                                       });
                                                        [alert hide];
                                                        
                                                        FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil

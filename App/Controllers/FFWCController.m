@@ -62,6 +62,12 @@
         self.picker.backgroundColor = [FFStyle darkGrey];
     }
     
+    //refresh control
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.tintColor = [FFStyle lightGrey];
+    [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
+    
     //reachability
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
     internetReachability = [Reachability reachabilityForInternetConnection];
@@ -78,9 +84,18 @@
 
 - (void)resetPicker
 {
-    [self.picker setNeedsLayout];
-    [self.picker reloadAllComponents];
-    [self.picker selectRow:0 inComponent:0 animated:NO];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.picker setNeedsLayout];
+        [self.picker reloadAllComponents];
+        [self.picker selectRow:0 inComponent:0 animated:NO];
+    });
+}
+
+- (void)pullToRefresh:(UIRefreshControl *)refreshControl
+{
+    [self.delegate refreshDataShowingAlert:NO completion:^{
+        [refreshControl endRefreshing];
+    }];
 }
 
 #pragma mark
@@ -93,7 +108,9 @@
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
         if (internetStatus == NotReachable && previousStatus != NotReachable)
-            [self.tableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
     }
 }
 

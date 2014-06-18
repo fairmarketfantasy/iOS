@@ -23,6 +23,8 @@
 - (void)submitPredictionOnPlayer:(FFWCPlayer *)player
                         category:(FFWCPredictionCategory)category;
 
+- (void)refreshDataShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
+
 @end
 
 @interface FFWCController : FFBaseViewController
