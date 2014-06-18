@@ -64,10 +64,13 @@
         if (!success)
             DLog(@"Failed to start notifier");
         self.networkStatus = [internetReachability currentReachabilityStatus];
-        
-        [self getWorldCupDataWithShowingAlert:YES resetToFirstController:YES completion:nil];
     }
     return self;
+}
+
+- (void)start
+{
+    [self getWorldCupDataWithShowingAlert:YES resetToFirstController:NO completion:nil];
 }
 
 - (void)dealloc
@@ -84,7 +87,7 @@
         self.networkStatus = internetStatus;
         
         if (internetStatus != NotReachable && previousStatus == NotReachable) {
-            [self getWorldCupDataWithShowingAlert:YES resetToFirstController:YES completion:nil];
+            [self getWorldCupDataWithShowingAlert:YES resetToFirstController:NO completion:nil];
         } 
     }
 }
@@ -131,22 +134,18 @@
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
-    __block FFAlertView *alert = nil;
+    __block FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
+                                                           messsage:@""
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
     if (shouldShow) {
-        alert = [[FFAlertView alloc] initWithTitle:nil
-                                          messsage:@""
-                                      loadingStyle:FFAlertViewLoadingStylePlain];
-        if (self.delegate.selectedController) {
-            [alert showInView:self.delegate.selectedController.view];
-        } else {
-            FFWCController *firstController = [self getViewControllers].firstObject;
-            [alert showInView:firstController.view];
-        }
+        [self.delegate showAlert:alert];
     }
     
     [self fetchDataForSession:self.session
            dataWithCompletion:^(NSError *error) {
-               [alert hide];
+               if (shouldShow) {
+                   [self.delegate hideAlert:alert];
+               }
                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                if (!error) {
                    self.errorType = FFErrorTypeNoError;

@@ -123,6 +123,7 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFSportManagerDelegate>
         }
         
         self.manager.delegate = self;
+        [self.manager start];
         
         [self setViewControllers:@[[self.manager getViewControllers].firstObject]
                        direction:UIPageViewControllerNavigationDirectionForward
@@ -257,6 +258,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     }
     
     self.manager.delegate = self;
+    [self.manager start];
     [self setViewControllers:@[[self.manager getViewControllers].firstObject]
                    direction:UIPageViewControllerNavigationDirectionForward
                     animated:NO
@@ -298,6 +300,16 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)openIndividualPredictionsForPlayer:(FFPlayer *)player
 {
     [self performSegueWithIdentifier:@"GotoPT" sender:player];
+}
+
+- (void)showAlert:(FFAlertView *)alert
+{
+    [alert showInView:self.view];
+}
+
+- (void)hideAlert:(FFAlertView *)alert
+{
+    [alert hide];
 }
 
 @end

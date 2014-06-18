@@ -73,12 +73,14 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
         if (!success)
             DLog(@"Failed to start notifier");
         self.networkStatus = [internetReachability currentReachabilityStatus];
-
-        
-        [self fetchPositionsNames];
-        [self updateMarkets];
     }
     return self;
+}
+
+- (void)start
+{
+    [self fetchPositionsNames];
+    [self updateMarkets];
 }
 
 - (void)dealloc
@@ -135,9 +137,11 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
         self.errorType = FFErrorTypeUnknownServerError;
     }
     
-    [self.rosterController.tableView reloadData];
-    [self.rosterController showOrHideSubmitIfNeeded];
-    [self.playersController.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.rosterController.tableView reloadData];
+        [self.rosterController showOrHideSubmitIfNeeded];
+        [self.playersController.tableView reloadData];
+    });
 }
 
 #pragma mark
@@ -199,9 +203,11 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
     } else {
         if (self.availableMarkets.count == 0) {
             self.roster = nil;
-            [self.rosterController showOrHideSubmitIfNeeded];
-            [self.rosterController.tableView reloadData];
-            [self.playersController.tableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.rosterController showOrHideSubmitIfNeeded];
+                [self.rosterController.tableView reloadData];
+                [self.playersController.tableView reloadData];
+            });
         }
     }
 }
@@ -332,9 +338,11 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
 - (void)setCurrentMarket:(FFMarket *)market
 {
     self.selectedMarket = market;
-    [self.rosterController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
-                                                                                 inSection:0]]
-                                           withRowAnimation:UITableViewRowAnimationAutomatic];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.rosterController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                                     inSection:0]]
+                                               withRowAnimation:UITableViewRowAnimationAutomatic];
+    });
     if (_rosterIsCreating == NO) {
 //        __weak FFFantasyManager *weakSelf = self;
         [self createRosterWithCompletion:^(NSError *error) {
@@ -420,8 +428,10 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
          self.roster.removeBenched = autoRemove;
          self.myTeam = [self newTeamWithPositions:[self allPositions]];
          
-         [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-         [self.rosterController showOrHideSubmitIfNeeded];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+             [self.rosterController showOrHideSubmitIfNeeded];
+         });
          
          [alert hide];
          if (block) {
@@ -563,7 +573,9 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
          SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.rosterController.removeBenched ? 1 : 0];
          self.roster.removeBenched = autoRemove;
          
-         [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+         });
          [self.rosterController showOrHideSubmitIfNeeded];
          
          if (block)
@@ -602,7 +614,9 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
          }
          SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.rosterController.removeBenched ? 1 : 0];
          self.roster.removeBenched = autoRemove;
-         [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+         });
          
          if (block)
              block(YES);
@@ -637,7 +651,9 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
              self.roster = successObj;
              SBInteger *autoRemove = [[SBInteger alloc] initWithInteger:self.rosterController.removeBenched ? 1 : 0];
              self.roster.removeBenched = autoRemove;
-             [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+             });
              
              if (alert)
                  [alert hide];
@@ -690,7 +706,9 @@ FFFantasyRosterDelegate, FFPlayersProtocol, FFEventsProtocol>
          @strongify(self)
          self.errorType = FFErrorTypeNoError;
          self.playersController.players = successObj;
-         [self.playersController.tableView reloadData];
+         dispatch_async(dispatch_get_main_queue(), ^{
+             [self.playersController.tableView reloadData];
+         });
          
          if(alert)
              [alert hide];

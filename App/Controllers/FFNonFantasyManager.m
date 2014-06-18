@@ -58,12 +58,14 @@
         if (!success)
             DLog(@"Failed to start notifier");
         self.networkStatus = [internetReachability currentReachabilityStatus];
-
-        
-        [self updateGames];
     }
     
     return self;
+}
+
+- (void)start
+{
+    [self updateGames];
 }
 
 - (void)dealloc

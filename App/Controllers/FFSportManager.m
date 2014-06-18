@@ -29,6 +29,11 @@
     
 }
 
+- (void)start
+{
+    
+}
+
 #pragma mark - FFErrorHandlingDelegate
 
 - (BOOL)isError
@@ -52,7 +57,7 @@
         case FFErrorTypeTimeOut:
             return @"Time Out Error";
         case FFErrorTypeUnknownServerError:
-            return @"Unknown Server Error";
+            return @"Unknown Error";
             
         default:
             break;

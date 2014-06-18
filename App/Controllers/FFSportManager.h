@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 
 @class FFSession;
 @class FFPlayer;
+@class FFAlertView;
 
 @protocol FFSportManagerDelegate <NSObject>
 
@@ -27,6 +28,9 @@ typedef NS_ENUM(NSInteger, FFErrorType)
                       direction:(UIPageViewControllerNavigationDirection)direction
                        animated:(BOOL)animated
                      completion:(void(^)(BOOL))block;
+
+- (void)showAlert:(FFAlertView *)alert;
+- (void)hideAlert:(FFAlertView *)alert;
 
 @end
 
@@ -42,6 +46,7 @@ typedef NS_ENUM(NSInteger, FFErrorType)
 @interface FFSportManager : NSObject <FFErrorHandlingDelegate>
 
 - (id)initWithSession:(FFSession *)session;
+- (void)start;
 - (NSArray *)getViewControllers;
 - (void)handleError:(NSError *)error;
 

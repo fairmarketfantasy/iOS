@@ -94,7 +94,9 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
     if (self.players.count == 0) {
         [self.delegate fetchPlayersForPosition:self.position showAlert:NO completion:nil];
     } else {
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
     }
 }
 
@@ -117,7 +119,9 @@ UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
         if (internetStatus == NotReachable && previousStatus != NotReachable) {
-            [self.tableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
         }
     }    
 }

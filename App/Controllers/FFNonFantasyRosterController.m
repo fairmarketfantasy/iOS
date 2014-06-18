@@ -265,9 +265,12 @@
     if ([self isSomethingWrong])
         return;
     
-    if (indexPath.section == 1) {
+    if ([self.dataSource teams].count <= indexPath.row && indexPath.section == 1)
         [self.delegate showAvailableGames];
-    }
+        
+//    if (indexPath.section == 1) {
+//        [self.delegate showAvailableGames];
+//    }
 }
 
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section

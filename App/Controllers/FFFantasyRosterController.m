@@ -98,7 +98,9 @@
     [self.submitView setupWithType:FFSubmitViewTypeFantasy];
     
     if (self.networkStatus == NotReachable) {
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
     }
 }
 
@@ -128,7 +130,9 @@
         self.networkStatus = internetStatus;
         if (internetStatus == NotReachable && previousStatus != NotReachable) {
             [self showOrHideSubmitIfNeeded];
-            [self.tableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
         }
     }
 }
@@ -147,37 +151,30 @@
 
 - (void)showOrHideSubmitIfNeeded
 {
-    BOOL anyObject = self.dataSource.currentRoster.players.count > 0 && self.networkStatus != NotReachable;;
-    CGFloat submitHeight = 70.f;
-    [UIView animateWithDuration:(NSTimeInterval).3f
-                     animations:
-     ^{
-         self.submitView.frame = CGRectMake(0.f,
-                                            anyObject ? self.view.bounds.size.height - submitHeight
-                                            : self.view.bounds.size.height,
-                                            self.view.bounds.size.width,
-                                            submitHeight);
-         self.submitView.alpha = (anyObject && self.networkStatus != NotReachable) ? 1.f : 0.f;
-         self.submitView.userInteractionEnabled = anyObject;
-         UIEdgeInsets tableInsets = self.tableView.contentInset;
-         tableInsets.bottom = anyObject ? submitHeight : 0.f;
-         self.tableView.contentInset = tableInsets;
-     }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL anyObject = self.dataSource.currentRoster.players.count > 0 && self.networkStatus != NotReachable;;
+        CGFloat submitHeight = 70.f;
+        [UIView animateWithDuration:(NSTimeInterval).3f
+                         animations:
+         ^{
+             self.submitView.frame = CGRectMake(0.f,
+                                                anyObject ? self.view.bounds.size.height - submitHeight
+                                                : self.view.bounds.size.height,
+                                                self.view.bounds.size.width,
+                                                submitHeight);
+             self.submitView.alpha = (anyObject && self.networkStatus != NotReachable) ? 1.f : 0.f;
+             self.submitView.userInteractionEnabled = anyObject;
+             UIEdgeInsets tableInsets = self.tableView.contentInset;
+             tableInsets.bottom = anyObject ? submitHeight : 0.f;
+             self.tableView.contentInset = tableInsets;
+         }];
+    });
 }
 
 #pragma mark
 
 - (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
-{
-//    if (self.networkStatus == NotReachable) {
-//        if (shouldShow) {
-//            [[FFAlertView noInternetConnectionAlert] showInView:self.view];
-//        }
-//        
-//        block();
-//        return;
-//    }
-    
+{    
     [self.delegate refreshRosterWithShowingAlert:shouldShow completion:block];
 }
 

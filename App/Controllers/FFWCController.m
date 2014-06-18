@@ -50,16 +50,7 @@
     
     //custom picker
     if (self.category == FFWCGroupWinners) {
-        self.picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 162.f)];
-        self.picker.delegate = self;
-        self.picker.dataSource = self;
-        self.picker.showsSelectionIndicator = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? NO : YES;
-        
-        CGAffineTransform t0 = CGAffineTransformMakeTranslation(self.picker.bounds.size.width/2, self.picker.bounds.size.height/2);
-        CGAffineTransform s0 = CGAffineTransformMakeScale(1.0, 0.47);
-        CGAffineTransform t1 = CGAffineTransformMakeTranslation(-self.picker.bounds.size.width/2, -self.picker.bounds.size.height/2);
-        self.picker.transform = CGAffineTransformConcat(t0, CGAffineTransformConcat(s0, t1));
-        self.picker.backgroundColor = [FFStyle darkGrey];
+        [self setupPicker];
     }
     
     //refresh control
@@ -82,11 +73,24 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
 }
 
+- (void)setupPicker
+{
+    self.picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 162.f)];
+    self.picker.delegate = self;
+    self.picker.dataSource = self;
+    self.picker.showsSelectionIndicator = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? NO : YES;
+    
+    CGAffineTransform t0 = CGAffineTransformMakeTranslation(self.picker.bounds.size.width/2, self.picker.bounds.size.height/2);
+    CGAffineTransform s0 = CGAffineTransformMakeScale(1.0, 0.47);
+    CGAffineTransform t1 = CGAffineTransformMakeTranslation(-self.picker.bounds.size.width/2, -self.picker.bounds.size.height/2);
+    self.picker.transform = CGAffineTransformConcat(t0, CGAffineTransformConcat(s0, t1));
+    self.picker.backgroundColor = [FFStyle darkGrey];
+}
+
 - (void)resetPicker
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.picker setNeedsLayout];
-        [self.picker reloadAllComponents];
+        [self setupPicker];
         [self.picker selectRow:0 inComponent:0 animated:NO];
     });
 }
