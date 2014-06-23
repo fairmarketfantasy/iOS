@@ -46,16 +46,4 @@
     return self;
 }
 
-- (void)hideLabels
-{
-    self.marketLabel.hidden = YES;
-    self.timeLabel.hidden = YES;
-}
-
-- (void)showLabels
-{
-    self.marketLabel.hidden = NO;
-    self.timeLabel.hidden = NO;
-}
-
 @end

@@ -16,5 +16,6 @@ typedef NS_ENUM(NSInteger, FFMarketType) {
 @interface FFMarketSet : FFDataObjectResultSet
 
 - (void)fetchType:(FFMarketType)type;
+- (void)fetchType:(FFMarketType)type completion:(void(^)(void))block;
 
 @end

@@ -45,4 +45,17 @@
                                 }];
 }
 
+- (void)fetchType:(FFMarketType)type completion:(void(^)(void))block
+{
+    NSAssert(self.query, @"Query shouldn't be nil!");
+    [self refreshWithParameters:@{
+                                  @"sport" : [FFSport stringFromSport:self.session.sport],
+                                  @"type" : [FFMarketSet typeKey:type]
+                                  }
+                     completion:^{
+                         if (block)
+                             block();
+                     }];
+}
+
 @end

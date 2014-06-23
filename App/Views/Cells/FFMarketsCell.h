@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+#define kMarketsCellIdentifier @"MarketsCell"
+
 @class FFMarketSelector;
 
 @interface FFMarketsCell : UITableViewCell
 
 @property(nonatomic) FFMarketSelector* marketSelector;
 
-- (void)showStatusLabelWithMessage:(NSString *)message;
-- (void)hideStatusLabel;
+- (void)setNoGamesLabelHidden:(BOOL)hidden;
 
 @end

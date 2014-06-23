@@ -28,6 +28,8 @@
  of AFOAuth2Client class in pods.
 */
 
+#define kCurrentSport @"CurrentSport"
+
 @interface FFSession : SBSession
 
 @property(nonatomic, readonly) FFUser* user;

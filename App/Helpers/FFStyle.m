@@ -29,6 +29,8 @@ CGRect CGRectCopyWithOrigin(CGRect r, CGPoint origin)
 {
     NSNumberFormatter* formatter = NSNumberFormatter.new;
     formatter.numberStyle = NSNumberFormatterCurrencyStyle;
+    [formatter setNegativeFormat:@"¤-#,##0.00"];
+    formatter.maximumFractionDigits = 0;
     return formatter;
 }
 

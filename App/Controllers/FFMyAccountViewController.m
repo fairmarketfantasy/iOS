@@ -319,7 +319,7 @@ didFinishPickingMediaWithInfo:(NSDictionary*)info
          BOOL horizontal = image.size.width > image.size.height;
          CGFloat scaledWidth = horizontal ? AVATAR_SIZE : aspectImage * AVATAR_SIZE;
          CGFloat scaledHeight = horizontal ? AVATAR_SIZE / aspectImage : AVATAR_SIZE;
-         UIImage* scaledImage = [image resizedImageToSize:CGSizeMake(scaledWidth, scaledHeight)];
+         UIImage* scaledImage = [image resizedImageToFitInSize:CGSizeMake(scaledWidth, scaledHeight) scaleIfSmaller:YES];
          NSURL* imagePath = info[UIImagePickerControllerReferenceURL];
 
          NSString* name = imagePath.lastPathComponent;

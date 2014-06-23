@@ -12,12 +12,14 @@
 #import "FFPredictHistoryTable.h"
 #import "FFPredictHistoryCell.h"
 #import "FFPredictIndividualCell.h"
+#import "FFNoConnectionCell.h"
 #import "FFPredictHeader.h"
 #import "FFRosterTableHeader.h"
 #import "FFPredictionsSelector.h"
 #import "FFStyle.h"
 #import "FFPredictRosterPagerController.h"
 #import "FFAlertView.h"
+#import "Reachability.h"
 // model
 #import "FFPredictionSet.h"
 #import "FFIndividualPrediction.h"
@@ -26,8 +28,6 @@
 #import "FFGame.h"
 #import "FFContestType.h"
 #import "FFDate.h"
-
-#define LOADING_VIEW_TAG 0xCCCF
 
 @interface FFPredictHistoryController () <UITableViewDataSource, UITableViewDelegate,
 FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
@@ -41,6 +41,8 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 @property(nonatomic) FFPredictionSet* individualPredictions;
 @property(nonatomic) FFPredictionSet* rosterActivePredictions;
 @property(nonatomic) FFPredictionSet* rosterHistoryPredictions;
+
+@property(nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 
@@ -69,6 +71,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                         action:@selector(showOrHideTypeSelectorIfNeeded)
               forControlEvents:UIControlEventTouchUpInside];
     self.typeButton.contentMode = UIViewContentModeScaleAspectFit;
+    
     // table view
     self.tableView = [[FFPredictHistoryTable alloc] initWithFrame:self.view.bounds];
     self.tableView.historyDelegate = self;
@@ -76,8 +79,28 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
     [self.view bringSubviewToFront:self.typeSelector];
+    
+    //refresh control
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.tintColor = [FFStyle lightGrey];
+    [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
+    
     // title
     self.navigationItem.titleView = self.typeButton;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    
+    internetReachability = [Reachability reachabilityForInternetConnection];
+	BOOL success = [internetReachability startNotifier];
+	if ( !success )
+		DLog(@"Failed to start notifier");
+    self.networkStatus = [internetReachability currentReachabilityStatus];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
 }
 
 - (void)willMoveToParentViewController:(UIViewController *)parent
@@ -97,16 +120,12 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 {
     [super viewWillAppear:animated];
     [self hideTypeSelector];
-    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
-                                                             messsage:nil
-                                                         loadingStyle:FFAlertViewLoadingStylePlain];
-    loadingView.tag = LOADING_VIEW_TAG;
-    [loadingView showInView:self.navigationController.view];
     
-    [self refreshWithCompletion:^{
-        [loadingView hide];
-    }];
-//    [self refresh];
+    if (self.networkStatus != NotReachable) {
+        [self refreshWithShowingAlert:NO completion:^{
+            [self.tableView reloadData];
+        }];        
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -126,20 +145,50 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     }
 }
 
+#pragma mark
+
+- (void)checkNetworkStatus:(NSNotification *)notification
+{
+    NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    NetworkStatus previousStatus = self.networkStatus;
+    if (internetStatus != self.networkStatus) {
+        self.networkStatus = internetStatus;
+        
+        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
+            (internetStatus == NotReachable && previousStatus != NotReachable)) {
+            
+            if (internetStatus == NotReachable) {
+                self.tableView.tableHeaderView = nil;
+                [self.tableView reloadData];
+            } else {
+                [self.tableView setPredictionType:FFPredictionsTypeRoster
+                   rosterPredictionType:FFRosterPredictionTypeSubmitted];
+                [self refreshWithShowingAlert:YES completion:^{
+                    [self.tableView reloadData];
+                }];
+            }
+        }
+    }
+}
+
+#pragma mark -
+
+- (void)pullToRefresh:(UIRefreshControl *)refreshControl
+{
+    [self refreshWithShowingAlert:NO completion:^{
+        [self.tableView reloadData];
+        [refreshControl endRefreshing];
+    }];
+}
+
 #pragma mark - FFPredictionsProtocol
 
 - (void)predictionsTypeSelected:(FFPredictionsType)type
 {
     self.predictionType = type;
-    
-    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
-                                                             messsage:nil
-                                                         loadingStyle:FFAlertViewLoadingStylePlain];
-    loadingView.tag = LOADING_VIEW_TAG;
-    [loadingView showInView:self.navigationController.view];
-    
-    [self refreshWithCompletion:^{
-        [loadingView hide];
+
+    [self refreshWithShowingAlert:YES completion:^{
+        [self.tableView reloadData];
     }];
     
     [self showOrHideTypeSelectorIfNeeded];
@@ -163,31 +212,40 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView*)tableView
- numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
-    switch (self.predictionType) {
-        case FFPredictionsTypeIndividual:
-            return self.individualPredictions.allObjects.count;
-        case FFPredictionsTypeRoster:
-        {
-            switch (self.rosterPredictionType) {
-                case FFRosterPredictionTypeSubmitted:
-                    return self.rosterActivePredictions.allObjects.count;
-                case FFRosterPredictionTypeFinished:
-                    return self.rosterHistoryPredictions.allObjects.count;
-                default:
-                    return 0;
+    if (self.networkStatus == NotReachable) {
+        return 1;
+    } else {
+        switch (self.predictionType) {
+            case FFPredictionsTypeIndividual:
+                return self.individualPredictions.allObjects.count;
+            case FFPredictionsTypeRoster:
+            {
+                switch (self.rosterPredictionType) {
+                    case FFRosterPredictionTypeSubmitted:
+                        return self.rosterActivePredictions.allObjects.count;
+                    case FFRosterPredictionTypeFinished:
+                        return self.rosterHistoryPredictions.allObjects.count;
+                    default:
+                        return 0;
+                }
             }
+            default:
+                return 0;
         }
-        default:
-            return 0;
     }
 }
 
-- (UITableViewCell*)tableView:(UITableView*)tableView
-        cellForRowAtIndexPath:(NSIndexPath*)indexPath
+- (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
+    if (self.networkStatus == NotReachable) {
+        FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
+                                                                   forIndexPath:indexPath];
+        cell.message.text = NSLocalizedString(@"No Internet Connection", nil);
+        return cell;
+    }
+    
     switch (self.predictionType) {
         case FFPredictionsTypeIndividual:
         {
@@ -273,21 +331,21 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView*)tableView
-heightForRowAtIndexPath:(NSIndexPath*)indexPath
+- (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    return 160.f;
+    return self.networkStatus == NotReachable ? [UIScreen mainScreen].bounds.size.height - 64.f : 160.f;
 }
 
-- (CGFloat)tableView:(UITableView*)tableView
-heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 40.f;
+    return self.networkStatus == NotReachable ? 0.f : 40.f;
 }
 
-- (UIView*)tableView:(UITableView*)tableView
-viewForHeaderInSection:(NSInteger)section
+- (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
+    if (self.networkStatus == NotReachable)
+        return nil;
+    
     FFRosterTableHeader* header = FFRosterTableHeader.new;
     header.titleLabel.text = @"";
     switch (self.predictionType) {
@@ -307,8 +365,7 @@ viewForHeaderInSection:(NSInteger)section
     return header;
 }
 
-- (void)tableView:(UITableView*)tableView
-didSelectRowAtIndexPath:(NSIndexPath*)indexPath
+- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath
                              animated:YES];
@@ -328,18 +385,9 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 {
     BOOL isHistory = segments.selectedSegmentIndex == 1;
     self.rosterPredictionType = isHistory ? FFRosterPredictionTypeFinished : FFRosterPredictionTypeSubmitted;
-    
-    __block FFAlertView* loadingView = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
-                                                             messsage:nil
-                                                         loadingStyle:FFAlertViewLoadingStylePlain];
-    loadingView.tag = LOADING_VIEW_TAG;
-    [loadingView showInView:self.navigationController.view];
-    
-    [self refreshWithCompletion:^{
-        [loadingView hide];
+    [self refreshWithShowingAlert:YES completion:^{
+        [self.tableView reloadData];
     }];
-    
-//    [self refresh];
 }
 
 #pragma mark - private
@@ -378,51 +426,36 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
      }];
 }
 
-- (void)refresh
+- (void)refreshWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
-    [self.tableView setPredictionType:self.predictionType
-                 rosterPredictionType:self.rosterPredictionType];
-    [self.tableView reloadData];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    switch (self.predictionType) {
-        case FFPredictionsTypeIndividual:
-        {
-            [self.individualPredictions fetch];
-            [self.typeButton setTitle:NSLocalizedString(@"Individual", nil)
-                             forState:UIControlStateNormal];
+    if (self.networkStatus == NotReachable) {
+        [self.tableView setPredictionType:self.predictionType
+                     rosterPredictionType:self.rosterPredictionType];
+        
+        if (shouldShow) {
+            [[FFAlertView noInternetConnectionAlert] showInView:self.view];
         }
-            break;
-        case FFPredictionsTypeRoster:
-        {
-            switch (self.rosterPredictionType) {
-                case FFRosterPredictionTypeSubmitted:
-                    [self.rosterActivePredictions fetch];
-                    break;
-                case FFRosterPredictionTypeFinished:
-                    [self.rosterHistoryPredictions fetchWithParameters:
-                     @{ @"historical" : @"true" }]; // TODO: should be in one of MODELs
-                    break;
-                default:
-                    break;
-            }
-            [self.typeButton setTitle:NSLocalizedString(@"Roster", nil)
-                             forState:UIControlStateNormal];
-        }
-            break;
-        default:
-            break;
+        
+        block();
+        return;
     }
-}
-
-- (void)refreshWithCompletion:(void(^)(void))block
-{
+    
+    __block FFAlertView* alert = nil;
+    if (shouldShow) {
+        alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Loading", nil)
+                                          messsage:nil
+                                      loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.navigationController.view];
+    }
+    
     [self.tableView setPredictionType:self.predictionType
                  rosterPredictionType:self.rosterPredictionType];
-    [self.tableView reloadData];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     switch (self.predictionType) {
         case FFPredictionsTypeIndividual: {
             [self.individualPredictions fetchWithCompletion:^{
+                if (alert)
+                    [alert hide];
                 if (block)
                     block();
             }];
@@ -434,13 +467,16 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
         case FFPredictionsTypeRoster: {
             if (self.rosterPredictionType == FFRosterPredictionTypeSubmitted) {
                 [self.rosterActivePredictions fetchWithCompletion:^{
-                    if (block) {
+                    if (alert)
+                        [alert hide];
+                    if (block)
                         block();
-                    }
                 }];
             } else if (self.rosterPredictionType == FFRosterPredictionTypeFinished) {
                 [self.rosterHistoryPredictions fetchWithParameters:@{ @"historical" : @"true" }
                                                         completion:^{
+                                                            if (alert)
+                                                                [alert hide];
                                                             if (block)
                                                                 block();
                                                         }]; // TODO: should be in one of MODELs

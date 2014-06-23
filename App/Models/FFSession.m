@@ -38,9 +38,14 @@
     self = [super initWithIdentifier:identifier
                            userClass:userClass];
     if (self) {
-        self.sport = FFMarketSportNBA;
+        self.sport = [self currentSport];
     }
     return self;
+}
+
+- (FFMarketSport)currentSport
+{
+    return [[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentSport] integerValue];
 }
 
 - (void)clearCredentials
@@ -97,7 +102,7 @@
 
     [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject)
     {
-        DebugLog(@"got fb login response response %@", responseObject);
+        NSLog(@"got fb login response response %@", responseObject);
         [user setValuesForKeysWithNetworkDictionary:responseObject];
         [user save];
         self.user = user;
@@ -117,7 +122,7 @@
 failure:
     ^(AFHTTPRequestOperation * operation, NSError * error)
     {
-        DebugLog(@"register failed to post user operation=%@ error=%@", operation, error);
+        NSLog(@"register failed to post user operation=%@ error=%@", operation, error);
         failure(error);
     }];
     [self.anonymousHttpClient enqueueHTTPRequestOperation:op];
@@ -162,7 +167,7 @@ failure:
     [super authorizedJSONRequestWithRequestBlock:requestBlock success:success failure:
      ^void (NSURLRequest *req, NSHTTPURLResponse *resp, NSError *err, id res)
     {
-        failure(req, resp, err, res);
+         failure(req, resp, err, res);
     }];
 }
 
@@ -187,10 +192,10 @@ failure:
          [AFOAuthCredential storeCredential:credential withIdentifier:self.identifier];
          success(user);
      } failure:^(NSError *error) {
-         DebugLog(@"oauth crapped %@", error);
+         NSLog(@"oauth crapped %@", error);
          NSError *dumbError = [NSError errorWithDomain:@"" code:400 userInfo:
                                @{ NSUnderlyingErrorKey: error,
-                                  NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid password", nil) }];
+                                  NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid username or password", nil) }];
          failure(dumbError);
          //because 2 popups with errors
          //         failure(error);
@@ -225,11 +230,11 @@ failure:
          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
              [self.user save];
              success(self.user);
-             DebugLog(@"successfully got and saved user");
+             NSLog(@"successfully got and saved user");
              //             [self syncPushToken];
          });
      } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
-         DebugLog(@"failed to get current user error=%@ json=%@", error, JSON);
+         NSLog(@"failed to get current user error=%@ json=%@", error, JSON);
          failure(error);
      }];
 }
@@ -293,7 +298,7 @@ failure:
                           failure:
      ^(NSError * error)
      {
-         DebugLog(@"failed to get user");
+         NSLog(@"failed to get user");
      }];
 }
 

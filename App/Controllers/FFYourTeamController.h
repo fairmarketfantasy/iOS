@@ -7,29 +7,24 @@
 //
 
 #import "FFBaseViewController.h"
+#import "FFYourTeamDataSource.h"
 
-@protocol FFYourTeamProtocol <NSObject>
-
-- (void)showPosition:(NSString*)position;
-
-@end
+@class FFRoster;
 
 @class FFMarket;
 @class FFMarketSet;
 @class Reachability;
+@class FFPlayer;
 
 @interface FFYourTeamController : FFBaseViewController {
     Reachability* internetReachability;
 }
 
-@property(nonatomic, weak) id<FFYourTeamProtocol> delegate;
-@property(nonatomic, readonly) FFRoster* roster;
-@property(nonatomic) FFMarket* selectedMarket;
+@property(nonatomic, weak) id<FFYourTeamDelegate> delegate;
+@property(nonatomic, weak) id<FFYourTeamDataSource> dataSource;
 @property(nonatomic) UITableView* tableView;
-@property(nonatomic, readonly) BOOL noGamesAvailable;
-- (NSArray*)uniquePositions;
-- (void)createRoster;
-- (void)refreshRoster;
-- (void)updateMarkets;
+
+- (void)refreshRosterWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block;
+- (void)reloadWithServerError:(BOOL)isError;
 
 @end

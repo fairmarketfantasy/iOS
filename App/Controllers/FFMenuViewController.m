@@ -371,6 +371,16 @@
     if (![header isKindOfClass:[FFAccountHeader class]]) {
         return;
     }
+    
+    NSString *imageName = nil;
+    if (self.session.sport == FFMarketSportNBA) {
+        imageName = @"loginbg";
+    } else if (self.session.sport == FFMarketSportMLB) {
+        imageName = @"loginmlb";
+    }
+    
+    [header setBackgroundImage:[UIImage imageNamed:imageName]];
+    
     [header.avatar setImageWithURL:[NSURL URLWithString:self.session.user.imageUrl]
                   placeholderImage:[UIImage imageNamed:@"defaultuser"]
        usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
@@ -453,16 +463,10 @@
     } else if ([item.title isEqualToString:@"MLB"]) {
         item.action = ^{
             @strongify(self)
-            [[[FFAlertView alloc] initWithTitle:nil
-                                        message:NSLocalizedString(@"Coming soon!", nil)
-                              cancelButtonTitle:nil
-                                okayButtonTitle:NSLocalizedString(@"Ok", nil)
-                                       autoHide:YES] showInView:self.view];
-        
-//            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-//                [self.delegate didUpdateToNewSport:FFMarketSportMLB];
-//            }
-//            [self dismissViewControllerAnimated:YES completion:nil];
+            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
+                [self.delegate didUpdateToNewSport:FFMarketSportMLB];
+            }
+            [self dismissViewControllerAnimated:YES completion:nil];
         };
     } else if ([item.title isEqualToString:@"Sign Out"]) {
         item.action = ^{

@@ -21,4 +21,6 @@
 @property(nonatomic, readonly) UILabel* prestigeLabel;
 @property(nonatomic, readonly) UILabel* winsLabel;
 
+- (void)setBackgroundImage:(UIImage *)image;
+
 @end

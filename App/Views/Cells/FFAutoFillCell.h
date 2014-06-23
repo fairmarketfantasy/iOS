@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define kAutoFillCellIdentifier @"AutoFillCell"
+
 @class FUISwitch;
 
 @interface FFAutoFillCell : UITableViewCell

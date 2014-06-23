@@ -69,40 +69,40 @@
     // appropriate. See also applicationDidEnterBackground:.
 }
 
-- (void)application:(UIApplication*)app
-    didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)devToken
-{
-    self.pushToken =
-        [[[[devToken description] stringByReplacingOccurrencesOfString:@" "
-                                                            withString:@""]
-             stringByReplacingOccurrencesOfString:@"<"
-                                       withString:@""]
-            stringByReplacingOccurrencesOfString:@">"
-                                      withString:@""];
-    DebugLog(@"successfully got push token: %@", self.pushToken);
-    [[NSNotificationCenter defaultCenter]
-        postNotificationName:SBDidReceiveRemoteNotificationAuthorization
-                      object:nil
-                    userInfo:@{
-                                 @"pushToken" : self.pushToken
-                             }];
-}
-
-- (void)application:(UIApplication*)app
-    didFailToRegisterForRemoteNotificationsWithError:(NSError*)err
-{
-    DebugLog(@"Error in push registration. Error: %@", err);
-}
-
-- (void)application:(UIApplication*)application
-    didReceiveRemoteNotification:(NSDictionary*)userInfo
-{
-    // TODO: implement push notifications if needed
-//    NSLog(@"did receive push notification %@", userInfo);
+//- (void)application:(UIApplication*)app
+//    didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)devToken
+//{
+//    self.pushToken =
+//        [[[[devToken description] stringByReplacingOccurrencesOfString:@" "
+//                                                            withString:@""]
+//             stringByReplacingOccurrencesOfString:@"<"
+//                                       withString:@""]
+//            stringByReplacingOccurrencesOfString:@">"
+//                                      withString:@""];
+//    NSLog(@"successfully got push token: %@", self.pushToken);
 //    [[NSNotificationCenter defaultCenter]
-//        postNotificationName:FFDidReceiveRemoteNotification
+//        postNotificationName:SBDidReceiveRemoteNotificationAuthorization
 //                      object:nil
-//                    userInfo:userInfo];
-}
+//                    userInfo:@{
+//                                 @"pushToken" : self.pushToken
+//                             }];
+//}
+
+//- (void)application:(UIApplication*)app
+//    didFailToRegisterForRemoteNotificationsWithError:(NSError*)err
+//{
+//    NSLog(@"Error in push registration. Error: %@", err);
+//}
+//
+//- (void)application:(UIApplication*)application
+//    didReceiveRemoteNotification:(NSDictionary*)userInfo
+//{
+//    // TODO: implement push notifications if needed
+////    NSLog(@"did receive push notification %@", userInfo);
+////    [[NSNotificationCenter defaultCenter]
+////        postNotificationName:FFDidReceiveRemoteNotification
+////                      object:nil
+////                    userInfo:userInfo];
+//}
 
 @end

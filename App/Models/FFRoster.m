@@ -225,6 +225,16 @@
 
 #pragma mark -
 
+- (FFPlayer *)playerByName:(NSString *)name
+{
+    for (FFPlayer *player in self.players) {
+        if ([player.name isEqualToString:name])
+            return player;
+    }
+    
+    return nil;
+}
+
 - (void)addPlayer:(FFPlayer*)player
           success:(SBSuccessBlock)success
           failure:(SBErrorBlock)failure

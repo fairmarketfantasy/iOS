@@ -20,6 +20,7 @@
 #import "Reachability.h"
 // model
 #import "FFControllerProtocol.h"
+#import "FFYourTeamDataSource.h"
 #import "FFMarketSet.h"
 #import "FFMarket.h"
 #import "FFSessionViewController.h"
@@ -30,7 +31,11 @@
 #import <SBData/SBTypes.h>
 
 @interface FFPagerController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, FFControllerProtocol,
-FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtocol, FFYourTeamProtocol>
+FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtocol, FFYourTeamDelegate, FFYourTeamDataSource,
+SBDataObjectResultSetDelegate>
+{
+    __block BOOL _rosterIsCreating;
+}
 
 @property(nonatomic) StyledPageControl* pager;
 @property(nonatomic) FFYourTeamController* teamController;
@@ -39,6 +44,17 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 @property(nonatomic) NSDictionary* positionsNames;
 
 @property(nonatomic, assign) NetworkStatus networkStatus;
+@property(nonatomic, assign) BOOL isFirstLaunch;
+
+@property(nonatomic) FFMarketSet* marketsSetRegular;
+@property(nonatomic) FFMarketSet* marketsSetSingle;
+
+@property(nonatomic, strong) NSArray* markets;
+@property(nonatomic) FFMarket* selectedMarket;
+
+@property(nonatomic, strong) NSMutableArray *myTeam;
+@property(nonatomic, strong) FFRoster* roster;
+@property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
 @end
 
@@ -60,9 +76,18 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
         self.receiverController = [[UIStoryboard storyboardWithName:@"MainStoryboard_iPhone"
                                                              bundle:[NSBundle mainBundle]]
                                    instantiateViewControllerWithIdentifier:@"ReceiverController"];
+
         self.teamController.delegate = self;
+        self.teamController.dataSource = self;
         self.receiverController.delegate = self;
+        self.receiverController.dataSource = self;
+        
+        self.isFirstLaunch = YES;
+        _rosterIsCreating = NO;
+        
+        self.myTeam = [NSMutableArray array];
     }
+    
     return self;
 }
 
@@ -123,17 +148,35 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.pager.numberOfPages = (int)[self getViewControllers].count;
+    
     // session
     self.teamController.session = self.session;
     self.receiverController.session = self.session;
+    
     // get player position names
     [self fetchPositionsNames];
-    [self setViewControllers:@[[self getViewControllers].firstObject]
-                   direction:UIPageViewControllerNavigationDirectionForward
-                    animated:NO
-                  completion:nil];
-    [self.view bringSubviewToFront:self.pager];
+    
+    if (self.isFirstLaunch) {
+        self.marketsSetRegular = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                      session:self.session authorized:YES];
+        self.marketsSetSingle = [[FFMarketSet alloc] initWithDataObjectClass:[FFMarket class]
+                                                                     session:self.session authorized:YES];
+        self.marketsSetRegular.delegate = self;
+        self.marketsSetSingle.delegate = self;
+        [self updateMarkets];
+        
+        [self setViewControllers:@[[self getViewControllers].firstObject]
+                       direction:UIPageViewControllerNavigationDirectionForward
+                        animated:NO
+                      completion:nil];
+        
+        [self.view bringSubviewToFront:self.pager];
+    }
+    
+    self.isFirstLaunch = NO;
+    
+    self.pager.numberOfPages = (int)[self getViewControllers].count;
+    self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:self.viewControllers.firstObject];
     
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
@@ -141,38 +184,26 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
 		DLog(@"Failed to start notifier");
     self.networkStatus = [internetReachability currentReachabilityStatus];
     
-    if (self.networkStatus == NotReachable) {
-        [self setScrollEnabled:NO];
-    }
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
-}
-
-- (void)setScrollEnabled:(BOOL)enabled
-{
-    for(UIView* view in self.view.subviews) {
-        if([view isKindOfClass:[UIScrollView class]]) {
-            UIScrollView* scrollView = (UIScrollView*)view;
-            [scrollView setScrollEnabled:enabled];
-            return;
-        }
-    }
 }
 
 - (void)checkNetworkStatus:(NSNotification *)notification
 {
     NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
+    NetworkStatus previousStatus = self.networkStatus;
     
     if (internetStatus != self.networkStatus) {
-        if (internetStatus == NotReachable) {
-            [self setScrollEnabled:NO];
-        } else {
-            [self setScrollEnabled:YES];
-        }
-        
         self.networkStatus = internetStatus;
-    }
+        
+        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
+            (internetStatus == NotReachable && previousStatus != NotReachable)) {
+            if (internetStatus != NotReachable) {
+                [self fetchPositionsNames];
+                [self updateMarkets];
+            }
+        }
+    }    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue
@@ -209,66 +240,126 @@ FFUserProtocol, FFMenuViewControllerDelegate, FFPlayersProtocol, FFEventsProtoco
     }
 }
 
-#pragma mark - UIPageViewControllerDataSource
+#pragma mark - Manage My Team
 
-- (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
-     viewControllerBeforeViewController:(UIViewController*)viewController
+- (NSMutableDictionary *)emptyPosition
 {
-    if (self.teamController.noGamesAvailable == YES) {
-        return nil;
+    return  [NSMutableDictionary dictionaryWithObjectsAndKeys:@"", @"name", @"", @"player", nil];
+}
+
+- (BOOL)isPositionUnique:(NSString *)position
+{
+    NSUInteger counter = 0;
+    for (NSString *pos in [self allPositions]) {
+        if ([position isEqualToString:pos])
+            counter++;
     }
     
-    NSUInteger index = [[self getViewControllers] indexOfObject:viewController];
-    if (index == NSNotFound) {
-        WTFLog;
-        return nil;
-    }
-    if (index == 0) {
-        return nil;
-    }
-    return [self getViewControllers][--index];
+    if (counter == 1)
+        return YES;
+    else if (counter > 1)
+        return NO;
+    else
+        assert(NO);
 }
 
-- (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
-      viewControllerAfterViewController:(UIViewController*)viewController
+- (NSMutableArray *)newTeamWithPositions:(NSArray *)positions
 {
-    if (self.teamController.noGamesAvailable == YES) {
-        return nil;
+    NSMutableArray *newTeam = [NSMutableArray array];
+    for (NSUInteger i = 0; i < positions.count; ++i) {
+        [newTeam addObject:[self emptyPosition]];
+        [newTeam[i] setObject:positions[i] forKey:@"name"];
     }
     
-    NSUInteger index = [[self getViewControllers] indexOfObject:viewController];
-    if (index == NSNotFound) {
-        WTFLog;
-        return nil;
-    }
-    if (index == [self getViewControllers].count - 1) {
-        return nil;
-    }
-    return [self getViewControllers][++index];
+    return newTeam;
 }
 
-#pragma mark - UIPageViewControllerDelegate
-
-- (void)pageViewController:(UIPageViewController *)pageViewController
-        didFinishAnimating:(BOOL)finished
-   previousViewControllers:(NSArray *)previousViewControllers
-       transitionCompleted:(BOOL)completed
+- (void)addPlayerToMyTeam:(FFPlayer *)player
 {
-    // TODO: on appear
-    if (!completed) {
-        return;
+    for (NSMutableDictionary *position in self.myTeam) {
+        if ([position[@"name"] isEqualToString:player.position]) {
+            if ([self isPositionUnique:player.position]) {
+                [position setObject:player forKey:@"player"];
+                break;
+            } else {
+                if ([position[@"player"] isKindOfClass:[NSString class]]) {
+                    if ([position[@"player"] isEqualToString:@""]) {
+                        [position setObject:player forKey:@"player"];
+                        break;
+                    } else {
+                        continue;
+                    }
+                }
+            }
+        }
     }
-    self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
-                                   self.viewControllers.firstObject];
 }
 
-- (void)pageViewController:(UIPageViewController*)pageViewController
-willTransitionToViewControllers:(NSArray*)pendingViewControllers
+- (void)removePlayerFromMyTeam:(FFPlayer *)player
 {
-    // TODO: on desappear
+    for (NSMutableDictionary *position in self.myTeam) {
+        if ([position[@"player"] isKindOfClass:[FFPlayer class]]) {
+            FFPlayer *pl = position[@"player"];
+            if ([pl.name isEqualToString:player.name]) {
+                [position setObject:@"" forKey:@"player"];
+            }
+        }
+    }
 }
 
 #pragma mark - private
+
+- (void)createRosterWithCompletion:(void(^)(BOOL success))block
+{
+    _rosterIsCreating = YES;
+    
+    if (!self.selectedMarket) {
+        self.roster = nil;
+        if (block) {
+            block(NO);
+        }
+        return;
+    }
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@""
+                                                           messsage:nil
+                                                       loadingStyle:FFAlertViewLoadingStylePlain];
+    [alert showInView:self.navigationController.view];
+    @weakify(self)
+    [FFRoster createNewRosterForMarket:self.selectedMarket.objId
+                               session:self.session
+                               success:
+     ^(id successObj) {
+         @strongify(self)
+         _rosterIsCreating = NO;
+         self.roster = successObj;
+         
+         self.myTeam = [self newTeamWithPositions:[self allPositions]];
+         
+         [alert hide];
+         if (block) {
+             block(YES);
+         }
+     }
+                               failure:
+     ^(NSError * error) {
+         @strongify(self)
+         _rosterIsCreating = NO;
+         if (self.tryCreateRosterTimes > 0) {
+             [alert hide];
+             self.tryCreateRosterTimes--;
+             [self createRosterWithCompletion:block];
+//             if (block) {
+//                 block(NO);
+//             }
+         } else {
+             self.roster = nil;
+             [alert hide];
+             if (block) {
+                 block(NO);
+             }
+         }
+     }];
+}
 
 - (NSArray*)getViewControllers
 {
@@ -303,6 +394,64 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                               sender:nil];
 }
 
+#pragma mark - UIPageViewControllerDataSource
+
+- (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
+     viewControllerBeforeViewController:(UIViewController*)viewController
+{
+    NSUInteger index = [[self getViewControllers] indexOfObject:viewController];
+    if (index == NSNotFound) {
+        WTFLog;
+        return nil;
+    }
+    if (index == 0) {
+        return nil;
+    }
+    return [self getViewControllers][--index];
+}
+
+- (UIViewController*)pageViewController:(UIPageViewController*)pageViewController
+      viewControllerAfterViewController:(UIViewController*)viewController
+{
+    NSUInteger index = [[self getViewControllers] indexOfObject:viewController];
+    if (index == NSNotFound) {
+        WTFLog;
+        return nil;
+    }
+    if (index == [self getViewControllers].count - 1) {
+        return nil;
+    }
+    return [self getViewControllers][++index];
+}
+
+#pragma mark - UIPageViewControllerDelegate
+
+- (void)pageViewController:(UIPageViewController *)pageViewController
+        didFinishAnimating:(BOOL)finished
+   previousViewControllers:(NSArray *)previousViewControllers
+       transitionCompleted:(BOOL)completed
+{
+    // TODO: on appear
+    if (!completed) {
+        return;
+    }
+    self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+                                   self.viewControllers.firstObject];
+    
+    //should update players list after swipe as in bug MLB-156
+    if (self.pager.currentPage == 1) {
+        [self.receiverController fetchPlayersWithShowingAlert:YES completion:^{
+            [self.receiverController reloadWithServerError:NO];
+        }];
+    }
+}
+
+- (void)pageViewController:(UIPageViewController*)pageViewController
+willTransitionToViewControllers:(NSArray*)pendingViewControllers
+{
+    // TODO: on desappear
+}
+
 #pragma mark - FFMenuViewControllerDelegate
 
 - (void)performMenuSegue:(NSString*)ident
@@ -314,7 +463,9 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)didUpdateToNewSport:(FFMarketSport)sport
 {
     self.session.sport = sport;
-    [self.teamController updateMarkets];
+    [self.receiverController resetPosition];
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInteger:sport] forKey:kCurrentSport];
+    [self updateMarkets];
 }
 
 - (FFMarketSport)currentMarketSport
@@ -331,26 +482,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 #pragma mark - FFPlayersProtocol
 
-- (NSString*)rosterId
-{
-    return self.teamController.roster.objId;
-}
-
-- (CGFloat)rosterSalary
-{
-    return self.teamController.roster.remainingSalary.floatValue;
-}
-
-- (NSArray*)positions
-{
-    return [self.teamController uniquePositions];
-}
-
-- (BOOL)autoRemovedBenched
-{
-    return self.teamController.roster.removeBenched.integerValue == 1;
-}
-
 - (void)addPlayer:(FFPlayer*)player
 {
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Buying Player", nil)
@@ -358,24 +489,29 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                                                loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
     @weakify(self)
-    [self.teamController.roster addPlayer:player
-                                  success:
+    [self.roster addPlayer:player
+                   success:
      ^(id successObj) {
          @strongify(self)
-//         [self.teamController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-//                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-//         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-//                                          withRowAnimation:UITableViewRowAnimationAutomatic];
+         //         [self.teamController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+         //                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+         //         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+         //                                          withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
-         [self.teamController refreshRoster];
+         [self addPlayerToMyTeam:player];
+         [self.teamController refreshRosterWithShowingAlert:YES completion:nil];
          [self setViewControllers:@[self.teamController]
                         direction:UIPageViewControllerNavigationDirectionReverse
                          animated:YES
                        completion:nil];
+                           
+         self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+                                        self.viewControllers.firstObject];
+         
      }
-                                  failure:
+                   failure:
      ^(NSError *error) {
-//         @strongify(self)
+         @strongify(self)
          [alert hide];
          
           //show this alert cause unclear situation:
@@ -393,14 +529,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              
              [alert showInView:self.navigationController.view];
          }
-         /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-          */
      }];
 }
 
@@ -408,10 +536,121 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (NSString*)marketId
 {
-    return self.teamController.selectedMarket.objId;
+    return self.selectedMarket.objId;
 }
 
-#pragma mark - FFYourTeamProtocol
+#pragma mark -
+
+- (void)updateMarkets
+{
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    __block FFAlertView *alert = nil;
+    
+    if (self.isFirstLaunch) {
+        alert = [[FFAlertView alloc] initWithTitle:@""
+                                          messsage:nil
+                                      loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.navigationController.view];
+    }
+    
+    [self.marketsSetRegular fetchType:FFMarketTypeRegularSeason completion:^{
+        [self.marketsSetSingle fetchType:FFMarketTypeSingleElimination completion:^{
+            if (alert)
+                [alert hide];
+        }];
+    }];
+}
+
+- (void)marketsUpdated
+{
+    [self.teamController.tableView reloadData];
+    NSArray *markets = [self availableMarkets];
+    if (markets.count > 0) {
+        
+        if ([self.teamController respondsToSelector:@selector(marketSelected:)]) {
+            [self.teamController performSelector:@selector(marketSelected:) withObject:markets.firstObject];
+        }
+        if ([self.receiverController respondsToSelector:@selector(marketSelected:)]) {
+            [self.receiverController performSelector:@selector(marketSelected:) withObject:markets.firstObject];
+        }
+    } else {
+        self.selectedMarket = nil;
+    }
+}
+
+#pragma mark - FFYourTeamDataSource
+
+- (NSString*)rosterId
+{
+    return self.roster.objId;
+}
+
+- (NSArray *)team
+{
+    return self.myTeam;
+}
+
+- (NSArray*)allPositions
+{
+    return [self.roster.positions componentsSeparatedByString:@","];
+}
+
+- (NSArray*)uniquePositions
+{
+    NSArray* positions = [self allPositions];
+    // make unique
+    NSMutableArray* unique = [NSMutableArray arrayWithCapacity:positions.count];
+    NSMutableSet* processed = [NSMutableSet set];
+    for (NSString* position in positions) {
+        if ([processed containsObject:position]) {
+            continue;
+        }
+        [unique addObject:position];
+        [processed addObject:position];
+    }
+    return [unique copy];
+}
+
+- (void)setCurrentMarket:(FFMarket *)market
+{
+    self.selectedMarket = market;
+    if (_rosterIsCreating == NO) {
+        
+        __weak FFPagerController *weakSelf = self;
+        [self createRosterWithCompletion:^(BOOL success) {
+            if (success) {
+                [weakSelf.teamController reloadWithServerError:NO];
+                [weakSelf.receiverController fetchPlayersWithShowingAlert:NO completion:^{
+                    [weakSelf.receiverController reloadWithServerError:NO ];
+                }];
+            } else {
+                [weakSelf.teamController reloadWithServerError:YES];
+                [weakSelf.receiverController reloadWithServerError:YES];
+            }
+        }];
+    }
+}
+
+- (FFMarket *)currentMarket
+{
+    return self.selectedMarket;
+}
+
+- (NSArray *)availableMarkets
+{
+    NSMutableArray* markets = [NSMutableArray arrayWithCapacity:self.marketsSetRegular.allObjects.count +
+                               self.marketsSetSingle.allObjects.count];
+    [markets addObjectsFromArray:self.marketsSetRegular.allObjects];
+    [markets addObjectsFromArray:self.marketsSetSingle.allObjects];
+    return [markets copy];
+}
+
+- (FFRoster *)currentRoster
+{
+    return self.roster;
+}
+
+#pragma mark - FFYourTeamDelegate
 
 - (void)showPosition:(NSString*)position
 {
@@ -422,8 +661,127 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                   completion:
      ^(BOOL finished) {
          @strongify(self)
+         self.pager.currentPage = (int)[[self getViewControllers] indexOfObject:
+                                        self.viewControllers.firstObject];
+         
          [self.receiverController showPosition:position];
      }];
+}
+
+- (void)removePlayer:(FFPlayer*)player completion:(void(^)(BOOL success))block
+{
+    @weakify(self)
+    [self.roster removePlayer:player
+                      success:
+     ^(id successObj) {
+         @strongify(self)
+         [self removePlayerFromMyTeam:player];
+         if (block)
+             block(YES);
+     }
+                      failure:
+     ^(NSError *error) {
+         if (block)
+             block(NO);
+     }];
+}
+
+- (void)submitRoster:(FFRosterSubmitType)rosterType completion:(void (^)(BOOL))block
+{
+    @weakify(self)
+    [self.roster submitContent:rosterType
+                       success:
+     ^(id successObj) {
+         @strongify(self)
+         if (block)
+             block(YES);
+         
+         [self createRosterWithCompletion:^(BOOL success) {
+             [self.teamController reloadWithServerError:!success];
+             [self.receiverController reloadWithServerError:!success];
+         }];
+     }
+                       failure:
+     ^(NSError * error) {
+         @strongify(self)
+         if (block)
+             block(NO);
+         [self.teamController.tableView reloadData];
+     }];
+}
+
+- (void)autoFillWithCompletion:(void(^)(BOOL success))block
+{
+    @weakify(self)
+    [self.roster autofillSuccess:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+         self.myTeam = [self newTeamWithPositions:[self allPositions]];
+         for (FFPlayer *player in self.roster.players) {
+             [self addPlayerToMyTeam:player];
+         }
+         
+         if (block)
+             block(YES);
+     }
+                         failure:
+     ^(NSError *error) {
+         @strongify(self)
+         self.roster = nil;
+         if (block)
+             block(NO);
+     }];
+}
+
+- (void)toggleRemoveBenchWithCompletion:(void(^)(BOOL success))block
+{
+    @weakify(self)
+    [self.roster toggleRemoveBenchedSuccess:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+         if (block)
+             block(YES);
+     }
+                                    failure:
+     ^(NSError *error) {
+         @strongify(self)
+         self.roster = nil;
+         if (block)
+             block(NO);
+     }];
+}
+
+- (void)refreshRosterWithCompletion:(void(^)(BOOL success))block
+{
+    @weakify(self)
+    [self.roster refreshInBackgroundWithBlock:
+     ^(id successObj) {
+         @strongify(self)
+         self.roster = successObj;
+
+         if (block)
+             block(YES);
+     }
+                                      failure:
+     ^(NSError *error) {
+         @strongify(self)
+         self.roster = nil;
+         
+         if (block)
+             block(NO);
+      }];
+}
+
+#pragma mark - SBDataObjectResultSetDelegate
+
+- (void)resultSetDidReload:(SBDataObjectResultSet*)resultSet
+{
+    if (resultSet.count > 0) {
+        [self marketsUpdated];
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    }
 }
 
 @end

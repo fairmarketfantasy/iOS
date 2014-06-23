@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define kTeamCellIdentifier @"TeamCell"
+
 @class FFPathImageView;
 
 @interface FFTeamCell : UITableViewCell

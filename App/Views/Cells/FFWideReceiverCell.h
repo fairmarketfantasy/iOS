@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+#define kWideRecieverCellIdentifier @"ReceiverCell"
+
 @class FUISegmentedControl;
 
 @interface FFWideReceiverCell : UITableViewCell
 
 @property(nonatomic) FUISegmentedControl* segments;
+
 - (void)setItems:(NSArray*)items;
 
 @end

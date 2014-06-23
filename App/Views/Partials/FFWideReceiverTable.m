@@ -9,6 +9,8 @@
 #import "FFWideReceiverTable.h"
 #import "FFWideReceiverCell.h"
 #import "FFTeamAddCell.h"
+#import "FFNoConnectionCell.h"
+#import "FFMarketsCell.h"
 
 @implementation FFWideReceiverTable
 
@@ -21,9 +23,15 @@
         self.separatorStyle = UITableViewCellSeparatorStyleNone;
         // cells
         [self registerClass:[FFWideReceiverCell class]
-     forCellReuseIdentifier:@"ReceiverCell"];
+     forCellReuseIdentifier:kWideRecieverCellIdentifier];
+        [self registerClass:[FFMarketsCell class]
+     forCellReuseIdentifier:kMarketsCellIdentifier];
         [self registerClass:[FFTeamAddCell class]
-     forCellReuseIdentifier:@"TeamAddCell"];
+     forCellReuseIdentifier:kTeamAddCellIdentifier];
+        [self registerClass:[FFNoConnectionCell class]
+     forCellReuseIdentifier:kNoConnectionCellIdentifier];
+        [self registerClass:[UITableViewCell class]
+     forCellReuseIdentifier:kPickerCellIdentifier];
     }
     return self;
 }

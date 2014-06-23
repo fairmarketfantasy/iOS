@@ -17,6 +17,9 @@
 		15A2379F17E2865A00225942 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A2379E17E2865A00225942 /* QuartzCore.framework */; };
 		15CD295517F7804A0027DFEC /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295317F7804A0027DFEC /* AddressBook.framework */; };
 		15CD295617F7804A0027DFEC /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295417F7804A0027DFEC /* AddressBookUI.framework */; };
+		3AB3F5BC191BA4A0005BA1DB /* loginmlb-586h.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AB3F5B9191BA4A0005BA1DB /* loginmlb-586h.png */; };
+		3AB3F5BD191BA4A0005BA1DB /* loginmlb.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AB3F5BA191BA4A0005BA1DB /* loginmlb.png */; };
+		3AB3F5BE191BA4A0005BA1DB /* loginmlb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AB3F5BB191BA4A0005BA1DB /* loginmlb@2x.png */; };
 		61A0C8A5904D4788A81F9EA6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A0D11613844A1D9BF1BC9E /* libPods.a */; };
 		890126B918E04F7100C27299 /* FFPTHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 890126B818E04F7100C27299 /* FFPTHeader.m */; };
 		890504CF18D9EEC7006CD2EA /* AnimatedTransitioning.m in Sources */ = {isa = PBXBuildFile; fileRef = 890504CC18D9EEC7006CD2EA /* AnimatedTransitioning.m */; };
@@ -188,6 +191,7 @@
 		89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E70018BE249A00B23A99 /* accessory_uncheck@2x.png */; };
 		89F2E70618BE249A00B23A99 /* accessory_uncollapse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E70118BE249A00B23A99 /* accessory_uncollapse@2x.png */; };
 		89F6D15C18F56A4C001DE023 /* FFDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F6D15B18F56A4C001DE023 /* FFDate.m */; };
+		F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -203,6 +207,9 @@
 		15A2379E17E2865A00225942 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		15CD295317F7804A0027DFEC /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		15CD295417F7804A0027DFEC /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		3AB3F5B9191BA4A0005BA1DB /* loginmlb-586h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginmlb-586h.png"; sourceTree = "<group>"; };
+		3AB3F5BA191BA4A0005BA1DB /* loginmlb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginmlb.png; sourceTree = "<group>"; };
+		3AB3F5BB191BA4A0005BA1DB /* loginmlb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginmlb@2x.png"; sourceTree = "<group>"; };
 		890126B718E04F7100C27299 /* FFPTHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPTHeader.h; sourceTree = "<group>"; };
 		890126B818E04F7100C27299 /* FFPTHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPTHeader.m; sourceTree = "<group>"; };
 		890504CB18D9EEC7006CD2EA /* AnimatedTransitioning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimatedTransitioning.h; sourceTree = "<group>"; };
@@ -478,6 +485,9 @@
 		89F6D15A18F56A4C001DE023 /* FFDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFDate.h; sourceTree = "<group>"; };
 		89F6D15B18F56A4C001DE023 /* FFDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFDate.m; sourceTree = "<group>"; };
 		C7A0D11613844A1D9BF1BC9E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9A27E8A192260B400BCE2AE /* FFYourTeamDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFYourTeamDataSource.h; sourceTree = "<group>"; };
+		F9FBDD5A19112D0C0009066D /* FFNoConnectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNoConnectionCell.h; sourceTree = "<group>"; };
+		F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNoConnectionCell.m; sourceTree = "<group>"; };
 		FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -632,6 +642,9 @@
 		896ACBCA18B664F5001E9C64 /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+				3AB3F5B9191BA4A0005BA1DB /* loginmlb-586h.png */,
+				3AB3F5BA191BA4A0005BA1DB /* loginmlb.png */,
+				3AB3F5BB191BA4A0005BA1DB /* loginmlb@2x.png */,
 				896ACBCB18B664F5001E9C64 /* button_normal.png */,
 				896ACBCC18B664F5001E9C64 /* button_pressed.png */,
 				89F2E6FD18BE249A00B23A99 /* accessory_check@2x.png */,
@@ -687,6 +700,7 @@
 				896ACC0618B664F5001E9C64 /* FFSessionViewController.m */,
 				8961095618D1CD4F006BCFA4 /* FFPagerController.h */,
 				8961095718D1CD4F006BCFA4 /* FFPagerController.m */,
+				F9A27E8A192260B400BCE2AE /* FFYourTeamDataSource.h */,
 				89DE99EB18D2D1AF006A66C4 /* FFYourTeamController.h */,
 				89DE99EC18D2D1AF006A66C4 /* FFYourTeamController.m */,
 				8972767B18D93FBE008D995C /* FFWideReceiverController.h */,
@@ -864,6 +878,8 @@
 				893D691418E5CDEA005E305B /* FFPredictHistoryCell.m */,
 				892E4FB918EDD30100F57860 /* FFPredictIndividualCell.h */,
 				892E4FBA18EDD30100F57860 /* FFPredictIndividualCell.m */,
+				F9FBDD5A19112D0C0009066D /* FFNoConnectionCell.h */,
+				F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1012,6 +1028,7 @@
 				896ACC5F18B664F5001E9C64 /* FMF-80.png in Resources */,
 				89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */,
 				89C985B618E48B3300ABB652 /* accessory_disclosure.png in Resources */,
+				3AB3F5BD191BA4A0005BA1DB /* loginmlb.png in Resources */,
 				89C985B818E48B3300ABB652 /* accessory_uncollapse.png in Resources */,
 				89F2E70218BE249A00B23A99 /* accessory_check@2x.png in Resources */,
 				896ACC7918B664F5001E9C64 /* bannerclose@2x.png in Resources */,
@@ -1048,9 +1065,11 @@
 				896ACC9D18B664F5001E9C64 /* loginbg@2x.png in Resources */,
 				89F1A08B18DC7C03001369E3 /* rosterslotempty.png in Resources */,
 				896ACC6918B664F5001E9C64 /* FMF.png in Resources */,
+				3AB3F5BE191BA4A0005BA1DB /* loginmlb@2x.png in Resources */,
 				89F1A09918DC87CB001369E3 /* loginbg.png in Resources */,
 				896ACC6718B664F5001E9C64 /* FMF-Small@2x.png in Resources */,
 				89F1A08818DC7C03001369E3 /* active.png in Resources */,
+				3AB3F5BC191BA4A0005BA1DB /* loginmlb-586h.png in Resources */,
 				896ACC5718B664F5001E9C64 /* FMF-120.png in Resources */,
 				89F2E70418BE249A00B23A99 /* accessory_disclosure@2x.png in Resources */,
 				896ACC5D18B664F5001E9C64 /* FMF-72@2x.png in Resources */,
@@ -1122,6 +1141,7 @@
 				8985933F18F5A97D0006405A /* FFDataObject.m in Sources */,
 				893D690F18E5CB22005E305B /* FFPredictHistoryTable.m in Sources */,
 				896ACCEF18B664F5001E9C64 /* FFSession.m in Sources */,
+				F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */,
 				896ACCE518B664F5001E9C64 /* main.m in Sources */,
 				896ACCD718B664F5001E9C64 /* FFStyle.m in Sources */,
 				896ACCF518B664F5001E9C64 /* FFPlayerSelectCell.m in Sources */,

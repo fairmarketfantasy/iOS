@@ -7,10 +7,16 @@
 //
 
 #import "FFAccountHeader.h"
-#import <FlatUIKit.h>
 #import "FFPathImageView.h"
 #import "FFStyle.h"
+#import <FlatUIKit.h>
 #import <QuartzCore/QuartzCore.h>
+
+@interface FFAccountHeader()
+
+@property(nonatomic, strong) UIImageView* backgroundView;
+
+@end
 
 @implementation FFAccountHeader
 
@@ -20,12 +26,12 @@
     if (self) {
         // background
         self.backgroundColor = [UIColor clearColor];
-        UIImageView* backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loginbg.png"]];
-        backgroundView.frame = self.bounds;
-        backgroundView.clipsToBounds = YES;
-        backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        backgroundView.contentMode = UIViewContentModeTop;
-        [self addSubview:backgroundView];
+        _backgroundView = [UIImageView new];
+        _backgroundView.frame = self.bounds;
+        _backgroundView.clipsToBounds = YES;
+        _backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _backgroundView.contentMode = UIViewContentModeTop;
+        [self addSubview:_backgroundView];
         // avatar
         _avatar = [FFPathImageView.alloc initWithFrame:CGRectMake(15.f, 15.f, 60.f, 60.f)
                                                  image:[UIImage imageNamed:@"defaultuser"]
@@ -116,6 +122,12 @@
         
     }
     return self;
+}
+
+- (void)setBackgroundImage:(UIImage *)image
+{
+    if (image)
+        _backgroundView.image = image;
 }
 
 @end
