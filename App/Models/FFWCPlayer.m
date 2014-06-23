@@ -20,6 +20,7 @@
         _statsId = dict[@"stats_id"];
         _pt = [dict[@"pt"] integerValue];
         _disablePT = [dict[@"disable_pt"] boolValue];
+        _isPtHidden = [dict[@"remove_pt"] boolValue];
     }
     
     return self;

@@ -16,6 +16,7 @@
     NSString *_statsId;
     NSInteger _pt;
     BOOL _disablePT;
+    BOOL _isPtHidden;
 }
 
 @property (nonatomic, readonly) NSString *name;
@@ -23,6 +24,7 @@
 @property (nonatomic, readonly) NSString *statsId;
 @property (nonatomic, readonly) NSInteger pt;
 @property (nonatomic, assign) BOOL disablePT;
+@property (nonatomic, readonly) BOOL isPtHidden;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 

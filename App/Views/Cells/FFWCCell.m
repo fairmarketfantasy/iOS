@@ -86,16 +86,21 @@
 {
     self.titleLabel.text = team.name;
     
+    [self.flag setImageWithURL:[NSURL URLWithString:team.flagURL]
+              placeholderImage:[UIImage imageNamed:@"flag_placeholder.jpg"]
+   usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [self.flag draw];
+    
+    self.PTButton.hidden = team.isPtHidden;
+    if (team.isPtHidden)
+        return;
+        
     self.PTButton.enabled = !team.disablePT;
     
     UIColor *color = team.disablePT ? [FFStyle lightGrey] : [FFStyle brightBlue];
     [self.PTButton setTitleColor:color forState:UIControlStateNormal];
     self.PTButton.layer.borderColor = color.CGColor;
     
-    [self.flag setImageWithURL:[NSURL URLWithString:team.flagURL]
-              placeholderImage:[UIImage imageNamed:@"flag_placeholder.jpg"]
-   usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-    [self.flag draw];
     
     [self.PTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", team.pt]
                    forState:UIControlStateNormal];
@@ -105,17 +110,21 @@
 {
     self.titleLabel.text = player.name;
     
-    self.PTButton.enabled = !player.disablePT;
-    
-    UIColor *color = player.disablePT ? [FFStyle lightGrey] : [FFStyle brightBlue];
-    [self.PTButton setTitleColor:color forState:UIControlStateNormal];
-    self.PTButton.layer.borderColor = color.CGColor;
-    
     [self.flag setImageWithURL:[NSURL URLWithString:player.flagURL]
               placeholderImage:[UIImage imageNamed:@"flag_placeholder.jpg"]
    usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [self.flag draw];
     
+    self.PTButton.hidden = player.isPtHidden;
+    if (player.isPtHidden)
+        return;
+    
+    self.PTButton.enabled = !player.disablePT;
+    
+    UIColor *color = player.disablePT ? [FFStyle lightGrey] : [FFStyle brightBlue];
+    [self.PTButton setTitleColor:color forState:UIControlStateNormal];
+    self.PTButton.layer.borderColor = color.CGColor;
+
     [self.PTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", player.pt]
                    forState:UIControlStateNormal];
 }

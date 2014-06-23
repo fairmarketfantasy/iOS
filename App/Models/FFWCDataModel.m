@@ -22,6 +22,7 @@
     [result appendFormat:@"\nFlag URL: %@", _flagURL];
     [result appendFormat:@"\nPT: %i", _pt];
     [result appendFormat:@"\nDisable PT: %@", _disablePT ? @"YES" : @"NO"];
+    [result appendFormat:@"\nShould hide PT: %i", _isPtHidden];
     return result;
 }
 
