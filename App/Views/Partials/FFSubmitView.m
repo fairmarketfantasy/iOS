@@ -31,8 +31,36 @@
         self.segments.selectedColor = [FFStyle darkGrey];
         self.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
         [self addSubview:self.segments];
+        
+        _submitButton = [FFStyle coloredButtonWithText:@"Submit"
+                                                 color:[FFStyle brightGreen]
+                                           borderColor:[UIColor clearColor]];
+
+        self.submitButton.frame = CGRectMake(60.f, 10.f, 200.f, 30.f);
+        self.submitButton.layer.cornerRadius = 3.f;
+        self.submitButton.backgroundColor = [FFStyle brightGreen];
+        self.submitButton.titleLabel.font = [FFStyle blockFont:14.f];
+        self.submitButton.titleLabel.textColor = [FFStyle white];
+        [self addSubview:self.submitButton];
     }
     return self;
+}
+
+- (void)setupWithType:(FFSubmitViewType)type
+{
+    switch (type) {
+        case FFSubmitViewTypeFantasy:
+            self.segments.hidden = NO;
+            self.submitButton.hidden = YES;
+            break;
+        case FFSubmitViewTypeNonFantasy:
+            self.submitButton.hidden = NO;
+            self.segments.hidden = YES;
+            break;
+            
+        default:
+            break;
+    }
 }
 
 @end

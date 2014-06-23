@@ -8,22 +8,24 @@
 
 #import "FFMenuViewController.h"
 #import "FFSessionViewController.h"
-#import <RATreeView.h>
 #import "FFNodeItem.h"
 #import "FFMenuCell.h"
 #import "FFLogo.h"
 #import "TransitionDelegate.h"
 #import "FFNavigationBarItemView.h"
-#import <libextobjc/EXTScope.h>
 #import "FFAlertView.h"
 #import "FFAccountBalance.h"
 #import "FFStyle.h"
 #import "FFSport.h"
 #import "FFAccountHeader.h"
-#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import <libextobjc/EXTScope.h>
+#import <RATreeView.h>
 // model
 #import "FFDate.h"
+#import "FFCategory.h"
+#import "FFSessionManager.h"
 
 @interface FFMenuViewController () <RATreeViewDataSource, RATreeViewDelegate, FFUserProtocol>
 
@@ -54,30 +56,10 @@
         } else {
             self.modalPresentationStyle = UIModalPresentationCurrentContext;
         }
-
-        _nodes = [FFNodeItem nodesFromStrings:
-                                 @[
-                                     @{
-                                         @"Fantasy Sports" : @[
-                                             /*@"NFL",*/
-                                             @"NBA",
-                                             @"MLB"
-                                         ]
-                                     },
-                                     @{
-                                         @"Enternainment" : @[
-                                         ]
-                                     },
-                                     @{
-                                         @"Politics" : @[
-                                         ]
-                                     },
-                                     @"Predictions",
-                                     @"Rules",
-                                     @"How it works  〉Support",
-                                     @"Settings",
-                                     @"Sign Out"
-                                 ]];
+        
+        //setup nodes those determine cell titles and actions
+        [self setupNodes];
+        
         _segueByTitle = @{
             @"Predictions" : @"GotoPredictions",
             @"Rules" : @"GotoRules",
@@ -193,6 +175,28 @@
     }
 }
 
+#pragma mark 
+
+- (void)setupNodes
+{
+    NSMutableArray *nodes = [NSMutableArray array];
+    for (FFCategory *category in [FFSessionManager shared].categories) {
+        [nodes addObject:[FFNodeItem nodeFromCategory:category]];
+    }
+    
+    NSArray *staticNodes = [FFNodeItem nodesFromStrings:
+                            @[
+                              @"Predictions",
+                              @"Rules",
+                              @"How it works  〉Support",
+                              @"Settings",
+                              @"Sign Out"
+                              ]];
+    
+    [nodes addObjectsFromArray:staticNodes];
+    _nodes = [NSArray arrayWithArray:nodes];
+}
+
 #pragma mark - RATreeViewDataSource
 
 - (NSInteger)treeView:(RATreeView*)treeView
@@ -255,10 +259,8 @@
         }
     } else {
         if (treeNodeInfo.treeDepthLevel > 0) {
-            if ([self.delegate respondsToSelector:@selector(currentMarketSport)]
-                    &&
-                [[FFSport stringFromSport:[self.delegate currentMarketSport]]
-                    isEqualToString:nodeItem.title]) {
+            if ([nodeItem.categoryTitle isEqualToString:[FFSessionManager shared].currentCategoryName] &&
+                [nodeItem.sportName isEqualToString:[FFSessionManager shared].currentSportName]) {
                 accessoryName = @"accessory_check";
             } else {
                 accessoryName = @"accessory_uncheck";
@@ -309,7 +311,7 @@
            treeNodeInfo:(RATreeNodeInfo*)treeNodeInfo
 {
     if (!self.delegate) {
-        DebugLog(@"all dressed up with no delegate and no where to go");
+        NSLog(@"all dressed up with no delegate and no where to go");
         WTFLog;
         return;
     }
@@ -364,19 +366,29 @@
 
 #pragma mark - private
 
+- (void)showComingSoonAlert
+{
+    [[[FFAlertView alloc] initWithTitle:nil
+                                message:@"Coming soon!"
+                      cancelButtonTitle:nil
+                        okayButtonTitle:@"Ok"
+                               autoHide:YES] showInView:self.view];
+}
+
 - (void)updateHeader
 {
-//    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     FFAccountHeader* header = (FFAccountHeader*)self.treeView.treeHeaderView;
     if (![header isKindOfClass:[FFAccountHeader class]]) {
         return;
     }
     
     NSString *imageName = nil;
-    if (self.session.sport == FFMarketSportNBA) {
+    if ([[FFSessionManager shared].currentSportName isEqualToString:@"NBA"]) {
         imageName = @"loginbg";
-    } else if (self.session.sport == FFMarketSportMLB) {
+    } else if ([[FFSessionManager shared].currentSportName isEqualToString:@"MLB"]) {
         imageName = @"loginmlb";
+    } else {
+        imageName = @"loginmlb";//@"login_wc.jpg";
     }
     
     [header setBackgroundImage:[UIImage imageNamed:imageName]];
@@ -430,63 +442,51 @@
 {
     NSParameterAssert([item isKindOfClass:[FFNodeItem class]]);
     @weakify(self)
-    if (item.type != FFNodeItemTypeLeaf || item.action) {
-        if ([item.title isEqualToString:@"Enternainment"] ||
-            [item.title isEqualToString:@"Politics"]) {
-            item.action = ^{
-                @strongify(self)
-                [[[FFAlertView alloc] initWithTitle:nil
-                                            message:@"Coming soon!"
-                                  cancelButtonTitle:nil
-                                    okayButtonTitle:@"Ok"
-                                           autoHide:YES] showInView:self.view];
-            };
-        }
+    if (item.comingSoon == YES) {
+        item.action = ^{
+            @strongify(self)
+            [self showComingSoonAlert];
+        };
         return;
     }
-    if ([item.title isEqualToString:@"NBA"]) {
-        item.action = ^{
-            @strongify(self)
-            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-                [self.delegate didUpdateToNewSport:FFMarketSportNBA];
+    
+    if (item.type == FFNodeItemTypeParent) {
+        return;
+    }
+    
+    @weakify(item)
+    if (item.type == FFNodeItemTypeLeaf) {
+        if (item.categoryTitle == nil) {
+            if ([item.title isEqualToString:@"Sign Out"]) {
+                item.action = ^{
+                    @strongify(self)
+                    [self dismissViewControllerAnimated:YES completion:^{
+                        if ([self.delegate respondsToSelector:@selector(logout)]) {
+                            [self.delegate logout];
+                        }
+                    }];
+                };
+            } else {
+                __block FFNodeItem* blockItem = item;
+                item.action = ^{
+                    @strongify(self)
+                    [self dismissViewControllerAnimated:YES completion:^{
+                        if (self.delegate) {
+                            [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
+                        }
+                    }];
+                };
             }
-            [self dismissViewControllerAnimated:YES completion:nil];
-        };
-    } else if ([item.title isEqualToString:@"NFL"]) {
-        item.action = ^{
-            @strongify(self)
-            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-                [self.delegate didUpdateToNewSport:FFMarketSportNFL];
-            }
-            [self dismissViewControllerAnimated:YES completion:nil];
-        };
-    } else if ([item.title isEqualToString:@"MLB"]) {
-        item.action = ^{
-            @strongify(self)
-            if ([self.delegate respondsToSelector:@selector(didUpdateToNewSport:)]) {
-                [self.delegate didUpdateToNewSport:FFMarketSportMLB];
-            }
-            [self dismissViewControllerAnimated:YES completion:nil];
-        };
-    } else if ([item.title isEqualToString:@"Sign Out"]) {
-        item.action = ^{
-            @strongify(self)
-            [self dismissViewControllerAnimated:YES completion:^{
-                if ([self.delegate respondsToSelector:@selector(logout)]) {
-                    [self.delegate logout];
+        } else {
+            item.action = ^{
+                @strongify(self)
+                @strongify(item)
+                if ([self.delegate respondsToSelector:@selector(didUpdateToCategory:sport:)]) {
+                    [self.delegate didUpdateToCategory:item.categoryName sport:item.sportName];
                 }
-            }];
-        };
-    } else {
-        __block FFNodeItem* blockItem = item;
-        item.action = ^{
-            @strongify(self)
-            [self dismissViewControllerAnimated:YES completion:^{
-                if (self.delegate) {
-                    [self.delegate performMenuSegue:self.segueByTitle[blockItem.title]];
-                }
-            }];
-        };
+                [self dismissViewControllerAnimated:YES completion:nil];
+            };
+        }
     }
 }
 

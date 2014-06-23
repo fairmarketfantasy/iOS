@@ -8,7 +8,15 @@
 
 #import "FFAutoFillCell.h"
 #import "FFStyle.h"
+#import "FFSessionManager.h"
+#import "FUISwitch.h"
 #import <FlatUIKit.h>
+
+@interface FFAutoFillCell()
+
+@property (nonatomic, strong) UILabel *switchLabel;
+
+@end
 
 @implementation FFAutoFillCell
 
@@ -36,6 +44,7 @@
         topSeparator.backgroundColor = [UIColor colorWithWhite:.8f
                                                          alpha:1.f];
         [self.contentView addSubview:topSeparator];
+        
         // switch
         // TODO: fix grayed FUISwitch for iOS 7.1
         _autoRemovedBenched = [[FUISwitch alloc] initWithFrame:CGRectMake(0.f, 0.f,
@@ -50,17 +59,18 @@
         self.autoRemovedBenched.offLabel.font = [FFStyle blockFont:17.f];
         self.autoRemovedBenched.onLabel.font = [FFStyle blockFont:17.f];
         [self.contentView addSubview:self.autoRemovedBenched];
+        
         // switch label
-        UILabel* switchLabel = [[UILabel alloc] initWithFrame:CGRectMake(120.f, 10.f,
+        self.switchLabel = [[UILabel alloc] initWithFrame:CGRectMake(120.f, 10.f,
                                                                          110.f, 30.f)];
-        switchLabel.backgroundColor = [UIColor clearColor];
-        switchLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        switchLabel.textAlignment = NSTextAlignmentRight;
-        switchLabel.numberOfLines = 2;
-        switchLabel.font = [FFStyle regularFont:12.f];
-        switchLabel.textColor = [FFStyle lightGrey];
-        switchLabel.text = @"Auto-remove benched players";
-        [self addSubview:switchLabel];
+        self.switchLabel.backgroundColor = [UIColor clearColor];
+        self.switchLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.switchLabel.textAlignment = NSTextAlignmentRight;
+        self.switchLabel.numberOfLines = 2;
+        self.switchLabel.font = [FFStyle regularFont:12.f];
+        self.switchLabel.textColor = [FFStyle lightGrey];
+        self.switchLabel.text = @"Auto-remove benched players";
+        [self addSubview:self.switchLabel];
     }
     return self;
 }
@@ -68,11 +78,24 @@
 - (void)drawRect:(CGRect)rect
 {
     [super drawRect:rect];
-    // FIX label vertical centered with custom font
-    self.autoRemovedBenched.onLabel.frame = CGRectOffset(self.autoRemovedBenched.onLabel.frame, 0.f,
-                                                         SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? 1.f : 2.f);
-    self.autoRemovedBenched.offLabel.frame = CGRectOffset(self.autoRemovedBenched.offLabel.frame, 0.f,
-                                                          SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? 1.f : 2.f);
+    
+    CGPoint center = self.autoFillButton.center;
+    center.y = self.contentView.center.y;
+    self.autoFillButton.center = center;
+    
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        _autoRemovedBenched.hidden = NO;
+        self.switchLabel.hidden = NO;
+        
+        // FIX label vertical centered with custom font
+        self.autoRemovedBenched.onLabel.frame = CGRectOffset(self.autoRemovedBenched.onLabel.frame, 0.f,
+                                                             SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? 1.f : 2.f);
+        self.autoRemovedBenched.offLabel.frame = CGRectOffset(self.autoRemovedBenched.offLabel.frame, 0.f,
+                                                              SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? 1.f : 2.f);        
+    } else {
+        _autoRemovedBenched.hidden = YES;
+        self.switchLabel.hidden = YES;
+    }
 }
 
 @end

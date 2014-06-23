@@ -22,6 +22,11 @@
 @property(nonatomic) NSString* state;
 @property(nonatomic) FFDate* gameTime;
 @property(nonatomic) FFDate* gameDay;
-@property(nonatomic) NSString* gameResult;
+@property(nonatomic) NSNumber* gameResult;
+
++ (void)submitPredictionForSession:(FFSession *)session
+                            params:(NSDictionary *)params
+                           success:(SBSuccessBlock)success
+                           failure:(SBErrorBlock)failure;
 
 @end

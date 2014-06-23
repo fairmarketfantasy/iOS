@@ -24,6 +24,7 @@
         self.message.numberOfLines = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? 5 : 6;
         self.message.font = [FFStyle blockFont:20.f];
         self.message.textColor = [FFStyle lightGrey];
+        self.message.numberOfLines = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? 5 : 6;
         self.message.backgroundColor = [UIColor clearColor];
         self.message.textAlignment = NSTextAlignmentCenter;
         self.selectionStyle = UITableViewCellSelectionStyleNone;

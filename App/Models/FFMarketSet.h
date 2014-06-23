@@ -8,6 +8,8 @@
 
 #import "FFDataObjectResultSet.h"
 
+@class FFSession;
+
 typedef NS_ENUM(NSInteger, FFMarketType) {
     FFMarketTypeSingleElimination,
     FFMarketTypeRegularSeason

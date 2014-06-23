@@ -10,14 +10,17 @@
 #import "FFPredictRosterTeamTable.h"
 #import "FFPredictRosterTeamCell.h"
 #import "FFTeamTradeCell.h"
+#import "FFNonFantasyTeamTradeCell.h"
 #import "FFRosterTableHeader.h"
 #import "FFStyle.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
 #import "FFAlertView.h"
+#import "FFSessionManager.h"
 // model
 #import "FFRosterPrediction.h"
 #import "FFPlayer.h"
+#import "FFTeam.h"
 
 @interface FFPredictRosterTeamController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -29,7 +32,7 @@
 {
     [super viewDidLoad];
     // table view
-    self.tableView = [FFPredictRosterTeamTable.alloc initWithFrame:self.view.bounds];
+    self.tableView = [[FFPredictRosterTeamTable alloc] initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView];
@@ -45,7 +48,11 @@
 - (NSInteger)tableView:(UITableView*)tableView
  numberOfRowsInSection:(NSInteger)section
 {
-    return self.delegate.players.count;
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        return self.delegate.players.count;
+    } else {
+        return self.delegate.teams.count;
+    }
 }
 
 - (CGFloat)tableView:(UITableView*)tableView
@@ -54,33 +61,83 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
     return 80.f;
 }
 
+- (FFPredictRosterTeamCell *)provideTeamCellForPlayer:(FFPlayer *)player
+                                            tableView:(UITableView *)tableView
+                                          atIndexPath:(NSIndexPath*)indexPath
+{
+    BOOL benched = player.benched.integerValue == 1;
+    BOOL swapped = player.swappedPlayerName && player.swappedPlayerName.length > 0;
+    FFPredictRosterTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictRosterTeamCell"
+                                                                    forIndexPath:indexPath];
+    cell.titleLabel.text = player.team;
+    cell.nameLabel.text = player.name;
+    cell.costLabel.text = [FFStyle.priceFormatter
+                           stringFromNumber:@([player.purchasePrice floatValue])];
+    UIColor* avatarColor = swapped ? [FFStyle brightBlue] :
+    ( benched ? [FFStyle brightOrange] : [FFStyle brightGreen] );
+    cell.avatar.borderColor = avatarColor;
+    cell.avatar.pathColor = avatarColor;
+    [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
+                placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
+     usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [cell.avatar draw];
+    cell.benched.hidden = !benched;
+    cell.swapped.hidden = !swapped;
+    
+    return cell;
+}
+
+- (FFPredictRosterTeamCell *)provideTeamCellForTeam:(FFTeam *)team
+                                          tableView:(UITableView *)tableView
+                                        atIndexPath:(NSIndexPath*)indexPath
+{
+    FFPredictRosterTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictRosterTeamCell"
+                                                                    forIndexPath:indexPath];
+    
+    cell.titleLabel.text = team.name;
+    cell.costLabel.text = team.isHomeTeam ?
+    [NSString stringWithFormat:@"%@ @ %@", team.name, team.opponentName] :
+    [NSString stringWithFormat:@"%@ @ %@", team.opponentName, team.name];
+    
+    [cell.avatar setImageWithURL:[NSURL URLWithString:team.logoURL]
+                placeholderImage:[UIImage imageNamed:@"rosterslotempty"]
+     usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [cell.avatar draw];
+    
+    return cell;
+}
+
+- (FFNonFantasyTeamTradeCell *)provideNonFantasyTeamCellForTeam:(FFTeam *)team
+                                                      tableView:(UITableView *)tableView
+                                                    atIndexPath:(NSIndexPath*)indexPath
+{
+    FFNonFantasyTeamTradeCell *cell = [tableView dequeueReusableCellWithIdentifier:kNonFantasyTeamTradeCellIdentifier
+                                                                      forIndexPath:indexPath];
+    [cell setupWithGame:team];
+    return cell;
+
+}
 - (UITableViewCell*)tableView:(UITableView*)tableView
         cellForRowAtIndexPath:(NSIndexPath*)indexPath
 {
-    if (self.delegate.players.count > indexPath.row) {
-        __block FFPlayer* player = self.delegate.players[indexPath.row];
-        BOOL benched = player.benched.integerValue == 1;
-        BOOL swapped = player.swappedPlayerName && player.swappedPlayerName.length > 0;
-        
-        FFPredictRosterTeamCell* cell = [tableView dequeueReusableCellWithIdentifier:@"PredictRosterTeamCell"
-                                                                        forIndexPath:indexPath];
-        cell.titleLabel.text = player.team;
-        cell.nameLabel.text = player.name;
-        cell.costLabel.text = [FFStyle.priceFormatter
-                               stringFromNumber:@([player.purchasePrice floatValue])];
-        UIColor* avatarColor = swapped ? [FFStyle brightBlue] :
-        ( benched ? [FFStyle brightOrange] : [FFStyle brightGreen] );
-        cell.avatar.borderColor = avatarColor;
-        cell.avatar.pathColor = avatarColor;
-        [cell.avatar setImageWithURL: [NSURL URLWithString:player.headshotURL]
-                    placeholderImage: [UIImage imageNamed:@"rosterslotempty"]
-         usingActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-        [cell.avatar draw];
-        cell.benched.hidden = !benched;
-        cell.swapped.hidden = !swapped;
-        return cell;
-        
-//        FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamTradeCell"
+        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+            if (self.delegate.players.count > indexPath.row) {
+                FFPlayer* player = self.delegate.players[indexPath.row];
+                return [self provideTeamCellForPlayer:player tableView:tableView atIndexPath:indexPath];
+            } else {
+                return nil;
+            }
+        } else {
+            if (self.delegate.teams.count > indexPath.row) {
+                FFTeam *team = self.delegate.teams[indexPath.row];
+//                return [self provideTeamCellForTeam:team tableView:tableView atIndexPath:indexPath];
+                return [self provideNonFantasyTeamCellForTeam:team tableView:tableView atIndexPath:indexPath];
+            } else {
+                return nil;
+            }
+        }
+
+        //        FFTeamTradeCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TeamTradeCell"
 //                                                                forIndexPath:indexPath];
 //        cell.titleLabel.text = player.team;
 //        cell.nameLabel.text = player.name;
@@ -114,8 +171,6 @@ heightForRowAtIndexPath:(NSIndexPath*)indexPath
 //                              }
 //                          }];
 //        return cell;
-    }
-    return nil;
 }
 
 #pragma mark - UITableViewDelegate
@@ -130,10 +185,19 @@ didSelectRowAtIndexPath:(NSIndexPath*)indexPath
 viewForHeaderInSection:(NSInteger)section
 {
     FFRosterTableHeader* header = FFRosterTableHeader.new;
-    header.titleLabel.text = @"Your Team";
-    header.priceLabel.text = [[FFStyle priceFormatter] stringFromNumber:@(self.delegate.rosterSalary)];
-    header.priceLabel.textColor = self.delegate.rosterSalary > 0.f
-    ? [FFStyle brightGreen] : [FFStyle brightRed];
+    NSString *title = nil;
+    NSString *price = nil;
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        title = @"Your Team";
+        price = [[FFStyle priceFormatter] stringFromNumber:@(self.delegate.rosterSalary)];
+        header.priceLabel.textColor = self.delegate.rosterSalary > 0.f ? [FFStyle brightGreen] : [FFStyle brightRed];
+    } else {
+        title = @"Your choices";
+        price = @"";
+    }
+
+    header.titleLabel.text = title;
+    header.priceLabel.text = price;
     return header;
 }
 

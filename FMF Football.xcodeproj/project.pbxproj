@@ -17,6 +17,15 @@
 		15A2379F17E2865A00225942 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15A2379E17E2865A00225942 /* QuartzCore.framework */; };
 		15CD295517F7804A0027DFEC /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295317F7804A0027DFEC /* AddressBook.framework */; };
 		15CD295617F7804A0027DFEC /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15CD295417F7804A0027DFEC /* AddressBookUI.framework */; };
+		3A9B09AB193B3ABF00C81CA7 /* FFWCController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B09AA193B3ABF00C81CA7 /* FFWCController.m */; };
+		3A9B09AE193B486E00C81CA7 /* FFWCCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B09AD193B486E00C81CA7 /* FFWCCell.m */; };
+		3A9B09B1193B6D2600C81CA7 /* FFWCGameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9B09B0193B6D2600C81CA7 /* FFWCGameCell.m */; };
+		3AA7EDD61939EE770087C08E /* FFWCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7EDD51939EE770087C08E /* FFWCManager.m */; };
+		3AA7EDD91939FF080087C08E /* FFWCGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7EDD81939FF080087C08E /* FFWCGame.m */; };
+		3AA7EDDC1939FF5B0087C08E /* FFWCTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7EDDB1939FF5B0087C08E /* FFWCTeam.m */; };
+		3AA7EDDF193A01050087C08E /* FFWCPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7EDDE193A01050087C08E /* FFWCPlayer.m */; };
+		3AA7EDE2193A075F0087C08E /* FFWCDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7EDE1193A075F0087C08E /* FFWCDataModel.m */; };
+		3AA7EDE5193A12C70087C08E /* FFWCGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA7EDE4193A12C70087C08E /* FFWCGroup.m */; };
 		3AB3F5BC191BA4A0005BA1DB /* loginmlb-586h.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AB3F5B9191BA4A0005BA1DB /* loginmlb-586h.png */; };
 		3AB3F5BD191BA4A0005BA1DB /* loginmlb.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AB3F5BA191BA4A0005BA1DB /* loginmlb.png */; };
 		3AB3F5BE191BA4A0005BA1DB /* loginmlb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AB3F5BB191BA4A0005BA1DB /* loginmlb@2x.png */; };
@@ -34,7 +43,6 @@
 		892E4FBE18EDE86600F57860 /* FFRosterPrediction.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FBD18EDE86600F57860 /* FFRosterPrediction.m */; };
 		892E4FC118EDE87E00F57860 /* FFIndividualPrediction.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FC018EDE87E00F57860 /* FFIndividualPrediction.m */; };
 		892E4FC518EDF7C800F57860 /* FFPredictionSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FC418EDF7C800F57860 /* FFPredictionSet.m */; };
-		892E4FC718EDF83900F57860 /* FFSport.m in Sources */ = {isa = PBXBuildFile; fileRef = 892E4FC618EDF83900F57860 /* FFSport.m */; };
 		89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 89314A7618C8C2B80048E00F /* FFRosterCell.m */; };
 		893D27AB18E32CB900899094 /* FFCollectionMarketCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 893D27AA18E32CB900899094 /* FFCollectionMarketCell.m */; };
 		893D690918E5C1F9005E305B /* hide.png in Resources */ = {isa = PBXBuildFile; fileRef = 893D690518E5C1F9005E305B /* hide.png */; };
@@ -191,6 +199,26 @@
 		89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E70018BE249A00B23A99 /* accessory_uncheck@2x.png */; };
 		89F2E70618BE249A00B23A99 /* accessory_uncollapse@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89F2E70118BE249A00B23A99 /* accessory_uncollapse@2x.png */; };
 		89F6D15C18F56A4C001DE023 /* FFDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 89F6D15B18F56A4C001DE023 /* FFDate.m */; };
+		F90A3355192A102C0095FAD4 /* FFCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A3354192A102C0095FAD4 /* FFCategory.m */; };
+		F90A335B192A13800095FAD4 /* FFSport.m in Sources */ = {isa = PBXBuildFile; fileRef = F90A335A192A13800095FAD4 /* FFSport.m */; };
+		F9227E2D1934976A009DD1D1 /* plus-btn-disable.png in Resources */ = {isa = PBXBuildFile; fileRef = F9227E281934976A009DD1D1 /* plus-btn-disable.png */; };
+		F9227E2E1934976A009DD1D1 /* pt_disable_both.png in Resources */ = {isa = PBXBuildFile; fileRef = F9227E291934976A009DD1D1 /* pt_disable_both.png */; };
+		F9227E2F1934976A009DD1D1 /* pt_disable_left.png in Resources */ = {isa = PBXBuildFile; fileRef = F9227E2A1934976A009DD1D1 /* pt_disable_left.png */; };
+		F9227E301934976A009DD1D1 /* pt_disable_right.png in Resources */ = {isa = PBXBuildFile; fileRef = F9227E2B1934976A009DD1D1 /* pt_disable_right.png */; };
+		F9227E311934976A009DD1D1 /* pt_enable_both.png in Resources */ = {isa = PBXBuildFile; fileRef = F9227E2C1934976A009DD1D1 /* pt_enable_both.png */; };
+		F96F0C40192B5609003AA3BA /* FFSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C3F192B5609003AA3BA /* FFSessionManager.m */; };
+		F96F0C45192C9100003AA3BA /* FFFantasyGame.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C44192C9100003AA3BA /* FFFantasyGame.m */; };
+		F96F0C48192C91AD003AA3BA /* FFNonFantasyGame.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C47192C91AD003AA3BA /* FFNonFantasyGame.m */; };
+		F96F0C4E192CB27E003AA3BA /* FFNonFantasyTeamCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C4D192CB27E003AA3BA /* FFNonFantasyTeamCell.m */; };
+		F96F0C51192CBB4B003AA3BA /* FFNonFantasyGameCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C50192CBB4B003AA3BA /* FFNonFantasyGameCell.m */; };
+		F96F0C56192CE0EF003AA3BA /* delete-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C52192CE0EF003AA3BA /* delete-btn.png */; };
+		F96F0C57192CE0EF003AA3BA /* empty-team.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C53192CE0EF003AA3BA /* empty-team.png */; };
+		F96F0C58192CE0EF003AA3BA /* plus-btn.png in Resources */ = {isa = PBXBuildFile; fileRef = F96F0C54192CE0EF003AA3BA /* plus-btn.png */; };
+		F96F0C5C192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C5B192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m */; };
+		F96F0C62192CFE86003AA3BA /* FFTeam.m in Sources */ = {isa = PBXBuildFile; fileRef = F96F0C61192CFE86003AA3BA /* FFTeam.m */; };
+		F9A92F9D1941C66500AC1B3B /* flag_placeholder.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F9A92F9C1941C66500AC1B3B /* flag_placeholder.jpg */; };
+		F9AC76C6193CC44300593116 /* Collection+UnNullable.m in Sources */ = {isa = PBXBuildFile; fileRef = F9AC76C5193CC44300593116 /* Collection+UnNullable.m */; };
+		F9AF0EEB193F044D00A2A353 /* login_wc.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F9AF0EE9193F044D00A2A353 /* login_wc.jpg */; };
 		F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */; };
 /* End PBXBuildFile section */
 
@@ -207,6 +235,24 @@
 		15A2379E17E2865A00225942 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		15CD295317F7804A0027DFEC /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		15CD295417F7804A0027DFEC /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
+		3A9B09A9193B3ABF00C81CA7 /* FFWCController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCController.h; sourceTree = "<group>"; };
+		3A9B09AA193B3ABF00C81CA7 /* FFWCController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCController.m; sourceTree = "<group>"; };
+		3A9B09AC193B486E00C81CA7 /* FFWCCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCCell.h; sourceTree = "<group>"; };
+		3A9B09AD193B486E00C81CA7 /* FFWCCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCCell.m; sourceTree = "<group>"; };
+		3A9B09AF193B6D2600C81CA7 /* FFWCGameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCGameCell.h; sourceTree = "<group>"; };
+		3A9B09B0193B6D2600C81CA7 /* FFWCGameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCGameCell.m; sourceTree = "<group>"; };
+		3AA7EDD41939EE770087C08E /* FFWCManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCManager.h; sourceTree = "<group>"; };
+		3AA7EDD51939EE770087C08E /* FFWCManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCManager.m; sourceTree = "<group>"; };
+		3AA7EDD71939FF080087C08E /* FFWCGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCGame.h; sourceTree = "<group>"; };
+		3AA7EDD81939FF080087C08E /* FFWCGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCGame.m; sourceTree = "<group>"; };
+		3AA7EDDA1939FF5B0087C08E /* FFWCTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCTeam.h; sourceTree = "<group>"; };
+		3AA7EDDB1939FF5B0087C08E /* FFWCTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCTeam.m; sourceTree = "<group>"; };
+		3AA7EDDD193A01050087C08E /* FFWCPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCPlayer.h; sourceTree = "<group>"; };
+		3AA7EDDE193A01050087C08E /* FFWCPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCPlayer.m; sourceTree = "<group>"; };
+		3AA7EDE0193A075F0087C08E /* FFWCDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCDataModel.h; sourceTree = "<group>"; };
+		3AA7EDE1193A075F0087C08E /* FFWCDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCDataModel.m; sourceTree = "<group>"; };
+		3AA7EDE3193A12C70087C08E /* FFWCGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFWCGroup.h; sourceTree = "<group>"; };
+		3AA7EDE4193A12C70087C08E /* FFWCGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFWCGroup.m; sourceTree = "<group>"; };
 		3AB3F5B9191BA4A0005BA1DB /* loginmlb-586h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginmlb-586h.png"; sourceTree = "<group>"; };
 		3AB3F5BA191BA4A0005BA1DB /* loginmlb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loginmlb.png; sourceTree = "<group>"; };
 		3AB3F5BB191BA4A0005BA1DB /* loginmlb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "loginmlb@2x.png"; sourceTree = "<group>"; };
@@ -234,10 +280,8 @@
 		892E4FBD18EDE86600F57860 /* FFRosterPrediction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterPrediction.m; sourceTree = "<group>"; };
 		892E4FBF18EDE87E00F57860 /* FFIndividualPrediction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFIndividualPrediction.h; sourceTree = "<group>"; };
 		892E4FC018EDE87E00F57860 /* FFIndividualPrediction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFIndividualPrediction.m; sourceTree = "<group>"; };
-		892E4FC218EDF70700F57860 /* FFSport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFSport.h; sourceTree = "<group>"; };
 		892E4FC318EDF7C800F57860 /* FFPredictionSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFPredictionSet.h; sourceTree = "<group>"; };
 		892E4FC418EDF7C800F57860 /* FFPredictionSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFPredictionSet.m; sourceTree = "<group>"; };
-		892E4FC618EDF83900F57860 /* FFSport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSport.m; sourceTree = "<group>"; };
 		89314A7518C8C2B80048E00F /* FFRosterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFRosterCell.h; sourceTree = "<group>"; };
 		89314A7618C8C2B80048E00F /* FFRosterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFRosterCell.m; sourceTree = "<group>"; };
 		893D27A818E0A14500899094 /* FFControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFControllerProtocol.h; sourceTree = "<group>"; };
@@ -485,7 +529,37 @@
 		89F6D15A18F56A4C001DE023 /* FFDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFDate.h; sourceTree = "<group>"; };
 		89F6D15B18F56A4C001DE023 /* FFDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFDate.m; sourceTree = "<group>"; };
 		C7A0D11613844A1D9BF1BC9E /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F90A3353192A102C0095FAD4 /* FFCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFCategory.h; sourceTree = "<group>"; };
+		F90A3354192A102C0095FAD4 /* FFCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFCategory.m; sourceTree = "<group>"; };
+		F90A3359192A13800095FAD4 /* FFSport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFSport.h; sourceTree = "<group>"; };
+		F90A335A192A13800095FAD4 /* FFSport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSport.m; sourceTree = "<group>"; };
+		F9227E281934976A009DD1D1 /* plus-btn-disable.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-btn-disable.png"; sourceTree = "<group>"; };
+		F9227E291934976A009DD1D1 /* pt_disable_both.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pt_disable_both.png; sourceTree = "<group>"; };
+		F9227E2A1934976A009DD1D1 /* pt_disable_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pt_disable_left.png; sourceTree = "<group>"; };
+		F9227E2B1934976A009DD1D1 /* pt_disable_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pt_disable_right.png; sourceTree = "<group>"; };
+		F9227E2C1934976A009DD1D1 /* pt_enable_both.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pt_enable_both.png; sourceTree = "<group>"; };
+		F96F0C3E192B5609003AA3BA /* FFSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFSessionManager.h; sourceTree = "<group>"; };
+		F96F0C3F192B5609003AA3BA /* FFSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSessionManager.m; sourceTree = "<group>"; };
+		F96F0C43192C9100003AA3BA /* FFFantasyGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFFantasyGame.h; sourceTree = "<group>"; };
+		F96F0C44192C9100003AA3BA /* FFFantasyGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFFantasyGame.m; sourceTree = "<group>"; };
+		F96F0C46192C91AD003AA3BA /* FFNonFantasyGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNonFantasyGame.h; sourceTree = "<group>"; };
+		F96F0C47192C91AD003AA3BA /* FFNonFantasyGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNonFantasyGame.m; sourceTree = "<group>"; };
+		F96F0C4C192CB27E003AA3BA /* FFNonFantasyTeamCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNonFantasyTeamCell.h; sourceTree = "<group>"; };
+		F96F0C4D192CB27E003AA3BA /* FFNonFantasyTeamCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNonFantasyTeamCell.m; sourceTree = "<group>"; };
+		F96F0C4F192CBB4B003AA3BA /* FFNonFantasyGameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FFNonFantasyGameCell.h; path = ../../Controllers/FFNonFantasyGameCell.h; sourceTree = "<group>"; };
+		F96F0C50192CBB4B003AA3BA /* FFNonFantasyGameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FFNonFantasyGameCell.m; path = ../../Controllers/FFNonFantasyGameCell.m; sourceTree = "<group>"; };
+		F96F0C52192CE0EF003AA3BA /* delete-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "delete-btn.png"; sourceTree = "<group>"; };
+		F96F0C53192CE0EF003AA3BA /* empty-team.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "empty-team.png"; sourceTree = "<group>"; };
+		F96F0C54192CE0EF003AA3BA /* plus-btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "plus-btn.png"; sourceTree = "<group>"; };
+		F96F0C5A192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNonFantasyTeamTradeCell.h; sourceTree = "<group>"; };
+		F96F0C5B192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNonFantasyTeamTradeCell.m; sourceTree = "<group>"; };
+		F96F0C60192CFE86003AA3BA /* FFTeam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFTeam.h; sourceTree = "<group>"; };
+		F96F0C61192CFE86003AA3BA /* FFTeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFTeam.m; sourceTree = "<group>"; };
 		F9A27E8A192260B400BCE2AE /* FFYourTeamDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FFYourTeamDataSource.h; sourceTree = "<group>"; };
+		F9A92F9C1941C66500AC1B3B /* flag_placeholder.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = flag_placeholder.jpg; sourceTree = "<group>"; };
+		F9AC76C4193CC44300593116 /* Collection+UnNullable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Collection+UnNullable.h"; path = "Categories/Collection+UnNullable.h"; sourceTree = "<group>"; };
+		F9AC76C5193CC44300593116 /* Collection+UnNullable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Collection+UnNullable.m"; path = "Categories/Collection+UnNullable.m"; sourceTree = "<group>"; };
+		F9AF0EE9193F044D00A2A353 /* login_wc.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = login_wc.jpg; sourceTree = "<group>"; };
 		F9FBDD5A19112D0C0009066D /* FFNoConnectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFNoConnectionCell.h; sourceTree = "<group>"; };
 		F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFNoConnectionCell.m; sourceTree = "<group>"; };
 		FACE7B05A54E4AFCA3D2ADB7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
@@ -565,6 +639,25 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3AA7EDD31939ED520087C08E /* Football World Cup */ = {
+			isa = PBXGroup;
+			children = (
+				3AA7EDD41939EE770087C08E /* FFWCManager.h */,
+				3AA7EDD51939EE770087C08E /* FFWCManager.m */,
+				3AA7EDD71939FF080087C08E /* FFWCGame.h */,
+				3AA7EDD81939FF080087C08E /* FFWCGame.m */,
+				3AA7EDDA1939FF5B0087C08E /* FFWCTeam.h */,
+				3AA7EDDB1939FF5B0087C08E /* FFWCTeam.m */,
+				3AA7EDDD193A01050087C08E /* FFWCPlayer.h */,
+				3AA7EDDE193A01050087C08E /* FFWCPlayer.m */,
+				3AA7EDE0193A075F0087C08E /* FFWCDataModel.h */,
+				3AA7EDE1193A075F0087C08E /* FFWCDataModel.m */,
+				3AA7EDE3193A12C70087C08E /* FFWCGroup.h */,
+				3AA7EDE4193A12C70087C08E /* FFWCGroup.m */,
+			);
+			name = "Football World Cup";
+			sourceTree = "<group>";
+		};
 		896ACAED18B663C2001E9C64 /* Test */ = {
 			isa = PBXGroup;
 			children = (
@@ -575,6 +668,7 @@
 		896ACBB418B664F5001E9C64 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				F9AC76C3193CC43200593116 /* Categories */,
 				896ACC2418B664F5001E9C64 /* Models */,
 				896ACC1518B664F5001E9C64 /* Helpers */,
 				896ACBE818B664F5001E9C64 /* Controllers */,
@@ -642,6 +736,16 @@
 		896ACBCA18B664F5001E9C64 /* Pictures */ = {
 			isa = PBXGroup;
 			children = (
+				F9A92F9C1941C66500AC1B3B /* flag_placeholder.jpg */,
+				F9AF0EE9193F044D00A2A353 /* login_wc.jpg */,
+				F9227E281934976A009DD1D1 /* plus-btn-disable.png */,
+				F9227E291934976A009DD1D1 /* pt_disable_both.png */,
+				F9227E2A1934976A009DD1D1 /* pt_disable_left.png */,
+				F9227E2B1934976A009DD1D1 /* pt_disable_right.png */,
+				F9227E2C1934976A009DD1D1 /* pt_enable_both.png */,
+				F96F0C52192CE0EF003AA3BA /* delete-btn.png */,
+				F96F0C53192CE0EF003AA3BA /* empty-team.png */,
+				F96F0C54192CE0EF003AA3BA /* plus-btn.png */,
 				3AB3F5B9191BA4A0005BA1DB /* loginmlb-586h.png */,
 				3AB3F5BA191BA4A0005BA1DB /* loginmlb.png */,
 				3AB3F5BB191BA4A0005BA1DB /* loginmlb@2x.png */,
@@ -705,6 +809,8 @@
 				89DE99EC18D2D1AF006A66C4 /* FFYourTeamController.m */,
 				8972767B18D93FBE008D995C /* FFWideReceiverController.h */,
 				8972767C18D93FBE008D995C /* FFWideReceiverController.m */,
+				3A9B09A9193B3ABF00C81CA7 /* FFWCController.h */,
+				3A9B09AA193B3ABF00C81CA7 /* FFWCController.m */,
 				89F1A09A18DCC951001369E3 /* FFPTController.h */,
 				89F1A09B18DCC951001369E3 /* FFPTController.m */,
 				89C985BD18E5AB9400ABB652 /* FFPredictHistoryController.h */,
@@ -717,6 +823,8 @@
 				89923F0118EE3D0D00F74FEB /* FFPredictRosterScoreController.m */,
 				896ACBFB18B664F5001E9C64 /* FFMenuViewController.h */,
 				896ACBFC18B664F5001E9C64 /* FFMenuViewController.m */,
+				896ACBFD18B664F5001E9C64 /* FFMyAccountViewController.h */,
+				896ACBFE18B664F5001E9C64 /* FFMyAccountViewController.m */,
 				896ACBF718B664F5001E9C64 /* FFHomeViewController.h */,
 				896ACBF818B664F5001E9C64 /* FFHomeViewController.m */,
 				896ACBED18B664F5001E9C64 /* FFContestEntrantsViewController.h */,
@@ -731,8 +839,6 @@
 				896ACBF618B664F5001E9C64 /* FFFindGameViewController.m */,
 				896ACBF918B664F5001E9C64 /* FFInviteViewController.h */,
 				896ACBFA18B664F5001E9C64 /* FFInviteViewController.m */,
-				896ACBFD18B664F5001E9C64 /* FFMyAccountViewController.h */,
-				896ACBFE18B664F5001E9C64 /* FFMyAccountViewController.m */,
 				896ACBFF18B664F5001E9C64 /* FFNavigationController.h */,
 				896ACC0018B664F5001E9C64 /* FFNavigationController.m */,
 				896ACC0118B664F5001E9C64 /* FFOptionSelectController.h */,
@@ -760,8 +866,6 @@
 		896ACC1518B664F5001E9C64 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				892E4FC218EDF70700F57860 /* FFSport.h */,
-				892E4FC618EDF83900F57860 /* FFSport.m */,
 				896ACC1618B664F5001E9C64 /* FFStyle.h */,
 				896ACC1718B664F5001E9C64 /* FFStyle.m */,
 				896ACC1818B664F5001E9C64 /* FFTickerDataSource.h */,
@@ -786,6 +890,9 @@
 		896ACC2418B664F5001E9C64 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3AA7EDD31939ED520087C08E /* Football World Cup */,
+				F96F0C42192C8EDC003AA3BA /* Non Fantasy */,
+				F96F0C41192C8ECF003AA3BA /* Fantasy */,
 				896ACC2518B664F5001E9C64 /* FFContestType.h */,
 				896ACC2618B664F5001E9C64 /* FFContestType.m */,
 				89051CB618BFA4E8001E8C78 /* FFDataObjectResultSet.h */,
@@ -818,6 +925,12 @@
 				8985933E18F5A97D0006405A /* FFDataObject.m */,
 				89BABFC418BBB98F001AD755 /* FFNodeItem.h */,
 				89BABFC518BBB98F001AD755 /* FFNodeItem.m */,
+				F90A3353192A102C0095FAD4 /* FFCategory.h */,
+				F90A3354192A102C0095FAD4 /* FFCategory.m */,
+				F90A3359192A13800095FAD4 /* FFSport.h */,
+				F90A335A192A13800095FAD4 /* FFSport.m */,
+				F96F0C3E192B5609003AA3BA /* FFSessionManager.h */,
+				F96F0C3F192B5609003AA3BA /* FFSessionManager.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -880,6 +993,16 @@
 				892E4FBA18EDD30100F57860 /* FFPredictIndividualCell.m */,
 				F9FBDD5A19112D0C0009066D /* FFNoConnectionCell.h */,
 				F9FBDD5B19112D0C0009066D /* FFNoConnectionCell.m */,
+				F96F0C4C192CB27E003AA3BA /* FFNonFantasyTeamCell.h */,
+				F96F0C4D192CB27E003AA3BA /* FFNonFantasyTeamCell.m */,
+				F96F0C5A192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.h */,
+				F96F0C5B192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m */,
+				F96F0C4F192CBB4B003AA3BA /* FFNonFantasyGameCell.h */,
+				F96F0C50192CBB4B003AA3BA /* FFNonFantasyGameCell.m */,
+				3A9B09AC193B486E00C81CA7 /* FFWCCell.h */,
+				3A9B09AD193B486E00C81CA7 /* FFWCCell.m */,
+				3A9B09AF193B6D2600C81CA7 /* FFWCGameCell.h */,
+				3A9B09B0193B6D2600C81CA7 /* FFWCGameCell.m */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -956,6 +1079,35 @@
 			path = Partials;
 			sourceTree = "<group>";
 		};
+		F96F0C41192C8ECF003AA3BA /* Fantasy */ = {
+			isa = PBXGroup;
+			children = (
+				F96F0C43192C9100003AA3BA /* FFFantasyGame.h */,
+				F96F0C44192C9100003AA3BA /* FFFantasyGame.m */,
+			);
+			name = Fantasy;
+			sourceTree = "<group>";
+		};
+		F96F0C42192C8EDC003AA3BA /* Non Fantasy */ = {
+			isa = PBXGroup;
+			children = (
+				F96F0C46192C91AD003AA3BA /* FFNonFantasyGame.h */,
+				F96F0C47192C91AD003AA3BA /* FFNonFantasyGame.m */,
+				F96F0C60192CFE86003AA3BA /* FFTeam.h */,
+				F96F0C61192CFE86003AA3BA /* FFTeam.m */,
+			);
+			name = "Non Fantasy";
+			sourceTree = "<group>";
+		};
+		F9AC76C3193CC43200593116 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				F9AC76C4193CC44300593116 /* Collection+UnNullable.h */,
+				F9AC76C5193CC44300593116 /* Collection+UnNullable.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1016,15 +1168,21 @@
 				89F2E70318BE249A00B23A99 /* accessory_collapse@2x.png in Resources */,
 				896ACC9B18B664F5001E9C64 /* leftshuttle@2x.png in Resources */,
 				896ACCA718B664F5001E9C64 /* rosterslotempty@2x.png in Resources */,
+				F9227E2D1934976A009DD1D1 /* plus-btn-disable.png in Resources */,
 				896ACC7D18B664F5001E9C64 /* checkmark@2x.png in Resources */,
 				89F1A08A18DC7C03001369E3 /* passive.png in Resources */,
 				896ACC5318B664F5001E9C64 /* Default.png in Resources */,
 				896ACCA918B664F5001E9C64 /* sectionback@2x.png in Resources */,
+				F9227E301934976A009DD1D1 /* pt_disable_right.png in Resources */,
 				8972768918D9774A008D995C /* close@2x.png in Resources */,
 				89C985BC18E48B8000ABB652 /* accessory_disclosure_dark@2x.png in Resources */,
 				89BED92D18C77348003E9E68 /* Prohibition-Bold.ttf in Resources */,
+				F9AF0EEB193F044D00A2A353 /* login_wc.jpg in Resources */,
+				F9227E2F1934976A009DD1D1 /* pt_disable_left.png in Resources */,
 				896ACD0D18B664F5001E9C64 /* MainStoryboard_iPhone.storyboard in Resources */,
 				896ACC6318B664F5001E9C64 /* FMF-Small-50@2x.png in Resources */,
+				F96F0C56192CE0EF003AA3BA /* delete-btn.png in Resources */,
+				F96F0C58192CE0EF003AA3BA /* plus-btn.png in Resources */,
 				896ACC5F18B664F5001E9C64 /* FMF-80.png in Resources */,
 				89C3656518B7CBD5003C7A9C /* FMF-Small-50.png in Resources */,
 				89C985B618E48B3300ABB652 /* accessory_disclosure.png in Resources */,
@@ -1032,6 +1190,7 @@
 				89C985B818E48B3300ABB652 /* accessory_uncollapse.png in Resources */,
 				89F2E70218BE249A00B23A99 /* accessory_check@2x.png in Resources */,
 				896ACC7918B664F5001E9C64 /* bannerclose@2x.png in Resources */,
+				F9A92F9D1941C66500AC1B3B /* flag_placeholder.jpg in Resources */,
 				896ACC6B18B664F5001E9C64 /* FMF@2x.png in Resources */,
 				893D690A18E5C1F9005E305B /* hide@2x.png in Resources */,
 				896ACC5918B664F5001E9C64 /* FMF-58.png in Resources */,
@@ -1052,6 +1211,7 @@
 				89F2E70518BE249A00B23A99 /* accessory_uncheck@2x.png in Resources */,
 				896ACC7118B664F5001E9C64 /* button_normal.png in Resources */,
 				896ACC9118B664F5001E9C64 /* globalmenu@2x.png in Resources */,
+				F9227E2E1934976A009DD1D1 /* pt_disable_both.png in Resources */,
 				896ACC6F18B664F5001E9C64 /* iTunesArtwork@2x.png in Resources */,
 				896ACC7F18B664F5001E9C64 /* contestcircle@2x.png in Resources */,
 				893D690C18E5C1F9005E305B /* show@2x.png in Resources */,
@@ -1063,10 +1223,12 @@
 				89C985B418E48B3300ABB652 /* accessory_check.png in Resources */,
 				89F1A08F18DC7CAB001369E3 /* active@2x.png in Resources */,
 				896ACC9D18B664F5001E9C64 /* loginbg@2x.png in Resources */,
+				F96F0C57192CE0EF003AA3BA /* empty-team.png in Resources */,
 				89F1A08B18DC7C03001369E3 /* rosterslotempty.png in Resources */,
 				896ACC6918B664F5001E9C64 /* FMF.png in Resources */,
 				3AB3F5BE191BA4A0005BA1DB /* loginmlb@2x.png in Resources */,
 				89F1A09918DC87CB001369E3 /* loginbg.png in Resources */,
+				F9227E311934976A009DD1D1 /* pt_enable_both.png in Resources */,
 				896ACC6718B664F5001E9C64 /* FMF-Small@2x.png in Resources */,
 				89F1A08818DC7C03001369E3 /* active.png in Resources */,
 				3AB3F5BC191BA4A0005BA1DB /* loginmlb-586h.png in Resources */,
@@ -1123,6 +1285,7 @@
 				892E4FBB18EDD30100F57860 /* FFPredictIndividualCell.m in Sources */,
 				896ACCE118B664F5001E9C64 /* UIView+FindFirstResponder.m in Sources */,
 				896ACD0318B664F5001E9C64 /* FFMarketSelector.m in Sources */,
+				3AA7EDE2193A075F0087C08E /* FFWCDataModel.m in Sources */,
 				896ACCAB18B664F5001E9C64 /* FFAppDelegate.m in Sources */,
 				89F6D15C18F56A4C001DE023 /* FFDate.m in Sources */,
 				89C985BF18E5AB9400ABB652 /* FFPredictHistoryController.m in Sources */,
@@ -1131,11 +1294,15 @@
 				896ACD0118B664F5001E9C64 /* FFGameButtonView.m in Sources */,
 				89F1A09F18DCCABD001369E3 /* FFPTCell.m in Sources */,
 				896ACD0518B664F5001E9C64 /* FFNavigationBarItemView.m in Sources */,
+				F96F0C5C192CF39F003AA3BA /* FFNonFantasyTeamTradeCell.m in Sources */,
 				896ACCB118B664F5001E9C64 /* FFContestViewController.m in Sources */,
+				F9AC76C6193CC44300593116 /* Collection+UnNullable.m in Sources */,
 				89470EC218BF694200E405EF /* FFMenuCell.m in Sources */,
 				893D691218E5CD49005E305B /* FFPredictHeader.m in Sources */,
 				896ACCE718B664F5001E9C64 /* FFContestType.m in Sources */,
+				3AA7EDD91939FF080087C08E /* FFWCGame.m in Sources */,
 				896ACCBD18B664F5001E9C64 /* FFMenuViewController.m in Sources */,
+				F96F0C4E192CB27E003AA3BA /* FFNonFantasyTeamCell.m in Sources */,
 				89F1A0A218DCCAE5001369E3 /* FFPTTable.m in Sources */,
 				890126B918E04F7100C27299 /* FFPTHeader.m in Sources */,
 				8985933F18F5A97D0006405A /* FFDataObject.m in Sources */,
@@ -1143,6 +1310,7 @@
 				896ACCEF18B664F5001E9C64 /* FFSession.m in Sources */,
 				F9FBDD5D19112D0C0009066D /* FFNoConnectionCell.m in Sources */,
 				896ACCE518B664F5001E9C64 /* main.m in Sources */,
+				3AA7EDDC1939FF5B0087C08E /* FFWCTeam.m in Sources */,
 				896ACCD718B664F5001E9C64 /* FFStyle.m in Sources */,
 				896ACCF518B664F5001E9C64 /* FFPlayerSelectCell.m in Sources */,
 				89BED93118C77D19003E9E68 /* FFRosterTable.m in Sources */,
@@ -1154,17 +1322,21 @@
 				896ACCB718B664F5001E9C64 /* FFFindGameViewController.m in Sources */,
 				896ACCCD18B664F5001E9C64 /* FFTickerMinimizedDrawerViewController.m in Sources */,
 				89DE99F318D2D44D006A66C4 /* FFTeamCell.m in Sources */,
+				F96F0C45192C9100003AA3BA /* FFFantasyGame.m in Sources */,
+				F96F0C51192CBB4B003AA3BA /* FFNonFantasyGameCell.m in Sources */,
+				3A9B09AB193B3ABF00C81CA7 /* FFWCController.m in Sources */,
 				89C7AA3618F83E1C00BAFFA2 /* FFAccountBalance.m in Sources */,
+				F96F0C48192C91AD003AA3BA /* FFNonFantasyGame.m in Sources */,
 				896ACCB918B664F5001E9C64 /* FFHomeViewController.m in Sources */,
 				89051CBB18BFC253001E8C78 /* FFMarketSet.m in Sources */,
 				893D691518E5CDEA005E305B /* FFPredictHistoryCell.m in Sources */,
 				896ACCC118B664F5001E9C64 /* FFNavigationController.m in Sources */,
 				89BB9F8118EB0CDC002D0C78 /* FFPlayer.m in Sources */,
-				892E4FC718EDF83900F57860 /* FFSport.m in Sources */,
 				893D926F18EE5B7A00E55CDF /* FFPredictRosterTeamCell.m in Sources */,
 				896ACCF318B664F5001E9C64 /* FFContest2UpTabelViewCell.m in Sources */,
 				89F1A09C18DCC951001369E3 /* FFPTController.m in Sources */,
 				89923EFF18EE3C7300F74FEB /* FFPredictRosterTeamController.m in Sources */,
+				3A9B09B1193B6D2600C81CA7 /* FFWCGameCell.m in Sources */,
 				8972768318D9559D008D995C /* FFWideReceiverCell.m in Sources */,
 				890504DF18DA0C3A006CD2EA /* FFAutoFillCell.m in Sources */,
 				89CE186E18EE7E0D00A73C72 /* FFScoreView.m in Sources */,
@@ -1172,6 +1344,7 @@
 				896ACCD118B664F5001E9C64 /* FFValueEntryController.m in Sources */,
 				896ACCCF18B664F5001E9C64 /* FFTokenPurchaseViewController.m in Sources */,
 				892E4FBE18EDE86600F57860 /* FFRosterPrediction.m in Sources */,
+				F90A335B192A13800095FAD4 /* FFSport.m in Sources */,
 				892E4FB518EDBB1800F57860 /* FFPredictionsSelector.m in Sources */,
 				89051CB818BFA4E8001E8C78 /* FFDataObjectResultSet.m in Sources */,
 				896ACCDB18B664F5001E9C64 /* FFWeakReference.m in Sources */,
@@ -1179,11 +1352,13 @@
 				896ACCCB18B664F5001E9C64 /* FFTickerMaximizedDrawerViewController.m in Sources */,
 				8972767D18D93FBE008D995C /* FFWideReceiverController.m in Sources */,
 				896ACCEB18B664F5001E9C64 /* FFMarket.m in Sources */,
+				F96F0C40192B5609003AA3BA /* FFSessionManager.m in Sources */,
 				896ACCC318B664F5001E9C64 /* FFOptionSelectController.m in Sources */,
 				89F1A09518DC81C4001369E3 /* FFPathImageView.m in Sources */,
 				896ACCDF18B664F5001E9C64 /* NSDate+ISO8601.m in Sources */,
 				896ACD0918B664F5001E9C64 /* FFUserBitView.m in Sources */,
 				896ACCC518B664F5001E9C64 /* FFRosterViewController.m in Sources */,
+				3AA7EDDF193A01050087C08E /* FFWCPlayer.m in Sources */,
 				896ACCAF18B664F5001E9C64 /* FFContestEntrantsViewController.m in Sources */,
 				8972768018D94920008D995C /* FFWideReceiverTable.m in Sources */,
 				897C869418ED90DF0068D03F /* FFSubmitView.m in Sources */,
@@ -1191,6 +1366,7 @@
 				89D0309B18CF9F2800250D82 /* FFContestTable.m in Sources */,
 				896ACCF918B664F5001E9C64 /* FFAlertView.m in Sources */,
 				89923F0218EE3D0D00F74FEB /* FFPredictRosterScoreController.m in Sources */,
+				3AA7EDE5193A12C70087C08E /* FFWCGroup.m in Sources */,
 				89BABFC618BBB98F001AD755 /* FFNodeItem.m in Sources */,
 				896ACCBF18B664F5001E9C64 /* FFMyAccountViewController.m in Sources */,
 				896ACCF718B664F5001E9C64 /* FFRosterSlotCell.m in Sources */,
@@ -1207,12 +1383,16 @@
 				89DE99F618D34638006A66C4 /* FFMarketsCell.m in Sources */,
 				8951A33218D08A9E0019384D /* FFBannerCell.m in Sources */,
 				896ACCB318B664F5001E9C64 /* FFCreateGameViewController.m in Sources */,
+				3A9B09AE193B486E00C81CA7 /* FFWCCell.m in Sources */,
 				896ACCAD18B664F5001E9C64 /* FFBaseViewController.m in Sources */,
 				89F1058F1901787700B8B00E /* FFForgotPassword.m in Sources */,
 				89314A7718C8C2B90048E00F /* FFRosterCell.m in Sources */,
 				896ACCC918B664F5001E9C64 /* FFTickerDrawerViewController.m in Sources */,
+				F96F0C62192CFE86003AA3BA /* FFTeam.m in Sources */,
 				892E4FC118EDE87E00F57860 /* FFIndividualPrediction.m in Sources */,
 				896ACCBB18B664F5001E9C64 /* FFInviteViewController.m in Sources */,
+				F90A3355192A102C0095FAD4 /* FFCategory.m in Sources */,
+				3AA7EDD61939EE770087C08E /* FFWCManager.m in Sources */,
 				893D926C18EE5B1D00E55CDF /* FFPredictRosterTeamTable.m in Sources */,
 				890504D018D9EEC7006CD2EA /* TransitionDelegate.m in Sources */,
 				8951A33318D08A9E0019384D /* FFContestCell.m in Sources */,

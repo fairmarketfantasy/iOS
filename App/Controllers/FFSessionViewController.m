@@ -57,7 +57,7 @@
     [super viewDidLoad];
     
     self.session = [FFSession lastUsedSessionWithUserClass:[FFUser class]];
-    self.availableSports = @[[NSNumber numberWithInteger:FFMarketSportNBA], [NSNumber numberWithInteger:FFMarketSportMLB]];
+    self.availableSports = @[@"NBA", @"MLB"];
     self.indexShowingSport = 0;
     self.signInView = [[UIView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, self.view.frame.size.height)];
     [self setupSignInView];
@@ -114,6 +114,7 @@
         [self.tickerDataSource refresh];
         return;
     }
+
     [self.session pollUser];
     [self.session syncPushToken];
     [self performSegueWithIdentifier:@"GoImmediatelyToHome"
@@ -174,19 +175,12 @@
     NSString *smallImageName = nil;
     NSString *bigImageName = nil;
     
-    switch ([self.availableSports[self.indexShowingSport] integerValue]) {
-        case FFMarketSportMLB:
-            smallImageName = @"loginmlb";
-            bigImageName = @"loginmlb-586h";
-            break;
-            
-        case FFMarketSportNBA:
-            smallImageName = @"loginbg";
-            bigImageName = @"loginbg-586h";
-            break;
-            
-        default:
-            break;
+    if ([self.availableSports[self.indexShowingSport] isEqualToString:@"MLB"]) {
+        smallImageName = @"loginmlb";
+        bigImageName = @"loginmlb-586h";
+    } else {
+        smallImageName = @"loginbg";
+        bigImageName = @"loginbg-586h";
     }
     
     if (self.indexShowingSport == self.availableSports.count - 1)
@@ -328,7 +322,7 @@
 - (void)signIn:(id)sender
 {
     // get/compile the regex we'll be using
-    __strong static NSRegularExpression* regex = nil; // ???: rewrite
+    __strong static NSRegularExpression* regex = nil;
     if (regex == nil) {
         NSError* error = nil;
         NSString* emailRe = FF_EMAIL_REGEX;
@@ -555,7 +549,6 @@ failure:
     if (!error || error.code == 2) {
         return;
     }
-
     [[[UIAlertView alloc]
              initWithTitle:@"Error"
                    message:error.localizedDescription
@@ -586,7 +579,6 @@ failure:
         
         if (!result[@"email"] || [result[@"email"] isEqual:[NSNull null]]) {
             [alert hide];
-        
             FFAlertView* ealert = [[FFAlertView alloc] initWithTitle:@"Error"
                                                              message:@"The provided Facebook account does not have a verified email address associated with it. It could be a new account, to which Facebook does not yet give us access to the email. For now, you'll have to use a regular username and password to create an account."
                                                    cancelButtonTitle:nil

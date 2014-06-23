@@ -10,7 +10,6 @@
 #import <SBData/SBTypes.h>
 
 @class FFMarketSet;
-@class FFGame;
 @class FFDate;
 
 @interface FFMarket : FFDataObject
@@ -25,7 +24,7 @@
 @property(nonatomic) FFDate* startedAt;
 @property(nonatomic) NSString* state;
 @property(nonatomic) SBFloat* totalBets;
-@property(nonatomic) NSArray* games; // FFGame*
+@property(nonatomic) NSArray* games; // FFFantasyGame*
 
 + (FFMarketSet*)getBulkWithSession:(SBSession*)session
                         authorized:(BOOL)isAuthorizedRequest;

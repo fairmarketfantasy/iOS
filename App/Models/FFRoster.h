@@ -37,6 +37,7 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 @property(nonatomic) NSString* ownerName;
 @property(nonatomic) FFDate* paidAt;
 @property(nonatomic) NSArray* players; // FFPlayer*
+@property(nonatomic) NSArray* teams; // FFTeam*
 @property(nonatomic) NSString* positions;
 @property(nonatomic) SBFloat* remainingSalary;
 @property(nonatomic) SBInteger* score;
@@ -90,7 +91,15 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
                            failure:(SBErrorBlock)failure;
 - (void)autofillSuccess:(SBSuccessBlock)success
                 failure:(SBErrorBlock)failure;
++ (void)autofillForSession:(FFSession *)session
+                   success:(SBSuccessBlock)success
+                   failure:(SBErrorBlock)failure;
 
 - (FFPlayer *)playerByName:(NSString *)name;
+
++ (void)submitNonFantasyRosterWithTeams:(NSArray *)teams
+                                session:(FFSession *)session
+                                success:(SBSuccessBlock)success
+                                failure:(SBErrorBlock)failure;
 
 @end

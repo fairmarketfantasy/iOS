@@ -372,21 +372,6 @@
 //    }
 }
 
-#pragma mark - FFMenuViewControllerDelegate
-
-- (void)didUpdateToNewSport:(FFMarketSport)sport
-{
-    [self hideMenuController];
-//    _markets.sport = sport;
-    [self updateMarkets];
-}
-
-- (FFMarketSport)currentMarketSport
-{
-    return FFMarketSportNBA;
-//    return _markets.sport;
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView

@@ -65,15 +65,13 @@ FFControllerProtocol, FFPredictionPlayersProtocol, FFEventsProtocol, FFPredictRo
     self.pager.thumbImage = [UIImage imageNamed:@"passive"];
     self.pager.selectedThumbImage = [UIImage imageNamed:@"active"];
     self.pager.userInteractionEnabled = NO;
-    if ([self.roster.state isEqualToString:@"finished"]) {
-        [self.view addSubview:self.pager];
-        [self.view bringSubviewToFront:self.pager];        
-    }
+    [self.view addSubview:self.pager];
+    [self.view bringSubviewToFront:self.pager];
+
     // navigation bar
     self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
     self.navigationItem.leftBarButtonItems = [FFStyle backBarItemsForController:self];
 }
-
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue
                  sender:(id)sender
@@ -97,7 +95,6 @@ FFControllerProtocol, FFPredictionPlayersProtocol, FFEventsProtocol, FFPredictRo
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.pager.numberOfPages = (int)[self getViewControllers].count;
     self.teamController.session = self.session;
     self.scoreController.session = self.session;
     [self setViewControllers:@[[self getViewControllers].firstObject]
@@ -177,6 +174,10 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      ^(id successObj) {
          @strongify(self)
          self.roster = successObj;
+         self.pager.numberOfPages = (int)[self getViewControllers].count;
+         if ([self.roster.state isEqualToString:@"finished"] == NO) {
+             [self.pager removeFromSuperview];
+         }
          [self.teamController.tableView reloadData];
          [alert hide];
      }
@@ -186,14 +187,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          self.roster = nil;
          [self.teamController.tableView reloadData];
          [alert hide];
-         /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-          */
      }];
 }
 
@@ -219,6 +212,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     return self.roster.players;
 }
 
+- (NSArray*)teams
+{
+    return self.roster.teams;
+}
+
 - (CGFloat)rosterSalary
 {
     return self.roster.remainingSalary.floatValue;
@@ -231,7 +229,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)removePlayer:(FFPlayer*)player
 {
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Removing Player", nil)
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Removing Player"
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
@@ -247,14 +245,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
      ^(NSError *error) {
 //         @strongify(self)
          [alert hide];
-         /* !!!: disable error alerts NBA-659
-         [[[FFAlertView alloc] initWithError:error
-                                       title:nil
-                           cancelButtonTitle:nil
-                             okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
-                                    autoHide:YES]
-          showInView:self.navigationController.view];
-          */
      }];
 }
 

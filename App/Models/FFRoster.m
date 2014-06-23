@@ -17,6 +17,8 @@
 #import "FFContestType.h"
 #import "FFMarket.h"
 #import "FFSession.h"
+#import "FFTeam.h"
+#import "FFSessionManager.h"
 
 @implementation FFRoster
 
@@ -207,7 +209,10 @@
     NSString* path = [[FFRoster bulkPath] stringByAppendingString:@"/new"];
     [session authorizedJSONRequestWithMethod:@"GET"
                                         path:path
-                                   paramters:@{ @"sport" : [FFSport stringFromSport:session.sport] }
+                                   paramters:@{
+                                               @"category" : [FFSessionManager shared].categoryNameForNetwork,
+                                               @"sport" : [FFSessionManager shared].currentSportName
+                                               }
                                      success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
      {
          if (success) {
@@ -349,6 +354,38 @@ failure:
      }];
 }
 
++ (void)autofillForSession:(FFSession *)session
+                   success:(SBSuccessBlock)success
+                   failure:(SBErrorBlock)failure
+{
+    NSString *path = [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ?
+    [[FFRoster bulkPath] stringByAppendingFormat:@"/autofill"] : @"/game_rosters/autofill";
+//    NSString* path = [[FFRoster bulkPath] stringByAppendingFormat:@"/autofill"];
+    [session authorizedJSONRequestWithMethod:@"POST"
+                                        path:path
+                                   paramters:@{ @"sport" : [FFSessionManager shared].currentSportName }
+                                     success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+                                         NSLog(@"JSON : %@", JSON);
+                                         if ([[JSON objectForKey:@"predictions"] isKindOfClass:[NSArray class]] == NO) {
+                                             NSLog(@"Incompatible type of response");
+                                             assert(NO);
+                                         }
+                                         NSArray *teams = [JSON objectForKey:@"predictions"];
+                                         NSMutableArray *result = [NSMutableArray arrayWithCapacity:teams.count];
+                                         for (NSDictionary *teamDict in teams) {
+                                             FFTeam *team = [[FFTeam alloc] initWithDictionary:teamDict];
+                                             [result addObject:team];
+                                         }
+                                         
+                                         if (success) {
+                                             success(result);
+                                         }
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+                                         if (failure)
+                                             failure(error);
+                                     }];
+}
+
 #pragma mark -
 
 - (void)submitContent:(FFRosterSubmitType)type
@@ -371,18 +408,40 @@ failure:
                                              path:path
                                         paramters:@{ @"contest_type" : contestType }
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
-    {
-        NSString *message = [[httpResponse allHeaderFields] objectForKey:@"X-CLIENT-FLASH"];
-        _messageAfterSubmit = (message != nil && message.length > 0) ? message : @"Roster submitted successfully!";
-        [self updateWithNetworkRepresentation:JSON
-                                      success:success
-                                      failure:failure];
-    }
-failure:
-    ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
-    {
-        failure(error);
-    }];
+     {
+         NSString *message = [[httpResponse allHeaderFields] objectForKey:@"X-CLIENT-FLASH"];
+         _messageAfterSubmit = (message != nil && message.length > 0) ? message : @"Roster submitted successfully!";
+         [self updateWithNetworkRepresentation:JSON
+                                       success:success
+                                       failure:failure];
+     }
+                                          failure:
+     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
+     {
+         failure(error);
+     }];
+}
+
++ (void)submitNonFantasyRosterWithTeams:(NSArray *)teams
+                                session:(FFSession *)session
+                                success:(SBSuccessBlock)success
+                                failure:(SBErrorBlock)failure
+{
+    NSDictionary *params = @{@"teams": teams};
+    NSString *path = @"/game_rosters";
+    [session authorizedJSONRequestWithMethod:@"POST"
+                                        path:path
+                                   paramters:params
+                                     success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+                                         NSLog(@"Submit NonFantasy Roster: %@", JSON);
+                                         if (success) {
+                                             success(JSON);
+                                         }
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+                                         NSLog(@"JSON: %@", JSON);
+                                         if (failure)
+                                             failure(error);
+                                     }];
 }
 
 - (void)setValuesForKeysWithNetworkDictionary:(NSDictionary*)keyedValues
@@ -413,6 +472,14 @@ failure:
                                                           save:YES]];
     }
     self.players = [players copy];
+    
+    NSArray* teamsDictionaries = keyedValues[@"game_predictions"];
+    NSMutableArray* teams = [NSMutableArray arrayWithCapacity:playerDictionaries.count];
+    for (NSDictionary* teamDictionary in teamsDictionaries) {
+        FFTeam *team = [[FFTeam alloc] initWithDictionary:teamDictionary];
+        [teams addObject:team];
+    }
+    self.teams = [teams copy];
 }
 
 - (FFContestType*)contestType

@@ -8,6 +8,7 @@
 
 #import "FFMarketSet.h"
 #import "FFSession.h"
+#import "FFSessionManager.h"
 
 @implementation FFMarketSet
 
@@ -40,16 +41,18 @@
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                    @"sport" : [FFSport stringFromSport:self.session.sport],
-                                    @"type" : [FFMarketSet typeKey:type]
-                                }];
+                                  @"category" : [FFSessionManager shared].categoryNameForNetwork,
+                                  @"sport" : [FFSessionManager shared].currentSportName,
+                                  @"type" : [FFMarketSet typeKey:type]
+                                  }];
 }
 
 - (void)fetchType:(FFMarketType)type completion:(void(^)(void))block
 {
     NSAssert(self.query, @"Query shouldn't be nil!");
     [self refreshWithParameters:@{
-                                  @"sport" : [FFSport stringFromSport:self.session.sport],
+                                  @"category" : [FFSessionManager shared].categoryNameForNetwork,
+                                  @"sport" : [FFSessionManager shared].currentSportName,
                                   @"type" : [FFMarketSet typeKey:type]
                                   }
                      completion:^{

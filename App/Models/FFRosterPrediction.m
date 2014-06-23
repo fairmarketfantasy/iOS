@@ -7,9 +7,9 @@
 //
 
 #import "FFRosterPrediction.h"
+#import "FFSessionManager.h"
 #import <SBData/NSDictionary+Convenience.h>
 // model
-#import "FFSport.h"
 #import "FFPlayer.h"
 #import "FFContestType.h"
 #import "FFMarket.h"
@@ -32,16 +32,31 @@
 - (void)loadRosterSuccess:(SBSuccessBlock)success
                   failure:(SBErrorBlock)failure
 {
+    NSString *path = [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ?
+    [[[self superclass] bulkPath] stringByAppendingFormat:@"/%i", self.objId.integerValue] :
+    @"/game_predictions/day_games";
+    NSDictionary *params = [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ?
+    @{} :
+    @{@"sport" : [FFSessionManager shared].currentSportName,
+      @"roster_id" : [NSNumber numberWithInteger:self.objId.integerValue]
+      };
+
     [self.session authorizedJSONRequestWithMethod:@"GET"
-                                             path:[[[self superclass] bulkPath] stringByAppendingFormat:@"/%i",
-                                                   self.objId.integerValue]
-                                        paramters:@{}
+                                             path:path
+                                        paramters:params
                                           success:^(NSURLRequest* request, NSHTTPURLResponse* httpResponse, id JSON)
      {
-         [[self superclass] createWithNetworkRepresentation:JSON
-                                                    session:self.session
-                                                    success:success
-                                                    failure:failure];
+         if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+             [[self superclass] createWithNetworkRepresentation:JSON
+                                                        session:self.session
+                                                        success:success
+                                                        failure:failure];
+         } else {
+             [[self superclass] createWithNetworkRepresentation:[JSON objectForKey:@"game_roster"]
+                                                        session:self.session
+                                                        success:success
+                                                        failure:failure];
+         }
      }
                                           failure:
      ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)

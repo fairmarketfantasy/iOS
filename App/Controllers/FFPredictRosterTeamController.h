@@ -14,6 +14,7 @@
 @protocol FFPredictionPlayersProtocol <NSObject>
 
 @property(nonatomic, readonly) NSArray* players; // should contain FFPlayer*
+@property(nonatomic, readonly) NSArray* teams; // should contain FFTeam*
 @property(nonatomic, readonly) CGFloat rosterSalary;
 @property(nonatomic, readonly) NSString* rosterState;
 - (void)removePlayer:(FFPlayer*)player;

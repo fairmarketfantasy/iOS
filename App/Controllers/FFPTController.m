@@ -11,10 +11,10 @@
 #import "FFPTCell.h"
 #import "FFPTHeader.h"
 #import "FFAlertView.h"
-#import <FlatUIKit.h>
 #import "FFAlertView.h"
-#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "FFPathImageView.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import <FlatUIKit.h>
 // model
 #import "FFEvent.h"
 #import "FFPlayer.h"
@@ -68,7 +68,7 @@
     [alert showInView:self.navigationController.view];
     @weakify(self)
     [FFEvent fetchEventsForMarket:self.delegate.marketId
-                           player:self.player.statsId
+                           player:self.player
                           session:self.session
                           success:
      ^(id successObj) {

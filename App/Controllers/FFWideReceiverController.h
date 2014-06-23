@@ -10,10 +10,14 @@
 #import "FFYourTeamDataSource.h"
 
 @class FFPlayer;
+@class FFTeam;
 
 @protocol FFPlayersProtocol <NSObject>
 
 - (void)addPlayer:(FFPlayer*)player;
+- (void)addTeam:(FFTeam *)team;
+- (void)fetchGamesShowAlert:(BOOL)shouldShow withCompletion:(void(^)(void))block;
+- (void)makeIndividualPredictionOnTeam:(FFTeam *)team;
 
 @end
 

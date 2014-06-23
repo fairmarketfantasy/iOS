@@ -7,6 +7,8 @@
 //
 
 #import "FFNodeItem.h"
+#import "FFCategory.h"
+#import "FFSport.h"
 
 @implementation FFNodeItem
 
@@ -23,6 +25,14 @@
     return [self nodeWithTitle:title
                       children:children
                           type:FFNodeItemTypeParent];
+}
+
++ (FFNodeItem*)nodeWithTitle:(NSString*)title children:(NSArray*)children comingSoon:(BOOL)commingSoon
+{
+    return [self nodeWithTitle:title
+                      children:children
+                          type:FFNodeItemTypeParent
+                    comingSoon:commingSoon];
 }
 
 + (NSArray*)nodesFromStrings:(NSArray*)strings
@@ -51,6 +61,28 @@
                                         type:type];
 }
 
++ (FFNodeItem*)nodeWithTitle:(NSString*)title
+                    children:(NSArray*)children
+                        type:(FFNodeItemType)type
+                  comingSoon:(BOOL)comingSoon
+{
+    return [[FFNodeItem alloc] initWithTitle:title
+                                    children:children
+                                        type:type
+                                  comingSoon:comingSoon];
+}
+
++ (FFNodeItem*)nodeWithSport:(FFSport*)sport
+                  comingSoon:(BOOL)comingSoon
+{
+    
+    return [[FFNodeItem alloc] initWithTitle:sport.title
+                                  sportName:sport.name
+                                    children:@[]
+                                  comingSoon:comingSoon];
+}
+
+
 - (id)initWithTitle:(NSString*)title
            children:(NSArray*)children
                type:(FFNodeItemType)type
@@ -60,6 +92,38 @@
         self.title = title;
         self.children = children;
         self.type = type;
+    }
+    return self;
+}
+
+- (id)initWithTitle:(NSString*)title
+           children:(NSArray*)children
+               type:(FFNodeItemType)type
+         comingSoon:(BOOL)comingSoon
+{
+    self = [super init];
+    if (self) {
+        self.title = title;
+        self.children = children;
+        self.type = type;
+        _comingSoon = comingSoon;
+    }
+    return self;
+}
+
+- (id)initWithTitle:(NSString*)title
+         sportName:(NSString*)key
+           children:(NSArray*)children
+         comingSoon:(BOOL)comingSoon
+{
+    self = [super init];
+    if (self) {
+        self.title = title;
+        self.children = children;
+        self.type = FFNodeItemTypeLeaf;
+        _comingSoon = comingSoon;
+        _sportName = key;
+        _sportTitle = title;
     }
     return self;
 }
@@ -117,6 +181,30 @@
         }
     }
     return [nodes copy];
+}
+
+/**
+ *  Create node from category object
+ *
+ *  @param category FFCategory.
+ *
+ *  @return FFNodeItem.
+ */
++ (instancetype)nodeFromCategory:(FFCategory *)category
+{
+    NSMutableArray *children = [NSMutableArray arrayWithCapacity:category.sports.count];
+    for (FFSport *sport in category.sports) {
+        if (sport.isActive == YES) {
+            FFNodeItem *childNode = [FFNodeItem nodeWithSport:sport
+                                                   comingSoon:sport.commingSoon];
+            
+            childNode.categoryTitle = category.title;
+            childNode.categoryName = category.name;
+            [children addObject:childNode];
+        }
+    }
+    
+    return [self nodeWithTitle:category.name children:children];
 }
 
 @end

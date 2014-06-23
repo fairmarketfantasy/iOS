@@ -7,8 +7,10 @@
 //
 
 #import "FFEvent.h"
-#import <SBData/NSDictionary+Convenience.h>
 #import "FFSession.h"
+#import "FFPlayer.h"
+#import "FFSessionManager.h"
+#import <SBData/NSDictionary+Convenience.h>
 
 @implementation FFEvent
 
@@ -29,7 +31,7 @@
 
 + (NSString*)bulkPath
 {
-    return @"/events";
+    return [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? @"/events" : @"/game_predictions";
 }
 
 + (NSDictionary*)propertyToNetworkKeyMapping
@@ -46,14 +48,15 @@
 #pragma mark -
 
 + (void)fetchEventsForMarket:(NSString*)marketId
-                     player:(NSString*)statId
+                      player:(FFPlayer*)player
                       session:(SBSession*)session
                       success:(SBSuccessBlock)success
                       failure:(SBErrorBlock)failure
 {
     // TODO: use FFDataObjectResultSet
     NSDictionary* params = @{
-                             @"player_ids" : statId,
+                             @"player_ids" : player.statsId,
+                             @"position" : player.position,
                              @"average" : @"true", // for this request only, API specific
                              @"market_id" : marketId,
                              };
@@ -88,6 +91,29 @@
              failure(error);
          }
      }];
+}
+
++ (void)fetchEventsForTeam:(NSString *)teamId
+                    inGame:(NSString *)gameId
+                   session:(SBSession*)session
+                   success:(SBSuccessBlock)success
+                   failure:(SBErrorBlock)failure
+{
+    NSDictionary *params = @{
+                             @"game_stats_id" : gameId,
+                             @"team_stats_id" : teamId
+                             };
+    
+    [session authorizedJSONRequestWithMethod:@"POST"
+                                        path:[self bulkPath]
+                                   paramters:params
+                                     success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+                                         if(success)
+                                             success(JSON);
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+                                         if (failure)
+                                             failure(error);
+                                     }];
 }
 
 - (void)individualPredictionsForMarket:(NSString*)marketId

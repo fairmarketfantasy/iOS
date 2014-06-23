@@ -16,13 +16,9 @@
 #define LOG_FMT_STR(format, ...) [NSString stringWithFormat:(@"%s [Line %d] " format), \
                                                             __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__]
 #define DLog(format, ...) CFShow((__bridge CFStringRef)LOG_FMT_STR(format, ##__VA_ARGS__))
-
 #define WTFLog NSLog(@"How did we even get here?")
 
-#ifdef DEBUG
-#define DebugLog(s, ...) NSLog( @"<%@:(%d)> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__, [NSString stringWithFormat:(s), ##__VA_ARGS__] )
-#else
-#define DebugLog(s, ...)
-#endif
+#define FANTASY_SPORTS @"fantasy sports"
+#define FOOTBALL_WC @"FWC"
 
 #endif

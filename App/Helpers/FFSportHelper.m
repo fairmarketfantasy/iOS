@@ -1,14 +1,14 @@
 //
-//  FFSport.m
+//  FFSportHelper.m
 //  FMF Football
 //
 //  Created by Yuriy Pitomets on 4/3/14.
 //  Copyright (c) 2014 FairMarketFantasy. All rights reserved.
 //
 
-#import "FFSport.h"
+#import "FFSportHelper.h"
 
-@implementation FFSport
+@implementation FFSportHelper
 
 + (NSString*)stringFromSport:(FFMarketSport)key
 {

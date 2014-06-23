@@ -11,6 +11,8 @@
 #import "FFTeamAddCell.h"
 #import "FFNoConnectionCell.h"
 #import "FFMarketsCell.h"
+#import "FFNonFantasyGameCell.h"
+#import "FFAutoFillCell.h"
 
 @implementation FFWideReceiverTable
 
@@ -32,6 +34,10 @@
      forCellReuseIdentifier:kNoConnectionCellIdentifier];
         [self registerClass:[UITableViewCell class]
      forCellReuseIdentifier:kPickerCellIdentifier];
+        [self registerClass:[FFNonFantasyGameCell class]
+     forCellReuseIdentifier:kNonFantasyGameCellIdentifier];
+        [self registerClass:[FFAutoFillCell class]
+     forCellReuseIdentifier:kAutoFillCellIdentifier];
     }
     return self;
 }

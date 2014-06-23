@@ -9,9 +9,11 @@
 #import "FFSession.h"
 #import <AFNetworking/AFHTTPClient.h>
 #import "FFMarket.h"
-#import "FFGame.h"
 #import "FFContestType.h"
 #import "FFRoster.h"
+#import "FFCategory.h"
+#import "FFSport.h"
+#import "FFSessionManager.h"
 
 @interface SBSession (private)
 
@@ -38,14 +40,9 @@
     self = [super initWithIdentifier:identifier
                            userClass:userClass];
     if (self) {
-        self.sport = [self currentSport];
+
     }
     return self;
-}
-
-- (FFMarketSport)currentSport
-{
-    return [[[NSUserDefaults standardUserDefaults] objectForKey:kCurrentSport] integerValue];
 }
 
 - (void)clearCredentials
@@ -56,6 +53,10 @@
 
 - (id)deserializeJSON:(id)JSON
 {
+    if ([JSON isKindOfClass:[NSArray class]]) {
+        return JSON;
+    }
+    
     if (JSON[@"data"] && [JSON[@"data"] isKindOfClass:[NSArray class]]) {
         // it's JSONH
         NSArray* lst = JSON[@"data"];
@@ -78,6 +79,41 @@
         return ret;
     }
     return JSON;
+}
+
+- (void)loginWithEmail:(NSString *)email password:(NSString *)password success:(SBSuccessBlock)success failure:(SBErrorBlock)failure
+{
+    if (!self.user) {
+        self.user = [[self.userClass alloc] initWithSession:self];
+        self.user.email = email;
+    }
+    [self.sessionData save]; // generate an identifier for this session
+    self.authorizedHttpClient = nil;
+    [self getOAuth:self.user password:password success:^(id _) {
+        // now that we've got oauth, get the user data
+        NSMutableURLRequest *req = [self.authorizedHttpClient requestWithMethod:@"GET" path:[self.user listPath] parameters:@{ }];
+        [req addValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        SBJSONRequestOperation *op = [[SBJSONRequestOperation alloc] initWithRequest:req];
+        [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [self.user setValuesForKeysWithNetworkDictionary:responseObject];
+            [self.user save];
+            
+            [[FFSessionManager shared] saveCategoriesFromDictionaries:[responseObject objectForKey:@"categories"]];
+            [[FFSessionManager shared] saveCurrentCategory:[responseObject objectForKey:@"currentCategory"]
+                                                  andSport:[responseObject objectForKey:@"currentSport"]];
+            
+            self.sessionData.userKey = self.user.key;
+            [self.sessionData save];
+            [self syncPushToken];
+            success(self.user);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"operation: %@", operation.request.allHTTPHeaderFields);
+            failure(error);
+        }];
+        [self.authorizedHttpClient enqueueHTTPRequestOperation:op];
+    } failure:^(NSError *err) {
+        failure(err);
+    }];
 }
 
 - (void)registerAndLoginUsingFBAccessToken:(NSString*)accessToken fbUid:(NSString*)fbuid
@@ -106,6 +142,11 @@
         [user setValuesForKeysWithNetworkDictionary:responseObject];
         [user save];
         self.user = user;
+        
+        [[FFSessionManager shared] saveCategoriesFromDictionaries:[responseObject objectForKey:@"categories"]];
+        [[FFSessionManager shared] saveCurrentCategory:[responseObject objectForKey:@"currentCategory"]
+                                              andSport:[responseObject objectForKey:@"currentSport"]];
+        
         [self.sessionData save];
         [self getOAuth:user fbAccessToken:accessToken success:^(id successObj)
         {
@@ -195,7 +236,7 @@ failure:
          NSLog(@"oauth crapped %@", error);
          NSError *dumbError = [NSError errorWithDomain:@"" code:400 userInfo:
                                @{ NSUnderlyingErrorKey: error,
-                                  NSLocalizedDescriptionKey:@"Invalid username or password" }];
+                                  NSLocalizedDescriptionKey:@"Invalid username or password"}];
          failure(dumbError);
          //because 2 popups with errors
          //         failure(error);
@@ -221,6 +262,7 @@ failure:
 
 #pragma mark - inheritance
 
+
 // do not save models any more
 - (void)syncUserSuccess:(SBSuccessBlock)success failure:(SBErrorBlock)failure
 {
@@ -244,13 +286,13 @@ failure:
 - (SBModelQueryBuilder *)queryBuilderForClass:(Class)modelCls
 {
     return [[super queryBuilderForClass:modelCls] property:@"sportKey"
-                                                 isEqualTo:[FFSport stringFromSport:self.sport]];
+                                                 isEqualTo:[FFSessionManager shared].currentSportName];
 }
 
 - (SBModelQueryBuilder *)unsafeQueryBuilderForClass:(Class)modelCls
 {
     return [[super unsafeQueryBuilderForClass:modelCls] property:@"sportKey"
-                                                       isEqualTo:[FFSport stringFromSport:self.sport]];
+                                                       isEqualTo:[FFSessionManager shared].currentSportName];
 }
 
 #pragma mark - user retrieving
