@@ -18,13 +18,13 @@
 @property(nonatomic) NSArray* eventPredictions;
 @property(nonatomic) NSString* playerName;
 @property(nonatomic) NSString* predictThat;
-@property(nonatomic) NSString* currentPT;
 @property(nonatomic) NSString* award;
 @property(nonatomic) NSString* state;
 @property(nonatomic) NSString* tradeMessage;
 @property(nonatomic) FFDate* gameTime;
 @property(nonatomic) FFDate* gameDay;
 @property(nonatomic) NSNumber* gameResult;
+@property(nonatomic) NSNumber* shouldShowTrade;
 
 + (void)submitPredictionForSession:(FFSession *)session
                             params:(NSDictionary *)params

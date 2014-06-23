@@ -332,7 +332,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                 FFIndividualPrediction* prediction = self.predictions[indexPath.row];
                 [cell setupWithPrediction:prediction];
                 
-                if ([prediction.state isEqualToString:@"submitted"] && prediction.currentPT) {
+                if ([prediction.state isEqualToString:@"submitted"] && [prediction.shouldShowTrade boolValue] == YES) {
                     cell.tradeButton.hidden = NO;
                     __weak FFPredictHistoryController *weakSelf = self;
                     [cell.tradeButton setAction:kUIButtonBlockTouchUpInside

@@ -25,8 +25,8 @@
 @dynamic gameTime;
 @dynamic gameDay;
 @dynamic gameResult;
-@dynamic currentPT;
 @dynamic tradeMessage;
+@dynamic shouldShowTrade;
 
 + (NSString*)tableName
 {
@@ -47,7 +47,6 @@
 {
     return [[super propertyToNetworkKeyMapping] dictionaryByMergingWithDictionary:
             @{
-              @"currentPT" : @"current_pt",
               @"playerId" : @"player_id",
               @"playerStatId" : @"player_stat_id",
               @"marketName" : @"market_name",
@@ -59,7 +58,8 @@
               @"gameTime" : @"game_time",
               @"gameDay" : @"game_day",
               @"gameResult" : @"game_result",
-              @"tradeMessage" : @"trade_message"
+              @"tradeMessage" : @"trade_message",
+              @"shouldShowTrade" : @"show_trade"
               }];
 }
 // TODO: FFEventPrediction
