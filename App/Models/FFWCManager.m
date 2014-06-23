@@ -17,6 +17,7 @@
 #import "FFSession.h"
 #import "FFIndividualPrediction.h"
 #import "Reachability.h"
+#import "Collection+UnNullable.h"
 
 @interface FFWCManager() <FFWCDelegate> {
      Reachability* internetReachability;
@@ -192,6 +193,7 @@
                                    paramters:@{@"sport" : FOOTBALL_WC}
                                      success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
                                          NSLog(@" @{FFWCM} : JSON : %@", JSON);
+                                         JSON = [JSON removeNulls];
                                          NSArray *dailyWinsDicts = [JSON objectForKey:@"daily_wins"];
                                          _dailyWins = [NSMutableArray arrayWithCapacity:dailyWinsDicts.count];
                                          for (NSDictionary *gameDict in dailyWinsDicts) {
