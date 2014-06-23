@@ -400,7 +400,7 @@
 
     } else {
 
-        message = NSLocalizedString(@"An uknown error occurred.", @"unknown error message");
+        message = @"An uknown error occurred.", @"unknown error message";
     }
 
     if (title) {
@@ -463,9 +463,9 @@
 + (FFAlertView *)noInternetConnectionAlert
 {
     return [[FFAlertView alloc] initWithTitle:nil
-                                      message:NSLocalizedString(@"No Internet Connection", nil)
+                                      message:@"No Internet Connection"
                             cancelButtonTitle:nil
-                              okayButtonTitle:NSLocalizedString(@"Ok", nil)
+                              okayButtonTitle:@"Ok"
                                      autoHide:YES];
 }
 

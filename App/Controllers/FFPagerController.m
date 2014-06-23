@@ -56,6 +56,8 @@ SBDataObjectResultSetDelegate>
 @property(nonatomic, strong) FFRoster* roster;
 @property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
 
+@property(nonatomic, assign) BOOL unpaid;
+
 @end
 
 @implementation FFPagerController
@@ -309,14 +311,14 @@ SBDataObjectResultSetDelegate>
 
 #pragma mark - private
 
-- (void)createRosterWithCompletion:(void(^)(BOOL success))block
+- (void)createRosterWithCompletion:(void(^)(BOOL success, BOOL unpaid))block
 {
     _rosterIsCreating = YES;
     
     if (!self.selectedMarket) {
         self.roster = nil;
         if (block) {
-            block(NO);
+            block(NO, NO);
         }
         return;
     }
@@ -331,21 +333,33 @@ SBDataObjectResultSetDelegate>
      ^(id successObj) {
          @strongify(self)
          _rosterIsCreating = NO;
+         [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Unpaidsubscription"];
+         self.unpaid = NO;
          self.roster = successObj;
          
          self.myTeam = [self newTeamWithPositions:[self allPositions]];
          
          [alert hide];
          if (block) {
-             block(YES);
+             block(YES, NO);
          }
      }
                                failure:
      ^(NSError * error) {
          @strongify(self)
          _rosterIsCreating = NO;
+         [alert hide];
+         if ([[[error userInfo] objectForKey:@"NSLocalizedDescription"] isEqualToString:@"Unpaid subscription!"]) {
+             [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Unpaidsubscription"];
+             self.roster = nil;
+             self.unpaid = YES;
+             if (block) {
+                 block(NO, YES);
+             }
+             return;
+         }
+         
          if (self.tryCreateRosterTimes > 0) {
-             [alert hide];
              self.tryCreateRosterTimes--;
              [self createRosterWithCompletion:block];
 //             if (block) {
@@ -353,9 +367,8 @@ SBDataObjectResultSetDelegate>
 //             }
          } else {
              self.roster = nil;
-             [alert hide];
              if (block) {
-                 block(NO);
+                 block(NO, NO);
              }
          }
      }];
@@ -484,7 +497,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (void)addPlayer:(FFPlayer*)player
 {
-    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:NSLocalizedString(@"Buying Player", nil)
+    __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Buying Player"
                                                    messsage:nil
                                                loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.navigationController.view];
@@ -493,13 +506,10 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
                    success:
      ^(id successObj) {
          @strongify(self)
-         //         [self.teamController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-         //                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-         //         [self.receiverController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-         //                                          withRowAnimation:UITableViewRowAnimationAutomatic];
          [alert hide];
          [self addPlayerToMyTeam:player];
          [self.teamController refreshRosterWithShowingAlert:YES completion:nil];
+         
          [self setViewControllers:@[self.teamController]
                         direction:UIPageViewControllerNavigationDirectionReverse
                          animated:YES
@@ -524,7 +534,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
              FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
                                                              message:localizedDescription
                                                    cancelButtonTitle:nil
-                                                     okayButtonTitle:NSLocalizedString(@"Dismiss", nil)
+                                                     okayButtonTitle:@"Dismiss"
                                                             autoHide:YES];
              
              [alert showInView:self.navigationController.view];
@@ -566,7 +576,6 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     [self.teamController.tableView reloadData];
     NSArray *markets = [self availableMarkets];
     if (markets.count > 0) {
-        
         if ([self.teamController respondsToSelector:@selector(marketSelected:)]) {
             [self.teamController performSelector:@selector(marketSelected:) withObject:markets.firstObject];
         }
@@ -614,18 +623,24 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (void)setCurrentMarket:(FFMarket *)market
 {
     self.selectedMarket = market;
+    [self.teamController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                               inSection:0]]
+                                         withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.teamController.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
+                                                                               inSection:0]]
+                                         withRowAnimation:UITableViewRowAnimationAutomatic];
     if (_rosterIsCreating == NO) {
         
         __weak FFPagerController *weakSelf = self;
-        [self createRosterWithCompletion:^(BOOL success) {
+        [self createRosterWithCompletion:^(BOOL success, BOOL unpaid) {
             if (success) {
                 [weakSelf.teamController reloadWithServerError:NO];
                 [weakSelf.receiverController fetchPlayersWithShowingAlert:NO completion:^{
-                    [weakSelf.receiverController reloadWithServerError:NO ];
+                    [weakSelf.receiverController reloadWithServerError:NO];
                 }];
             } else {
-                [weakSelf.teamController reloadWithServerError:YES];
-                [weakSelf.receiverController reloadWithServerError:YES];
+                [weakSelf.teamController.tableView reloadData];
+                [weakSelf.receiverController.tableView reloadData];
             }
         }];
     }
@@ -648,6 +663,11 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 - (FFRoster *)currentRoster
 {
     return self.roster;
+}
+
+- (BOOL)unpaidSubscription
+{
+    return self.unpaid;
 }
 
 #pragma mark - FFYourTeamDelegate
@@ -696,7 +716,7 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
          if (block)
              block(YES);
          
-         [self createRosterWithCompletion:^(BOOL success) {
+         [self createRosterWithCompletion:^(BOOL success, BOOL unpaid) {
              [self.teamController reloadWithServerError:!success];
              [self.receiverController reloadWithServerError:!success];
          }];
@@ -781,6 +801,13 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
     if (resultSet.count > 0) {
         [self marketsUpdated];
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    } else {
+        if (self.availableMarkets.count == 0) {
+            self.roster = nil;
+            [self.teamController showOrHideSubmitIfNeeded];
+            [self.teamController.tableView reloadData];
+            [self.receiverController.tableView reloadData];
+        }
     }
 }
 

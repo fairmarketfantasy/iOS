@@ -65,8 +65,10 @@ FFControllerProtocol, FFPredictionPlayersProtocol, FFEventsProtocol, FFPredictRo
     self.pager.thumbImage = [UIImage imageNamed:@"passive"];
     self.pager.selectedThumbImage = [UIImage imageNamed:@"active"];
     self.pager.userInteractionEnabled = NO;
-    [self.view addSubview:self.pager];
-    [self.view bringSubviewToFront:self.pager];
+    if ([self.roster.state isEqualToString:@"finished"]) {
+        [self.view addSubview:self.pager];
+        [self.view bringSubviewToFront:self.pager];        
+    }
     // navigation bar
     self.navigationItem.titleView = [[FFLogo alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 44.f)];
     self.navigationItem.leftBarButtonItems = [FFStyle backBarItemsForController:self];
@@ -197,10 +199,17 @@ willTransitionToViewControllers:(NSArray*)pendingViewControllers
 
 - (NSArray*)getViewControllers
 {
-    return @[
-             self.teamController,
-             self.scoreController
-             ];
+    if ([self.roster.state isEqualToString:@"finished"]) {
+        return @[
+                 self.teamController,
+                 self.scoreController
+                 ];
+        
+    } else {
+        return @[
+                 self.teamController
+                 ];
+    }
 }
 
 #pragma  mark - FFPredictionPlayersProtocol

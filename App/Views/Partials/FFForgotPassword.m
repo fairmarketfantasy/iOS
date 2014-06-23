@@ -29,7 +29,7 @@
         captionBalanceLabel.backgroundColor = [UIColor clearColor];
         captionBalanceLabel.textColor = [FFStyle darkGreyTextColor];
         captionBalanceLabel.font = [FFStyle blockFont:17.f];
-        captionBalanceLabel.text = NSLocalizedString(@"Forgot Password", nil);
+        captionBalanceLabel.text = @"Forgot Password";
         [self addSubview:captionBalanceLabel];
 
         // separator
@@ -45,7 +45,7 @@
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.textColor = [FFStyle darkGreyTextColor];
         titleLabel.font = [FFStyle blockFont:14.f];
-        titleLabel.text = NSLocalizedString(@"Enter your email address for instructions", nil);
+        titleLabel.text = @"Enter your email address for instructions";
         [self addSubview:titleLabel];
 
         // mail text field
@@ -55,7 +55,7 @@
         self.mailField.frame = CGRectMake(10.f, 85.f, 240.f, 44.f);
         self.mailField.layer.borderColor = [FFStyle greyBorder].CGColor;
         self.mailField.backgroundColor = [FFStyle white];
-        self.mailField.placeholder = NSLocalizedString(@"email", nil);
+        self.mailField.placeholder = @"email";
         self.mailField.returnKeyType = UIReturnKeySend;
         self.mailField.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.mailField.autocorrectionType = UITextAutocorrectionTypeNo;

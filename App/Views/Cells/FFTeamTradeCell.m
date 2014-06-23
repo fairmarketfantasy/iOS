@@ -42,7 +42,7 @@
         self.centLabel.adjustsFontSizeToFitWidth = YES;
         [self.contentView addSubview:self.centLabel];
         // pt button
-        _PTButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"PT", nil)
+        _PTButton = [FFStyle coloredButtonWithText:@"PT"
                                              color:self.contentView.backgroundColor
                                        borderColor:[FFStyle brightBlue]];
         self.PTButton.frame = CGRectMake(207.f,
@@ -58,7 +58,7 @@
                                                          0.f, 0.f, 0.f);
         [self.contentView addSubview:self.PTButton];
         // trade button
-        _tradeButton = [FFStyle coloredButtonWithText:NSLocalizedString(@"Trade", nil)
+        _tradeButton = [FFStyle coloredButtonWithText:@"Trade"
                                               color:[FFStyle brightOrange]
                                         borderColor:[FFStyle white]];
         self.tradeButton.frame = CGRectMake(252.f,

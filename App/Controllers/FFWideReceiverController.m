@@ -78,6 +78,7 @@
     self.picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 162.f)];
     self.picker.delegate = self;
     self.picker.dataSource = self;
+    self.picker.showsSelectionIndicator = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? NO : YES;
     
     CGAffineTransform t0 = CGAffineTransformMakeTranslation(self.picker.bounds.size.width/2, self.picker.bounds.size.height/2);
 	CGAffineTransform s0 = CGAffineTransformMakeScale(1.0, 0.47);
@@ -177,7 +178,8 @@
 {
     return (self.networkStatus == NotReachable ||
             self.isServerError ||
-            self.markets.count == 0);
+            self.markets.count == 0 ||
+            [self.dataSource unpaidSubscription]);
 }
 
 - (void)selectPosition:(NSUInteger)position
@@ -190,19 +192,17 @@
 
 - (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
 {
-    if (self.networkStatus == NotReachable) {
-        if (shouldShow) {
-            [[FFAlertView noInternetConnectionAlert] showInView:self.view];
-        }
-        
+    if ([self isSomethingWrong] == YES) {
         block();
         return;
     }
     
     if (![self.dataSource.currentRoster objId]) {
         self.players = @[];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
+        if ([self isSomethingWrong] == NO) {
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                          withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
         return;
     }
     
@@ -272,9 +272,9 @@
     if (pickerLabel == nil) {
         pickerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 320.0f, 54.f)];
         pickerLabel.textAlignment = NSTextAlignmentCenter;
-        pickerLabel.textColor = [UIColor clearColor];
+        pickerLabel.textColor = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? [UIColor clearColor] : [FFStyle darkGrey];
         pickerLabel.font = [FFStyle blockFont:30.0f];
-        pickerLabel.textColor = [UIColor whiteColor];
+        pickerLabel.textColor = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? [UIColor whiteColor] : [UIColor blackColor];
     }
     
     NSString *positionName = [self.dataSource uniquePositions][row];
@@ -298,10 +298,10 @@
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return 2;
+        return [self isSomethingWrong] ? 1 : 2;
     }
     
-    return [self isSomethingWrong] ? 1 : self.players.count;
+    return self.players.count;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
@@ -324,8 +324,16 @@
             if ([self isSomethingWrong]) {
                 FFNoConnectionCell* cell = [tableView dequeueReusableCellWithIdentifier:kNoConnectionCellIdentifier
                                                                            forIndexPath:indexPath];
-                cell.message.text = self.markets.count == 0 ? NSLocalizedString(@"No Games Scheduled", nil) :
-                                                              NSLocalizedString(@"No Internet Connection", nil);
+                NSString *message = nil;
+                if (self.networkStatus == NotReachable) {
+                    message = @"No Internet Connection";
+                } else if ([self.dataSource unpaidSubscription]) {
+                    message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
+                } else if (self.markets.count == 0) {
+                    message = @"No Games Scheduled";
+                }
+                
+                cell.message.text = message;
                 return cell;
             }
             return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
@@ -441,7 +449,7 @@
                 positionName = positionFullName;
             }
         }
-        view.titleLabel.text = NSLocalizedString(positionName, nil);
+        view.titleLabel.text = positionName;
         view.priceLabel.text = self.delegate ?
         [[FFStyle priceFormatter] stringFromNumber:@([[self.dataSource currentRoster] remainingSalary].floatValue)] : @"";
         view.priceLabel.textColor = [[self.dataSource currentRoster] remainingSalary].floatValue > 0.f
@@ -493,7 +501,7 @@
                                                                              forIndexPath:indexPath];
     if (self.markets.count > indexPath.item && self.networkStatus != NotReachable) {
         FFMarket* market = self.markets[indexPath.item];
-        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : NSLocalizedString(@"Market", nil);
+        cell.marketLabel.text = market.name && market.name.length > 0 ? market.name : @"Market";
         cell.timeLabel.text = [[FFStyle marketDateFormatter] stringFromDate:market.startedAt];
     }
     
@@ -505,9 +513,6 @@
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
     [self.dataSource setCurrentMarket:selectedMarket];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0
-                                                                inSection:0]]
-                          withRowAnimation:UITableViewRowAnimationAutomatic];
     self.tryCreateRosterTimes = 3;
 }
 

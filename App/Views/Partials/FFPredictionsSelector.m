@@ -26,7 +26,7 @@
         self.backgroundColor = [UIColor colorWithWhite:1.f
                                                  alpha:.9f];
         // individual button
-        self.individualButton = [FFStyle clearButtonWithText:NSLocalizedString(@"Individual predictions", nil)
+        self.individualButton = [FFStyle clearButtonWithText:@"Individual predictions"
                                                  borderColor:[FFStyle lightGrey]];
         self.individualButton.frame = CGRectMake(-1.f, -1.f, 322.f, 52.f);
         self.individualButton.layer.cornerRadius = 0.f;
@@ -38,14 +38,14 @@
                         forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:self.individualButton];
         // roster button
-        self.rosterButton = [FFStyle clearButtonWithText:NSLocalizedString(@"Roster predictions", nil)
+        self.rosterButton = [FFStyle clearButtonWithText:@"Roster predictions"
                                              borderColor:[FFStyle lightGrey]];
         self.rosterButton.frame = CGRectMake(-1.f, 50.f, 322.f, 52.f);
         self.rosterButton.layer.cornerRadius = 0.f;
         self.rosterButton.titleLabel.textColor = [FFStyle darkGreyTextColor];
         [self.rosterButton setTitleColor:[FFStyle darkGreyTextColor]
                                 forState:UIControlStateNormal];
-        [self.rosterButton setTitle:NSLocalizedString(@"Roster predictions", nil)
+        [self.rosterButton setTitle:@"Roster predictions"
                            forState:UIControlStateNormal];
         self.rosterButton.titleLabel.font = [FFStyle regularFont:17.f];
         [self.rosterButton addTarget:self

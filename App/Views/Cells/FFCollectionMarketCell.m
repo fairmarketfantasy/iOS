@@ -29,7 +29,7 @@
         self.marketLabel.textColor = [FFStyle darkGreyTextColor];
         self.marketLabel.backgroundColor = [UIColor clearColor];
         self.marketLabel.textAlignment = NSTextAlignmentCenter;
-        self.marketLabel.text = NSLocalizedString(@"Market", nil);
+        self.marketLabel.text = @"Market";
         _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.f,
                                                                30.f,
                                                                self.contentView.frame.size.width,

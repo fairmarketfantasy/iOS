@@ -167,7 +167,7 @@ failure:
     [super authorizedJSONRequestWithRequestBlock:requestBlock success:success failure:
      ^void (NSURLRequest *req, NSHTTPURLResponse *resp, NSError *err, id res)
     {
-         failure(req, resp, err, res);
+        failure(req, resp, err, res);
     }];
 }
 
@@ -195,7 +195,7 @@ failure:
          NSLog(@"oauth crapped %@", error);
          NSError *dumbError = [NSError errorWithDomain:@"" code:400 userInfo:
                                @{ NSUnderlyingErrorKey: error,
-                                  NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid username or password", nil) }];
+                                  NSLocalizedDescriptionKey:@"Invalid username or password" }];
          failure(dumbError);
          //because 2 popups with errors
          //         failure(error);
