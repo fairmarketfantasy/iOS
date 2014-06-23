@@ -8,6 +8,12 @@
 
 #import "FFPredictHistoryCell.h"
 #import "FFStyle.h"
+#import "FFRosterPrediction.h"
+#import "FFDate.h"
+#import "FFSessionManager.h"
+#import "FFMarket.h"
+#import "FFContestType.h"
+#import "FFFantasyGame.h"
 
 @implementation FFPredictHistoryCell
 
@@ -137,6 +143,29 @@
         [self.contentView addSubview:captionAwardLabel];
     }
     return self;
+}
+
+- (void)setupWithPrediction:(FFRosterPrediction *)prediction
+{
+    BOOL isFinished = [prediction.state isEqualToString:@"finished"];
+    self.nameLabel.text = prediction.market.name;
+    self.teamLabel.text = prediction.contestType.name;
+    self.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.startedAt];
+    self.stateLabel.text = prediction.state;
+    self.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%li", (long)prediction.score.integerValue] : @"N/A";
+    self.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%li", (long)prediction.contestRankPayout.integerValue / 100] : @"N/A";
+    NSDateFormatter* formatter = [FFStyle timeFormatter];
+    
+    self.rankLabel.text = isFinished ?
+    [NSString stringWithFormat:@"%li of %li", (long)prediction.contestRank.integerValue, (long)prediction.contestType.maxEntries.integerValue]
+    : @"Not started yet";
+    
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        FFFantasyGame* firstGame = prediction.market.games.firstObject;
+        self.gameTimeLabel.text = firstGame ? [formatter stringFromDate:firstGame.gameTime] : @"N/A";
+    } else {
+        self.gameTimeLabel.text = prediction.startedAt ? [formatter stringFromDate:prediction.startedAt] : @"N/A";
+    }
 }
 
 @end

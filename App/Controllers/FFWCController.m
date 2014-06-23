@@ -21,7 +21,6 @@
 #import "FFWCPlayer.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "Reachability.h"
-#import "FFYourTeamDataSource.h"
 
 @interface FFWCController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 {
@@ -51,17 +50,14 @@
     
     //custom picker
     if (self.category == FFWCGroupWinners) {
-        self.picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 162.f)];
-        self.picker.delegate = self;
-        self.picker.dataSource = self;
-        self.picker.showsSelectionIndicator = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? NO : YES;
-        
-        CGAffineTransform t0 = CGAffineTransformMakeTranslation(self.picker.bounds.size.width/2, self.picker.bounds.size.height/2);
-        CGAffineTransform s0 = CGAffineTransformMakeScale(1.0, 0.47);
-        CGAffineTransform t1 = CGAffineTransformMakeTranslation(-self.picker.bounds.size.width/2, -self.picker.bounds.size.height/2);
-        self.picker.transform = CGAffineTransformConcat(t0, CGAffineTransformConcat(s0, t1));
-        self.picker.backgroundColor = [FFStyle darkGrey];
+        [self setupPicker];
     }
+    
+    //refresh control
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl.tintColor = [FFStyle lightGrey];
+    [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
     
     //reachability
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
@@ -70,6 +66,40 @@
 	if (!success)
 		DLog(@"Failed to start notifier");
     self.networkStatus = [internetReachability currentReachabilityStatus];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+}
+
+- (void)setupPicker
+{
+    self.picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0.f, 0.f, 320.f, 162.f)];
+    self.picker.delegate = self;
+    self.picker.dataSource = self;
+    self.picker.showsSelectionIndicator = SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ? NO : YES;
+    
+    CGAffineTransform t0 = CGAffineTransformMakeTranslation(self.picker.bounds.size.width/2, self.picker.bounds.size.height/2);
+    CGAffineTransform s0 = CGAffineTransformMakeScale(1.0, 0.47);
+    CGAffineTransform t1 = CGAffineTransformMakeTranslation(-self.picker.bounds.size.width/2, -self.picker.bounds.size.height/2);
+    self.picker.transform = CGAffineTransformConcat(t0, CGAffineTransformConcat(s0, t1));
+    self.picker.backgroundColor = [FFStyle darkGrey];
+}
+
+- (void)resetPicker
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupPicker];
+        [self.picker selectRow:0 inComponent:0 animated:NO];
+    });
+}
+
+- (void)pullToRefresh:(UIRefreshControl *)refreshControl
+{
+    [self.delegate refreshDataShowingAlert:NO completion:^{
+        [refreshControl endRefreshing];
+    }];
 }
 
 #pragma mark
@@ -81,17 +111,18 @@
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
-        
         if (internetStatus == NotReachable && previousStatus != NotReachable)
-            [self.tableView reloadData];
-        else
-            [self.picker reloadAllComponents];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
     }
 }
 
 - (BOOL)isSomethingWrong
 {
-    return self.networkStatus == NotReachable || self.dataSource.unpaidSubscription;
+    return ([self.errorDelegate isError] ||
+            [self.errorDelegate isUnpaid] ||
+            self.networkStatus == NotReachable);
 }
 
 #pragma mark - UITableViewDataSource
@@ -106,7 +137,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.candidates.count == 0 || [self isSomethingWrong])
+    if ([self isSomethingWrong])
         return 1;
     
     if (self.category == FFWCGroupWinners) {
@@ -143,8 +174,10 @@
             NSString *message = nil;
             if (self.networkStatus == NotReachable) {
                 message = @"No Internet Connection";
-            } else if ([self.dataSource unpaidSubscription]) {
-                message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
+            } else if ([self.errorDelegate isUnpaid]) {
+                message = [self.errorDelegate unpaidErrorMessage];
+            } else {
+                message = [self.errorDelegate errorMessage];
             }
             
             cell.message.text = message;
@@ -160,7 +193,7 @@
                 __weak FFWCController *weakSelf = self;
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
-                                   [weakSelf submitPredictionOnTeam:team inGame:nil];
+                                   [weakSelf.delegate submitPredictionOnTeam:team inGame:nil category:self.category];
                                }];
                 return cell;
             }
@@ -179,11 +212,11 @@
                 __weak FFWCController *weakSelf = self;
                 [cell.homePTButton setAction:kUIButtonBlockTouchUpInside
                                    withBlock:^{
-                                       [weakSelf submitPredictionOnTeam:game.homeTeam inGame:game];
+                                       [weakSelf.delegate submitPredictionOnTeam:game.homeTeam inGame:game category:self.category];
                                    }];
                 [cell.guestPTButton setAction:kUIButtonBlockTouchUpInside
                                     withBlock:^{
-                                       [weakSelf submitPredictionOnTeam:game.guestTeam inGame:game];
+                                        [weakSelf.delegate submitPredictionOnTeam:game.guestTeam inGame:game category:self.category];
                                     }];
                 
                 return cell;
@@ -197,7 +230,7 @@
                 __weak FFWCController *weakSelf = self;
                 [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                                withBlock:^{
-                                   [weakSelf submitPredictionOnPlayer:player];
+                                   [weakSelf.delegate submitPredictionOnPlayer:player category:self.category];
                                }];
                 return cell;
             }
@@ -214,7 +247,7 @@
         __weak FFWCController *weakSelf = self;
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{
-                           [weakSelf submitPredictionOnTeam:team inGame:nil];
+                           [weakSelf.delegate submitPredictionOnTeam:team inGame:nil category:self.category];
                        }];
         return cell;
     }
@@ -305,115 +338,6 @@
 {
     self.selectedCroupIndex = row;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
-}
-
-#pragma mark - Actions
-
-- (void)submitPredictionOnPlayer:(FFWCPlayer *)player
-{
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   FOOTBALL_WC, @"sport",
-                                   [[FFWCManager shared] stringForWCCategory:self.category], @"prediction_type",
-                                   player.statsId, @"predictable_id",
-                                   nil];
-    
-    FFAlertView* confirmAlert = [FFAlertView.alloc initWithTitle:nil
-                                                         message:[NSString stringWithFormat:@"Predict %@ ?", player.name]
-                                               cancelButtonTitle:@"Cancel"
-                                                 okayButtonTitle:@"Submit"
-                                                        autoHide:NO];
-    [confirmAlert showInView:self.navigationController.view];
-    @weakify(confirmAlert)
-    @weakify(self)
-    confirmAlert.onOkay = ^(id obj) {
-        @strongify(confirmAlert)
-        @strongify(self)
-        __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Individual Predictions"
-                                                               messsage:nil
-                                                           loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
-        
-        [FFIndividualPrediction submitPredictionForSession:self.session
-                                                    params:params
-                                                   success:^(id successObj) {
-                                                       [[FFWCManager shared] disablePTForPlayer:player];
-                                                       [self.tableView reloadData];
-                                                       [alert hide];
-                                                       
-                                                       FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
-                                                                                                       message:[successObj objectForKey:@"msg"]
-                                                                                             cancelButtonTitle:nil
-                                                                                               okayButtonTitle:@"OK"
-                                                                                                      autoHide:YES];
-                                                       [alert showInView:self.navigationController.view];
-                                                   } failure:^(NSError *error) {
-                                                       NSLog(@" {FFWCC} : submittion failed: %@", error);
-                                                       [alert hide];
-                                                   }];
-        [confirmAlert hide];
-    };
-    
-    confirmAlert.onCancel = ^(id obj) {
-        @strongify(confirmAlert)
-        [confirmAlert hide];
-    };
-}
-
-- (void)submitPredictionOnTeam:(FFWCTeam *)team inGame:(FFWCGame *)game
-{
-    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   FOOTBALL_WC, @"sport",
-                                   [[FFWCManager shared] stringForWCCategory:self.category], @"prediction_type",
-                                   team.statsId, @"predictable_id",
-                                   nil];
-    if (game) {
-        [params addEntriesFromDictionary:@{
-                                           @"game_stats_id" : game.statsId
-                                           }];
-    }
-    
-    FFAlertView* confirmAlert = [FFAlertView.alloc initWithTitle:nil
-                                                         message:[NSString stringWithFormat:@"Predict %@ ?", team.name]
-                                               cancelButtonTitle:@"Cancel"
-                                                 okayButtonTitle:@"Submit"
-                                                        autoHide:NO];
-    [confirmAlert showInView:self.navigationController.view];
-    @weakify(confirmAlert)
-    @weakify(self)
-    confirmAlert.onOkay = ^(id obj) {
-        @strongify(confirmAlert)
-        @strongify(self)
-        __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Individual Predictions"
-                                                               messsage:nil
-                                                           loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
-        
-        [FFIndividualPrediction submitPredictionForSession:self.session
-                                                    params:params
-                                                   success:^(id successObj) {
-                                                       [[FFWCManager shared] disablePTForTeam:team
-                                                                                       inGame:game
-                                                                                   inCategory:self.category];
-                                                       [self.tableView reloadData];
-                                                       [alert hide];
-                                                       
-                                                       FFAlertView* alert = [[FFAlertView alloc] initWithTitle:nil
-                                                                                                       message:[successObj objectForKey:@"msg"]
-                                                                                             cancelButtonTitle:nil
-                                                                                               okayButtonTitle:@"OK"
-                                                                                                      autoHide:YES];
-                                                       [alert showInView:self.navigationController.view];
-                                                   } failure:^(NSError *error) {
-                                                       NSLog(@" {FFWCC} : submittion failed: %@", error);
-                                                       [alert hide];
-                                                   }];
-        [confirmAlert hide];
-    };
-    
-    confirmAlert.onCancel = ^(id obj) {
-        @strongify(confirmAlert)
-        [confirmAlert hide];
-    };
 }
 
 @end

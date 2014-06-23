@@ -388,7 +388,7 @@
     } else if ([[FFSessionManager shared].currentSportName isEqualToString:@"MLB"]) {
         imageName = @"loginmlb";
     } else {
-        imageName = @"loginmlb";//@"login_wc.jpg";
+        imageName = @"loginmlb";
     }
     
     [header setBackgroundImage:[UIImage imageNamed:imageName]];

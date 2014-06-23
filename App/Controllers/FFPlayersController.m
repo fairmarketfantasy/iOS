@@ -1,20 +1,17 @@
 //
-//  FFWideReceiverController.m
+//  FFPlayersController.m
 //  FMF Football
 //
-//  Created by Yuriy Pitomets on 3/19/14.
+//  Created by Anton Chuev on 6/5/14.
 //  Copyright (c) 2014 FairMarketFantasy. All rights reserved.
 //
 
-#import "FFWideReceiverController.h"
-#import "FFYourTeamDataSource.h"
-#import "FFPagerController.h"
+#import "FFPlayersController.h"
 #import "FFWideReceiverTable.h"
 #import "FFWideReceiverCell.h"
 #import "FFTeamAddCell.h"
 #import "FFNoConnectionCell.h"
 #import "FFCollectionMarketCell.h"
-#import "FFNonFantasyGameCell.h"
 #import "FFMarketsCell.h"
 #import "FFAutoFillCell.h"
 #import "FFRosterTableHeader.h"
@@ -25,7 +22,6 @@
 #import "FFDate.h"
 #import "FFMarketSet.h"
 #import "FFPathImageView.h"
-#import "FFPTController.h"
 #import "FFAlertView.h"
 #import "Reachability.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
@@ -36,30 +32,23 @@
 #import "FFUser.h"
 #import "FFRoster.h"
 #import "FFPlayer.h"
-#import "FFTeam.h"
-#import "FFNonFantasyGame.h"
-#import "FFSessionManager.h"
 
-@interface FFWideReceiverController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
+@interface FFPlayersController () <UITableViewDataSource, UITableViewDelegate, UIPickerViewDataSource,
+UIPickerViewDelegate, FFMarketSelectorDelegate, FFMarketSelectorDataSource>
 
-@property(nonatomic, assign) NSUInteger position;
-@property(nonatomic, assign) NetworkStatus networkStatus;
-@property(nonatomic, assign) BOOL isServerError;
-
-@property(nonatomic) FFMarketSet* marketsSetRegular;
-@property(nonatomic) FFMarketSet* marketsSetSingle;
-@property(nonatomic, assign) NSUInteger tryCreateRosterTimes;
-
-@property(nonatomic, strong) UIPickerView *picker;
+@property (nonatomic, strong) UIPickerView *picker;
+@property (nonatomic, strong) FFMarketSet* marketsSetRegular;
+@property (nonatomic, strong) FFMarketSet* marketsSetSingle;
+@property (nonatomic, assign) NetworkStatus networkStatus;
 
 @end
 
-@implementation FFWideReceiverController
+@implementation FFPlayersController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.position = 0;
+    _position = 0;
     self.tableView = [[FFWideReceiverTable alloc] initWithFrame:self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -72,7 +61,7 @@
     [self.tableView addSubview:refreshControl];
     
     //reachability
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusHasChanged:) name:kReachabilityChangedNotification object:nil];
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
 	if ( !success )
@@ -100,18 +89,14 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-        
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        [self.picker reloadAllComponents];
-        if (self.players.count == 0) {
-            [self fetchPlayersWithShowingAlert:NO completion:^{
-                [self.tableView reloadData];
-            }];
-        } else {
-            [self.tableView reloadData];
-        }
+    
+    [self.picker reloadAllComponents];
+    if (self.players.count == 0) {
+        [self.delegate fetchPlayersForPosition:self.position showAlert:NO completion:nil];
     } else {
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
     }
 }
 
@@ -119,59 +104,29 @@
 
 - (void)pullToRefresh:(UIRefreshControl *)refreshControl
 {
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        [self fetchPlayersWithShowingAlert:NO completion:^{
-            [self.tableView reloadData];
-            [refreshControl endRefreshing];
-        }];
-    } else {
-        [self.delegate fetchGamesShowAlert:NO withCompletion:^{
-            [self.tableView reloadData];
-            [refreshControl endRefreshing];
-        }];
-    }
+    [self.delegate fetchPlayersForPosition:self.position showAlert:NO completion:^{
+        [refreshControl endRefreshing];
+    }];
 }
 
 #pragma mark -
 
-- (void)checkNetworkStatus:(NSNotification *)notification
+- (void)networkStatusHasChanged:(NSNotification *)notification
 {
     NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
     NetworkStatus previousStatus = self.networkStatus;
     
     if (internetStatus != self.networkStatus) {
         self.networkStatus = internetStatus;
-        
-        if ((internetStatus != NotReachable && previousStatus == NotReachable) ||
-            (internetStatus == NotReachable && previousStatus != NotReachable)) {
-            
-            if (internetStatus == NotReachable) {
+        if (internetStatus == NotReachable && previousStatus != NotReachable) {
+            dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
-            } else {
-                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-                    [self fetchPlayersWithShowingAlert:YES completion:^{
-                        [self.tableView reloadData];
-                    }];
-                }
-            }
+            });
         }
-    }
+    }    
 }
 
 #pragma mark - public
-
-- (void)resetPosition
-{
-    self.position = 0;
-    [self.picker selectRow:0 inComponent:0 animated:NO];
-}
-
-- (void)reloadWithServerError:(BOOL)isError
-{
-    self.isServerError = isError;
-    [self.picker reloadAllComponents];
-    [self.tableView reloadData];
-}
 
 - (void)showPosition:(NSString*)position
 {
@@ -193,79 +148,16 @@
 
 - (BOOL)isSomethingWrong
 {
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        return (self.networkStatus == NotReachable ||
-                self.isServerError ||
-                self.dataSource.unpaidSubscription == YES ||
-                self.markets.count == 0);
-    } else {
-        return (self.networkStatus == NotReachable ||
-                self.isServerError ||
-                self.dataSource.unpaidSubscription == YES ||
-                [self.dataSource availableGames].count == 0);
-    }
+    return ([self.errorDelegate isError] ||
+            [self.errorDelegate isUnpaid] ||
+            self.networkStatus == NotReachable ||
+            self.markets.count == 0);
 }
 
 - (void)selectPosition:(NSUInteger)position
 {
-    self.position = position;
-    [self fetchPlayersWithShowingAlert:YES completion:^{
-        [self.tableView reloadData];
-    }];
-}
-
-- (void)fetchPlayersWithShowingAlert:(BOOL)shouldShow completion:(void(^)(void))block
-{
-    if ([self isSomethingWrong]) {
-        block();
-        return;
-    }
-    
-    if (![self.dataSource.currentRoster objId]) {
-        self.players = @[];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                      withRowAnimation:UITableViewRowAnimationAutomatic];
-        return;
-    }
-    
-    __block FFAlertView* alert = nil;
-    if (shouldShow) {
-        alert = [[FFAlertView alloc] initWithTitle:@"Loading Players"
-                                          messsage:nil
-                                      loadingStyle:FFAlertViewLoadingStylePlain];
-        [alert showInView:self.navigationController.view];
-    }
-    
-    __block BOOL shouldRemoveBenched = [[self.dataSource currentRoster] removeBenched].integerValue == 1;
-    
-    @weakify(self)
-    [FFPlayer fetchPlayersForRoster:[self.dataSource rosterId]
-                           position:[self.dataSource uniquePositions][self.position]
-                     removedBenched:shouldRemoveBenched
-                            session:self.session
-                            success:
-     ^(id successObj) {
-         @strongify(self)
-         self.isServerError = NO;
-         self.players = successObj;
-         //         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-         //                       withRowAnimation:UITableViewRowAnimationAutomatic];
-         if(alert)
-             [alert hide];
-         if (block)
-             block();
-     }
-                            failure:
-     ^(NSError *error) {
-         @strongify(self)
-         self.players = @[];
-         //         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-         //                       withRowAnimation:UITableViewRowAnimationAutomatic];
-         if(alert)
-             [alert hide];
-         if (block)
-             block();
-     }];
+    _position = position;
+    [self.delegate fetchPlayersForPosition:position showAlert:YES completion:nil];
 }
 
 #pragma mark - UIPickerViewDataSource
@@ -324,36 +216,24 @@
             return 1;
         }
         
-        return [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? 2 : 1;
+        return 2;
     }
     
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        return self.players.count;
-    } else {
-        return [self.dataSource availableGames].count;
-    }
+    return self.players.count;
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath*)indexPath
 {
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-                //navigation bar height + status bar height = 64
-                return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
-            } else {
-                return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 70.f;
-            }
+            //navigation bar height + status bar height = 64
+            return [self isSomethingWrong] ? [UIScreen mainScreen].bounds.size.height - 64.f : 60.f;
         } else {
             return 76.f;
         }
     }
-    
-    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-        return 80.f;
-    } else {
-        return 100.f;
-    }
+
+    return 80.f;
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath*)indexPath
@@ -366,76 +246,32 @@
                 NSString *message = nil;
                 if (self.networkStatus == NotReachable) {
                     message = @"No Internet Connection";
-                } else if ([self.dataSource unpaidSubscription]) {
-                    message = @"Your free trial has ended. We hope you have enjoyed playing. To continue please visit our site: https//:predictthat.com";
-                } else if (([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] && self.markets.count == 0) ||
-                           ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] == NO && [self.dataSource availableGames].count == 0)) {
+                } else if ([self.errorDelegate isUnpaid]) {
+                    message = [self.errorDelegate unpaidErrorMessage];
+                } else if (self.markets.count == 0) {
                     message = @"No Games Scheduled";
+                } else {
+                    message = [self.errorDelegate errorMessage];
                 }
-
+                
                 cell.message.text = message;
                 return cell;
             }
             
-            if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-                return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
-            } else {
-                return [self provideAutoFillCellForTable:tableView atIndexPath:indexPath];
-            }
-            
+            return [self provideMarketsCellForTable:tableView atIndexPath:indexPath];
         } else if (indexPath.row == 1) {
-            //            [self provideWideRecieverCellForTable:tableView atIndexPath:indexPath];
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kPickerCellIdentifier forIndexPath:indexPath];
             [cell addSubview:self.picker];
             return cell;
         }
     } else if (indexPath.section == 1) {
-        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-            return [self provideTeamAddCellForTable:tableView atIndexPath:indexPath];
-        } else {
-            FFNonFantasyGame *game = [[self.dataSource availableGames] objectAtIndex:indexPath.row];
-            return [self provideGameCellForGame:game
-                                          table:tableView
-                                    atIndexPath:indexPath];
-        }
+        return [self provideTeamAddCellForTable:tableView atIndexPath:indexPath];
     }
     
     return nil;
 }
 
 #pragma mark - Cells
-
-- (FFNonFantasyGameCell *)provideGameCellForGame:(FFNonFantasyGame *)game table:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
-{
-    FFNonFantasyGameCell *cell = [tableView dequeueReusableCellWithIdentifier:kNonFantasyGameCellIdentifier
-                                                                 forIndexPath:indexPath];
-    [cell setupWithGame:game];
-    
-    __weak FFWideReceiverController *weakSelf = self;
-    [cell.addHomeTeamBtn setAction:kUIButtonBlockTouchUpInside
-                         withBlock:^{
-                             FFNonFantasyGame *game = [weakSelf.dataSource availableGames][indexPath.row];
-                             [weakSelf.delegate addTeam:[game homeTeam]];
-                         }];
-    
-    [cell.addAwayTeamBtn setAction:kUIButtonBlockTouchUpInside
-                         withBlock:^{
-                             FFNonFantasyGame *game = [weakSelf.dataSource availableGames][indexPath.row];
-                             [weakSelf.delegate addTeam:[game awayTeam]];
-                         }];
-    
-    [cell.homePTButton setAction:kUIButtonBlockTouchUpInside
-                       withBlock:^{
-                           [self.delegate makeIndividualPredictionOnTeam:game.homeTeam];
-                       }];
-    
-    [cell.awayPTButton setAction:kUIButtonBlockTouchUpInside
-                       withBlock:^{
-                           [self.delegate makeIndividualPredictionOnTeam:game.awayTeam];
-                       }];
-    
-    return cell;
-}
 
 - (FFAutoFillCell *)provideAutoFillCellForTable:(UITableView *)tableView atIndexPath:(NSIndexPath *)indexPath
 {
@@ -480,7 +316,7 @@
     if (self.players.count > indexPath.row) {
         __block FFPlayer* player = self.players[indexPath.row];
         
-        cell.titleLabel.text = [NSString stringWithFormat:@"%@ PPG %i", player.team, [player.ppg integerValue]];
+        cell.titleLabel.text = [NSString stringWithFormat:@"%@ PPG %li", player.team, (long)[player.ppg integerValue]];
         cell.nameLabel.text = player.name;
         cell.costLabel.text = [FFStyle.priceFormatter stringFromNumber:@([player.buyPrice floatValue])];
         BOOL benched = player.benched.integerValue == 1;
@@ -497,8 +333,9 @@
         [cell.PTButton setAction:kUIButtonBlockTouchUpInside
                        withBlock:^{
                            @strongify(self)
-                           [self.parentViewController performSegueWithIdentifier:@"GotoPT"
-                                                                          sender:player]; // TODO: refactode it (?)
+                           [self.dataSource showIndividualPredictionsForPlayer:player];
+//                           [self.parentViewController performSegueWithIdentifier:@"GotoPT"
+//                                                                          sender:player]; // TODO: refactode it (?)
                        }];
         [cell.addButton setAction:kUIButtonBlockTouchUpInside
                         withBlock:^{
@@ -537,10 +374,6 @@
 {
     if (section == 1) {
         FFRosterTableHeader* view = [FFRosterTableHeader new];
-        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] == NO) {
-            view.titleLabel.text = @"Games for today";
-            return view;
-        }
         NSString* positionName = @"";
         if (self.delegate && self.networkStatus != NotReachable && [self.dataSource uniquePositions].count > 0) {
             positionName = [self.dataSource uniquePositions][self.position];
@@ -618,7 +451,6 @@
 - (void)marketSelected:(FFMarket*)selectedMarket
 {
     [self.dataSource setCurrentMarket:selectedMarket];
-    self.tryCreateRosterTimes = 3;
 }
 
 @end

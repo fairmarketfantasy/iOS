@@ -13,6 +13,10 @@
 #import <Foundation/Foundation.h>
 #import <libextobjc/EXTScope.h>
 #import "FFStyle.h"
+<<<<<<< HEAD
+=======
+
+>>>>>>> pre-relised-v1.4(trade)
 #define LOG_FMT_STR(format, ...) [NSString stringWithFormat:(@"%s [Line %d] " format), \
                                                             __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__]
 #define DLog(format, ...) CFShow((__bridge CFStringRef)LOG_FMT_STR(format, ##__VA_ARGS__))

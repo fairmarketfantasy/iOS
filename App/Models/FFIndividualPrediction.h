@@ -18,8 +18,10 @@
 @property(nonatomic) NSArray* eventPredictions;
 @property(nonatomic) NSString* playerName;
 @property(nonatomic) NSString* predictThat;
+@property(nonatomic) NSString* currentPT;
 @property(nonatomic) NSString* award;
 @property(nonatomic) NSString* state;
+@property(nonatomic) NSString* tradeMessage;
 @property(nonatomic) FFDate* gameTime;
 @property(nonatomic) FFDate* gameDay;
 @property(nonatomic) NSNumber* gameResult;
@@ -28,5 +30,16 @@
                             params:(NSDictionary *)params
                            success:(SBSuccessBlock)success
                            failure:(SBErrorBlock)failure;
+
++ (void)submitPredictionForTeam:(NSString *)teamId
+                         inGame:(NSString *)gameId
+                        session:(SBSession*)session
+                        success:(SBSuccessBlock)success
+                        failure:(SBErrorBlock)failure;
+
++ (void)tradePredictionForSession:(FFSession *)session
+                           params:(NSDictionary *)params
+                          success:(SBSuccessBlock)success
+                          failure:(SBErrorBlock)failure;
 
 @end

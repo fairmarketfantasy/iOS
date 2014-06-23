@@ -33,26 +33,25 @@
 @interface FFPredictHistoryController () <UITableViewDataSource, UITableViewDelegate,
 FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
+@property(nonatomic, strong) UIButton* typeButton;
+@property(nonatomic, strong) FFPredictHistoryTable* tableView;
+@property(nonatomic, strong) FFPredictionsSelector* typeSelector;
+// model
+@property(nonatomic, strong) FFPredictionSet* individualActivePredictions;
+@property(nonatomic, strong) FFPredictionSet* individualHistoryPredictions;
+@property(nonatomic, strong) FFPredictionSet* rosterActivePredictions;
+@property(nonatomic, strong) FFPredictionSet* rosterHistoryPredictions;
+
 @property(nonatomic, assign) FFPredictionsType predictionType;
 @property(nonatomic, assign) FFPredictionState predictionState;
-@property(nonatomic) UIButton* typeButton;
-@property(nonatomic) FFPredictHistoryTable* tableView;
-@property(nonatomic) FFPredictionsSelector* typeSelector;
-// model
-@property(nonatomic) FFPredictionSet* individualActivePredictions;
-@property(nonatomic) FFPredictionSet* individualHistoryPredictions;
-@property(nonatomic) FFPredictionSet* rosterActivePredictions;
-@property(nonatomic) FFPredictionSet* rosterHistoryPredictions;
-
 @property(nonatomic, assign) NetworkStatus networkStatus;
 @property(nonatomic, assign) BOOL unpaid;
+@property(nonatomic, assign) BOOL needToRefresh;
 
 //pagination stuff
 @property(nonatomic, strong) NSMutableArray *predictions;
 @property(nonatomic, assign) NSUInteger pageNumber;
 @property(nonatomic, assign) BOOL nextPageIsEmpty;
-
-@property(nonatomic, assign) BOOL needToRefresh;
 
 @end
 
@@ -103,7 +102,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
     [refreshControl addTarget:self action:@selector(pullToRefresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(checkNetworkStatus:) name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(networkStatusHasChanged:) name:kReachabilityChangedNotification object:nil];
     
     internetReachability = [Reachability reachabilityForInternetConnection];
 	BOOL success = [internetReachability startNotifier];
@@ -175,7 +174,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 #pragma mark
 
-- (void)checkNetworkStatus:(NSNotification *)notification
+- (void)networkStatusHasChanged:(NSNotification *)notification
 {
     NetworkStatus internetStatus = [internetReachability currentReachabilityStatus];
     NetworkStatus previousStatus = self.networkStatus;
@@ -232,6 +231,52 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
 
 #pragma mark - button actions
 
+- (void)tradeIndividulPrediction:(FFIndividualPrediction *)prediction
+{
+    FFAlertView* confirmAlert = [FFAlertView.alloc initWithTitle:nil
+                                                         message:prediction.tradeMessage
+                                               cancelButtonTitle:@"Cancel"
+                                                 okayButtonTitle:@"Submit"
+                                                        autoHide:NO];
+    [confirmAlert showInView:self.view];
+    
+    @weakify(confirmAlert)
+    @weakify(self)
+    confirmAlert.onOkay = ^(id obj) {
+        @strongify(confirmAlert)
+        @strongify(self)
+        __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Trading..."
+                                                               messsage:nil
+                                                           loadingStyle:FFAlertViewLoadingStylePlain];
+        [alert showInView:self.view];
+        
+        [FFIndividualPrediction tradePredictionForSession:self.session
+                                                   params:@{
+                                                            @"id" : prediction.objId,
+                                                            @"sport" : [FFSessionManager shared].currentSportName
+                                                            }
+                                                  success:^(id successObj) {
+                                                      [alert hide];
+                                                      FFAlertView *successAlert = [[FFAlertView alloc] initWithTitle:nil
+                                                                                                             message:[successObj objectForKey:@"msg"]
+                                                                                                   cancelButtonTitle:nil
+                                                                                                     okayButtonTitle:@"OK"
+                                                                                                            autoHide:YES];
+                                                      [successAlert showInView:self.view];
+                                                      [self.predictions removeObject:prediction];
+                                                      [self.tableView reloadData];
+                                                  } failure:^(NSError *error) {
+                                                      NSLog(@"Error: %@", error);
+                                                  }];
+        [confirmAlert hide];
+    };
+    
+    confirmAlert.onCancel = ^(id obj) {
+        @strongify(confirmAlert)
+        [confirmAlert hide];
+    };
+}
+
 - (void)showOrHideTypeSelectorIfNeeded
 {
     if (!self.typeSelector.userInteractionEnabled) {
@@ -284,54 +329,19 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                                                             forIndexPath:indexPath];
             
             if (self.predictions.count > indexPath.row) {
-                __block FFIndividualPrediction* prediction = self.predictions[indexPath.row];
-                cell.choiceLabel.text = prediction.playerName;
-                cell.eventLabel.text = prediction.marketName;
+                FFIndividualPrediction* prediction = self.predictions[indexPath.row];
+                [cell setupWithPrediction:prediction];
                 
-                cell.ptLabel.text = prediction.predictThat;
-                if (prediction.eventPredictions.count > 0) {
-                    NSDictionary* eventPrediction = prediction.eventPredictions.firstObject;
-                    if (eventPrediction) {
-                        cell.predictLabel.text = [NSString stringWithFormat:@"%@: %@ %@",
-                                                  [eventPrediction[@"diff"] isEqualToString:@"less"]
-                                                  ? @"Under": @"Over", // TODO: refactor it and move to model
-                                                  eventPrediction[@"value"],
-                                                  eventPrediction[@"event_type"]];
-                    }
-                }
-                
-                NSString *dayString = nil;
-                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-                    dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
+                if ([prediction.state isEqualToString:@"submitted"] && prediction.currentPT) {
+                    cell.tradeButton.hidden = NO;
+                    __weak FFPredictHistoryController *weakSelf = self;
+                    [cell.tradeButton setAction:kUIButtonBlockTouchUpInside
+                                      withBlock:^{
+                                          [weakSelf tradeIndividulPrediction:prediction];
+                                      }];
                 } else {
-                    dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameTime];
+                    cell.tradeButton.hidden = YES;
                 }
-                if ([prediction.marketName isEqualToString:@"MVP"]) {
-                    dayString = @"N/A";
-                    cell.timeLabel.text = @"N/A";
-                } else {
-                    cell.timeLabel.text = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
-                }
-                cell.dayLabel.text = dayString;
-                
-                cell.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
-                NSString *resultString = nil;
-                //TODO:field gameResult in fantasy and anon-fantasy has different type
-                if ([prediction.state isEqualToString:@"cancelled"]) {
-                    resultString = @"Didn't play";
-                } else if ([prediction.gameResult isKindOfClass:[NSNumber class]]) {
-                    if (prediction.gameResult)
-                        resultString = [prediction.gameResult stringValue];
-                    else
-                        resultString = @"N/A";
-                } else if ([prediction.gameResult isKindOfClass:[NSString class]]) {
-                    resultString = ((NSString *)prediction.gameResult && [(NSString *)prediction.gameResult isEqualToString:@""] == NO) ?
-                    (NSString *)prediction.gameResult : @"N/A";
-                } else {
-                    resultString = @"N/A";
-                }
-                
-                cell.resultLabel.text = resultString;
             }
             return cell;
         }
@@ -349,25 +359,7 @@ FFPredictionsProtocol, SBDataObjectResultSetDelegate, FFPredictHistoryProtocol>
                                        [self performSegueWithIdentifier:@"GotoPredictRoster"
                                                                  sender:prediction]; // TODO: refactode it (?)
                                    }];
-                BOOL isFinished = [prediction.state isEqualToString:@"finished"];
-                cell.nameLabel.text = prediction.market.name;
-                cell.teamLabel.text = prediction.contestType.name;
-                cell.dayLabel.text = [FFStyle.dayFormatter stringFromDate:prediction.startedAt];
-                cell.stateLabel.text = prediction.state;
-                cell.pointsLabel.text = isFinished ? [NSString stringWithFormat:@"%li", (long)prediction.score.integerValue] : @"N/A";
-                cell.awardLabel.text = isFinished ? [NSString stringWithFormat:@"%li", (long)prediction.contestRankPayout.integerValue / 100] : @"N/A";
-                NSDateFormatter* formatter = [FFStyle timeFormatter];
-                
-                cell.rankLabel.text = isFinished ?
-                [NSString stringWithFormat:@"%li of %li", (long)prediction.contestRank.integerValue, (long)prediction.contestType.maxEntries.integerValue]
-                : @"Not started yet";
-                
-                if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
-                    FFFantasyGame* firstGame = prediction.market.games.firstObject;
-                    cell.gameTimeLabel.text = firstGame ? [formatter stringFromDate:firstGame.gameTime] : @"N/A";
-                } else {
-                    cell.gameTimeLabel.text = prediction.startedAt ? [formatter stringFromDate:prediction.startedAt] : @"N/A";
-                }
+                [cell setupWithPrediction:prediction];
             }
             return cell;
         }

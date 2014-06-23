@@ -8,6 +8,9 @@
 
 #import "FFWebViewController.h"
 #import "FFLogo.h"
+#import "FFAlertView.h"
+
+#define ALERT_TAG 0xCCCC
 
 @interface FFWebViewController () <UIWebViewDelegate>
 
@@ -35,7 +38,7 @@
                                                                                  target:self
                                                                                selector:@selector(close:)
                                                                           leftElseRight:YES];
-    [self updateState];
+//    [self updateState];
 
     self.webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
     self.webView.backgroundColor = [FFStyle darkGreen];
@@ -124,7 +127,9 @@
 
 - (void)finishLoad
 {
-    [self updateState];
+//    [self updateState];
+    FFAlertView *alert = (FFAlertView *)[self.view viewWithTag:ALERT_TAG];
+    [alert hide];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
@@ -157,7 +162,12 @@
 - (void)webViewDidStartLoad:(UIWebView*)webView
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-    [self updateState];
+    FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
+                                                   messsage:@"Loading..."
+                                               loadingStyle:FFAlertViewLoadingStylePlain];
+    alert.tag = ALERT_TAG;
+    [alert showInView:self.view];
+//    [self updateState];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView*)webView

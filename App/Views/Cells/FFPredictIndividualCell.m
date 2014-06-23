@@ -7,6 +7,9 @@
 //
 
 #import "FFPredictIndividualCell.h"
+#import "FFIndividualPrediction.h"
+#import "FFSessionManager.h"
+#import "FFDate.h"
 
 @implementation FFPredictIndividualCell
 
@@ -29,6 +32,21 @@
         separator2.backgroundColor = [UIColor colorWithWhite:1.f
                                                        alpha:.5f];
         [self.contentView addSubview:separator2];
+        // button
+        if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] == NO) {
+            _tradeButton = [FFStyle coloredButtonWithText:@"Trade"
+                                                    color:[FFStyle brightBlue]
+                                              borderColor:[UIColor clearColor]];
+            self.tradeButton.frame = CGRectMake(205.f, 15.f, 100.f, 30.f);
+            self.tradeButton.titleEdgeInsets = UIEdgeInsetsMake(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ?
+                                                                3.f : 5.5f,
+                                                                0.f, 0.f, 0.f);
+            self.tradeButton.titleLabel.font = [FFStyle blockFont:17.f];
+            [self.tradeButton setTitleColor:[FFStyle white]
+                                   forState:UIControlStateNormal];
+            [self.contentView addSubview:self.tradeButton];
+        }
+        
         // labels
         _choiceLabel = [[UILabel alloc] initWithFrame:
                       CGRectMake(10.f, 10.f, 190.f, 25.f)];
@@ -55,7 +73,7 @@
         self.ptLabel.textColor = [FFStyle darkGreyTextColor];
         [self.contentView addSubview:self.ptLabel];
         _predictLabel = [[UILabel alloc] initWithFrame:
-                         CGRectMake(90.f, 120.f, 80.f, 30.f)];
+                         CGRectMake(90.f, [[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS] ? 120.f : 115.f, 80.f, 30.f)];
         self.predictLabel.adjustsFontSizeToFitWidth = YES;
         self.predictLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.predictLabel.minimumScaleFactor = .8f;
@@ -127,6 +145,74 @@
         [self.contentView addSubview:captionResultLabel];
     }
     return self;
+}
+
+- (void)setupWithPrediction:(FFIndividualPrediction *)prediction
+{
+    //title
+    if ([[FFSessionManager shared].currentSportName isEqualToString:FOOTBALL_WC]) {
+        self.choiceLabel.text = prediction.marketName;
+        self.eventLabel.text = prediction.playerName;
+    } else {
+        self.choiceLabel.text = prediction.playerName;
+        self.eventLabel.text = prediction.marketName;
+    }
+    //day
+    NSString *dayString = nil;
+    NSString *timeString = nil;
+    if ([[FFSessionManager shared].currentCategoryName isEqualToString:FANTASY_SPORTS]) {
+        dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameDay];
+        timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
+    } else {
+        NSDate *defaultDate = [NSDate dateWithTimeIntervalSinceReferenceDate:0];
+        if ([prediction.gameTime isEqualToDate:defaultDate]) {
+            dayString = timeString = @"N/A";
+        } else {
+            dayString = [[FFStyle dayFormatter] stringFromDate:prediction.gameTime];
+            timeString = [[FFStyle timeFormatter] stringFromDate:prediction.gameTime];
+        }
+    }
+    self.dayLabel.text = dayString;
+    //time
+    self.timeLabel.text = timeString;
+    //pt
+    self.ptLabel.text = prediction.predictThat;
+    //prediction
+    if (prediction.eventPredictions.count > 0) {
+        NSDictionary* eventPrediction = prediction.eventPredictions.firstObject;
+        if (eventPrediction) {
+            self.predictLabel.text = [NSString stringWithFormat:@"%@: %@ %@",
+                                      [eventPrediction[@"diff"] isEqualToString:@"less"]
+                                      ? @"Under": @"Over", // TODO: refactor it and move to model
+                                      eventPrediction[@"value"],
+                                      eventPrediction[@"event_type"]];
+        }
+    } else {
+        self.predictLabel.text = @"N/A";
+    }
+    
+    //award
+    CGFloat award = [prediction.award floatValue];
+//    self.awaidLabel.text = prediction.award ? prediction.award : @"N/A";
+    self.awaidLabel.text = prediction.award ? [NSString stringWithFormat:@"%.1f", award] : @"N/A";
+    //result
+    NSString *resultString = nil;
+    //TODO:field gameResult in fantasy and anon-fantasy has different type
+    if ([prediction.state isEqualToString:@"cancelled"]) {
+        resultString = @"Didn't play";
+    } else if ([prediction.gameResult isKindOfClass:[NSNumber class]]) {
+        if (prediction.gameResult)
+            resultString = [prediction.gameResult stringValue];
+        else
+            resultString = @"N/A";
+    } else if ([prediction.gameResult isKindOfClass:[NSString class]]) {
+        resultString = ((NSString *)prediction.gameResult && [(NSString *)prediction.gameResult isEqualToString:@""] == NO) ?
+        (NSString *)prediction.gameResult : @"N/A";
+    } else {
+        resultString = @"N/A";
+    }
+    
+    self.resultLabel.text = resultString;
 }
 
 @end

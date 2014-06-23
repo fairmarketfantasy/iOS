@@ -103,7 +103,7 @@
         [self.contentView addSubview:self.awayTeamName];
 
         // date
-        self.datelabel = [[UILabel alloc] initWithFrame:CGRectMake(120.f, 70.f, 80.f, 20.f)];
+        self.datelabel = [[UILabel alloc] initWithFrame:CGRectMake(110.f, 70.f, 100.f, 20.f)];
         self.datelabel.textAlignment = NSTextAlignmentCenter;
         self.datelabel.backgroundColor = [UIColor clearColor];
         self.datelabel.font = [FFStyle regularFont:14.f];
@@ -184,7 +184,10 @@
     
     self.homeTeamName.text = game.homeTeamName;
     self.awayTeamName.text = game.awayTeamName;
-    self.datelabel.text = [[FFDate prettyDateFormatter] stringFromDate:game.gameTime];
+    
+    NSString *dayOfMonth = [[FFStyle dayOfMonthFormatter] stringFromDate:game.gameTime];
+    NSString *dayOfWeak = [[FFStyle dayOfWeekFormatter] stringFromDate:game.gameTime];
+    self.datelabel.text = [NSString stringWithFormat:@"%@%@ @ %@", dayOfWeak, dayOfMonth, [[FFStyle timeFormatter] stringFromDate:game.gameTime]];
     
     self.addAwayTeamBtn.enabled = !game.awayTeam.selected;
     self.addHomeTeamBtn.enabled = !game.homeTeam.selected;

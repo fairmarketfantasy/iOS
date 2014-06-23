@@ -25,6 +25,8 @@
 @dynamic gameTime;
 @dynamic gameDay;
 @dynamic gameResult;
+@dynamic currentPT;
+@dynamic tradeMessage;
 
 + (NSString*)tableName
 {
@@ -45,6 +47,7 @@
 {
     return [[super propertyToNetworkKeyMapping] dictionaryByMergingWithDictionary:
             @{
+              @"currentPT" : @"current_pt",
               @"playerId" : @"player_id",
               @"playerStatId" : @"player_stat_id",
               @"marketName" : @"market_name",
@@ -55,7 +58,8 @@
               @"state" : @"state",
               @"gameTime" : @"game_time",
               @"gameDay" : @"game_day",
-              @"gameResult" : @"game_result"
+              @"gameResult" : @"game_result",
+              @"tradeMessage" : @"trade_message"
               }];
 }
 // TODO: FFEventPrediction
@@ -84,6 +88,44 @@
 {
     [session authorizedJSONRequestWithMethod:@"POST"
                                         path:@"/create_prediction"
+                                   paramters:params
+                                     success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+                                         success(JSON);
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+                                         failure(error);
+                                     }];
+}
+
++ (void)submitPredictionForTeam:(NSString *)teamId
+                         inGame:(NSString *)gameId
+                        session:(SBSession*)session
+                        success:(SBSuccessBlock)success
+                        failure:(SBErrorBlock)failure
+{
+    NSDictionary *params = @{
+                             @"game_stats_id" : gameId,
+                             @"team_stats_id" : teamId
+                             };
+    
+    [session authorizedJSONRequestWithMethod:@"POST"
+                                        path:@"/game_predictions"
+                                   paramters:params
+                                     success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
+                                         if(success)
+                                             success(JSON);
+                                     } failure:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, NSError *error, id JSON) {
+                                         if (failure)
+                                             failure(error);
+                                     }];
+}
+
++ (void)tradePredictionForSession:(FFSession *)session
+                           params:(NSDictionary *)params
+                          success:(SBSuccessBlock)success
+                          failure:(SBErrorBlock)failure
+{
+    [session authorizedJSONRequestWithMethod:@"DELETE"
+                                        path:@"/trade_prediction"
                                    paramters:params
                                      success:^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON) {
                                          success(JSON);

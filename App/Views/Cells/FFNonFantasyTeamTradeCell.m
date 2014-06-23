@@ -65,7 +65,9 @@
     
     [self.avatar draw];
     
-    self.titleLabel.text = [[FFDate prettyDateFormatter] stringFromDate:team.gameDate];
+    NSString *dayOfMonth = [[FFStyle dayOfMonthFormatter] stringFromDate:team.gameDate];
+    NSString *dayOfWeak = [[FFStyle dayOfWeekFormatter] stringFromDate:team.gameDate];
+    self.titleLabel.text = [NSString stringWithFormat:@"%@%@ @ %@", dayOfWeak, dayOfMonth, [[FFStyle timeFormatter] stringFromDate:team.gameDate]];
     
     self.ptLabel.text = [NSString stringWithFormat:@"%i", team.pt];
     self.teamNameLabel.text = team.name;
