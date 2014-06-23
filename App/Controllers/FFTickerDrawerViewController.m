@@ -117,7 +117,7 @@
     if (self.dontTickUntil) {
         NSDate* now = [NSDate date];
         if ([now compare:self.dontTickUntil] == NSOrderedAscending) {
-            DebugLog(@"ignoring ticker tick");
+            NSLog(@"ignoring ticker tick");
             return [self performSelector:@selector(tick)
                               withObject:nil
                               afterDelay:TICK_INTERVAL];

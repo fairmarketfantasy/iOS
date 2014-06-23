@@ -45,7 +45,7 @@
 {
     if (_banner) {
         WTFLog;
-        DebugLog(@"trying to show a banner when there already is one %@ %@ -> %@",
+        NSLog(@"trying to show a banner when there already is one %@ %@ -> %@",
               text, target, NSStringFromSelector(selector));
         return;
     }
@@ -141,7 +141,7 @@
                                animated:(BOOL)animated
 {
     if (_minimizedDrawerController || _maximizedDrawerController) {
-        DebugLog(@"trying to show a drawer when there already is one %@ %@", maximizedController, minimizedController);
+        NSLog(@"trying to show a drawer when there already is one %@ %@", maximizedController, minimizedController);
         return;
     }
     NSParameterAssert(maximizedController != nil);
@@ -226,12 +226,12 @@
 - (void)maximizeDrawerAnimated:(BOOL)animated
 {
     if (!_minimizedDrawerController) {
-        DebugLog(@"tried to maximize drawer but there is no minimized controller...");
+        NSLog(@"tried to maximize drawer but there is no minimized controller...");
         WTFLog;
         return;
     }
     if (!_drawerIsMinimized) {
-        DebugLog(@"tried to maximize drawer that is already maximized");
+        NSLog(@"tried to maximize drawer that is already maximized");
         return;
     }
 
@@ -282,11 +282,11 @@
 - (void)minimizeDrawerAnimated:(BOOL)animated
 {
     if (!_minimizedDrawerController) {
-        DebugLog(@"tried to minimize drawer but there is no minimized controller");
+        NSLog(@"tried to minimize drawer but there is no minimized controller");
         return;
     }
     if (_drawerIsMinimized) {
-        DebugLog(@"tried to minimize the drawer but it is already minimized");
+        NSLog(@"tried to minimize the drawer but it is already minimized");
         return;
     }
 
@@ -338,7 +338,7 @@
 - (void)closeDrawerAnimated:(BOOL)animated
 {
     if (!_maximizedDrawerController) {
-        DebugLog(@"cant close a drawer that isn't showing...");
+        NSLog(@"cant close a drawer that isn't showing...");
         return;
     }
 

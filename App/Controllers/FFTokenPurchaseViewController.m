@@ -260,37 +260,37 @@ failure:
         [_alert hide];
         _alert = nil;
     }
-    DebugLog(@"removed transactions %@", transactions);
+    NSLog(@"removed transactions %@", transactions);
 }
 
 - (void)paymentQueue:(SKPaymentQueue*)queue restoreCompletedTransactionsFailedWithError:(NSError*)error
 {
-    DebugLog(@"restore completed transactions failed %@", error);
+    NSLog(@"restore completed transactions failed %@", error);
 }
 
 - (void)paymentQueue:(SKPaymentQueue*)queue updatedDownloads:(NSArray*)downloads
 {
-    DebugLog(@"update downloads %@", downloads);
+    NSLog(@"update downloads %@", downloads);
 }
 
 - (void)paymentQueue:(SKPaymentQueue*)queue updatedTransactions:(NSArray*)transactions
 {
-    DebugLog(@"updated transactions %@", transactions);
+    NSLog(@"updated transactions %@", transactions);
 
     for (SKPaymentTransaction* t in transactions) {
         switch (t.transactionState) {
         case SKPaymentTransactionStatePurchased:
-            DebugLog(@"transaction purchased %@ %@", t, t.payment);
+            NSLog(@"transaction purchased %@ %@", t, t.payment);
             [self addTokens:t];
             break;
         case SKPaymentTransactionStateRestored:
-            DebugLog(@"transaction restored %@ %@", t, t.payment);
+            NSLog(@"transaction restored %@ %@", t, t.payment);
             break;
         case SKPaymentTransactionStatePurchasing:
-            DebugLog(@"transaction purchasing %@ %@", t, t.payment);
+            NSLog(@"transaction purchasing %@ %@", t, t.payment);
             break;
         case SKPaymentTransactionStateFailed:
-            DebugLog(@"transaction failed %@ %@ %@", t, t.payment, t.error);
+            NSLog(@"transaction failed %@ %@ %@", t, t.payment, t.error);
             [queue finishTransaction:t];
             [self failedAddToken:t.error];
             break;
@@ -320,12 +320,12 @@ failure:
 
 - (void)addTokens:(SKPaymentTransaction*)transaction
 {
-    DebugLog(@"add tokens %@", transaction);
+    NSLog(@"add tokens %@", transaction);
 
     NSDictionary* params = @{
         @"receipt" : [transaction.transactionReceipt base64EncodedString]
     };
-    DebugLog(@"params %@", params);
+    NSLog(@"params %@", params);
 
     [self.session authorizedJSONRequestWithMethod:@"POST" path:@"/users/add_tokens" paramters:params success:
      ^(NSURLRequest *request, NSHTTPURLResponse *httpResponse, id JSON)
@@ -337,14 +337,14 @@ failure:
 failure:
     ^(NSURLRequest * request, NSHTTPURLResponse * httpResponse, NSError * error, id JSON)
     {
-        DebugLog(@"error verifying transaction %@", error);
+        NSLog(@"error verifying transaction %@", error);
         [self failedAddToken:error];
     }];
 }
 
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue*)queue
 {
-    DebugLog(@"restore completed transactions finished");
+    NSLog(@"restore completed transactions finished");
 }
 
 @end
