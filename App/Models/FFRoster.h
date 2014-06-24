@@ -16,7 +16,9 @@
 
 typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
     FFRosterSubmitType100FB,
-    FFRosterSubmitTypeHTH27FB
+    FFRosterSubmitTypeHTH27FB,
+    FFRosterSubmitTypeCommonNonFantasy,
+    FFRosterSubmitTypePick5
 };
 
 @interface FFRoster : FFDataObject
@@ -97,9 +99,10 @@ typedef NS_ENUM(NSUInteger, FFRosterSubmitType) {
 
 - (FFPlayer *)playerByName:(NSString *)name;
 
-+ (void)submitNonFantasyRosterWithTeams:(NSArray *)teams
-                                session:(FFSession *)session
-                                success:(SBSuccessBlock)success
-                                failure:(SBErrorBlock)failure;
++ (void)submitNonFantasyRosterWithType:(FFRosterSubmitType)submitType
+                                 teams:(NSArray *)teams
+                               session:(FFSession *)session
+                               success:(SBSuccessBlock)success
+                               failure:(SBErrorBlock)failure;
 
 @end

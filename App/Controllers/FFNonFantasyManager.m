@@ -359,12 +359,23 @@
                          }];
 }
 
-- (void)submitRosterCompletion:(void (^)(BOOL))block
+- (void)submitRosterWithType:(FFRosterSubmitType)type completion:(void (^)(BOOL))block
 {
+    if (type == FFRosterSubmitTypePick5 && self.selectedTeams.count != 5) {
+        FFAlertView *alert = [[FFAlertView alloc] initWithTitle:nil
+                                                        message:@"You should have 5 teams in your roster to submit as pick5"
+                                              cancelButtonTitle:nil
+                                                okayButtonTitle:@"Dismiss"
+                                                       autoHide:YES];
+        [self.delegate showAlert:alert];
+        return;
+    }
+    
     __block FFAlertView* alert = [[FFAlertView alloc] initWithTitle:@"Submitting Roster"
                                                            messsage:nil
                                                        loadingStyle:FFAlertViewLoadingStylePlain];
     [alert showInView:self.rosterController.view];
+    [self.rosterController showOrHideSubmitIfNeeded];
     
     NSMutableArray *teamsDicts = [NSMutableArray arrayWithCapacity:self.selectedTeams.count];
     for (FFTeam *team in self.selectedTeams) {
@@ -376,31 +387,32 @@
         [teamsDicts addObject:dict];
     }
     
-    [FFRoster submitNonFantasyRosterWithTeams:teamsDicts
-                                      session:self.session
-                                      success:^(id successObj) {
-                                          self.errorType = FFErrorTypeNoError;
-                                          [self deselectAllTeams];
-                                          [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                                                                         withRowAnimation:UITableViewRowAnimationAutomatic];
-                                          [self.rosterController showOrHideSubmitIfNeeded];
-                                          [alert hide];
-                                          
-                                          FFAlertView* successAlert = [[FFAlertView alloc] initWithTitle:nil
-                                                                                          message:[successObj objectForKey:@"msg"]
-                                                                                cancelButtonTitle:nil
-                                                                                  okayButtonTitle:@"OK"
-                                                                                         autoHide:YES];
-                                          [successAlert showInView:self.rosterController.navigationController.view];
-                                          
-                                          if (block)
-                                              block(YES);
-                                      } failure:^(NSError *error) {
-                                          [self handleError:error];
-                                          [alert hide];
-                                          if (block)
-                                              block(NO);
-                                      }];
+    [FFRoster submitNonFantasyRosterWithType:type
+                                       teams:teamsDicts
+                                     session:self.session
+                                     success:^(id successObj) {
+                                         self.errorType = FFErrorTypeNoError;
+                                         [self deselectAllTeams];
+                                         [self.rosterController.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
+                                                                        withRowAnimation:UITableViewRowAnimationAutomatic];
+                                         [self.rosterController showOrHideSubmitIfNeeded];
+                                         [alert hide];
+                                         
+                                         FFAlertView* successAlert = [[FFAlertView alloc] initWithTitle:nil
+                                                                                                message:[successObj objectForKey:@"msg"]
+                                                                                      cancelButtonTitle:nil
+                                                                                        okayButtonTitle:@"OK"
+                                                                                               autoHide:YES];
+                                         [successAlert showInView:self.rosterController.navigationController.view];
+                                         
+                                         if (block)
+                                             block(YES);
+                                     } failure:^(NSError *error) {
+                                         [self handleError:error];
+                                         [alert hide];
+                                         if (block)
+                                             block(NO);
+                                     }];
 }
 
 @end

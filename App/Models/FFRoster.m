@@ -422,13 +422,19 @@ failure:
      }];
 }
 
-+ (void)submitNonFantasyRosterWithTeams:(NSArray *)teams
++ (void)submitNonFantasyRosterWithType:(FFRosterSubmitType)submitType
+                                 teams:(NSArray *)teams
                                 session:(FFSession *)session
                                 success:(SBSuccessBlock)success
                                 failure:(SBErrorBlock)failure
 {
-    NSDictionary *params = @{@"teams": teams};
-    NSString *path = @"/game_rosters";
+    NSMutableString *path = [NSMutableString stringWithString:@"/game_rosters"];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:teams, @"teams", nil];
+    if (submitType == FFRosterSubmitTypePick5) {
+        [params setObject:@"pick5" forKey:@"type"];
+        [path appendString:@"/create_pick_5"];
+    }
+    
     [session authorizedJSONRequestWithMethod:@"POST"
                                         path:path
                                    paramters:params

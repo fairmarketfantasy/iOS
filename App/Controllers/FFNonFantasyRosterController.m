@@ -23,6 +23,7 @@
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 // models
 #import "FFDate.h"
+#import "FFRoster.h"
 
 @interface FFNonFantasyRosterController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -44,10 +45,6 @@
     [self.submitView.segments addTarget:self
                                  action:@selector(onSubmit:)
                        forControlEvents:UIControlEventValueChanged];
-    [self.submitView.submitButton addTarget:self
-                                     action:@selector(onSubmit:)
-                           forControlEvents:UIControlEventTouchUpInside];
-    
     [self.view addSubview:self.submitView];
     
     // table view
@@ -267,10 +264,6 @@
     
     if ([self.dataSource teams].count <= indexPath.row && indexPath.section == 1)
         [self.delegate showAvailableGames];
-        
-//    if (indexPath.section == 1) {
-//        [self.delegate showAvailableGames];
-//    }
 }
 
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
@@ -300,7 +293,9 @@
 
 - (void)onSubmit:(FUISegmentedControl*)segments
 {
-    [self.delegate submitRosterCompletion:nil];
+    FFRosterSubmitType type = [self.submitView submitionType];
+    [self.delegate submitRosterWithType:type completion:nil];
+    self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
 }
 
 @end

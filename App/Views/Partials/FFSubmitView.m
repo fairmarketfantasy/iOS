@@ -9,6 +9,14 @@
 #import "FFSubmitView.h"
 #import <FlatUIKit.h>
 #import "FFStyle.h"
+#import "FFRoster.h"
+#import "FFSessionManager.h"
+
+@interface FFSubmitView()
+
+@property (nonatomic, strong) NSArray *items;
+
+@end
 
 @implementation FFSubmitView
 
@@ -18,8 +26,8 @@
     if (self) {
         self.backgroundColor = [FFStyle darkGrey];
         // segments
-        _segments = [FUISegmentedControl.alloc initWithItems:@[@"Submit 100FB",
-                                                               @"Submit HTH 27FB"]];
+        _segments = [[FUISegmentedControl alloc] initWithItems:@[@"Submit 100FB",
+                                                                 @"Submit HTH 27FB"]];
         self.segments.frame = CGRectMake(15.f, 10.f, 290.f, 30.f);
         self.segments.cornerRadius = 3.f;
         self.segments.dividerColor = [FFStyle white];
@@ -31,17 +39,6 @@
         self.segments.selectedColor = [FFStyle darkGrey];
         self.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
         [self addSubview:self.segments];
-        
-        _submitButton = [FFStyle coloredButtonWithText:@"Submit"
-                                                 color:[FFStyle brightGreen]
-                                           borderColor:[UIColor clearColor]];
-
-        self.submitButton.frame = CGRectMake(60.f, 10.f, 200.f, 30.f);
-        self.submitButton.layer.cornerRadius = 3.f;
-        self.submitButton.backgroundColor = [FFStyle brightGreen];
-        self.submitButton.titleLabel.font = [FFStyle blockFont:14.f];
-        self.submitButton.titleLabel.textColor = [FFStyle white];
-        [self addSubview:self.submitButton];
     }
     return self;
 }
@@ -50,17 +47,37 @@
 {
     switch (type) {
         case FFSubmitViewTypeFantasy:
-            self.segments.hidden = NO;
-            self.submitButton.hidden = YES;
+            self.items = @[@"Submit 100FB", @"Submit HTH 27FB"];
+            [self.segments setTitle:@"Submit 100FB" forSegmentAtIndex:0];
+            [self.segments setTitle:@"Submit HTH 27FB" forSegmentAtIndex:1];
             break;
+            
         case FFSubmitViewTypeNonFantasy:
-            self.submitButton.hidden = NO;
-            self.segments.hidden = YES;
+            self.items = @[@"Submit", @"Pick 5"];
+            [self.segments setTitle:@"Submit" forSegmentAtIndex:0];
+            [self.segments setTitle:@"Pick 5" forSegmentAtIndex:1];
             break;
             
         default:
             break;
     }
+}
+
+- (FFRosterSubmitType)submitionType
+{
+    return [self submitTypeForTitle:self.items[self.segments.selectedSegmentIndex]];
+}
+
+- (FFRosterSubmitType)submitTypeForTitle:(NSString *)title
+{
+    if ([title isEqualToString:@"Submit 100FB"])
+        return FFRosterSubmitType100FB;
+    else if ([title isEqualToString:@"Submit HTH 27FB"])
+        return FFRosterSubmitTypeHTH27FB;
+    else if ([title isEqualToString:@"Submit"])
+        return FFRosterSubmitTypeCommonNonFantasy;
+    else
+        return FFRosterSubmitTypePick5;
 }
 
 @end

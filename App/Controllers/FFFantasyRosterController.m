@@ -57,11 +57,7 @@
     self.submitView = [FFSubmitView new];
     [self.submitView.segments addTarget:self
                                  action:@selector(onSubmit:)
-                       forControlEvents:UIControlEventValueChanged];
-    [self.submitView.submitButton addTarget:self
-                                     action:@selector(onSubmit:)
-                           forControlEvents:UIControlEventTouchUpInside];
-    
+                       forControlEvents:UIControlEventValueChanged];    
     [self.view addSubview:self.submitView];
     
     // table view
@@ -403,7 +399,7 @@
 
 - (void)onSubmit:(FUISegmentedControl*)segments
 {
-    FFRosterSubmitType rosterType = (FFRosterSubmitType)segments.selectedSegmentIndex;
+    FFRosterSubmitType rosterType = [self.submitView submitionType];
     [self.delegate submitRoster:rosterType completion:nil];
     self.submitView.segments.selectedSegmentIndex = UISegmentedControlNoSegment;
 }

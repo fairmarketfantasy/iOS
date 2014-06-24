@@ -12,6 +12,7 @@ typedef NS_ENUM(NSInteger, FFSubmitViewType) {
 };
 
 #import <UIKit/UIKit.h>
+#import "FFRoster.h"
 
 @class FUISegmentedControl;
 
@@ -21,5 +22,6 @@ typedef NS_ENUM(NSInteger, FFSubmitViewType) {
 @property(nonatomic, readonly) UIButton *submitButton;
 
 - (void)setupWithType:(FFSubmitViewType)type;
+- (FFRosterSubmitType)submitionType;
 
 @end

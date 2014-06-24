@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "FFRoster.h"
 
 @class FFTeam;
 
@@ -19,7 +20,7 @@
 
 @protocol FFNonFantasyRosterDelegate <NSObject>
 
-- (void)submitRosterCompletion:(void (^)(BOOL))block;
+- (void)submitRosterWithType:(FFRosterSubmitType)type completion:(void (^)(BOOL))block;
 - (void)autoFillWithCompletion:(void(^)(BOOL success))block;
 - (void)showAvailableGames;
 - (void)removeTeam:(FFTeam *)removedTeam;
