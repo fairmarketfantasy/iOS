@@ -158,7 +158,7 @@
                    
                    self.groupWinnerController.category = FFWCGroupWinners;
                    self.groupWinnerController.candidates = [NSArray arrayWithArray:self.groupWinners];
-                   self.groupWinnerController.selectedCroupIndex = 0;
+                   self.groupWinnerController.selectedGroupIndex = 0;
                    
                    self.dailyWinsController.category = FFWCDailyWins;
                    self.dailyWinsController.candidates = [NSArray arrayWithArray:self.dailyWins];

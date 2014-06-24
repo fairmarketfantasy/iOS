@@ -30,7 +30,7 @@
 @interface FFWCController : FFBaseViewController
 
 @property (nonatomic, assign) FFWCPredictionCategory category;
-@property (nonatomic, assign) NSUInteger selectedCroupIndex;
+@property (nonatomic, assign) NSUInteger selectedGroupIndex;
 @property (nonatomic, strong) NSArray *candidates;
 @property (nonatomic, readonly) UITableView *tableView;
 

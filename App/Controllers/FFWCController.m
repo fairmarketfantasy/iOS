@@ -144,7 +144,7 @@
         if (section == 0) {
             return 1;
         } else {
-            FFWCGroup *group = [self.candidates objectAtIndex:self.selectedCroupIndex];
+            FFWCGroup *group = [self.candidates objectAtIndex:self.selectedGroupIndex];
             return group.teams.count;
         }
     } else {
@@ -239,7 +239,7 @@
                 return nil;
         }
     } else {
-        FFWCGroup *group = [self.candidates objectAtIndex:self.selectedCroupIndex];
+        FFWCGroup *group = [self.candidates objectAtIndex:self.selectedGroupIndex];
         __block FFWCTeam *team = [group.teams objectAtIndex:indexPath.row];
         FFWCCell *cell = [[FFWCCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WCCell"];
         [cell setupWithTeam:team];
@@ -336,7 +336,10 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    self.selectedCroupIndex = row;
+    if (self.networkStatus == NotReachable)
+        return;
+        
+    self.selectedGroupIndex = row;
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
