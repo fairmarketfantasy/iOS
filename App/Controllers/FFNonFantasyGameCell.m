@@ -66,7 +66,7 @@
         [self.contentView addSubview:self.awayTeamAvatar];
         [self.awayTeamAvatar draw];
         
-        // buttons
+        //add buttons
         _addHomeTeamBtn = [FFCustomButton buttonWithType:UIButtonTypeCustom];
         _addHomeTeamBtn.frame = CGRectMake(0.f, 0.f, 40.f, 100.f);
         _addHomeTeamBtn.backgroundColor = [UIColor clearColor];
@@ -112,18 +112,18 @@
         [self.contentView addSubview:self.datelabel];
         
         // pt background
-        self.ptBackground = [[UIImageView alloc] initWithFrame:CGRectMake(115.f, 20.f, 89.f, 36.f)];
+        self.ptBackground = [[UIImageView alloc] initWithFrame:CGRectMake(105.f, 20.f, 109.f, 36.f)];
         [self.contentView addSubview:self.ptBackground];
         
         // pt buttons
         _homePTButton = [FFCustomButton buttonWithType:UIButtonTypeCustom];
-        self.homePTButton.frame = CGRectMake(120.f, 26.f, 35.f, 25.f);
+        self.homePTButton.frame = CGRectMake(110.f, 26.f, 45.f, 25.f);
         self.homePTButton.backgroundColor = [UIColor clearColor];
         self.homePTButton.titleLabel.font = [FFStyle blockFont:17.f];
         [self.contentView addSubview:self.homePTButton];
         
         _awayPTButton = [FFCustomButton buttonWithType:UIButtonTypeCustom];
-        self.awayPTButton.frame = CGRectMake(165.f, 26.f, 35.f, 25.f);
+        self.awayPTButton.frame = CGRectMake(165.f, 26.f, 45.f, 25.f);
         self.awayPTButton.backgroundColor = [UIColor clearColor];
         self.awayPTButton.titleLabel.font = [FFStyle blockFont:17.f];
         [self.contentView addSubview:self.awayPTButton];
@@ -177,9 +177,9 @@
     [self.homePTButton setTitleColor:homePTColor forState:UIControlStateNormal];
     [self.awayPTButton setTitleColor:awayPTColor forState:UIControlStateNormal];
     
-    [self.homePTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", [game.homeTeamPT integerValue]]
+    [self.homePTButton setTitle:[NSString stringWithFormat:@"%@%i", @"WIN", [game.homeTeamPT integerValue]]
                        forState:UIControlStateNormal];
-    [self.awayPTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", [game.awayTeamPT integerValue]]
+    [self.awayPTButton setTitle:[NSString stringWithFormat:@"%@%i", @"WIN", [game.awayTeamPT integerValue]]
                        forState:UIControlStateNormal];
     
     self.homeTeamName.text = game.homeTeamName;

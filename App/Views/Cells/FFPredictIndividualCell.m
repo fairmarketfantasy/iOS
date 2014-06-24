@@ -111,7 +111,7 @@
         UILabel* captionPTLabel = [[UILabel alloc] initWithFrame:
                                    CGRectMake(10.f, 90.f, 70.f, 20.f)];
         captionPTLabel.backgroundColor = [UIColor clearColor];
-        captionPTLabel.text = @"○ PT";
+        captionPTLabel.text = @"○ WIN";
         captionPTLabel.font = [FFStyle regularFont:12.f];
         captionPTLabel.textColor = [FFStyle greyTextColor];
         [self.contentView addSubview:captionPTLabel];

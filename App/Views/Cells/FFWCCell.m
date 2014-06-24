@@ -52,13 +52,10 @@
         [self.contentView addSubview:self.titleLabel];
         
         // pt button
-        _PTButton = [FFStyle coloredButtonWithText:@"PT"
+        _PTButton = [FFStyle coloredButtonWithText:@"WIN"
                                              color:self.contentView.backgroundColor
                                        borderColor:[FFStyle brightBlue]];
-        self.PTButton.frame = CGRectMake(237.f,
-                                         20.f,
-                                         60.f,
-                                         40.f);
+        self.PTButton.frame = CGRectMake(232.f, 20.f, 70.f, 40.f);
         self.PTButton.layer.borderWidth = 2.f;
         [self.PTButton setTitleColor:[FFStyle brightBlue]
                             forState:UIControlStateNormal];
@@ -102,7 +99,7 @@
     self.PTButton.layer.borderColor = color.CGColor;
     
     
-    [self.PTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", team.pt]
+    [self.PTButton setTitle:[NSString stringWithFormat:@"%@%i", @"WIN", team.pt]
                    forState:UIControlStateNormal];
 }
 
@@ -125,7 +122,7 @@
     [self.PTButton setTitleColor:color forState:UIControlStateNormal];
     self.PTButton.layer.borderColor = color.CGColor;
 
-    [self.PTButton setTitle:[NSString stringWithFormat:@"%@%i", @"PT", player.pt]
+    [self.PTButton setTitle:[NSString stringWithFormat:@"%@%i", @"WIN", player.pt]
                    forState:UIControlStateNormal];
 }
 

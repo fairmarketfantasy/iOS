@@ -42,7 +42,7 @@
         self.centLabel.adjustsFontSizeToFitWidth = YES;
         [self.contentView addSubview:self.centLabel];
         // pt button
-        _PTButton = [FFStyle coloredButtonWithText:@"PT"
+        _PTButton = [FFStyle coloredButtonWithText:@"WIN"
                                              color:self.contentView.backgroundColor
                                        borderColor:[FFStyle brightBlue]];
         self.PTButton.frame = CGRectMake(207.f,

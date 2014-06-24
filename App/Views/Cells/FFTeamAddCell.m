@@ -36,7 +36,7 @@
         self.costLabel.textColor = [FFStyle darkGreyTextColor];
         self.costLabel.adjustsFontSizeToFitWidth = YES;
         [self.contentView addSubview:self.costLabel];
-        _PTButton = [FFStyle coloredButtonWithText:@"PT"
+        _PTButton = [FFStyle coloredButtonWithText:@"WIN"
                                              color:self.contentView.backgroundColor
                                        borderColor:[FFStyle brightBlue]];
         self.PTButton.frame = CGRectMake(222.f,
